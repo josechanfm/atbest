@@ -31,11 +31,11 @@ return new class extends Migration
             $table->text('content')->nullable();
             $table->string('registration_code')->nullable();
             $table->string('president')->nullable();
-            $table->boolean('status')->nullable();
             $table->string('card_style')->nullable();
             $table->string('logo')->nullable();
-            $table->string('domain')->nullable();
+            $table->string('subdomain')->nullable();
             $table->date('founted_at')->nullable();
+            $table->boolean('status')->nullable();
             $table->timestamps();
       
         });
