@@ -1,10 +1,10 @@
 <script>
-import WebLayout from '@/Layouts/WebLayout.vue';
+import DefaultLayout from '@/Layouts/DefaultLayout.vue';
 
 
 export default {
     components: {
-        WebLayout,
+        DefaultLayout,
     },
     props:['article'],
     data() {
@@ -27,7 +27,7 @@ export default {
 </script>
 
 <template>
-    <WebLayout title="Dashboard">
+    <DefaultLayout title="Dashboard">
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 {{ pageHeader }}
@@ -42,7 +42,7 @@ export default {
             </div>
         </div>
         
-    </WebLayout>
+    </DefaultLayout>
 
     
 </template>
