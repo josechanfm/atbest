@@ -9,7 +9,6 @@ use Inertia\Inertia;
 use App\Models\Article;
 use App\Models\Form;
 use App\Models\Event;
-use App\Models\Organization;
 
 class WelcomeController extends Controller
 {

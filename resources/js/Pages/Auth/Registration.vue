@@ -1,10 +1,10 @@
 <script>
-import WebLayout from '@/Layouts/WebLayout.vue';
+import DefaultLayout from '@/Layouts/DefaultLayout.vue';
 import { Modal } from 'ant-design-vue';
 
 export default {
     components: {
-        WebLayout
+        DefaultLayout
     },
     props: ['organizations'],
     data() {
@@ -41,7 +41,7 @@ export default {
 </script>
 
 <template>
-    <WebLayout title="Dashboard">
+    <DefaultLayout title="Dashboard">
         <div class="flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
             <a-typography-title :level="3">{{$t('account_registration')}}</a-typography-title>
             <div class="w-full max-w-lg mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg"><!--v-if-->
@@ -81,6 +81,6 @@ export default {
                 </a-form>
             </div>
         </div>
-    </WebLayout>
+    </DefaultLayout>
 </template>
 

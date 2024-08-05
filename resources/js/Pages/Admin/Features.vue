@@ -5,7 +5,12 @@
         {{ $t("feature") }}
       </h2>
     </template>
-    <inertia-link :href="route('admin.features.create')" class="ant-btn ant-btn-primary">{{ $t('create')}}</inertia-link>
+    <div class="flex justify-end pb-3 gap-3">
+      <a-button :href="route('admin.features.create')" as="link" type="primary">
+        {{ $t("create_feature") }}
+      </a-button>
+    </div>
+
     <div class="container mx-auto pt-5">
       <div class="bg-white relative shadow rounded-lg overflow-x-auto">
         <a-table :dataSource="features" :columns="columns">

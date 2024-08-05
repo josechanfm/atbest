@@ -108,11 +108,6 @@ export default {
 
 <template>
   <MemberLayout title="Dashboard">
-    <template #header>
-      <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-        {{ $t('membership') }}
-      </h2>
-    </template>
     <div class="container mx-auto">
       <div class="flex flex-col-reverse md:flex-row gap-6">
         <div class="flex-auto">

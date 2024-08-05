@@ -27,12 +27,22 @@
           <PieChartOutlined />
         </template>
         <span>
+          <inertia-link :href="route('admin.features.index')">
+            {{ $t("feature") }}
+          </inertia-link>
+        </span>
+      </a-menu-item>
+      <a-menu-item key="4">
+        <template #icon>
+          <PieChartOutlined />
+        </template>
+        <span>
           <inertia-link :href="route('admin.articles.index')">
             {{ $t("articles") }}
           </inertia-link>
         </span>
       </a-menu-item>
-      <a-menu-item key="4">
+      <a-menu-item key="5">
         <template #icon>
           <PieChartOutlined />
         </template>
@@ -42,7 +52,7 @@
           </inertia-link>
         </span>
       </a-menu-item>
-      <a-menu-item key="5">
+      <a-menu-item key="6">
         <template #icon>
           <PieChartOutlined />
         </template>
@@ -62,7 +72,7 @@
           </inertia-link>
         </span>
       </a-menu-item>
-      <a-menu-item key="7">
+      <a-menu-item key="8">
         <template #icon>
           <PieChartOutlined />
         </template>

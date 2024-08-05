@@ -20,6 +20,7 @@ defineProps({
 
 <template>
   <DefaultLayout title="Dashboard">
+    {{ welcomeMessage}}
     <div class="lg:h-96 bg-gradient-to-tr bg-[#0081C8] rounded-md flex items-center">
       <div class="ml-5 lg:ml-20 lg:w-4/5 py-5">
         <h2 class="text-white text-4xl" v-if="welcomeMessage">{{ welcomeMessage.title }}</h2>
