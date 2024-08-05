@@ -106,21 +106,21 @@ class FormController extends Controller
      */
     public function show(Form $form, Request $request)
     {
-        if($request->t!=$form->uuid){ //uuid not correct
-            return redirect('forms');
-        }elseif ($form->published==false) { //not yet publish
-            return redirect('forms');
-        }elseif ($form->require_login && empty(auth()->user()) ) {
-            return redirect('forms');
-        }elseif ($form->for_member) {
-            if (session('member')->organization->id != $form->organization_id) {
-                return redirect('forms');
-            }
-        };
-        $form->fields;
-        return Inertia::render('Form/FormDefault', [
-            'form' => $form,
-        ]);
+        // if($request->t!=$form->uuid){ //uuid not correct
+        //     return redirect('forms');
+        // }elseif ($form->published==false) { //not yet publish
+        //     return redirect('forms');
+        // }elseif ($form->require_login && empty(auth()->user()) ) {
+        //     return redirect('forms');
+        // }elseif ($form->for_member) {
+        //     if (session('member')->organization->id != $form->organization_id) {
+        //         return redirect('forms');
+        //     }
+        // };
+        // $form->fields;
+        // return Inertia::render('Form/FormDefault', [
+        //     'form' => $form,
+        // ]);
     }
 
     /**
@@ -161,12 +161,25 @@ class FormController extends Controller
     }
 
     public function item(Request $request){
-        if(empty($request->t)){
-            return to_route('/');
-        }else{
-            $form=Form::where('uuid',$request->t)->first();
-            return redirect()->route('forms.show',['form'=> $form->id, 't'=>$request->t]);
-        }
+        if(empty($request->t)){ 
+            return redirect('forms');
+        };
+        $form=Form::where('uuid',$request->t)->first();
+        if(empty($form)){ //uuid not correct
+            return redirect('forms');
+        }elseif ($form->published==false) { //not yet publish
+            return redirect('forms');
+        }elseif ($form->require_login && empty(auth()->user()) ) {
+            return redirect('forms');
+        }elseif ($form->for_member) {
+            if (session('member')->organization->id != $form->organization_id) {
+                return redirect('forms');
+            }
+        };
+        $form->fields;
+        return Inertia::render('Form/FormDefault', [
+            'form' => $form,
+        ]);
 
     }
 }

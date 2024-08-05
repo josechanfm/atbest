@@ -115,15 +115,23 @@ class EventController extends Controller
     }
     public function item(Request $request){
         //dd(Article::where('uuid',$request->t)->where('published',true)->first());
-        if(empty($request->t)){
-            return to_route('/');
-        }else if(session('member') || (auth()->user() && auth()->user()->hasRole('admin'))){
-            $event=Event::where('uuid',$request->t)->where('published',true)->first();
-        }else{
-            $event=Event::where('uuid',$request->t)->where('published',true)->where('public',true)->first();
-        }
-        return Inertia::render('Event/Event',[
-            'event'=>$event
+        if(empty($request->t)){ 
+            return redirect('events');
+        };
+        $event=Event::where('uuid',$request->t)->first();
+        if(empty($fevent)){ //uuid not correct
+            return redirect('forms');
+        }elseif ($event->published==false) { //not yet publish
+            return redirect('events');
+        }elseif ($event->require_login && empty(auth()->user()) ) {
+            return redirect('events');
+        }elseif ($event->for_member) {
+            if (session('member')->organization->id != $event->organization_id) {
+                return redirect('events');
+            }
+        };
+        return Inertia::render('Event/Event', [
+            'event' => $event,
         ]);
     }
 }

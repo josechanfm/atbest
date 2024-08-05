@@ -1,13 +1,13 @@
 <script>
 import MemberLayout from "@/Layouts/MemberLayout.vue";
-import ArticleList from "@/Components/ArticleList.vue";
+import ThumbList from "@/Components/ThumbList.vue";
 import axios from "axios";
 import QRCodeVue3 from "qrcode-vue3";
 
 export default {
   components: {
     MemberLayout,
-    ArticleList,
+    ThumbList,
     QRCodeVue3,
   },
   props: ["currentMember", "members", "features", "forms", "articles", "cardStyle"],
@@ -155,7 +155,7 @@ export default {
 
           <!-- News Section-->
           <div class="container mx-auto">
-              <ArticleList :articles="articles" />
+              <ThumbList :records="articles" routePath="article.item"/>
           </div>
           <!-- News Section end-->
         </div>

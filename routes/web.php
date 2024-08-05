@@ -55,10 +55,15 @@ Route::get('/language/{language}', function ($language) {
 
 Route::get('registration', [\App\Http\Controllers\RegistrationController::class, 'create'])->name('registration');
 Route::post('registration', [\App\Http\Controllers\RegistrationController::class, 'store'])->name('registration.store');
+
 Route::get('article', [\App\Http\Controllers\ArticleController::class, 'item'])->name('article.item');
-Route::resource('forms', App\Http\Controllers\FormController::class)->names('forms');
+// Route::resource('forms', App\Http\Controllers\FormController::class)->names('forms');
+
+Route::get('forms', [\App\Http\Controllers\FormController::class, 'index'])->name('forms');
+Route::post('forms', [\App\Http\Controllers\FormController::class, 'store'])->name('forms.store');
 Route::get('form', [\App\Http\Controllers\FormController::class, 'item'])->name('form.item');
-Route::resource('events', App\Http\Controllers\EventController::class)->names('events');
+
+Route::get('events', [App\Http\Controllers\EventController::class,'index'])->name('events');
 Route::get('event', [\App\Http\Controllers\EventController::class, 'item'])->name('event.item');
 
 Route::get('form/{entry}/receipt', [App\Http\Controllers\FormController::class, 'receipt'])->name('form.receipt');

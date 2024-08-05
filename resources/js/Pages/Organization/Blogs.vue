@@ -1,5 +1,5 @@
 <template>
-  <OrganizationLayout title="$t('blogs')">
+  <OrganizationLayout :title="$t('blogs')">
     <div class="flex-auto pb-3 text-right">
       <a-button type="primary" class="!rounded" @click="createRecord()">
         {{ $t("create_blog") }}

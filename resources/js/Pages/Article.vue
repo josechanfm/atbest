@@ -33,7 +33,8 @@ export default {
                 {{ pageHeader }}
             </h2>
         </template>
-        <div class="max-w-7xl mx-auto py-10 px-2 sm:px-6 lg:px-8">
+
+        <div class="container py-10 px-2 sm:px-6 lg:px-8">
             <h2 class="font-bold text-2xl text-gray-800">
                 {{ article.title}}</h2>
             <div v-html="article.content"/>

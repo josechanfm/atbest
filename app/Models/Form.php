@@ -11,7 +11,6 @@ use Spatie\Image\Manipulations;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Illuminate\Support\Str;
 
-
 class Form extends Model implements HasMedia
 {
     use HasFactory;
@@ -22,12 +21,13 @@ class Form extends Model implements HasMedia
     public static function boot(){
         parent::boot();
         self::creating(function($model){
-            $model->uuid=hash('crc32b',rand());
+            $model->uuid=Str::uuid();
+            //$model->uuid=hash('crc32b',rand());
         });
         static::updating(function ($model){
             if(empty($model->uuid)){
-                $model->uuid=hash('crc32b',rand());
-                //$model->uuid=Str::uuid();
+                //$model->uuid=hash('crc32b',rand());
+                $model->uuid=Str::uuid();
             }
         });
     }

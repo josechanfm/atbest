@@ -1,6 +1,6 @@
 <script setup>
 import WebLayout from '@/Layouts/WebLayout.vue';
-import ArticleList from "@/Components/ArticleList.vue";
+import ThumbList from "@/Components/ThumbList.vue";
 import { default as Carousel } from "@/Components/Carousel01.vue";
 
 defineProps({
@@ -15,6 +15,6 @@ defineProps({
     <div class="px-4 py-2 mt-2 bg-white rounded-md">
       <h2 class="font-bold text-2xl text-gray-800">最新消息</h2>
     </div>
-      <ArticleList :articles="articles"/>
+      <ThumbList :records="articles" routePath="article.item"/>
   </WebLayout>
 </template>

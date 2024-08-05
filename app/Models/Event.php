@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Illuminate\Support\Str;
 
 class Event extends Model
 {
@@ -22,11 +23,12 @@ class Event extends Model
         parent::boot();
         self::creating(function($model){
             $model->uuid=hash('crc32b',rand());
+            $model->uuid=Str::uuid();
         });
         static::updating(function ($model){
             if(empty($model->uuid)){
-                $model->uuid=hash('crc32b',rand());
-                //$model->uuid=Str::uuid();
+                //$model->uuid=hash('crc32b',rand());
+                $model->uuid=Str::uuid();
             }
         });
     }

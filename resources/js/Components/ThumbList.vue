@@ -25,9 +25,12 @@ const props = defineProps({
           <a :href="route(routePath, { t: record.uuid })" target="_blank">
             <h2 class="text-xl font-bold">{{ record.title }}</h2>
           </a>
-          <div class="flex items-center mt-2">
-            <span class="bg-gray-200 text-gray-700 py-1 px-2 rounded-full text-sm" v-if="record.organization_abbr">{{ record.organization_abbr }}</span>
-            <span class="bg-gray-200 text-gray-700 py-1 px-2 rounded-full text-sm">{{ record.category_code}}</span>
+          <div class="flex items-center mt-2 gap-2">
+            <span v-if="record.organization_abbr" class="bg-gray-200 text-gray-700 py-1 px-2 rounded-full text-sm">{{ record.organization_abbr }}</span>
+            <span v-if="routePath=='article.item'" class="bg-gray-200 text-gray-700 py-1 px-2 rounded-full text-sm">Article</span>
+            <span v-else-if="routePath=='form.item'" class="bg-gray-200 text-gray-700 py-1 px-2 rounded-full text-sm">Form</span>
+            <span v-else-if="routePath=='event.item'" class="bg-gray-200 text-gray-700 py-1 px-2 rounded-full text-sm">Event</span>
+            <span v-if="record.category_code" class="bg-gray-200 text-gray-700 py-1 px-2 rounded-full text-sm">{{ record.category_code}}</span>
           </div>
           <div class="mt-2 text-gray-600">
             <div v-if="record.intro" class="text-justify">
@@ -81,3 +84,4 @@ const props = defineProps({
     </template>
   </a-list>
 --></template>
+
