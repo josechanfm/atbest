@@ -15,7 +15,7 @@ class ArticleController extends Controller
         }else if(session('member') || (auth()->user() && auth()->user()->hasRole('admin'))){
             $article=Article::where('uuid',$request->t)->where('published',true)->first();
         }else{
-            $article=Article::where('uuid',$request->t)->where('published',true)->where('public',true)->first();
+            $article=Article::where('uuid',$request->t)->where('published',true)->where('for_member',false)->first();
         }
         return Inertia::render('Article',[
             'article'=>$article
