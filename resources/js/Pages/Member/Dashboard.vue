@@ -123,20 +123,20 @@ export default {
                 <a :href="feature.link">
                   <div class="gutter-row">
                     <div class="max-w rounded overflow-hidden shadow-lg">
-                      <img class="w-full" alt="Use any sample image here..." :src="feature.thumbnail">
+                      <img class="w-full" alt="Use any sample image here..." :src="feature.image">
                       <div class="px-2 py-4 xs:h-64 lg:h-48">
                         <inertia-link v-if="feature.url" :href="feature.url">
-                          <div class="font-bold text-xl mb-2">{{ feature.title }}</div>
+                          <div class="font-bold text-xl mb-2">{{ feature.title_zh }}</div>
                         </inertia-link>
                         <inertia-link v-else :href="route('article.item', { t: feature.uuid })" target="_blank">
-                          <div class="font-bold text-xl mb-2">{{ feature.title }}</div>
+                          <div class="font-bold text-xl mb-2">{{ feature.title_zh }}</div>
                         </inertia-link>
                         <p class="text-gray-700 text-base pl-1">
-                          {{ feature.intro }}
+                          {{ feature.content_zh }}
                         </p>
                       </div>
                       <div class="px-6 py-4">
-                        <span v-for="tag in feature.tags"
+                        <span v-for="tag in feature.tags_zh"
                           class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">{{ tag }}</span>
                       </div>
                     </div>
@@ -257,7 +257,6 @@ export default {
                   <div v-if="members.length > 1">
                     <h3 class="font-medium text-gray-900 text-left px-6">Your Organizations</h3>
                     <div class="mt-5 w-full flex flex-col items-center overflow-hidden text-sm">
-
                       <template v-for="member in members">
                         <a href="#"
                           class="w-full border-t bor  der-gray-100 text-gray-600 py-4 pl-6 pr-3 w-full block hover:bg-gray-100 transition duration-150">
@@ -275,17 +274,6 @@ export default {
 
                   <h3 class="font-medium text-gray-900 text-left px-6">Recent updates</h3>
                   <div class="mt-5 w-full flex flex-col items-center overflow-hidden text-sm">
-
-                    <template v-for="organization in currentMember.organizations">
-                      <a href="#"
-                        class="w-full border-t border-gray-100 text-gray-600 py-4 pl-6 pr-3 w-full block hover:bg-gray-100 transition duration-150">
-                        <img src="https://avatars0.githubusercontent.com/u/35900628?v=4" alt=""
-                          class="rounded-full h-6 shadow-md inline-block mr-2" />
-                        {{ organization.abbr }} - {{ organization.full_name }}
-                        <span class="text-gray-500 text-xs">24 min ago</span>
-                      </a>
-                    </template>
-
                     <template v-for="portfolio in currentMember.portfolios">
                       <a href="#"
                         class="w-full border-t border-gray-100 text-gray-600 py-4 pl-6 pr-3 w-full block hover:bg-gray-100 transition duration-150">

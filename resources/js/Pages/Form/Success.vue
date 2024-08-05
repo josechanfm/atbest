@@ -59,7 +59,7 @@
             <inertia-link :href="route('form.receipt',entry)">打印表格</inertia-link>
           </div> -->
           <div>
-            <a :href="route('forms.index')">活動列表</a>
+            <a :href="route('forms')">活動列表</a>
           </div>
         </div>
       </div>

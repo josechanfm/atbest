@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Article;
 use Inertia\Inertia;
 use App\Models\Config;
+use App\Models\Feature;
 use App\Models\Member;
 use App\Models\Organization;
 
@@ -25,10 +26,13 @@ class DashboardController extends Controller
         if(empty(session('member'))){
             session(['member'=>$members[0]]);
         }
+        // dd(session('member')->organization);
+        // dd(Feature::whereBelongsTo(session('member')->organization)->orderBy('sequence')->limit(4)->get());
         return Inertia::render('Member/Dashboard', [
             'currentMember'=>session('member'),
             'members' => $members,
-            'features'=>Article::whereBelongsTo(session('member')->organization)->where('category_code','FEATURE')->orderBy('sequence')->limit(4)->get(),
+            //'features'=>Article::whereBelongsTo(session('member')->organization)->where('category_code','FEATURE')->orderBy('sequence')->limit(4)->get(),
+            'features'=>Feature::whereBelongsTo(session('member')->organization)->orderBy('sequence')->limit(4)->get(),
             'articles' => Article::whereBelongsTo(session('member')->organization)->where('category_code','NEWS')->orderBy('sequence','DESC')->get(),
             'cardStyle' => Config::item('card_styles')[session('member')->organization->card_style],
         ]);

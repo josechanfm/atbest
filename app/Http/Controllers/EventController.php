@@ -64,20 +64,20 @@ class EventController extends Controller
      */
     public function show(Event $event, Request $request)
     {
-        if($request->t!=$event->uuid){ //uuid not correct
-            return redirect('events');
-        }elseif ($event->published==false) { //not yet publish
-            return redirect('events');
-        }elseif ($event->require_login && empty(auth()->user()) ) {
-            return redirect('events');
-        }elseif ($event->for_member) {
-            if (session('member')->organization->id != $event->organization_id) {
-                return redirect('events');
-            }
-        };
-        return Inertia::render('Event/Event', [
-            'event' => $event,
-        ]);
+        // if($request->t!=$event->uuid){ //uuid not correct
+        //     return redirect('events');
+        // }elseif ($event->published==false) { //not yet publish
+        //     return redirect('events');
+        // }elseif ($event->require_login && empty(auth()->user()) ) {
+        //     return redirect('events');
+        // }elseif ($event->for_member) {
+        //     if (session('member')->organization->id != $event->organization_id) {
+        //         return redirect('events');
+        //     }
+        // };
+        // return Inertia::render('Event/Event', [
+        //     'event' => $event,
+        // ]);
     }
 
     /**
@@ -115,17 +115,22 @@ class EventController extends Controller
     }
     public function item(Request $request){
         //dd(Article::where('uuid',$request->t)->where('published',true)->first());
+        //dd($request->all());
         if(empty($request->t)){ 
             return redirect('events');
         };
         $event=Event::where('uuid',$request->t)->first();
-        if(empty($fevent)){ //uuid not correct
-            return redirect('forms');
+        if(empty($event)){ //uuid not correct
+            dd('00');
+            return redirect('events');
         }elseif ($event->published==false) { //not yet publish
+            dd('kk');
             return redirect('events');
         }elseif ($event->require_login && empty(auth()->user()) ) {
+            dd('aa');
             return redirect('events');
         }elseif ($event->for_member) {
+            dd('bb');
             if (session('member')->organization->id != $event->organization_id) {
                 return redirect('events');
             }

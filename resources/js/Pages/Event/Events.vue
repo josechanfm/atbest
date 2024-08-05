@@ -11,7 +11,7 @@
                 <a-table :dataSource="events" :columns="columns">
                     <template #bodyCell="{column, text, record, index}">
                         <template v-if="column.dataIndex=='operation'">
-                            <inertia-link :href="route('events.show',{event:record.id,t:record.uuid})">填寫</inertia-link>
+                            <inertia-link :href="route('event.item',{t:record.uuid})">詳細</inertia-link>
                         </template>
                         <template v-else-if="column.dataIndex=='abbr'">
                             <span v-if="record.organization">

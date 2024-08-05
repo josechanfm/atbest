@@ -14,6 +14,8 @@
             <a-select v-model:value="feature.organization_id" :options="organizations"
               :fieldNames="{ value: 'id', label: 'name_zh' }" />
           </a-form-item>
+          <!-- Hide other languages-->
+          <!-- 
           <a-row>
             <a-col :span="4">
             </a-col>
@@ -21,10 +23,11 @@
               <a-tabs v-model:activeKey="selectedLang">
                 <a-tab-pane key="zh" :tab="$t('chinese')" />
                 <a-tab-pane key="en" :tab="$t('english')" />
-                <!-- <a-tab-pane key="pt" :tab="$t('portuguese')" /> -->
+                <a-tab-pane key="pt" :tab="$t('portuguese')" />
               </a-tabs>
             </a-col>
           </a-row>
+           -->
           <template v-if="selectedLang == 'zh'">
             <a-form-item :label="$t('title')" name="title_zh">
               <a-input v-model:value="feature.title_zh" />
@@ -35,10 +38,9 @@
             <a-form-item :label="$t('tag')">
               <a-select v-model:value="feature.tags_zh" mode="tags" style="width: 100%" placeholder="Tags Mode"
                 :options="tagOptions"></a-select>
-              <a-input v-model:value="feature.tag_zh" />
             </a-form-item>
           </template>
-
+          <!-- Hide other languages-->
           <template v-if="selectedLang == 'en'">
             <a-form-item :label="$t('title')">
               <a-input v-model:value="feature.title_en" />

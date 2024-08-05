@@ -204,10 +204,10 @@ const showingNavigationDropdown = ref(false);
             </h1>
             <div class="bg-white rounded-md list-none text-center">
               <li class="py-3 border-b-2">
-                <inertia-link :href="route('forms.index')">報名表格</inertia-link>
+                <inertia-link :href="route('forms')">報名表格</inertia-link>
               </li>
               <li class="py-3 border-b-2">
-                <inertia-link :href="route('events.index')">活動列表</inertia-link>
+                <inertia-link :href="route('events')">活動列表</inertia-link>
               </li>
               <li class="py-3 border-b-2">
                 <a
