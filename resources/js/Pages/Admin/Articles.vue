@@ -127,14 +127,14 @@
                 v-model:checked="modal.data.published"
                 :checkedValue="1"
                 :unCheckedValue="0"
-                @change="modal.data.public = 0"
+                @change="modal.data.for_member = 0"
               />
             </a-form-item>
           </a-col>
           <a-col class="pl-10" v-if="modal.data.published">
-            <a-form-item :label="$t('public')" name="public">
+            <a-form-item :label="$t('for_member')" name="for_member">
               <a-switch
-                v-model:checked="modal.data.public"
+                v-model:checked="modal.data.for_member"
                 :checkedValue="1"
                 :unCheckedValue="0"
               />
@@ -315,7 +315,7 @@ export default {
     },
     createRecord() {
       this.modal.data = {};
-      this.modal.data.public = 0;
+      this.modal.data.for_member = 0;
       this.modal.mode = "CREATE";
       this.modal.title = "Create";
       this.modal.isOpen = true;

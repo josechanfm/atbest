@@ -1,6 +1,6 @@
 <script setup>
 import DefaultLayout from '@/Layouts/DefaultLayout.vue';
-import ArticleList from "@/Components/ArticleList.vue";
+import ThumbList from "@/Components/ThumbList.vue";
 import { Head, Link } from '@inertiajs/inertia-vue3';
 import { UserOutlined } from '@ant-design/icons-vue';
 
@@ -12,6 +12,8 @@ defineProps({
   isMember: Boolean,
   isOrganizer: Boolean,
   articles: Array,
+  forms: Array,
+  events: Array,
   welcomeMessage: Object,
 });
 </script>
@@ -47,8 +49,8 @@ defineProps({
     <div class="px-4 py-2 mt-2 bg-white rounded-md">
       <h2 class="font-bold text-2xl text-gray-800">最新消息</h2>
     </div>
-      <ArticleList :articles="articles"/>
-    
-
+      <ThumbList :records="articles" routePath="article.item"/>
+      <ThumbList :records="forms" routePath="form.item"/>
+      <ThumbList :records="events" routePath="event.item"/>
   </DefaultLayout>
 </template>

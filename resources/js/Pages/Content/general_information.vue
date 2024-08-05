@@ -1,6 +1,5 @@
 <script setup>
 import WebLayout from '@/Layouts/WebLayout.vue';
-import ArticleList from "@/Components/ArticleList.vue";
 import { Head, Link } from '@inertiajs/inertia-vue3';
 import { UserOutlined } from '@ant-design/icons-vue';
 

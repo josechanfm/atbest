@@ -159,4 +159,14 @@ class FormController extends Controller
     public function receipt(Entry $entry){
         echo ('comming soon.');
     }
+
+    public function item(Request $request){
+        if(empty($request->t)){
+            return to_route('/');
+        }else{
+            $form=Form::where('uuid',$request->t)->first();
+            return redirect()->route('forms.show',['form'=> $form->id, 't'=>$request->t]);
+        }
+
+    }
 }

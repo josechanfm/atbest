@@ -24,24 +24,32 @@
         <a-form-item :label="$t('form_thankyou')" name="thanks" v-if="form.openThanks">
           <quill-editor v-model:value="form.thanks" style="min-height: 200px" />
         </a-form-item>
+        <a-form-item :label="$t('valid_at')" name="valid_at">
+          <a-date-picker
+            v-model:value="form.valid_at"
+            :format="dateFormat"
+            :valueFormat="dateFormat"
+          />
+        </a-form-item>
+        <a-form-item :label="$t('expired_at')" name="expired_at">
+          <a-date-picker v-model:value="form.expire_at" :valueFormat="dateFormat" :format="dateFormat"/>
+        </a-form-item>
         <a-form-item :label="$t('require_login')" name="require_login">
-          <a-switch v-model:checked="form.require_login" :unCheckedValue="0" :checkedValue="1"
-            @change="form.for_member = false" />
+          <a-switch v-model:checked="form.require_login" @change="form.for_member = false" />
           <span class="pl-3">{{ $t("require_login_note") }}</span>
         </a-form-item>
         <a-form-item :label="$t('for_member')" name="for_member" v-if="form.require_login">
-          <a-switch v-model:checked="form.for_member" :unCheckedValue="0" :checkedValue="1" />
+          <a-switch v-model:checked="form.for_member"/>
           <span class="pl-3">{{ $t("for_member_note") }}</span>
         </a-form-item>
         <a-form-item :label="$t('published')" name="published">
-          <a-switch v-model:checked="form.published" :unCheckedValue="0" :checkedValue="1"
-            @change="form.with_attendance = false" :disabled="form.entries_count > 0" />
+          <a-switch v-model:checked="form.published" @change="form.with_attendance = false" :disabled="form.entries_count > 0" />
           <span class="pl-3">{{ $t("published_note") }}</span><br />
           <span v-if="form.entries_count > 0">
             The form has responses, please backup before unpublished.</span>
         </a-form-item>
         <a-form-item :label="$t('with_attendance')" name="with_attendance" v-if="form.published">
-          <a-switch v-model:checked="form.with_attendance" :unCheckedValue="0" :checkedValue="1" />
+          <a-switch v-model:checked="form.with_attendance"/>
           <span class="pl-3">{{ $t("with_attendance_note") }}</span>
         </a-form-item>
         <!-- Thumbnail-->
@@ -109,6 +117,7 @@ export default {
         { label: "表格列表", url: route('manage.forms.index') },
         { label: this.form.id ? '表格修改' : '表格新增', url: null }
       ],
+      dateFormat: "YYYY-MM-DD",
       loading: false,
       previewImage: null,
       selectedMedia: null,
@@ -116,6 +125,7 @@ export default {
       rules: {
         name: { required: true },
         title: { required: true },
+        valid_at: { required: true },
       },
       validateMessages: {
         required: "${label} is required!",

@@ -191,7 +191,7 @@ export default {
     },
     createRecord() {
       this.modal.data = {};
-      this.modal.data.public = 0;
+      this.modal.data.for_member = 0;
       this.modal.mode = "CREATE";
       this.modal.title = "Create";
       this.modal.isOpen = true;

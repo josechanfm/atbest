@@ -71,14 +71,14 @@
               <a-form-item :label="$t('published')" name="published">
                 <a-switch
                   v-model:checked="article.published"
-                  @change="article.public = false"
+                  @change="article.for_member= false"
                 />
               </a-form-item>
             </a-col>
             <a-col class="pl-10" v-if="article.published">
-              <a-form-item :label="$t('public')" name="public">
+              <a-form-item :label="$t('for_member')" name="for_member">
                 <a-switch
-                  v-model:checked="article.public"
+                  v-model:checked="article.for_member"
                 />
               </a-form-item>
             </a-col>
@@ -234,7 +234,7 @@ export default {
     };
   },
   created() {
-    this.article.public=false
+    this.article.for_member=false
     this.article.published=false
     this.organizations.unshift({ id: 0, name_zh: "System default" });
   },

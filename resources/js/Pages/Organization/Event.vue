@@ -14,11 +14,8 @@
         @finish="onFinish"
         @finishFailed="onFinishFailed"
       >
-        <a-form-item :label="$t('event_title_en')" name="title_en">
-          <a-input v-model:value="event.title_en" />
-        </a-form-item>
-        <a-form-item :label="$t('event_title_fn')" name="title_fn">
-          <a-input v-model:value="event.title_fn" />
+        <a-form-item :label="$t('event_title')" name="title">
+          <a-input v-model:value="event.title" />
         </a-form-item>
         <a-form-item :label="$t('type')" name="category_code">
           <a-select v-model:value="event.category_code" :options="categories" />
@@ -51,15 +48,26 @@
         <a-form-item :label="$t('description')" name="description">
           <quill-editor v-model:value="event.description" style="min-height: 200px" />
         </a-form-item>
-        <a-form-item :label="$t('remark')" name="remark">
-          <quill-editor v-model:value="event.remark" style="min-height: 200px" />
+        <a-form-item :label="$t('require_login')" name="require_login">
+          <a-switch v-model:checked="event.require_login" @change="event.for_member = false" />
+          <span class="pl-3">{{ $t("require_login_note") }}</span>
+        </a-form-item>
+        <a-form-item :label="$t('for_member')" name="for_member" v-if="event.require_login">
+          <a-switch v-model:checked="event.for_member" />
+          <span class="pl-3">{{ $t("for_member_note") }}</span>
+        </a-form-item>
+        <a-form-item :label="$t('published')" name="published">
+          <a-switch v-model:checked="event.published" @change="event.with_attendance = false" />
+          <span class="pl-3">{{ $t("published_note") }}</span><br />
+          <span v-if="event.entries_count > 0">
+            The form has responses, please backup before unpublished.</span>
         </a-form-item>
         <a-form-item :label="$t('with_attendance_note')" name="with_attendance">
-          <a-switch
-            v-model:checked="event.with_attendance"
-            :checkedValue="1"
-            :unCheckedValue="0"
-          />
+          <a-switch v-model:checked="event.with_attendance"/>
+        </a-form-item>
+
+        <a-form-item :label="$t('remark')" name="remark">
+          <quill-editor v-model:value="event.remark" style="min-height: 200px" />
         </a-form-item>
         <div class="flex flex-row item-center justify-center">
           <a-button type="primary" html-type="submit">{{ $t("submit") }}</a-button>

@@ -28,9 +28,7 @@ const showingNavigationDropdown = ref(false);
       <div class="flex justify-between items-center py-6 px-10 container mx-auto">
         <div class="flex">
           <div class="shrink-0 flex items-center">
-            <a href="/"
-              ><img src="/images/site_logo.png" class="block h-14 w-auto"
-            /></a>
+            <a href="/"><img src="/images/site_logo.png" class="block h-14 w-auto"/></a>
           </div>
           <h1 class="ml-2 pt-4 text-2xl font-bold">
             <a href="/" class="text-white">Sync Connect</a>
@@ -196,18 +194,20 @@ const showingNavigationDropdown = ref(false);
                   stroke-linejoin="round"
                   stroke-width="2"
                   d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                /></svg
-            ></span>
+                />
+              </svg>
+            </span>
           </div>
-          <div class="bg-white rounded-md">
-            <h1
-              class="text-center text-xl my-4 bg-white py-2 rounded-md border-b-2 cursor-pointer text-gray-600"
-            >
+          <div class="bg-white rounded-md"> 
+            <h1 class="text-center text-xl my-4 bg-white py-2 rounded-md border-b-2 cursor-pointer text-gray-600">
               {{ $t('service') }}
             </h1>
             <div class="bg-white rounded-md list-none text-center">
               <li class="py-3 border-b-2">
                 <inertia-link :href="route('forms.index')">報名表格</inertia-link>
+              </li>
+              <li class="py-3 border-b-2">
+                <inertia-link :href="route('events.index')">活動列表</inertia-link>
               </li>
               <li class="py-3 border-b-2">
                 <a

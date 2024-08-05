@@ -1,8 +1,8 @@
 <template>
-  <WebLayout title="Dashboard">
+  <DefaultLayout title="Dashboard">
     <template #header>
       <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-        {{$t('event_registration')}}
+        {{$t('form_registration')}}
       </h2>
     </template>
     <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
@@ -13,7 +13,7 @@
           <a-typography-title :level="3">{{ form.title }}</a-typography-title>
         </div>
         <div id="pure-html">
-          <div v-html="form.description" />
+          <div v-html="form.content" />
         </div>
         <a-form
           :model="formData"
@@ -192,19 +192,19 @@
         </a-form>
       </div>
     </div>
-  </WebLayout>
+  </DefaultLayout>
 </template>
 
 <script>
 import MemberLayout from "@/Layouts/MemberLayout.vue";
-import WebLayout from "@/Layouts/WebLayout.vue";
+import DefaultLayout from "@/Layouts/DefaultLayout.vue";
 import CropperModal from "@/Components/Member/CropperModal.vue";
 import { quillEditor } from "vue3-quill";
 
 export default {
   components: {
     MemberLayout,
-    WebLayout,
+    DefaultLayout,
     quillEditor,
     CropperModal,
   },

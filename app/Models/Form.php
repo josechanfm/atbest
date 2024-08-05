@@ -16,7 +16,8 @@ class Form extends Model implements HasMedia
 {
     use HasFactory;
     use InteractsWithMedia;
-    protected $fillable = ['uuid','organization_id', 'name', 'title', 'description', 'welcome', 'thanks','thumbnail', 'require_login', 'for_member', 'published', 'with_attendance'];
+    protected $fillable = ['uuid','organization_id', 'name', 'title','tags', 'content', 'welcome', 'thanks','thumbnail','valid_at','expire_at', 'require_login', 'for_member', 'published', 'with_attendance'];
+    protected $casts=['require_login'=>'boolean','for_member'=>'boolean','published'=>'boolean','with_attendance'=>'boolean'];
 
     public static function boot(){
         parent::boot();
@@ -173,6 +174,34 @@ class Form extends Model implements HasMedia
     public function hasChild()
     {
         return $this->fields()->exists();
+    }
+    public static function recents(){
+        return self::publics();
+    }
+    public static function publics(){
+        return Form::where('published',true)->where('for_member',false)
+        ->where(function($query){
+            $query->whereNull('valid_at')->orWhere('valid_at','<=',date('Y-m-d'));
+        })
+        ->where(function($query){
+            $query->whereNull('expire_at')->orWhere('expire_at','>=',date('Y-m-d'));
+        })
+        ->orderBy('created_at','DESC')->get();
+    }
+
+    public static function privites(){
+        if(empty(session('organization'))){
+            return false;
+        }
+        return Form::where('published',true)->where('organization_id',session('organization')->id)
+                ->where(function($query){
+                    $query->whereNull('valid_at')->orWhere('valid_at','<=',date('Y-m-d'));
+                })
+                ->where(function($query){
+                    $query->whereNull('expire_at')->orWhere('expire_at','>=',date('Y-m-d'));
+                })
+                ->get();
+
     }
 
 }

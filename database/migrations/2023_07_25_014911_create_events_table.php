@@ -15,15 +15,19 @@ return new class extends Migration
     {
         Schema::create('events', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid')->nullable();
             $table->foreignId('organization_id');
             $table->string('category_code');
             $table->tinyInteger('credit')->nullable();
-            $table->string('title_en');
-            $table->string('title_fn')->nullable();
+            $table->string('title');
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
-            $table->text('description')->nullable();
+            $table->text('tags')->nullable();
+            $table->text('content')->nullable();
             $table->text('remark')->nullable();
+            $table->boolean('require_login')->default(false);
+            $table->boolean('for_member')->default(false);
+            $table->boolean('published')->default(false);
             $table->boolean('with_attendance')->nullable();
             $table->timestamps();
         });

@@ -32,9 +32,9 @@
                     style="min-height: 200px"
                 />
             </a-form-item>
-            <a-form-item :label="$t('description')" name="description">
+            <a-form-item :label="$t('description')" name="content">
                 <quill-editor
-                    v-model:value="form.description"
+                    v-model:value="form.content"
                     style="min-height: 200px"
                 />
             </a-form-item>

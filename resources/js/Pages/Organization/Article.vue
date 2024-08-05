@@ -56,14 +56,14 @@
             <a-form-item :label="$t('published')" name="published">
               <a-switch
                 v-model:checked="article.published"
-                @change="article.public = 0" 
+                @change="article.for_member = 0" 
               />
             </a-form-item>
           </a-col>
           <a-col class="pl-10" v-if="article.published">
-            <a-form-item :label="$t('public')" name="public">
+            <a-form-item :label="$t('for_member')" name="for_member">
               <a-switch
-                v-model:checked="article.public"
+                v-model:checked="article.for_member"
               />
             </a-form-item>
           </a-col>
@@ -90,14 +90,12 @@
     <a :href="route('article.item',{t:article.uuid})" target="_blank" ref="articleUrl">{{ route('article.item',{t:article.uuid}) }}</a>
     <a-button @click="copyUrl">{{ $t('copy_to_clipboard') }}</a-button>
     <p>Article CAN NOT be delete if published.</p>
-  
-
     <a-drawer
       v-model:open="isDrawerVisible"
       class="custom-class"
       title="Basic Drawer"
       placement="right"
-      @after-visible-change="afterVisibleChange"
+      @after-open-change="afterOpenChange"
     >
       <div class="h-max-48 overflow-auto">
         Design for files and images 
@@ -251,7 +249,7 @@ export default {
     onFinishFailed({ values, errorFields, outOfDate }){
       message.error("Some required fields are missing!");
     },
-    afterVisibleChange(bool) {
+    afterOpenChange(bool) {
       if (bool) {
         axios.get(route("manage.medias", 22)).then((response) => {
           this.medias = response.data;

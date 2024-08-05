@@ -3,16 +3,15 @@
     <DefaultLayout title="Dashboard">
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{$t('forms')}}
+                {{$t('events')}}
             </h2>
         </template>
-
         <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow sm:rounded-lg ">
-                <a-table :dataSource="forms" :columns="columns">
+                <a-table :dataSource="events" :columns="columns">
                     <template #bodyCell="{column, text, record, index}">
                         <template v-if="column.dataIndex=='operation'">
-                            <inertia-link :href="route('forms.show',{form:record.id,t:record.uuid})">填寫</inertia-link>
+                            <inertia-link :href="route('events.show',{event:record.id,t:record.uuid})">填寫</inertia-link>
                         </template>
                         <template v-else-if="column.dataIndex=='abbr'">
                             <span v-if="record.organization">
@@ -51,7 +50,7 @@ export default {
     components: {
         DefaultLayout,
     },
-    props: ['forms'],
+    props: ['events'],
     data() {
         return {
             currentStep:1,

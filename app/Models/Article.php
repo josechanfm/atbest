@@ -12,8 +12,8 @@ class Article extends Model implements HasMedia
 {
     use HasFactory, InteractsWithMedia;
 
-    protected $fillable=['uuid','organization_id','sequence','category_code','intro','title','content','tags','valid_at','expire_at','url','reference','published','public','author','thumbnail','lang','user_id'];
-    protected $casts=['tags'=>'json','published'=>'boolean','public'=>'boolean'];
+    protected $fillable=['uuid','organization_id','sequence','category_code','intro','title','content','tags','valid_at','expire_at','url','reference','published','for_member','author','thumbnail','lang','user_id'];
+    protected $casts=['tags'=>'json','published'=>'boolean','for_member'=>'boolean'];
     protected $appends=['organization_abbr'];
 
     public static function boot(){
@@ -34,8 +34,11 @@ class Article extends Model implements HasMedia
 
         return $this->organization?$this->organization->abbr:NULL;
     }
+    public static function recents(){
+        return self::publics();
+    }
     public static function publics(){
-        return Article::where('published',true)->where('public',true)
+        return Article::where('published',true)->where('for_member',false)
                 ->where(function($query){
                     $query->whereNull('valid_at')->orWhere('valid_at','<=',date('Y-m-d'));
                 })
@@ -48,7 +51,7 @@ class Article extends Model implements HasMedia
         if(empty(session('organization'))){
             return false;
         }
-        return Article::where('published',true)->where('public',false)->where('organization_id',session('organization')->id)
+        return Article::where('published',true)->where('for_member',true)->where('organization_id',session('organization')->id)
                 ->where(function($query){
                     $query->whereNull('valid_at')->orWhere('valid_at','<=',date('Y-m-d'));
                 })

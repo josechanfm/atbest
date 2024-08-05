@@ -9,17 +9,64 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
 class Event extends Model
 {
     use HasFactory;
-    protected $fillable=['organization_id','category_code','credit','title_en','title_fn','start_date','end_date','description','remark','with_attendance','form_id'];
+    protected $fillable=['organization_id','category_code','credit','title','start_date','end_date','tags','content','remark','require_login','for_member','published','with_attendance','form_id'];
     protected $attributes=[
         'title_en'=>'',
         'category_code'=>'',
         'credit'=>'',
         'start_date'=>'',
     ];
+    protected $casts=['require_login'=>'boolean','for_member'=>'boolean','published'=>'boolean','with_attendance'=>'boolean'];
 
+    public static function boot(){
+        parent::boot();
+        self::creating(function($model){
+            $model->uuid=hash('crc32b',rand());
+        });
+        static::updating(function ($model){
+            if(empty($model->uuid)){
+                $model->uuid=hash('crc32b',rand());
+                //$model->uuid=Str::uuid();
+            }
+        });
+    }
+
+    public function organization()
+    {
+        return $this->belongsTo(Organization::class);
+    }
 
     public function managers(){
         return $this->belongsToMany(Member::class,'event_manager','event_id','member_id');
+    }
+
+    public static function recents(){
+        return self::publics();
+    }
+    public static function publics(){
+        return Event::where('published',true)->where('for_member',false)
+        ->where(function($query){
+            $query->whereNull('start_date')->orWhere('start_date','<=',date('Y-m-d'));
+        })
+        ->where(function($query){
+            $query->whereNull('end_date')->orWhere('end_date','>=',date('Y-m-d'));
+        })
+        ->orderBy('created_at','DESC')->get();
+    }
+
+    public static function privites(){
+        if(empty(session('organization'))){
+            return false;
+        }
+        return Event::where('published',true)->where('organization_id',session('organization')->id)
+                ->where(function($query){
+                    $query->whereNull('start_date')->orWhere('start_date','<=',date('Y-m-d'));
+                })
+                ->where(function($query){
+                    $query->whereNull('end_date')->orWhere('end_date','>=',date('Y-m-d'));
+                })
+                ->get();
+
     }
 
 
