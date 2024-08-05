@@ -39,7 +39,8 @@ class MemberController extends Controller
         return Inertia::render('Admin/Members', [
             'members' => $members,
             'organizations' => Organization::where('status', true)->get(),
-            'users' => User::whereNotIn('id', Member::whereNotNull('user_id')->get()->pluck('user_id'))->get()
+            //'users' => User::whereNotIn('id', Member::whereNotNull('user_id')->get()->pluck('user_id'))->get()
+            'users' => User::all()
         ]);
     }
 

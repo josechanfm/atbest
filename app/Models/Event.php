@@ -48,10 +48,10 @@ class Event extends Model
     public static function publics(){
         return Event::where('published',true)->where('for_member',false)
         ->where(function($query){
-            $query->whereNull('start_date')->orWhere('start_date','<=',date('Y-m-d'));
+            $query->whereNull('valid_at')->orWhere('valid_at','<=',date('Y-m-d'));
         })
         ->where(function($query){
-            $query->whereNull('end_date')->orWhere('end_date','>=',date('Y-m-d'));
+            $query->whereNull('expire_at')->orWhere('expire_at','>=',date('Y-m-d'));
         })
         ->orderBy('created_at','DESC')->get();
     }
@@ -62,10 +62,10 @@ class Event extends Model
         }
         return Event::where('published',true)->where('organization_id',session('organization')->id)
                 ->where(function($query){
-                    $query->whereNull('start_date')->orWhere('start_date','<=',date('Y-m-d'));
+                    $query->whereNull('valid_at')->orWhere('valid_at','<=',date('Y-m-d'));
                 })
                 ->where(function($query){
-                    $query->whereNull('end_date')->orWhere('end_date','>=',date('Y-m-d'));
+                    $query->whereNull('expire_at')->orWhere('expire_at','>=',date('Y-m-d'));
                 })
                 ->get();
 
