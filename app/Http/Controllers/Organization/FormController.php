@@ -85,18 +85,12 @@ class FormController extends Controller
             'title' => 'required',
         ]);
         $form = Form::create($request->all());
-        if ($request->file('thumbnail_upload')) {
-            $file = $request->file('thumbnail_upload');
-            $fileName = $form->id . '_' . $file->getClientOriginalName();
-            $file->move(public_path('thumbnail/forms'), $fileName);
-            $form->thumbnail = '/thumbnail/forms/' . $fileName;
-            $form->save();
+        if($request->file('banner_image')){
+            $form->addMedia($request->file('banner_image')[0]['originFileObj'])->toMediaCollection('banner');
         }
-
-        // if($request->file('image')){
-        //     $form->addMedia($request->file('image')[0]['originFileObj'])->toMediaCollection('form_banner');
-        // }
-
+        if($request->file('thumb_image')){
+            $form->addMedia($request->file('thumb_image')[0]['originFileObj'])->toMediaCollection('thumb');
+        }
         return to_route('manage.forms.index');
     }
 
@@ -123,7 +117,8 @@ class FormController extends Controller
     public function edit(Form $form)
     {
         //dd(Organization::find($form->organization_id));
-        $form->media;
+        $form->banner_url=$form->getFirstMediaUrl('banner');
+        $form->thumb_url=$form->getFirstMediaUrl('thumb');
         return Inertia::render('Organization/Form', [
             //'organization' => Organization::find(session('organization')->id),
             //'forms'=>Organization::find(session('organization')->id)->forms
@@ -145,17 +140,13 @@ class FormController extends Controller
             'name' => 'required',
             'title' => 'required',
         ]);
-        $data = $request->all();
-        if ($request->file('thumbnail_upload')) {
-            $file = $request->file('thumbnail_upload');
-            $fileName = $form->id . '_' . $file->getClientOriginalName();
-            $file->move(public_path('thumbnail/forms'), $fileName);
-            $data['thumbnail'] = '/thumbnail/forms/' . $fileName;
+        $form->update($request->all());
+        if($request->file('banner_image')){
+            $form->addMedia($request->file('banner_image')[0]['originFileObj'])->toMediaCollection('banner');
         }
-        $form->update($data);
-        // if($request->file('image')){
-        //     $form->addMedia($request->file('image')[0]['originFileObj'])->toMediaCollection('form_banner');
-        // }
+        if($request->file('thumb_image')){
+            $form->addMedia($request->file('thumb_image')[0]['originFileObj'])->toMediaCollection('thumb');
+        }
         return to_route('manage.forms.index');
     }
 

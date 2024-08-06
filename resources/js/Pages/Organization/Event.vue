@@ -27,18 +27,18 @@
             </a-form-item>
           </a-col>
           <a-col :xs="24" :md="8">
-            <a-form-item :label="$t('start_date')" name="start_date">
+            <a-form-item :label="$t('start_date')" name="valid_at">
               <a-date-picker
-                v-model:value="event.start_date"
+                v-model:value="event.valid_at"
                 :format="dateFormat"
                 :valueFormat="dateFormat"
               />
             </a-form-item>
           </a-col>
           <a-col :xs="24" :md="8">
-            <a-form-item :label="$t('end_date')" name="end_date">
+            <a-form-item :label="$t('end_date')" name="expire_at">
               <a-date-picker
-                v-model:value="event.end_date"
+                v-model:value="event.expire_at"
                 :format="dateFormat"
                 :valueFormat="dateFormat"
               />
@@ -66,6 +66,54 @@
           <a-switch v-model:checked="event.with_attendance"/>
         </a-form-item>
 
+
+
+        <!-- Form images-->
+        <a-form-item :label="$t('banner')" name="banner_image">
+              <div class="flex gap-5">
+                  <div>
+                    <img :src="event.banner_url" width="100"/>
+                  </div>
+                  <a-upload
+                    v-model:file-list="event.banner_image"
+                    :multiple="false"
+                    :max-count="1"
+                    :accept="'image/*'"
+                    list-type="picture-card"
+                    @change="handleBannerUpload"
+                    >
+                    <!--before upload preview-->
+                    <div v-if="!event.banner_image">
+                        <plus-outlined></plus-outlined>
+                        <div class="ant-upload-text">Upload</div>
+                    </div>
+                  </a-upload>
+              </div>
+            </a-form-item>
+
+            <a-form-item :label="$t('thumbnail')" name="thumb_image">
+              <div class="flex gap-5">
+                  <div>
+                    <img :src="event.thumb_url" width="100"/>
+                  </div>
+                  <a-upload
+                    v-model:file-list="event.thumb_image"
+                    :multiple="false"
+                    :max-count="1"
+                    :accept="'image/*'"
+                    list-type="picture-card"
+                    @change="handleThumbUpload"
+                    >
+                    <!--before upload preview-->
+                    <div v-if="!event.thumb_image">
+                        <plus-outlined></plus-outlined>
+                        <div class="ant-upload-text">Upload</div>
+                    </div>
+                  </a-upload>
+              </div>
+            </a-form-item>
+
+
         <a-form-item :label="$t('remark')" name="remark">
           <quill-editor v-model:value="event.remark" style="min-height: 200px" />
         </a-form-item>
@@ -83,6 +131,8 @@ import { quillEditor } from "vue3-quill";
 import { message } from "ant-design-vue";
 import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
+import { PlusOutlined } from "@ant-design/icons-vue";
+
 dayjs.extend(duration);
 export default {
   components: {
@@ -90,6 +140,7 @@ export default {
     quillEditor,
     message,
     dayjs,
+    PlusOutlined
   },
   props: ["event", "categories"],
   data() {
@@ -124,12 +175,11 @@ export default {
     };
   },
   created() {
-    console.log(this.event);
+    
   },
   mounted() {},
   methods: {
     onFinish() {
-      console.log(this.event);
       if (this.event.id === undefined) {
         this.$inertia.post(route("manage.events.store"), this.event, {
           onSuccess: (page) => {
@@ -140,7 +190,8 @@ export default {
           },
         });
       } else {
-        this.$inertia.patch(route("manage.events.update", this.event.id), this.event, {
+        this.event._method = 'PATCH';
+        this.$inertia.post(route("manage.events.update", this.event.id), this.event, {
           onSuccess: (page) => {
             console.log(page);
           },
@@ -153,6 +204,46 @@ export default {
     onFinishFailed({ values, errorFields, outOfDate }) {
       message.error("Some required fields are missing!");
     },
+
+    checkFileSize(file) {
+      const isLessThan200KB = file.size / 1024 / 1024 < 2;
+      if (!isLessThan200KB) {
+        this.$message.error('Image must be smaller than 200KB!');
+        return false;
+      }
+      return true;
+    },
+    handleBannerUpload(info) {
+      if(!this.checkFileSize(info.file)){
+        this.form.banner_image = null;
+        return false
+      }
+      if (info.file.status === 'uploading') {
+        this.loading = true;
+      }
+      if (info.file.status === 'done' ) {
+        // Reset the form.banner_image to only include the valid file
+        this.form.banner_image = [info.file.originFileObj];
+        this.loading = false;
+      }
+    },
+
+    handleThumbUpload(info) {
+      if(!this.checkFileSize(info.file)){
+        this.form.thumb_image = null;
+        return false
+      }
+      if (info.file.status === 'uploading') {
+        this.loading = true;
+      }
+      if (info.file.status === 'done' ) {
+        // Reset the form.banner_image to only include the valid file
+        this.form.thumb_image = [info.file.originFileObj];
+        this.loading = false;
+      }
+    }, 
+
+
   },
 };
 </script>

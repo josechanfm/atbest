@@ -66,24 +66,63 @@
           </a-col>
         </a-row>
         <a-form-item :label="$t('tag')">
-          <a-select v-model:value="article.tags" mode="tags" style="width: 100%" placeholder="Tags Mode"
-            :options="tagOptions"></a-select>
+          <a-select v-model:value="article.tags" mode="tags" style="width: 100%" placeholder="Tags Mode" :options="tagOptions"></a-select>
         </a-form-item>
-            <FileUploader
-              :file="article.thumbnail"
-              :maxSize="5120"
-              :maxWidth="1024"
-              :maxHeight="768"
-              :allowedTypes="['image/jpeg', 'image/png']"
-              @upload="handleFileUpload"
-              @delete="handleFileDelete"
-            />
+        <a-form-item :label="$t('banner')" name="banner_image">
+              <div class="flex gap-5">
+                  <div>
+                    <img :src="article.banner_url" width="100"/>
+                  </div>
+                  <a-upload
+                    v-model:file-list="article.banner_image"
+                    :multiple="false"
+                    :max-count="1"
+                    :accept="'image/*'"
+                    list-type="picture-card"
+                    @change="handleBannerUpload"
+                    >
+                    <!--before upload preview-->
+                    <div v-if="!article.banner_image">
+                        <plus-outlined></plus-outlined>
+                        <div class="ant-upload-text">Upload</div>
+                    </div>
+                  </a-upload>
+              </div>
+        </a-form-item>
+
+        <a-form-item :label="$t('thumbnail')" name="thumb_image">
+          <div class="flex gap-5">
+              <div>
+                <img :src="article.thumb_url" width="100"/>
+              </div>
+              <a-upload
+                v-model:file-list="article.thumb_image"
+                :multiple="false"
+                :max-count="1"
+                :accept="'image/*'"
+                list-type="picture-card"
+                @change="handleThumbUpload"
+                >
+                <!--before upload preview-->
+                <div v-if="!article.thumb_image">
+                    <plus-outlined></plus-outlined>
+                    <div class="ant-upload-text">Upload</div>
+                </div>
+              </a-upload>
+          </div>
+        </a-form-item>
+
+
+
 
         <div class="flex flex-row item-center justify-center">
           <a-button type="primary" html-type="submit">{{ $t("submit") }}</a-button>
         </div>
       </a-form>
     </div>
+
+
+
     <a :href="route('article.item',{t:article.uuid})" target="_blank" ref="articleUrl">{{ route('article.item',{t:article.uuid}) }}</a>
     <a-button @click="copyUrl">{{ $t('copy_to_clipboard') }}</a-button>
     <p>Article CAN NOT be delete if published.</p>
@@ -127,7 +166,7 @@ import { defineComponent, reactive } from "vue";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import UploadAdapter from "@/Components/ImageUploadAdapter.vue";
 import { message } from "ant-design-vue";
-import { ConsoleSqlOutlined, UploadOutlined } from '@ant-design/icons-vue'
+import { PlusOutlined, UploadOutlined } from '@ant-design/icons-vue'
 import FileUploader from '@/Components/FileUploader.vue'
 import { quillEditor } from 'vue3-quill';
 
@@ -135,7 +174,7 @@ export default {
   components: {
     OrganizationLayout,
     UploadAdapter,
-    UploadOutlined,
+    PlusOutlined, UploadOutlined,
     FileUploader,
     quillEditor,
     //UploadAdapter
@@ -222,7 +261,8 @@ export default {
       };
     },
     onFinish(event) {
-     this.article.thumbnail_upload=this.thumbnailUpload;
+     //this.article.thumbnail_upload=this.thumbnailUpload;
+     //this.article.banner_image=this.thumbnailUpload;
       if (this.article.id) {
         this.article._method='PATCH';
         this.$inertia.post(route("manage.articles.update", this.article.id), this.article, {
@@ -312,7 +352,46 @@ export default {
           // }
         }
       }
-    }
+    },
+
+    checkFileSize(file) {
+      const isLessThan200KB = file.size / 1024 / 1024 < 2;
+      if (!isLessThan200KB) {
+        this.$message.error('Image must be smaller than 200KB!');
+        return false;
+      }
+      return true;
+    },
+    handleBannerUpload(info) {
+      if(!this.checkFileSize(info.file)){
+        this.form.banner_image = null;
+        return false
+      }
+      if (info.file.status === 'uploading') {
+        this.loading = true;
+      }
+      if (info.file.status === 'done' ) {
+        // Reset the form.banner_image to only include the valid file
+        this.form.banner_image = [info.file.originFileObj];
+        this.loading = false;
+      }
+    },
+
+    handleThumbUpload(info) {
+      if(!this.checkFileSize(info.file)){
+        this.form.thumb_image = null;
+        return false
+      }
+      if (info.file.status === 'uploading') {
+        this.loading = true;
+      }
+      if (info.file.status === 'done' ) {
+        // Reset the form.banner_image to only include the valid file
+        this.form.thumb_image = [info.file.originFileObj];
+        this.loading = false;
+      }
+    }, 
+
   },
 
 };

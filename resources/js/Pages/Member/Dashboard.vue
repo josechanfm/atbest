@@ -144,7 +144,7 @@ export default {
 
           <ol class="list-disc">
             <li v-for="form in forms">
-              <inertia-link :href="route('forms.show', form.id)">{{ form.title }}</inertia-link>
+              <inertia-link :href="route('form.item', {t:form.uuid})">{{ form.title }}</inertia-link>
             </li>
           </ol>
 

@@ -42,7 +42,8 @@ class Form extends Model implements HasMedia
 
     public function registerMediaCollections(): void
     {
-        $this->addMediaCollection('form_content');
+        $this->addMediaCollection('banner')->singleFile()->useDisk('media');
+        $this->addMediaCollection('thumb')->singleFile()->useDisk('media');
     }
 
     public function organization()

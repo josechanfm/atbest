@@ -5,11 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\Image\Manipulations;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
+
 use Illuminate\Support\Str;
 
-class Event extends Model
+class Event extends Model implements HasMedia
 {
     use HasFactory;
+    use InteractsWithMedia;
     protected $fillable=['organization_id','category_code','credit','title','start_date','end_date','tags','content','remark','require_login','for_member','published','with_attendance','form_id'];
     protected $attributes=[
         'title_en'=>'',
@@ -32,6 +38,21 @@ class Event extends Model
             }
         });
     }
+
+    public function registerMediaConversions(Media $media = null): void
+    {
+        $this
+            ->addMediaConversion('preview')
+            ->fit(Manipulations::FIT_CROP, 300, 300)
+            ->nonQueued();
+    }
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('banner')->singleFile()->useDisk('media');
+        $this->addMediaCollection('thumb')->singleFile()->useDisk('media');
+    }
+
 
     public function organization()
     {

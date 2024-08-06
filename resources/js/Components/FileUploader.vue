@@ -46,7 +46,7 @@ export default {
   },
   props: {
     file:{
-      type: String,
+      type: Object,
     },
     maxSize: {
       type: Number,

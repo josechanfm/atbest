@@ -68,18 +68,26 @@ class ArticleController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-        $data['organization_id'] = session('organization')->id;
+        //$data['organization_id'] = session('organization')->id;
         $data['user_id'] = auth()->user()->id;
         $data['author'] = auth()->user()->name;
-        $article = Article::create($data);
+        //$article = Article::create($data);
 
-        if ($request->file('thumbnail_upload')) {
-            $file = $request->file('thumbnail_upload');
-            $fileName = $article->id . '_' . $file->getClientOriginalName();
-            $file->move(public_path('images/articles/thumbnail'), $fileName);
-            $article->thumbnail = '/images/articles/thumbnail/' . $fileName;
-            $article->save();
+        $article=session('organization')->articles()->create($data);
+        if($request->file('banner_image')){
+            $article->addMedia($request->file('banner_image')[0]['originFileObj'])->toMediaCollection('banner');
         }
+        if($request->file('thumb_image')){
+            $article->addMedia($request->file('thumb_image')[0]['originFileObj'])->toMediaCollection('thumb');
+        }
+
+        // if ($request->file('thumbnail_upload')) {
+        //     $file = $request->file('thumbnail_upload');
+        //     $fileName = $article->id . '_' . $file->getClientOriginalName();
+        //     $file->move(public_path('images/articles/thumbnail'), $fileName);
+        //     $article->thumbnail = '/images/articles/thumbnail/' . $fileName;
+        //     $article->save();
+        // }
 
         return redirect()->route('manage.articles.index');
     }
@@ -103,6 +111,8 @@ class ArticleController extends Controller
      */
     public function edit(Article $article)
     {
+        $article->banner_url=$article->getFirstMediaUrl('banner');
+        $article->thumb_url=$article->getFirstMediaUrl('thumb');
         return Inertia::render('Organization/Article', [
             'classifies' => Classify::whereBelongsTo(session('organization'))->get(),
             'articleCategories' => Config::item('article_categories'),
@@ -119,17 +129,13 @@ class ArticleController extends Controller
      */
     public function update(Request $request, Article $article)
     {
-        $data = $request->all();
-
-
-        if ($request->hasFile('thumbnail_upload')) {
-            $file = $request->file('thumbnail_upload');
-            $fileName = $article->id . '_' . $file->getClientOriginalName();
-            $file->move(public_path('images/articles/thumbnail'), $fileName);
-            $data['thumbnail'] = '/images/articles/thumbnail/' . $fileName;
+        $article->update($request->all());
+        if($request->file('banner_image')){
+            $article->addMedia($request->file('banner_image')[0]['originFileObj'])->toMediaCollection('banner');
         }
-        $article->update($data);
-
+        if($request->file('thumb_image')){
+            $article->addMedia($request->file('thumb_image')[0]['originFileObj'])->toMediaCollection('thumb');
+        }
         return redirect()->route('manage.articles.index');
     }
 

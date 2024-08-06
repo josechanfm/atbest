@@ -52,46 +52,62 @@
           <a-switch v-model:checked="form.with_attendance"/>
           <span class="pl-3">{{ $t("with_attendance_note") }}</span>
         </a-form-item>
-        <!-- Thumbnail-->
-        <a-form-item :label="$t('thumbnail')">
-          <template v-if="form.thumbnail">
-            <img :src="form.thumbnail" width="300px" />
-            <a @click="onDeleteImage(form)">{{ $t('delete_photo') }}</a>
-          </template>
-          <template v-else>
-            <template v-if="previewImage">
-              <img :src="previewImage" class="w-64" />
-              <a @click="onRemoveImage">{{ $t('remove_photo') }}</a>
-            </template>
-            <template v-else>
-              <div class="flex items-center justify-center w-64">
-                <label for="dropzone-file"
-                  class="flex flex-col items-center justify-center w-full h-48 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
-                  <div class="flex flex-col items-center justify-center pt-5 pb-6">
-                    <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
-                      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
-                    </svg>
-                    <p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                      <div v-html="$t('upload_drag_drop')" />
-                    </p>
-                    <p class="text-xs text-gray-500 dark:text-gray-400">{{ $t('image_size_note') }}</p>
+        <!-- Form images-->
+        <a-form-item :label="$t('banner')" name="banner_image">
+              <div class="flex gap-5">
+                  <div>
+                    <img :src="form.banner_url" width="100"/>
                   </div>
-                  <input id="dropzone-file" type="file" @change="onSelectFile" accept="image/png, image/gif, image/jpeg"
-                    style="display:none" />
-                </label>
+                  <a-upload
+                    v-model:file-list="form.banner_image"
+                    :multiple="false"
+                    :max-count="1"
+                    :accept="'image/*'"
+                    list-type="picture-card"
+                    @change="handleBannerUpload"
+                    >
+                    <!--before upload preview-->
+                    <div v-if="!form.banner_image">
+                        <plus-outlined></plus-outlined>
+                        <div class="ant-upload-text">Upload</div>
+                    </div>
+                  </a-upload>
               </div>
-            </template>
-          </template>
-        </a-form-item>
+            </a-form-item>
+
+            <a-form-item :label="$t('thumbnail')" name="thumb_image">
+              <div class="flex gap-5">
+                  <div>
+                    <img :src="form.thumb_url" width="100"/>
+                  </div>
+                  <a-upload
+                    v-model:file-list="form.thumb_image"
+                    :multiple="false"
+                    :max-count="1"
+                    :accept="'image/*'"
+                    list-type="picture-card"
+                    @change="handleThumbUpload"
+                    >
+                    <!--before upload preview-->
+                    <div v-if="!form.thumb_image">
+                        <plus-outlined></plus-outlined>
+                        <div class="ant-upload-text">Upload</div>
+                    </div>
+                  </a-upload>
+              </div>
+            </a-form-item>
+
+
+
+
+
         <a-form-item :wrapper-col="{ offset: 12, span: 10 }">
           <a-button type="primary" html-type="submit">{{ $t('submit') }}</a-button>
         </a-form-item>
       </a-form>
       <div v-if="form.id">
-        <a :href="route('forms.show', { form: form, t: form.uuid })" target="_blank" ref="formUrl">
-          {{ route('forms.show', {form: form,t: form.uuid}) }}</a>
+        <a :href="route('form.item', { t: form.uuid })" target="_blank" ref="formUrl">
+          {{ route('form.item', {t: form.uuid}) }}</a>
         <a-button @click="copyUrl">{{ $t('copy_to_clipboard') }}</a-button>
       </div>
     </div>
@@ -103,12 +119,14 @@
 import OrganizationLayout from "@/Layouts/OrganizationLayout.vue";
 import { quillEditor, Quill } from "vue3-quill";
 import { message } from "ant-design-vue";
+import { PlusOutlined } from "@ant-design/icons-vue";
 
 export default {
   components: {
     OrganizationLayout,
     quillEditor,
     message,
+    PlusOutlined
   },
   props: ["form"],
   data() {
@@ -160,10 +178,6 @@ export default {
       this.previewImage = URL.createObjectURL(file)
 
     },
-    onRemoveImage() {
-      this.form.thumbial_upload = null
-      this.previewImage = null
-    },
     onDeleteImage(form) {
       this.$inertia.post(route('manage.form.deleteImage', this.form), {
         onSuccess: (page) => {
@@ -206,9 +220,53 @@ export default {
     onFinishFailed({ values, errorFields, outOfDate }) {
       message.error("Some required fields are missing!");
     },
+
+
+    checkFileSize(file) {
+      const isLessThan200KB = file.size / 1024 / 1024 < 2;
+      if (!isLessThan200KB) {
+        this.$message.error('Image must be smaller than 200KB!');
+        return false;
+      }
+      return true;
+    },
+    handleBannerUpload(info) {
+      if(!this.checkFileSize(info.file)){
+        this.form.banner_image = null;
+        return false
+      }
+      if (info.file.status === 'uploading') {
+        this.loading = true;
+      }
+      if (info.file.status === 'done' ) {
+        // Reset the form.banner_image to only include the valid file
+        this.form.banner_image = [info.file.originFileObj];
+        this.loading = false;
+      }
+    },
+
+    handleThumbUpload(info) {
+      if(!this.checkFileSize(info.file)){
+        this.form.thumb_image = null;
+        return false
+      }
+      if (info.file.status === 'uploading') {
+        this.loading = true;
+      }
+      if (info.file.status === 'done' ) {
+        // Reset the form.banner_image to only include the valid file
+        this.form.thumb_image = [info.file.originFileObj];
+        this.loading = false;
+      }
+    }, 
+
+
     copyUrl() {
       navigator.clipboard.writeText(this.$refs.formUrl.href)
     },
+
+
+
 
   },
 };

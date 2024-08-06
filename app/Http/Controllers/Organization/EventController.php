@@ -55,9 +55,17 @@ class EventController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->all();
-        $data['organization_id'] = session('organization')->id;
-        Event::create($data);
+        // $data = $request->all();
+        // $data['organization_id'] = session('organization')->id;
+        // Event::create($data);
+        $event=session('organization')->events()->create($request->all());
+        if($request->file('banner_image')){
+            $event->addMedia($request->file('banner_image')[0]['originFileObj'])->toMediaCollection('banner');
+        }
+        if($request->file('thumb_image')){
+            $event->addMedia($request->file('thumb_image')[0]['originFileObj'])->toMediaCollection('thumb');
+        }
+
         return to_route('manage.events.index');
     }
 
@@ -79,6 +87,9 @@ class EventController extends Controller
      */
     public function edit(Event $event)
     {
+        $event->banner_url=$event->getFirstMediaUrl('banner');
+        $event->thumb_url=$event->getFirstMediaUrl('thumb');
+        //dd($event);
         return Inertia::render('Organization/Event', [
             'event' => $event,
             'categories' => Config::item('event_categories', session('organization'))
@@ -96,6 +107,13 @@ class EventController extends Controller
     {
         //dd($event);
         $event->update($request->all());
+        if($request->file('banner_image')){
+            $event->addMedia($request->file('banner_image')[0]['originFileObj'])->toMediaCollection('banner');
+        }
+        if($request->file('thumb_image')){
+            $event->addMedia($request->file('thumb_image')[0]['originFileObj'])->toMediaCollection('thumb');
+        }
+
         return to_route('manage.events.index');
     }
 
