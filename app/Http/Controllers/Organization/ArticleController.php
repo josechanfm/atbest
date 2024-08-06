@@ -111,8 +111,8 @@ class ArticleController extends Controller
      */
     public function edit(Article $article)
     {
-        $article->banner_url=$article->getFirstMediaUrl('banner');
-        $article->thumb_url=$article->getFirstMediaUrl('thumb');
+        // $article->banner_url=$article->getFirstMediaUrl('banner');
+        // $article->thumb_url=$article->getFirstMediaUrl('thumb');
         return Inertia::render('Organization/Article', [
             'classifies' => Classify::whereBelongsTo(session('organization'))->get(),
             'articleCategories' => Config::item('article_categories'),
@@ -152,13 +152,9 @@ class ArticleController extends Controller
         }
         return redirect()->back();
     }
-    public function deleteImage(Article $article)
+    public function deleteImage(Article $article, Request $request)
     {
-        if (file_exists($article->thumbnail)) {
-            unlink(public_path($article->thumbnail));
-        }
-        $article->thumbnail = null;
-        $article->save();
+        $article->getFirstMedia($request->collection)->delete();
         return redirect()->back();
     }
     public function sequence(Request $request)

@@ -117,8 +117,9 @@ class FormController extends Controller
     public function edit(Form $form)
     {
         //dd(Organization::find($form->organization_id));
-        $form->banner_url=$form->getFirstMediaUrl('banner');
-        $form->thumb_url=$form->getFirstMediaUrl('thumb');
+        // $form->banner_url=$form->getFirstMediaUrl('banner');
+        // $form->thumb_url=$form->getFirstMediaUrl('thumb');
+        //dd($form);
         return Inertia::render('Organization/Form', [
             //'organization' => Organization::find(session('organization')->id),
             //'forms'=>Organization::find(session('organization')->id)->forms
@@ -187,11 +188,9 @@ class FormController extends Controller
         return response()->json($data);
     }
 
-    public function deleteImage(Form $form)
+    public function deleteImage(Form $form, Request $request)
     {
-        unlink(public_path($form->thumbnail));
-        $form->thumbnail = null;
-        $form->save();
+        $form->getFirstMedia($request->collection)->delete();
         return redirect()->back();
     }
 }

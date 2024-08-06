@@ -62,12 +62,12 @@ export default {
         {
           title: "Start date",
           i18n: "start_date",
-          dataIndex: "start_date",
+          dataIndex: "valid_at",
         },
         {
           title: "End date",
           i18n: "end_date",
-          dataIndex: "end_date",
+          dataIndex: "valid_at",
         },
         {
           title: "Operation",

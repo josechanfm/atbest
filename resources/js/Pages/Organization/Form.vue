@@ -52,11 +52,17 @@
           <a-switch v-model:checked="form.with_attendance"/>
           <span class="pl-3">{{ $t("with_attendance_note") }}</span>
         </a-form-item>
+
         <!-- Form images-->
         <a-form-item :label="$t('banner')" name="banner_image">
               <div class="flex gap-5">
-                  <div>
-                    <img :src="form.banner_url" width="100"/>
+                  <div v-if="form.banner_url" class="flex">
+                    <img :src="form.banner_url" width="100" />
+                    <div class="flex flex-col justify-end">
+                      <inertia-link :href="route('manage.form.deleteImage',{form:form,collection:'banner'})" method="delete" class="text-red-500">
+                        <DeleteOutlined />
+                      </inertia-link>
+                    </div>
                   </div>
                   <a-upload
                     v-model:file-list="form.banner_image"
@@ -77,8 +83,13 @@
 
             <a-form-item :label="$t('thumbnail')" name="thumb_image">
               <div class="flex gap-5">
-                  <div>
-                    <img :src="form.thumb_url" width="100"/>
+                  <div v-if="form.thumb_url" class="flex">
+                    <img :src="form.thumb_url" width="100" />
+                    <div class="flex flex-col justify-end">
+                      <inertia-link :href="route('manage.form.deleteImage',{form:form,collection:'thumb'})" method="delete" class="text-red-500">
+                        <DeleteOutlined />
+                      </inertia-link>
+                    </div>
                   </div>
                   <a-upload
                     v-model:file-list="form.thumb_image"
@@ -119,14 +130,14 @@
 import OrganizationLayout from "@/Layouts/OrganizationLayout.vue";
 import { quillEditor, Quill } from "vue3-quill";
 import { message } from "ant-design-vue";
-import { PlusOutlined } from "@ant-design/icons-vue";
+import { PlusOutlined,DeleteOutlined } from "@ant-design/icons-vue";
 
 export default {
   components: {
     OrganizationLayout,
     quillEditor,
     message,
-    PlusOutlined
+    PlusOutlined, DeleteOutlined
   },
   props: ["form"],
   data() {

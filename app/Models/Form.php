@@ -17,6 +17,7 @@ class Form extends Model implements HasMedia
     use InteractsWithMedia;
     protected $fillable = ['uuid','organization_id', 'name', 'title','tags', 'content', 'welcome', 'thanks','thumbnail','valid_at','expire_at', 'require_login', 'for_member', 'published', 'with_attendance'];
     protected $casts=['require_login'=>'boolean','for_member'=>'boolean','published'=>'boolean','with_attendance'=>'boolean'];
+    protected $appends=['banner_url','thumb_url'];
 
     public static function boot(){
         parent::boot();
@@ -30,6 +31,12 @@ class Form extends Model implements HasMedia
                 $model->uuid=Str::uuid();
             }
         });
+    }
+    public function getBannerUrlAttribute(){
+        return $this->getFirstMediaUrl('banner');
+    }
+    public function getThumbUrlAttribute(){
+        return $this->getFirstMediaUrl('thumb');
     }
 
     public function registerMediaConversions(Media $media = null): void

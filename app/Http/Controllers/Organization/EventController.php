@@ -58,6 +58,7 @@ class EventController extends Controller
         // $data = $request->all();
         // $data['organization_id'] = session('organization')->id;
         // Event::create($data);
+        // dd($request->all());
         $event=session('organization')->events()->create($request->all());
         if($request->file('banner_image')){
             $event->addMedia($request->file('banner_image')[0]['originFileObj'])->toMediaCollection('banner');
@@ -87,8 +88,8 @@ class EventController extends Controller
      */
     public function edit(Event $event)
     {
-        $event->banner_url=$event->getFirstMediaUrl('banner');
-        $event->thumb_url=$event->getFirstMediaUrl('thumb');
+        // $event->banner_url=$event->getFirstMediaUrl('banner');
+        // $event->thumb_url=$event->getFirstMediaUrl('thumb');
         //dd($event);
         return Inertia::render('Organization/Event', [
             'event' => $event,
@@ -127,4 +128,11 @@ class EventController extends Controller
     {
         //
     }
+
+    public function deleteImage(Event $event, Request $request)
+    {
+        $event->getFirstMedia($request->collection)->delete();
+        return redirect()->back();
+    }
+
 }

@@ -17,7 +17,7 @@ class Article extends Model implements HasMedia
 
     protected $fillable=['uuid','organization_id','sequence','category_code','intro','title','content','tags','valid_at','expire_at','url','reference','published','for_member','author','thumbnail','lang','user_id'];
     protected $casts=['tags'=>'json','published'=>'boolean','for_member'=>'boolean'];
-    protected $appends=['organization_abbr'];
+    protected $appends=['organization_abbr','banner_url','thumb_url'];
 
     public static function boot(){
         parent::boot();
@@ -32,6 +32,12 @@ class Article extends Model implements HasMedia
                 $model->uuid=Str::uuid();
             }
         });
+    }
+    public function getBannerUrlAttribute(){
+        return $this->getFirstMediaUrl('banner');
+    }
+    public function getThumbUrlAttribute(){
+        return $this->getFirstMediaUrl('thumb');
     }
 
     public function registerMediaConversions(Media $media = null): void

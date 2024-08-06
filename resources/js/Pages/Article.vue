@@ -34,9 +34,11 @@ export default {
             </h2>
         </template>
 
-        <div class="container py-10 px-2 sm:px-6 lg:px-8">
+        <div class="container py-0 px-2 sm:px-6 lg:px-8">
             <h2 class="font-bold text-2xl text-gray-800">
-                {{ article.title}}</h2>
+                {{ article.title}}
+            </h2>
+            <img :src="article.banner_url" height="200"/>
             <div v-html="article.content"/>
             <div class="text-center pt-10">
             <a v-if="article.url" :href="article.url" target="_blank">Link</a>

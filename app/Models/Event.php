@@ -16,14 +16,14 @@ class Event extends Model implements HasMedia
 {
     use HasFactory;
     use InteractsWithMedia;
-    protected $fillable=['organization_id','category_code','credit','title','start_date','end_date','tags','content','remark','require_login','for_member','published','with_attendance','form_id'];
-    protected $attributes=[
-        'title_en'=>'',
-        'category_code'=>'',
-        'credit'=>'',
-        'start_date'=>'',
-    ];
+    protected $fillable=['organization_id','category_code','credit','title','valid_at','expire_at','tags','content','remark','require_login','for_member','published','with_attendance','form_id'];
+    // protected $attributes=[
+    //     'title_en'=>'',
+    //     'category_code'=>'',
+    //     'credit'=>'',
+    // ];
     protected $casts=['require_login'=>'boolean','for_member'=>'boolean','published'=>'boolean','with_attendance'=>'boolean'];
+    protected $appends=['banner_url','thumb_url'];
 
     public static function boot(){
         parent::boot();
@@ -37,6 +37,12 @@ class Event extends Model implements HasMedia
                 $model->uuid=Str::uuid();
             }
         });
+    }
+    public function getBannerUrlAttribute(){
+        return $this->getFirstMediaUrl('banner');
+    }
+    public function getThumbUrlAttribute(){
+        return $this->getFirstMediaUrl('thumb');
     }
 
     public function registerMediaConversions(Media $media = null): void

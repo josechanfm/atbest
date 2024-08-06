@@ -70,8 +70,13 @@
         </a-form-item>
         <a-form-item :label="$t('banner')" name="banner_image">
               <div class="flex gap-5">
-                  <div>
-                    <img :src="article.banner_url" width="100"/>
+                  <div v-if="article.banner_url" class="flex">
+                    <img :src="article.banner_url" width="100" />
+                    <div class="flex flex-col justify-end">
+                      <inertia-link :href="route('manage.article.deleteImage',{article:article,collection:'banner'})" method="delete" class="text-red-500">
+                        <DeleteOutlined />
+                      </inertia-link>
+                    </div>
                   </div>
                   <a-upload
                     v-model:file-list="article.banner_image"
@@ -92,24 +97,30 @@
 
         <a-form-item :label="$t('thumbnail')" name="thumb_image">
           <div class="flex gap-5">
-              <div>
-                <img :src="article.thumb_url" width="100"/>
+            <div v-if="article.thumb_url" class="flex">
+              <img :src="article.thumb_url" width="100" />
+              <div class="flex flex-col justify-end">
+                <inertia-link :href="route('manage.article.deleteImage',{article:article,collection:'thumb'})" method="delete" class="text-red-500">
+                  <DeleteOutlined />
+                </inertia-link>
               </div>
-              <a-upload
-                v-model:file-list="article.thumb_image"
-                :multiple="false"
-                :max-count="1"
-                :accept="'image/*'"
-                list-type="picture-card"
-                @change="handleThumbUpload"
-                >
-                <!--before upload preview-->
-                <div v-if="!article.thumb_image">
-                    <plus-outlined></plus-outlined>
-                    <div class="ant-upload-text">Upload</div>
-                </div>
-              </a-upload>
+            </div>
+            <a-upload
+              v-model:file-list="article.thumb_image"
+              :multiple="false"
+              :max-count="1"
+              :accept="'image/*'"
+              list-type="picture-card"
+              @change="handleThumbUpload"
+            >
+              <!--before upload preview-->
+              <div v-if="!article.thumb_image">
+                <plus-outlined></plus-outlined>
+                <div class="ant-upload-text">Upload</div>
+              </div>
+            </a-upload>
           </div>
+          
         </a-form-item>
 
 
@@ -166,7 +177,7 @@ import { defineComponent, reactive } from "vue";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import UploadAdapter from "@/Components/ImageUploadAdapter.vue";
 import { message } from "ant-design-vue";
-import { PlusOutlined, UploadOutlined } from '@ant-design/icons-vue'
+import { PlusOutlined, DeleteOutlined, UploadOutlined } from '@ant-design/icons-vue'
 import FileUploader from '@/Components/FileUploader.vue'
 import { quillEditor } from 'vue3-quill';
 
@@ -174,7 +185,7 @@ export default {
   components: {
     OrganizationLayout,
     UploadAdapter,
-    PlusOutlined, UploadOutlined,
+    PlusOutlined, UploadOutlined, DeleteOutlined,
     FileUploader,
     quillEditor,
     //UploadAdapter

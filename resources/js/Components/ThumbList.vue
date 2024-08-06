@@ -12,9 +12,10 @@ const props = defineProps({
     <div class="bg-white relative shadow rounded-lg md:pl-5">
       <div class="flex flex-col md:flex-row items-center">
         <div class="md:w-[14vw] md:mr-4 shrink-0 flex justify-center">
+
           <img
-            v-if="record.thumbnail"
-            :src="record.thumbnail"
+            v-if="record.thumb_url"
+            :src="record.thumb_url"
             class="object-cover"
             alt="thumbnail"
             width="200px"

@@ -45,8 +45,8 @@
             </a-form-item>
           </a-col>
         </a-row>
-        <a-form-item :label="$t('description')" name="description">
-          <quill-editor v-model:value="event.description" style="min-height: 200px" />
+        <a-form-item :label="$t('description')" name="content">
+          <quill-editor v-model:value="event.content" style="min-height: 200px" />
         </a-form-item>
         <a-form-item :label="$t('require_login')" name="require_login">
           <a-switch v-model:checked="event.require_login" @change="event.for_member = false" />
@@ -71,8 +71,13 @@
         <!-- Form images-->
         <a-form-item :label="$t('banner')" name="banner_image">
               <div class="flex gap-5">
-                  <div>
-                    <img :src="event.banner_url" width="100"/>
+                  <div v-if="event.banner_url" class="flex">
+                    <img :src="event.banner_url" width="100" />
+                    <div class="flex flex-col justify-end">
+                      <inertia-link :href="route('manage.event.deleteImage',{event:event,collection:'banner'})" method="delete" class="text-red-500">
+                        <DeleteOutlined />
+                      </inertia-link>
+                    </div>
                   </div>
                   <a-upload
                     v-model:file-list="event.banner_image"
@@ -93,8 +98,13 @@
 
             <a-form-item :label="$t('thumbnail')" name="thumb_image">
               <div class="flex gap-5">
-                  <div>
-                    <img :src="event.thumb_url" width="100"/>
+                  <div v-if="event.thumb_url" class="flex">
+                    <img :src="event.thumb_url" width="100" />
+                    <div class="flex flex-col justify-end">
+                      <inertia-link :href="route('manage.event.deleteImage',{event:event,collection:'thumb'})" method="delete" class="text-red-500">
+                        <DeleteOutlined />
+                      </inertia-link>
+                    </div>
                   </div>
                   <a-upload
                     v-model:file-list="event.thumb_image"
@@ -131,7 +141,7 @@ import { quillEditor } from "vue3-quill";
 import { message } from "ant-design-vue";
 import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
-import { PlusOutlined } from "@ant-design/icons-vue";
+import { PlusOutlined, DeleteOutlined } from "@ant-design/icons-vue";
 
 dayjs.extend(duration);
 export default {
@@ -140,7 +150,7 @@ export default {
     quillEditor,
     message,
     dayjs,
-    PlusOutlined
+    PlusOutlined, DeleteOutlined
   },
   props: ["event", "categories"],
   data() {
@@ -154,7 +164,7 @@ export default {
       rules: {
         title_en: { required: true },
         category_code: { required: true },
-        start_date: { required: true },
+        valid_at: { required: true },
       },
       validateMessages: {
         required: "${label} is required!",
