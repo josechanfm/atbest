@@ -14,6 +14,7 @@ class RegistrationController extends Controller
 {
     //
     public function create(){
+
         return Inertia::render('Auth/Registration',[
             'organizations'=>Organization::where('registration_code','<>','')->where('status','=',true)->get()
         ]);
@@ -27,7 +28,6 @@ class RegistrationController extends Controller
             'email'=>'required|email',
             'password'=>'required',
         ]);
-
         $organization=Organization::find($request->organization_id);
         if(!$organization){
             return redirect()->route('/');
@@ -42,6 +42,7 @@ class RegistrationController extends Controller
 
         //make sure user account can create
         $user=User::where('email',$request->email)->first();
+
         if($user){ // has user account
             $member=$organization->members->where('user_id',$user->id)->first();
             if($member){ //has user account and also same organization member
@@ -66,15 +67,23 @@ class RegistrationController extends Controller
         }
         //if no member, but the user account is surely exist
         if(empty($member)){
-            $member=Member::create([
+            $organization->members()->create([
                 'user_id'=>$user->id,
                 'given_name'=>$request->given_name,
                 'middle_name'=>$request->middle_name??null,
                 'family_name'=>$request->family_name,
                 'email'=>$request->email
             ]);
+            // $member=Member::create([
+            //     'user_id'=>$user->id,
+            //     'given_name'=>$request->given_name,
+            //     'middle_name'=>$request->middle_name??null,
+            //     'family_name'=>$request->family_name,
+            //     'email'=>$request->email
+            // ]);
         }
-        $member->organizations()->attach($organization->id);
+        //dd($member,$organization);
+        //$member->organization()->attach($organization->id);
 
         return to_route('login');
     }
