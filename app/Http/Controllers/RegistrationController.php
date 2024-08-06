@@ -84,8 +84,8 @@ class RegistrationController extends Controller
         }
         //dd($member,$organization);
         //$member->organization()->attach($organization->id);
-
-        return to_route('login');
+        Auth()->login($user);
+        return to_route('member.dashboard');
     }
 }
 
