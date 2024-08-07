@@ -142,7 +142,7 @@ export default {
     },
     methods: {
         clearResponses(poll) {
-            axios.post(route("widget.poll.responseClear", poll))
+            axios.post(route("widget.admin.poll.responseClear", poll))
                 .then((resp) => {
                     poll.responses_count = 0
                     poll.responses = []
@@ -150,7 +150,7 @@ export default {
                 });
         },
         updatePollResult() {
-            axios.post(route("widget.poll.responseAll", this.poll))
+            axios.post(route("widget.admin.poll.responseAll", this.poll))
                 .then((resp) => {
                     this.poll.responses = resp.data
                     this.groupSelected = { A: 0, B: 0, C: 0, D: 0 };

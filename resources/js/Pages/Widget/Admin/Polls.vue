@@ -1,8 +1,9 @@
 <template>
-    <div class="font-sans text-gray-900 antialiased">
+    <WidgetLayout title="Widgets">
+    <div class="py-5 font-sans text-gray-900 antialiased">
         <div class="container mx-auto">
             <div class="flex justify-between gap-6">
-                <a-button type="primary" @click="createRecord()">{{ $t("create") }}</a-button>
+                <a-button type="primary" @click="createRecord()">Create</a-button>
             </div>
         </div>
         <div class="container mx-auto pt-5">
@@ -14,7 +15,7 @@
                     <template #bodyCell="{ column, text, record, index }">
                         <template v-if="column.dataIndex == 'operation'">
                             <a-button @click="editRecord(record)">Edit</a-button>
-                            <a :href="route('widget.polls.show',record)" target="PollDisplay">Show</a>
+                            <a-button as="link" :href="route('widget.admin.polls.show',record)" target="PollDisplay">Show</a-button>
                             <a-popconfirm
                                 title="Are you sure to delete all responses records?"
                                 ok-text="Yes"
@@ -36,7 +37,7 @@
             </div>
         </div>
     </div>
-
+</WidgetLayout>
         <!-- Modal Start-->
         <a-modal v-model:open="modal.isOpen" :title="modal.title" width="60%">
             <a-form ref="modalRef" :model="modal.data" name="Teacher" :label-col="{ span: 4}"
@@ -72,13 +73,13 @@
 
 
 <script>
-import WebLayout from '@/Layouts/WebLayout.vue';
+import WidgetLayout from '@/Layouts/WidgetLayout.vue';
 import { quillEditor } from 'vue3-quill';
 import { message } from 'ant-design-vue';
 
 export default {
     components: {
-        WebLayout,
+        WidgetLayout,
         quillEditor,
         message
     },
@@ -94,19 +95,15 @@ export default {
             columns: [
                 {
                     title: "Question",
-                    i18n: "question",
                     dataIndex: "question",
                 }, {
                     title: "Status",
-                    i18n: "status",
                     dataIndex: "status",
                 }, {
                     title: "Count",
-                    i18n: "count",
                     dataIndex: "responses_count",
                 }, {
                     title: "Operation",
-                    i18n: "operation",
                     dataIndex: "operation",
                 },
             ],
@@ -141,6 +138,7 @@ export default {
         editRecord(record) {
             this.modal.data = { ...record };
             this.modal.mode = "EDIT";
+            this.modal.title = "Edit";
             this.modal.isOpen = true;
         },
         storeRecord(){

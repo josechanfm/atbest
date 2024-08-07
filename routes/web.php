@@ -68,8 +68,6 @@ Route::get('event', [\App\Http\Controllers\EventController::class, 'item'])->nam
 
 Route::get('form/{entry}/receipt', [App\Http\Controllers\FormController::class, 'receipt'])->name('form.receipt');
 Route::get('content', [App\Http\Controllers\ContentController::class,'page'])->name('content');
-Route::get('widget/polling',[App\Http\Controllers\Widget\PollController::class,'polling'])->name('widget.polling');
-Route::post('widget/poll/vote',[App\Http\Controllers\Widget\PollController::class,'vote'])->name('widget.poll.vote');
 
 //Member
 Route::group([
@@ -138,10 +136,7 @@ Route::group([
     Route::delete('event/delete_image/{event}', [App\Http\Controllers\Organization\EventController::class, 'deleteImage'])->name('manage.event.deleteImage');
     Route::resource('configs', App\Http\Controllers\Organization\ConfigController::class)->names('manage.configs');
     Route::get('image_upload', [App\Http\Controllers\Organization\UploaderController::class, 'image'])->name('manage.image_upload');
-    Route::get('widget/dashboard',[App\Http\Controllers\Widget\DashboardController::class, 'index'])->name('widget.dashboard');
-    Route::resource('widget/polls',App\Http\Controllers\Widget\PollController::class)->names('widget.polls');
-    Route::post('widget/poll/{poll}/responseClear',[App\Http\Controllers\Widget\PollController::class,'responseClear'])->name('widget.poll.responseClear');
-    Route::post('widget/poll/{poll}/responseAll',[App\Http\Controllers\Widget\PollController::class,'responseAll'])->name('widget.poll.responseAll');
+
 });
 
 //admin
@@ -175,5 +170,44 @@ Route::group([
     Route::get('entry/{form}/export', [App\Http\Controllers\Admin\EntryController::class, 'export'])->name('admin.entry.export');
     Route::get('form/{form}/entry/{entry}/success', [App\Http\Controllers\Admin\EntryController::class, 'success'])->name('admin.form.entry.success');
     Route::post('form/delete_media/{form}', [App\Http\Controllers\Admin\FormController::class, 'deleteMedia'])->name('admin.form.deleteMedia');
+
+});
+
+
+
+
+
+
+
+//Widget
+Route::group([
+    'prefix' => 'widget',
+], function () {
+    Route::get('polling',[App\Http\Controllers\Widget\PollController::class,'polling'])->name('widget.polling');
+    Route::post('poll/vote',[App\Http\Controllers\Widget\PollController::class,'vote'])->name('widget.poll.vote');
+    
+    //Widget Admin
+    Route::group([
+        'prefix' => 'admin',
+        'middleware' => [
+            'auth:sanctum',
+            config('jetstream.auth_session'),
+            'verified',
+            'role:organizer|admin'
+        ]
+    ], function () {
+        Route::get('/',[App\Http\Controllers\Widget\DashboardController::class, 'index'])->name('widget.admin.dashboard');
+        Route::resource('polls',App\Http\Controllers\Widget\Admin\PollController::class)->names('widget.admin.polls');
+        Route::post('poll/{poll}/responseClear',[App\Http\Controllers\Widget\Admin\PollController::class,'responseClear'])->name('widget.admin.poll.responseClear');
+        Route::post('poll/{poll}/responseAll',[App\Http\Controllers\Widget\Admin\PollController::class,'responseAll'])->name('widget.admin.poll.responseAll');
+        
+        Route::get('materials', function(){
+            return Inertia::render('Widget/ComingSoon');
+        })->name('widget.admin.materials');
+        Route::get('tutorials', function(){
+            return Inertia::render('Widget/ComingSoon');
+        })->name('widget.admin.tutorials');
+    });
+
 
 });
