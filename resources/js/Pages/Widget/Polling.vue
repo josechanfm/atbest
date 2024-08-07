@@ -1,7 +1,7 @@
 <template>
     <div class="font-sans text-gray-900 antialiased">
-        <div class="container mx-auto pt-5">
-            <div class="container" v-if="poll">
+        <div class="p-2 w-full h-auto sm:w-auto sm:h-auto max-w-[800px] mx-auto">
+            <div class="container " v-if="poll">
                 <a-form
                     name="myPoll"
                     :model="poll"
@@ -12,7 +12,7 @@
                     <a-input v-model:value="poll.username"/>
                 </a-form-item>
                 
-                <div v-html="poll.question" />
+                <div v-html="poll.question" class="w-full h-auto overflow-hidden"/>
                 <div style="line-height: 2;">
                     <div :class="selectedAnswer=='A'?'text-red-500':''">A: <input type="radio" v-model="poll.answer" value="A">&nbsp;{{ poll.option_a }}</input></div>
                     <div :class="selectedAnswer=='B'?'text-red-500':''">B: <input type="radio" v-model="poll.answer" value="B">&nbsp;{{ poll.option_b }}</input></div>

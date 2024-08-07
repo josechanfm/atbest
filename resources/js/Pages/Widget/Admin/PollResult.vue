@@ -1,4 +1,5 @@
 <template>
+    <WidgetLayout title="Widgets">
     <div class="font-sans text-gray-900 antialiased">
         <div class="container mx-auto pt-5">
             <div class="card-container">
@@ -73,12 +74,12 @@
         </div>
     </div>
 
-
+</WidgetLayout>
 </template>
 
 
 <script>
-import WebLayout from '@/Layouts/WebLayout.vue';
+import WidgetLayout from '@/Layouts/WidgetLayout.vue';
 import { message } from 'ant-design-vue';
 import { DoughnutChart } from 'vue-chart-3';
 import { Chart, registerables } from "chart.js";
@@ -87,7 +88,7 @@ Chart.register(...registerables);
 
 export default {
     components: {
-        WebLayout,
+        WidgetLayout,
         message,
         DoughnutChart
     },
