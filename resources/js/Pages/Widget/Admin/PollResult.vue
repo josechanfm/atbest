@@ -20,6 +20,7 @@
                                 <a :href="route('widget.polling', { uuid: poll.uuid })" target="Polling">
                                     <a-qrcode :value="route('widget.polling', { uuid: poll.uuid })" />
                                 </a>
+                                
                                 <div class="pt-5 pb-5"><a-button @click="showIndividuals = !showIndividuals">Show
                                         Individuals</a-button></div>
                                 <div><a-button @click="clearResponses(poll)">Clear Responses</a-button></div>

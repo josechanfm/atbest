@@ -58,7 +58,7 @@
                     <a-textarea v-model:value="modal.data.option_d" />
                 </a-form-item>
                 <a-form-item label="Answer" name="answer">
-                    <a-input v-model:value="modal.data.answer" />
+                    <a-select v-model:value="modal.data.answer" :options="answerOptions"/>
                 </a-form-item>
             </a-form>
             <template #footer>
@@ -123,6 +123,12 @@ export default {
                 range: "${label} must be between ${min} and ${max}",
                 },
             },
+            answerOptions:[
+                {value:'A'},
+                {value:'B'},
+                {value:'C'},
+                {value:'D'},
+            ]
 
         }
     },
@@ -146,7 +152,7 @@ export default {
             this.$refs.modalRef
                 .validateFields()
                 .then(() => {
-                this.$inertia.post(route("widget.polls.store"), this.modal.data, {
+                this.$inertia.post(route("widget.admin.polls.store"), this.modal.data, {
                     onSuccess: (page) => {
                         this.modal.data = {};
                         this.modal.isOpen = false;
@@ -167,7 +173,7 @@ export default {
                 .validateFields()
                 .then(() => {
                 this.$inertia.put(
-                    route("widget.polls.update", this.modal.data.id),
+                    route("widget.admin.polls.update", this.modal.data.id),
                     this.modal.data,
                     {
                     onSuccess: (page) => {
