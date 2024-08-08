@@ -165,7 +165,7 @@ export default {
       );
     };
     const page = usePage();
-    loadLanguageAsync(page.props.value.lang);
+    //loadLanguageAsync(page.props.value.lang);
     const logout = () => {
       router.post(route("logout"));
     };

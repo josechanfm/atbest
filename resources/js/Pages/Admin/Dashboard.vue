@@ -6,6 +6,7 @@
             </h2>
         </template>
         <p>Admin Dashboard</p>
+        {{ $page.props.user }}
     </AdminLayout>
 
 </template>

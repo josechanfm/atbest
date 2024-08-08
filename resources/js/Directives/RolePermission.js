@@ -1,14 +1,22 @@
 import { usePage } from '@inertiajs/vue3';
 
 const hasPermission = (permission) => {
-    const permissions = usePage().props.currentUserPermissions
-    return permissions.includes(permission)
+    if(!usePage().props.user.permissions){
+        return false;
+    }
+    const userPermissions=usePage().props.user.permissions.map(p=>p.name);
+    if(Array.isArray(permission)){
+        return permission.some(p=>{
+            return userPermissions.includes(p)
+        })
+    }else{
+        return userPermissions.includes(permission)
+    }
+   
 }
 
 function checkPermission(el, binding) {
     const { value } = binding
-    console.log(usePage().props)
-
     if (!hasPermission(value)) {
         el.style.display = 'none';
         //el.parentNode && el.parentNode.removeChild(el)
@@ -16,7 +24,6 @@ function checkPermission(el, binding) {
 }
 
 const hasRole = (role) => {
-    console.log(usePage().props.user);
     const userRoles=usePage().props.user.roles.map(u=>u.name);
     if(Array.isArray(role)){
          return role.some(r=>{
@@ -57,7 +64,7 @@ const role = {
 
 export default {
     install (App, options) {
-        App.directive('can', permission)
+        App.directive('permission', permission)
         App.directive('role', role)
         App.config.globalProperties.$can = hasPermission
         App.config.globalProperties.$is = hasRole

@@ -81,9 +81,9 @@
             <a-form-item :label="$t('roles')" name="roles">
               <a-checkbox-group v-model:value="modal.data.role_ids">
                 <template v-for="role in roles">
-                  <a-checkbox :value="role.id" :style="verticalStyle">{{
-                    role.name
-                  }}</a-checkbox>
+                  <a-checkbox :value="role.id" :style="verticalStyle">
+                    {{ role.name }} ({{ role.guard_name }})
+                  </a-checkbox>
                 </template>
               </a-checkbox-group>
             </a-form-item>

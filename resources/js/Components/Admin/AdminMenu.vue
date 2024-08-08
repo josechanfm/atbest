@@ -82,6 +82,16 @@
           </inertia-link>
         </span>
       </a-menu-item>
+      <a-menu-item key="widget">
+        <template #icon>
+          <PieChartOutlined />
+        </template>
+        <span>
+          <inertia-link :href="route('widget.admin.dashboard')">
+            {{ $t("widget") }}
+          </inertia-link>
+        </span>
+      </a-menu-item>
       <a-sub-menu key="sub1">
         <template #icon>
           <MailOutlined />

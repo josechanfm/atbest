@@ -81,7 +81,7 @@ const showingNavigationDropdown = ref(false);
                 <a href="https://www.mo.gov.mo" target="_blank"
                   class="text-bold text-white hover:text-yellow-300 text-md">一戶通</a>
               </li>
-              <template v-if="$page.props.user.id">
+              <template v-if="$page.props.user">
                 <li>
                   <a
                     :href="route('member.dashboard')"
@@ -137,7 +137,7 @@ const showingNavigationDropdown = ref(false);
               {{ $t("member_dashboard") }}
             </ResponsiveNavLink>
             <!-- Authentication -->
-            <template v-if="$page.props.user.id">
+            <template v-if="$page.props.user">
               <form method="POST" @submit.prevent="logout">
                 <ResponsiveNavLink as="button"> {{ $t("log_out") }} </ResponsiveNavLink>
               </form>

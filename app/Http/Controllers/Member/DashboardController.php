@@ -14,7 +14,8 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $members = Auth()->user()->members;
+        $members = auth()->user()->members;
+        auth()->user()->permissions;
         if ($members->count()==0) {
             return Inertia::render('Error', [
                 'message' => "You are not a register member."
@@ -26,6 +27,7 @@ class DashboardController extends Controller
         if(empty(session('member'))){
             session(['member'=>$members[0]]);
         }
+
         // dd(session('member')->organization);
         // dd(Feature::whereBelongsTo(session('member')->organization)->orderBy('sequence')->limit(4)->get());
         return Inertia::render('Member/Dashboard', [

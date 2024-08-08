@@ -22,14 +22,15 @@ class LoginResponse implements LoginResponseContract
         // dd(Auth()->user()->member);
         // $member= Member::where('user_id',auth()->user()->id)->with('guardian')->first();
         session_unset();
-        $members=Auth()->user()->members;
-        
+        $members=auth()->user()->members;
         if($request->service && $request->service=='widget'){
             return redirect()->route('widget.dashboard');
         }
-        if(Auth()->user()->hasRole('admin')){
+
+        if(auth()->user()->hasRole('admin')){
             return redirect()->route('admin.dashboard');
         }
+        auth()->user()->permissions;
         if($members){
             return redirect()->route('member.dashboard');
         }else{

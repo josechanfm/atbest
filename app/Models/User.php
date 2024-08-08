@@ -11,6 +11,7 @@ use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Jetstream\HasTeams;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
+//use Spatie\Permission\Traits\HasPermissions;
 use App\Notifications\SetPasswordNotification;
 use Attribute;
 use Illuminate\Auth\Notifications\ResetPassword as ResetPasswordNotification;
@@ -26,7 +27,7 @@ class User extends Authenticatable
     use Notifiable;
     use TwoFactorAuthenticatable;
     use HasRoles;
-    
+    //use HasPermissions;
     /**
      * The attributes that are mass assignable.
      *
