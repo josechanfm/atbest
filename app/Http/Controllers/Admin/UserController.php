@@ -109,7 +109,7 @@ class UserController extends Controller
         }
         $user->update($data);
         $user->roles()->sync($request->role_ids);
-        //dd($request->all());
+        dd($request->all());
         //$user->givePermissionTo($request->permission_ids);
         $user->syncPermissions($request->permission_ids);
         $user->organizations()->sync($request->organization_ids);
