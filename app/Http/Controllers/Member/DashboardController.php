@@ -29,7 +29,6 @@ class DashboardController extends Controller
         // dd(session('member')->organization);
         // dd(Feature::whereBelongsTo(session('member')->organization)->orderBy('sequence')->limit(4)->get());
         return Inertia::render('Member/Dashboard', [
-            'currentMember'=>session('member'),
             'members' => $members,
             //'features'=>Article::whereBelongsTo(session('member')->organization)->where('category_code','FEATURE')->orderBy('sequence')->limit(4)->get(),
             'features'=>Feature::whereBelongsTo(session('member')->organization)->orderBy('sequence')->limit(4)->get(),

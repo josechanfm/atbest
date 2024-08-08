@@ -121,8 +121,8 @@
 
 <script>
 import { ref, reactive } from "vue";
-import { Inertia } from "@inertiajs/inertia";
-import { usePage } from "@inertiajs/inertia-vue3";
+import { router } from "@inertiajs/vue3";
+import { usePage } from "@inertiajs/vue3";
 import Dropdown from "@/Components/Dropdown.vue";
 import DropdownLink from "@/Components/DropdownLink.vue";
 import { MenuUnfoldOutlined, MenuFoldOutlined } from "@ant-design/icons-vue";
@@ -152,7 +152,7 @@ export default {
     const collapsed = ref(false);
 
     const switchToTeam = (team) => {
-      Inertia.put(
+      router.put(
         route("current-team.update"),
         {
           team_id: team.id,
@@ -165,7 +165,7 @@ export default {
     const page = usePage();
     loadLanguageAsync(page.props.value.lang);
     const logout = () => {
-      Inertia.post(route("logout"));
+      router.post(route("logout"));
     };
 
     return {

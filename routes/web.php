@@ -196,7 +196,7 @@ Route::group([
             'role:organizer|admin'
         ]
     ], function () {
-        Route::get('/',[App\Http\Controllers\Widget\DashboardController::class, 'index'])->name('widget.admin.dashboard');
+        Route::get('/',[App\Http\Controllers\Widget\Admin\DashboardController::class, 'index'])->name('widget.admin.dashboard');
         Route::resource('polls',App\Http\Controllers\Widget\Admin\PollController::class)->names('widget.admin.polls');
         Route::post('poll/{poll}/responseClear',[App\Http\Controllers\Widget\Admin\PollController::class,'responseClear'])->name('widget.admin.poll.responseClear');
         Route::post('poll/{poll}/responseAll',[App\Http\Controllers\Widget\Admin\PollController::class,'responseAll'])->name('widget.admin.poll.responseAll');

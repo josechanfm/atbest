@@ -3,15 +3,14 @@ import '../css/app.css';
 //import '../css/admin.css'
 
 import { createApp, h } from 'vue';
-import { createInertiaApp, Head, Link } from '@inertiajs/inertia-vue3';
+import { createInertiaApp, Head, Link } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m';
-import { InertiaProgress } from '@inertiajs/progress';
 import Antd from 'ant-design-vue';
 import 'ant-design-vue/dist/reset.css';
-
 import { i18nVue } from 'laravel-vue-i18n'
 //import 'ant-design-vue/dist/antd.css';
+import  RolePermission  from './Directives/RolePermission.js';
 
 
 // import { createI18n } from 'vue-i18n';
@@ -27,11 +26,12 @@ const appName = window.document.getElementsByTagName('title')[0]?.innerText || '
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
     resolve: (name) => resolvePageComponent(`./Pages/${name}.vue`, import.meta.glob('./Pages/**/*.vue')),
-    setup({ el, app, props, plugin }) {
-        createApp({ render: () => h(app, props) })
+    setup({ el, App, props, plugin }) {
+        createApp({ render: () => h(App, props) })
             .use(plugin)
             .use(ZiggyVue, Ziggy)
             .use(Antd)
+            .use(RolePermission)
             .use(i18nVue, {
                 lang: 'zh-TW',
                 resolve: async lang => {
@@ -46,4 +46,3 @@ createInertiaApp({
     },
 });
 
-InertiaProgress.init({ color: '#4B5563' });

@@ -32,7 +32,6 @@
 
 import { defineComponent, ref, watch } from 'vue';
 
-import { Inertia } from '@inertiajs/inertia';
 import SubMenu from './SubMenu.vue';
 import * as AntdIcons from '@ant-design/icons-vue';
 

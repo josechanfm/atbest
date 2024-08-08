@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from "vue";
-import { Inertia } from "@inertiajs/inertia";
-import { Head, Link } from "@inertiajs/inertia-vue3";
+import { router } from "@inertiajs/vue3";
+import { Head, Link } from "@inertiajs/vue3";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink.vue";
 
 defineProps({
@@ -13,7 +13,7 @@ defineProps({
 });
 const logout = () => {
   console.log("logout");
-  Inertia.post(route("logout"));
+  router.post(route("logout"));
 };
 
 const showingNavigationDropdown = ref(false);

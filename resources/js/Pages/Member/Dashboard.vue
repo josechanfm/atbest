@@ -10,7 +10,7 @@ export default {
     ThumbList,
     QRCodeVue3,
   },
-  props: ["currentMember", "members", "features", "forms", "articles", "cardStyle"],
+  props: ["members", "features", "forms", "articles", "cardStyle"],
   data() {
     return {
       member: null,
@@ -75,8 +75,8 @@ export default {
     this.member = this.members[0]
     if(this.cardStyle.logo){
       this.qrcodeLogo='/images/'+this.cardStyle.logo
-    }else if(this.$page.props.currentMember.organization.logo){
-      this.qrcodeLogo=this.$page.props.currentMember.organization.logo
+    }else if(this.$page.props.member.organization.logo){
+      this.qrcodeLogo=this.$page.props.member.organization.logo
     }
   },
   mounted() { },
@@ -189,17 +189,17 @@ export default {
                   @click="onShowQrcode">
                   <div class="flex flex-col w-xl">
                     <div class="flex justify-center">
-                      <div class="text-lg font-bold">{{ currentMember.organization['name_' + $t('lang')] }}</div>
+                      <div class="text-lg font-bold">{{ member.organization['name_' + $t('lang')] }}</div>
                     </div>
                     <div class="flex">
                       <div class="flex flex-col flex-auto gap-1">
                         <div class="">姓名：</div>
-                        <div class="mb-2">{{ currentMember.family_name }}{{ currentMember.given_name }}</div>
+                        <div class="mb-2">{{ member.family_name }}{{ member.given_name }}</div>
                         <div class="">會員編號：</div>
-                        <div class="font-sans mb-2">{{ currentMember.member_number }}</div>
+                        <div class="font-sans mb-2">{{ member.member_number }}</div>
                       </div>
                       <div class="flex text-right">
-                        <img v-if="currentMember.avatar" class="w-20 h-20" :src="currentMember.avatar" />
+                        <img v-if="member.avatar" class="w-20 h-20" :src="member.avatar" />
                         <img v-else class="w-20 h-20" src="/avatars/dummy-avatar.jpg" />
                       </div>
                     </div>
@@ -207,11 +207,11 @@ export default {
                   <div class="flex text-xs">
                     <div class="flex flex-col gap-1 flex-auto">
                       <div class="">發出日期：</div>
-                      <div class="font-sans text-base">{{ currentMember.valid_at }}</div>
+                      <div class="font-sans text-base">{{ member.valid_at }}</div>
                     </div>
                     <div class="flex flex-col gap-1 flex-auto">
                       <div class="">有效日期：</div>
-                      <div class="font-sans text-base">{{ currentMember.expired_at }}</div>
+                      <div class="font-sans text-base">{{ member.expired_at }}</div>
                     </div>
                   </div>
                 </div>
@@ -222,13 +222,13 @@ export default {
 
               <div class="mt-16">
                 <h1 class="font-bold text-center text-3xl text-gray-900">
-                  {{ currentMember.family_name }}{{ currentMember.given_name }}
+                  {{ member.family_name }}{{ member.given_name }}
                 </h1>
                 <h1 class="font-bold text-center text-2xl text-gray-900">
-                  {{ currentMember.display_name }}
+                  {{ member.display_name }}
                 </h1>
                 <p class="text-center text-sm text-gray-400 font-medium">
-                  {{ currentMember.organization['name_' + $t('lang')] }}
+                  {{ member.organization['name_' + $t('lang')] }}
                 </p>
                 <p>
                   <span> </span>
@@ -236,16 +236,16 @@ export default {
                 <div class="my-5 px-6">
                   <a href="#"
                     class="text-gray-200 block rounded-lg text-center font-medium leading-6 px-6 py-3 bg-gray-900 hover:bg-black hover:text-white">Connect
-                    with <span class="font-bold">{{ currentMember.email }}</span></a>
+                    with <span class="font-bold">{{ member.email }}</span></a>
                 </div>
                 <div class="flex justify-between items-center my-5 px-6">
-                  <a href=""
+                  <a href="#"
                     class="text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded transition duration-150 ease-in font-medium text-sm text-center w-full py-3">Facebook</a>
-                  <a href=""
+                  <a href="#"
                     class="text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded transition duration-150 ease-in font-medium text-sm text-center w-full py-3">Twitter</a>
-                  <a href=""
+                  <a href="#"
                     class="text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded transition duration-150 ease-in font-medium text-sm text-center w-full py-3">Instagram</a>
-                  <a href=""
+                  <a href="#"
                     class="text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded transition duration-150 ease-in font-medium text-sm text-center w-full py-3">Email</a>
                 </div>
                 <div class="w-full">
@@ -269,7 +269,7 @@ export default {
 
                   <h3 class="font-medium text-gray-900 text-left px-6">Recent updates</h3>
                   <div class="mt-5 w-full flex flex-col items-center overflow-hidden text-sm">
-                    <template v-for="portfolio in currentMember.portfolios">
+                    <template v-for="portfolio in member.portfolios">
                       <a href="#"
                         class="w-full border-t border-gray-100 text-gray-600 py-4 pl-6 pr-3 w-full block hover:bg-gray-100 transition duration-150">
                         <img src="https://avatars0.githubusercontent.com/u/35900628?v=4" alt=""

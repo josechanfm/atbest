@@ -99,16 +99,17 @@
         </span>
       </a-menu-item>
 
-      <a-sub-menu key="sub1">
+      <a-menu-item key="widget">
         <template #icon>
           <DesktopOutlined />
         </template>
-        <template #title>Navigation One</template>
-        <a-menu-item key="101">Option 5</a-menu-item>
-        <a-menu-item key="122">Option 6</a-menu-item>
-        <a-menu-item key="103">Option 7</a-menu-item>
-        <a-menu-item key="104">Option 8</a-menu-item>
-      </a-sub-menu>
+        <span>
+          <inertia-link :href="route('widget.admin.dashboard')">
+            {{ $t("widget") }}
+          </inertia-link>
+        </span>
+      </a-menu-item>
+      
       <a-sub-menu key="sub2">
         <template #icon>
           <AppstoreOutlined />

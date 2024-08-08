@@ -322,5 +322,6 @@
     "create_blog": "創建板塊",
     "contents_management": "內容管理",
     "content.user": "留言人",
-    "masquerade":"偽裝"
+    "masquerade":"偽裝",
+    "widget":"小工具"
 }

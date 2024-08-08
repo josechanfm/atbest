@@ -1,6 +1,6 @@
 <script setup>
 import WebLayout from '@/Layouts/WebLayout.vue';
-import { Head, Link } from '@inertiajs/inertia-vue3';
+import { Head, Link } from '@inertiajs/vue3';
 import { UserOutlined } from '@ant-design/icons-vue';
 
 defineProps({

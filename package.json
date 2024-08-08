@@ -5,7 +5,7 @@
         "build": "vite build"
     },
     "devDependencies": {
-        "@inertiajs/vue3": "^1.0.0",
+        "@inertiajs/vue3": "^1.2.0",
         "@tailwindcss/forms": "^0.5.2",
         "@tailwindcss/typography": "^0.5.2",
         "@vitejs/plugin-vue": "^4.0.0",
@@ -25,8 +25,6 @@
         "@ckeditor/ckeditor5-build-classic": "^39.0.2",
         "@ckeditor/ckeditor5-upload": "^39.0.2",
         "@ckeditor/ckeditor5-vue": "^5.1.0",
-        "@inertiajs/inertia-vue3": "^0.6.0",
-        "@inertiajs/progress": "^0.2.7",
         "@vueup/vue-quill": "^1.2.0",
         "ant-design-vue": "^4.2.3",
         "chart.js": "^3.9.1",

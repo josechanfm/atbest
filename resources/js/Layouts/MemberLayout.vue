@@ -1,14 +1,14 @@
 <script>
 import { onMounted, ref } from "vue";
-import { Inertia } from "@inertiajs/inertia";
-import { Head, Link } from "@inertiajs/inertia-vue3";
+import { router } from "@inertiajs/vue3";
+import { Head, Link } from "@inertiajs/vue3";
 import ApplicationMark from "@/Components/ApplicationMark.vue";
 import Banner from "@/Components/Banner.vue";
 import Dropdown from "@/Components/Dropdown.vue";
 import DropdownLink from "@/Components/DropdownLink.vue";
 import NavLink from "@/Components/NavLink.vue";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink.vue";
-import { usePage } from "@inertiajs/inertia-vue3";
+import { usePage } from "@inertiajs/vue3";
 import { loadLanguageAsync } from "laravel-vue-i18n";
 
 export default {
@@ -27,7 +27,7 @@ export default {
   setup(props) {
     const showingNavigationDropdown = ref(false);
     const switchToTeam = (team) => {
-      Inertia.put(
+      router.put(
         route("current-team.update"),
         {
           team_id: team.id,
@@ -38,10 +38,10 @@ export default {
       );
     };
     const page = usePage();
-    loadLanguageAsync(page.props.value.lang);
+    //loadLanguageAsync(page.props.value.lang);
 
     const logout = () => {
-      Inertia.post(route("logout"));
+      router.post(route("logout"));
     };
     return {
       showingNavigationDropdown,
@@ -70,7 +70,7 @@ export default {
               <!-- Logo -->
               <div class="shrink-0 flex items-center">
                 <Link :href="route('/')">
-                  <img v-if="$page.props.currentMember.organization.logo" :src="$page.props.currentMember.organization.logo" class="block h-14 w-auto" />
+                  <img v-if="$page.props.member.organization.logo" :src="$page.props.member.organization.logo" class="block h-14 w-auto" />
                   <img v-else src="/images/site_logo.png" class="block h-14 w-auto" />
                 </Link>
               </div>
@@ -330,7 +330,7 @@ export default {
             </div>
 
             <div class="mt-3 space-y-1">
-              <ResponsiveNavLink> {{ $t("portfolios") }} </ResponsiveNavLink>
+              <ResponsiveNavLink href="#"> {{ $t("portfolios") }} </ResponsiveNavLink>
               <ResponsiveNavLink
                 :href="route('member.profile.index')"
                 :active="route().current('member.profile.index')"

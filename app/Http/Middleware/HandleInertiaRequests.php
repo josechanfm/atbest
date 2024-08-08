@@ -54,14 +54,13 @@ class HandleInertiaRequests extends Middleware
             }
         }
         return array_merge(parent::share($request), [
-            'user.roles' => $request->user() ? $request->user()->roles->pluck('name') : [],
-            //'user.permissions' => $request->user() ? $request->user()->getPermissionsViaRoles()->pluck('name') : [],
-            'user.permissions' => $permissions,
-            'currentMember' => session('member'),
-            'currentOrganization' => session('organization'),
-            'byGuardian' => session('guardian'),
-            'lang' => session('applocale'),
-            'lt'=>$request->session()->get('lt')
+            // 'user.roles' => $request->user() ? $request->user()->roles->pluck('name') : [],
+            // //'user.permissions' => $request->user() ? $request->user()->getPermissionsViaRoles()->pluck('name') : [],
+            // 'user.permissions' => $permissions,
+            'member' => session('member'),
+            'guardian' => session('guardian'),
+            //'lang' => session('applocale'),
+            //'lt'=>$request->session()->get('lt') //??
         ]);
     }
 }

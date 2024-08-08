@@ -45,7 +45,6 @@
 
 <script>
 import DefaultLayout from '@/Layouts/DefaultLayout.vue';
-import { Inertia } from '@inertiajs/inertia';
 
 export default {
     components: {

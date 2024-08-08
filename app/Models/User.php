@@ -16,6 +16,7 @@ use Attribute;
 use Illuminate\Auth\Notifications\ResetPassword as ResetPasswordNotification;
 use Illuminate\Foundation\Concerns\ResolvesDumpSource;
 
+
 class User extends Authenticatable
 {
     use HasApiTokens;
@@ -25,7 +26,7 @@ class User extends Authenticatable
     use Notifiable;
     use TwoFactorAuthenticatable;
     use HasRoles;
-
+    
     /**
      * The attributes that are mass assignable.
      *

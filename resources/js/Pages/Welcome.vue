@@ -1,7 +1,7 @@
 <script setup>
 import DefaultLayout from '@/Layouts/DefaultLayout.vue';
 import ThumbList from "@/Components/ThumbList.vue";
-import { Head, Link } from '@inertiajs/inertia-vue3';
+import { Head, Link } from '@inertiajs/vue3';
 import { UserOutlined } from '@ant-design/icons-vue';
 
 defineProps({
