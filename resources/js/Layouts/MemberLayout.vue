@@ -365,6 +365,12 @@ export default {
                 {{ $t("manager") }}
               </ResponsiveNavLink>
               <ResponsiveNavLink
+                as="a"
+                :href="route('member.blogs.index')"
+              >
+                {{ $t("blogs") }}
+              </ResponsiveNavLink>
+              <ResponsiveNavLink
                 v-if="$page.props.jetstream.hasApiFeatures"
                 :href="route('api-tokens.index')"
                 :active="route().current('api-tokens.index')"
