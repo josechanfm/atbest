@@ -94,6 +94,7 @@ export default {
                   {{ $t("blogs") }}
                 </NavLink>
                 <NavLink 
+                  v-role="['organizer']"
                   :href="route('manage.dashboard')"
                 >
                   {{ $t("manager") }}
@@ -318,17 +319,14 @@ export default {
           <!-- Responsive Settings Options -->
           <div class="pt-4 pb-1 border-t border-gray-200">
             <div class="flex items-center px-4">
-              <div
-                v-if="$page.props.jetstream.managesProfilePhotos"
-                class="shrink-0 mr-3"
-              >
+              <div v-if="$page.props.jetstream.managesProfilePhotos"
+                class="shrink-0 mr-3">
                 <img
                   class="h-10 w-10 rounded-full object-cover"
                   :src="$page.props.user.profile_photo_url"
                   :alt="$page.props.user.name"
                 />
               </div>
-
               <div>
                 <div class="font-medium text-base text-gray-800">
                   {{ $page.props.user.name }}
@@ -348,21 +346,21 @@ export default {
                 {{ $t("profile") }}
               </ResponsiveNavLink>
               <ResponsiveNavLink
-                :href="route('member.guardian.back')"
                 v-if="$page.props.by_guardian"
+                :href="route('member.guardian.back')"
               >
                 {{ $t("guardian") }}
               </ResponsiveNavLink>
               <ResponsiveNavLink
-                :href="route('profile.show')"
-                :active="route().current('profile.show')"
+                v-role="['widget']"
+                :href="route('widget.admin.dashboard')"
               >
                 {{ $t("account") }}
               </ResponsiveNavLink>
               <ResponsiveNavLink
                 as="a"
                 :href="route('manage.dashboard')"
-                v-if="$page.props.user.roles.includes('organizer')"
+                v-role="['organizer']"
               >
                 {{ $t("manager") }}
               </ResponsiveNavLink>
