@@ -93,7 +93,11 @@ export default {
                 <NavLink :href="route('member.blogs.index')">
                   {{ $t("blogs") }}
                 </NavLink>
-
+                <NavLink 
+                  :href="route('manage.dashboard')"
+                >
+                  {{ $t("manager") }}
+                </NavLink>
                 <NavLink 
                   :href="route('widget.admin.dashboard')"
                   v-permission="['widget']"
@@ -107,7 +111,7 @@ export default {
                   {{ $t("guardian") }}
                 </NavLink>
                 <NavLink
-                  :href="route('manage')"
+                  :href="route('manage.dashboard')"
                   v-if="$page.props.user.roles.includes('organizer')"
                 >
                   {{ $t("manager") }}
@@ -357,7 +361,7 @@ export default {
               </ResponsiveNavLink>
               <ResponsiveNavLink
                 as="a"
-                :href="route('manage')"
+                :href="route('manage.dashboard')"
                 v-if="$page.props.user.roles.includes('organizer')"
               >
                 {{ $t("manager") }}

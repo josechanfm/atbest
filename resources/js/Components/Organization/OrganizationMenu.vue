@@ -12,7 +12,7 @@
           <PieChartOutlined />
         </template>
         <span>
-          <inertia-link :href="route('manage')">
+          <inertia-link :href="route('manage.dashboard')">
             {{ $t("organization_management") }}
           </inertia-link>
         </span>

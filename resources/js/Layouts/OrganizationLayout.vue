@@ -6,9 +6,9 @@
         <inertia-link href="/">{{ $page.props.currentOrganization.abbr }}</inertia-link>
       </div>
       <div class="m-4 text-center text-lg" v-else>
-        <inertia-link :href="route('manage')" v-if="$page.props.currentOrganization">{{
-          $page.props.currentOrganization['name_'+$t('lang')]
-        }}</inertia-link>
+        <inertia-link :href="route('manage.dashboard')" v-if="$page.props.currentOrganization">
+          {{ $page.props.currentOrganization['name_'+$t('lang')] }}
+        </inertia-link>
       </div>
 
       <OrganizationMenu :menuKeys="menuKeys" />
@@ -94,7 +94,7 @@
                   </inertia-link>
                 </span>
                 <span v-else>
-                  <inertia-link :href="route('manage')">
+                  <inertia-link :href="route('manage.dashboard')">
                     Home
                   </inertia-link>
                 </span>
@@ -163,7 +163,7 @@ export default {
       );
     };
     const page = usePage();
-    loadLanguageAsync(page.props.value.lang);
+    //loadLanguageAsync(page.props.value.lang);
     const logout = () => {
       router.post(route("logout"));
     };

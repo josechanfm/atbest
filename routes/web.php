@@ -103,7 +103,7 @@ Route::group([
         'role:organizer|admin'
     ]
 ], function () {
-    Route::get('/', [App\Http\Controllers\Organization\DashboardController::class, 'index'])->name('manage');
+    Route::get('/', [App\Http\Controllers\Organization\DashboardController::class, 'index'])->name('manage.dashboard');
     Route::post('organization/switch/{organization}', [App\Http\Controllers\Organization\OrganizationController::class, 'switch'])->name('manage.organization.switch');
     Route::resource('organizations', App\Http\Controllers\Organization\OrganizationController::class)->names('manage.organizations');
     Route::post('organization/delete_logo/{organization}', [App\Http\Controllers\Organization\OrganizationController::class, 'deleteLogo'])->name('manage.organization.deleteLogo');
