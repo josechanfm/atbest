@@ -81,14 +81,6 @@ class ArticleController extends Controller
             $article->addMedia($request->file('thumb_image')[0]['originFileObj'])->toMediaCollection('thumb');
         }
 
-        // if ($request->file('thumbnail_upload')) {
-        //     $file = $request->file('thumbnail_upload');
-        //     $fileName = $article->id . '_' . $file->getClientOriginalName();
-        //     $file->move(public_path('images/articles/thumbnail'), $fileName);
-        //     $article->thumbnail = '/images/articles/thumbnail/' . $fileName;
-        //     $article->save();
-        // }
-
         return redirect()->route('manage.articles.index');
     }
 
