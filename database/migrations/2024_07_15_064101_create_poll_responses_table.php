@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('poll_id');
             $table->string('username');
             $table->string('answer');
+            $table->string('ip_address')->nullable();
             $table->timestamps();
         });
     }

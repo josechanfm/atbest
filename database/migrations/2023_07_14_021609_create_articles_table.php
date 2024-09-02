@@ -29,7 +29,6 @@ return new class extends Migration
             $table->text('author')->nullable();
             $table->string('tags')->nullable()->default('');
             $table->char('lang',2)->default('zh');
-            $table->string('thumbnail')->nullable();
             $table->foreignId('user_id');
             $table->boolean('public');
             $table->boolean('published');
