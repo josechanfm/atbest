@@ -8,7 +8,6 @@ use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Image\Manipulations;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
-
 use Illuminate\Support\Str;
   
 class Article extends Model implements HasMedia
@@ -33,6 +32,9 @@ class Article extends Model implements HasMedia
             }
         });
     }
+    public function getOrganizationAbbrAttribute(){
+        return $this->organization?$this->organization->abbr:NULL;
+    }
     public function getBannerUrlAttribute(){
         return $this->getFirstMediaUrl('banner');
     }
@@ -54,10 +56,6 @@ class Article extends Model implements HasMedia
         $this->addMediaCollection('thumb')->singleFile()->useDisk('media');
     }
 
-    public function getOrganizationAbbrAttribute(){
-
-        return $this->organization?$this->organization->abbr:NULL;
-    }
     public static function recents(){
         return self::publics();
     }
