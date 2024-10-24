@@ -32,6 +32,7 @@ return new class extends Migration
             $table->string('avatar')->nullable();
             $table->date('valid_at')->nullable();
             $table->date('expired_at')->nullable();
+            $table->boolean('default')->default(false);
             $table->timestamps();
         });
     }
