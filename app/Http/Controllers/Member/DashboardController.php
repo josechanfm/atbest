@@ -24,10 +24,9 @@ class DashboardController extends Controller
         foreach($members as $member){
             $member->organization;
         }
-        
         if(empty(session('member'))){
-            //session(['member'=>$members[0]]);
-            session(['member'=>$members->where('default',true)->first()]);
+            session(['member'=>$members[0]]);
+            //session(['member'=>$members->where('default',true)->first()->with('organization')]);
         }
 
         return Inertia::render('Member/Dashboard', [
