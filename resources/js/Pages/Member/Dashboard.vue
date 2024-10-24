@@ -72,9 +72,7 @@ export default {
     };
   },
   created() {
-    //this.member = this.members[0]
-    
-    this.member = this.members.find(m=>m.default==true)
+    this.member = this.members[0]
     console.log(this.member, this.members)
     if(this.cardStyle.logo){
       this.qrcodeLogo='/images/'+this.cardStyle.logo
