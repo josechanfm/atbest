@@ -17,7 +17,7 @@ defineProps({
                     <AuthenticationCardLogo />
                 </div>
                 <div class="w-full sm:max-w-2xl mt-6 p-6 bg-white shadow-md overflow-hidden sm:rounded-lg prose" v-html="message" />
-                <inertia-link :href="route('/')">Go Back</inertia-link>
+                <inertia-link :href="route('host')">Go Back</inertia-link>
                
             </div>
         </div>
