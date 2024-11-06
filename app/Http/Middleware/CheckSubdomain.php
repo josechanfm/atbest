@@ -18,9 +18,9 @@ class CheckSubdomain
     public function handle(Request $request, Closure $next)
     {
         $subdomain = $request->route()->parameter('abbr');
-
         // Check if the subdomain exists
         $organization = Organization::where('subdomain', $subdomain)->first();
+        //dd($subdomain, $organization);
         if ($organization) {
             $request->merge(['organization' => $organization]);
             return $next($request);

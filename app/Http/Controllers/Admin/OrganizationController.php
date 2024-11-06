@@ -136,6 +136,6 @@ class OrganizationController extends Controller
     public function masquerade(Organization $organization)
     {
         session(['organization' => $organization]);
-        return to_route('manage');
+        return to_route('manage.dashboard');
     }
 }

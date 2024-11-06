@@ -122,7 +122,7 @@ const showingNavigationDropdown = ref(false);
         class="sm:hidden bg-white"
       >
         <div class="pt-2 pb-3 space-y-1">
-          <ResponsiveNavLink :href="route('/')" :active="route().current('dashboard')">
+          <ResponsiveNavLink :href="route('host')" :active="route().current('dashboard')">
             {{ $t('dashboard') }}
           </ResponsiveNavLink>
         </div>

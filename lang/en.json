@@ -1,5 +1,7 @@
 {
     "lang": "en",
+    "host":"host",
+    "headquater":"headquater",
     "welcome_message": "Welcome Message",
     "readmore": "Read More",
     "english": "English",
