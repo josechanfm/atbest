@@ -12,7 +12,7 @@ class WebsiteController extends Controller
 
     public function __construct(Request $request){
         $subdomain = $request->route()->parameter('abbr');
-        $this->organization = Organization::where('subdomain', $subdomain)->first();
+        $this->organization = Organization::with('media')->where('subdomain', $subdomain)->first();
         
     }
     

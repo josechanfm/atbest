@@ -166,7 +166,7 @@ export default {
             this.previewImage = null
         },
         onDeleteLogo(feature) {
-            this.$inertia.post(route('admin.organization.deleteLogo', this.organization), {
+            this.$inertia.post(route('manage.organization.deleteLogo', this.organization), {
                 onSuccess: (page) => {
                     console.log(page)
                 },
