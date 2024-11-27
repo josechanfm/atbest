@@ -36,7 +36,8 @@ class ArticleSeeder extends Seeder
                 'thumbnail'=>'/features/4_community.png',
                 'user_id'=>1,
                 'public'=>0,
-                'published'=>1
+                'published'=>1,
+                'for_member'=>false
             ],
             ['organization_id'=>11,
             'category_code'=>'NEWS',
@@ -49,7 +50,8 @@ class ArticleSeeder extends Seeder
             'thumbnail'=>'',
             'user_id'=>1,
             'public'=>1,
-            'published'=>1
+            'published'=>1,
+            'for_member'=>false
         ]
 
             

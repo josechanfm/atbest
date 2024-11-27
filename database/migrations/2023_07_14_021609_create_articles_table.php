@@ -32,10 +32,11 @@ return new class extends Migration
             $table->foreignId('user_id');
             $table->boolean('public');
             $table->boolean('published');
+            $table->boolean('for_member');
+            $table->string('thumbnail')->nullable();
             $table->timestamps();
         });
     }
-
     /**
      * Reverse the migrations.
      *

@@ -25,6 +25,8 @@ return new class extends Migration
             $table->text('tags')->nullable();
             $table->text('content')->nullable();
             $table->text('remark')->nullable();
+            $table->date('valid_at')->nullable();
+            $table->date('expire_at')->nullable();
             $table->boolean('require_login')->default(false);
             $table->boolean('for_member')->default(false);
             $table->boolean('published')->default(false);

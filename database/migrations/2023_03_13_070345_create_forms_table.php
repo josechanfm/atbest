@@ -19,11 +19,14 @@ return new class extends Migration
             $table->foreignId('organization_id');
             $table->string('name');
             $table->string('title')->nullable();
+            $table->string('description')->nullable();
             $table->text('tags')->nullable();
             $table->text('content')->nullable();
             $table->text('welcome')->nullable();
             $table->text('thanks')->nullable();
             $table->string('thumbnail')->nullable();
+            $table->date('valid_at')->nullable();
+            $table->date('expire_at')->nullable();
             $table->boolean('require_login')->default(false);
             $table->boolean('for_member')->default(false);
             $table->boolean('published')->default(false);

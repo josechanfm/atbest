@@ -15,7 +15,6 @@ class WebsiteController extends Controller
         $this->organization = Organization::where('subdomain', $subdomain)->first();
         
     }
-    
     public function home(){
         return Inertia::render('Website/Home',[
             'organization'=>$this->organization,
