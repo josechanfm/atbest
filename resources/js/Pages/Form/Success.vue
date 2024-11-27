@@ -1,5 +1,5 @@
 <template>
-  <WebLayout title="Dashboard">
+  <WebsiteLayout title="Dashboard">
     <template #header>
       <h2 class="font-semibold text-xl text-gray-800 leading-tight">表格例表</h2>
     </template>
@@ -53,7 +53,7 @@
         </div>
         <div class="flex justify-between py-10">
           <div>
-            <a :href="route('/')">返回主頁</a>
+            <a :href="route('host')">返回主頁</a>
           </div>
           <!-- <div>
             <inertia-link :href="route('form.receipt',entry)">打印表格</inertia-link>
@@ -64,15 +64,15 @@
         </div>
       </div>
     </div>
-  </WebLayout>
+  </WebsiteLayout>
 </template>
 
 <script>
-import WebLayout from "@/Layouts/WebLayout.vue";
+import WebsiteLayout from "@/Layouts/WebsiteLayout.vue";
 
 export default {
   components: {
-    WebLayout,
+    WebsiteLayout,
   },
   props: ["form", "entry_records", "entry"],
   data() {

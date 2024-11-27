@@ -93,5 +93,4 @@ class User extends Authenticatable
     public function issues(){
         return $this->hasMany(Issue::class);
     }
-
 }

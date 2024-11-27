@@ -1,5 +1,5 @@
 <script setup>
-import WebLayout from '@/Layouts/WebLayout.vue';
+import WebsiteLayout from '@/Layouts/WebsiteLayout.vue';
 import { Head, Link } from '@inertiajs/vue3';
 import { UserOutlined } from '@ant-design/icons-vue';
 
@@ -15,7 +15,7 @@ defineProps({
 </script>
 
 <template>
-  <WebLayout title="Dashboard">
+  <WebsiteLayout title="Dashboard">
     <div class="lg:h-96 bg-gradient-to-tr bg-white rounded-md">
       <div class="ml-5  lg:w-4/5 py-5">
         <a-typography-title :level="3">社團及財團登記</a-typography-title>
@@ -26,5 +26,5 @@ defineProps({
       </div>
     </div>
 
-  </WebLayout>
+  </WebsiteLayout>
 </template>

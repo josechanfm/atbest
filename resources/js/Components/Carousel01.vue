@@ -29,10 +29,10 @@ export default {
     return {
       currentIndex: 0,
       slides: [
-        { image: 'https://via.placeholder.com/800x400', title: 'Slide 1' },
-        { image: 'https://via.placeholder.com/800x400', title: 'Slide 2' },
-        { image: 'https://via.placeholder.com/800x400', title: 'Slide 3' },
-        { image: 'https://via.placeholder.com/800x400', title: 'Slide 4' },
+        { image: '/images/800x400.png', title: 'Slide 1' },
+        { image: '/images/800x400.png', title: 'Slide 2' },
+        { image: '/images/800x400.png', title: 'Slide 3' },
+        { image: '/images/800x400.png', title: 'Slide 4' },
       ],
     };
   },

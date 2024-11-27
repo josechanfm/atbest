@@ -72,7 +72,10 @@ export default {
     };
   },
   created() {
+
     this.member = this.members[0]
+    console.log(this.member, this.members)
+    console.log(this.$page.props)
     if(this.cardStyle.logo){
       this.qrcodeLogo='/images/'+this.cardStyle.logo
     }else if(this.$page.props.member.organization.logo){
@@ -98,8 +101,8 @@ export default {
       }
     },
     switchOrganization(member) {
-      console.log(member);
       this.$inertia.post(route('member.membership.switch', { member: member.id }))
+      this.member=this.members.find(m=>m.id==member.id)
     }
 
   },
@@ -261,7 +264,6 @@ export default {
                           <span class="text-gray-500 text-xs float-right pr-2" v-if="members.length > 1">
                             <a @click="switchOrganization(member)">{{ $t('organization_switch') }}</a>
                           </span>
-
                         </a>
                       </template>
                     </div>

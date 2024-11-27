@@ -26,13 +26,11 @@ class DashboardController extends Controller
         }
         if(empty(session('member'))){
             session(['member'=>$members[0]]);
+            //session(['member'=>$members->where('default',true)->first()->with('organization')]);
         }
 
-        // dd(session('member')->organization);
-        // dd(Feature::whereBelongsTo(session('member')->organization)->orderBy('sequence')->limit(4)->get());
         return Inertia::render('Member/Dashboard', [
             'members' => $members,
-            //'features'=>Article::whereBelongsTo(session('member')->organization)->where('category_code','FEATURE')->orderBy('sequence')->limit(4)->get(),
             'features'=>Feature::whereBelongsTo(session('member')->organization)->orderBy('sequence')->limit(4)->get(),
             'articles' => Article::whereBelongsTo(session('member')->organization)->where('category_code','NEWS')->orderBy('sequence','DESC')->get(),
             'cardStyle' => Config::item('card_styles')[session('member')->organization->card_style],

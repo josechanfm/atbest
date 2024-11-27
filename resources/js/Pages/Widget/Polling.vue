@@ -35,11 +35,11 @@
 </template>
 
 <script>
-import WebLayout from '@/Layouts/WebLayout.vue';
+import WebsiteLayout from '@/Layouts/WebsiteLayout.vue';
 
 export default {
     components: {
-        WebLayout,
+        WebsiteLayout,
     },
     props: ['poll'],
     data() {

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\AdminUser;
 use App\Models\Organization;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Storage;
 
 class OrganizationController extends Controller
 {
@@ -18,7 +19,7 @@ class OrganizationController extends Controller
 
     public function switch(Organization $organization){
         session(['organization'=>$organization]);
-        return to_route('manage');
+        return to_route('manage.dashboard');
     }
     /**
      * Display a listing of the resource.
@@ -124,7 +125,10 @@ class OrganizationController extends Controller
         //
     }
     public function deleteLogo(Organization $organization){
-        unlink(public_path($organization->logo));
+        $logoPath = $organization->logo; // Adjust if necessary for the disk
+        if (Storage::exists($logoPath)) {
+            unlink($logoPath);
+        }
         $organization->logo=null;
         $organization->save();
         return redirect()->back();

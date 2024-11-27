@@ -69,7 +69,7 @@ export default {
             <div class="flex">
               <!-- Logo -->
               <div class="shrink-0 flex items-center">
-                <Link :href="route('/')" v-if="$page.props.member">
+                <Link :href="route('host')" v-if="$page.props.member">
                   <img v-if="$page.props.member.organization.logo" :src="$page.props.member.organization.logo" class="block h-14 w-auto" />
                   <img v-else src="/images/site_logo.png" class="block h-14 w-auto" />
                 </Link>
@@ -311,7 +311,7 @@ export default {
           class="sm:hidden"
         >
           <div class="pt-2 pb-3 space-y-1">
-            <ResponsiveNavLink :href="route('/')" :active="route().current('dashboard')">
+            <ResponsiveNavLink :href="route('host')" :active="route().current('dashboard')">
               {{ $t("dashboard") }}
             </ResponsiveNavLink>
           </div>

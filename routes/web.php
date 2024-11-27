@@ -45,7 +45,7 @@ Route::domain('{abbr}.' . env('APP_DOMAIN'))->middleware('check_subdomain')->gro
     Route::get('/article', [\App\Http\Controllers\WebsiteController::class, 'article'])->name('website.article');
 });
 
-Route::get('/', [\App\Http\Controllers\WelcomeController::class, 'dashboard'])->name('/');
+Route::get('/', [\App\Http\Controllers\WelcomeController::class, 'dashboard'])->name('host');
 // Route::get('/', [\App\Http\Controllers\WelcomeController::class, 'dashboard'])->name('/');
 
 Route::get('/language/{language}', function ($language) {

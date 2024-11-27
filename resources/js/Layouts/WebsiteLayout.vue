@@ -30,7 +30,7 @@ const showingNavigationDropdown = ref(false);
       <div class="flex justify-between items-center py-6 px-10 container mx-auto ">
         <div class="flex">
           <div class="shrink-0 flex items-center">
-            <a v-if="organization.logo" href="/"><img :src="'/logos/'+organization.logo" class="block h-14 w-auto"/></a>
+            <a v-if="organization.logo" href="/"><img :src="organization.logo" class="block h-14 w-auto"/></a>
           </div>
           <h1 class="ml-2 pt-4 text-2xl font-bold">
             <a href="/" class="text-white">{{organization.name_zh}}</a>
@@ -68,60 +68,23 @@ const showingNavigationDropdown = ref(false);
               </svg>
             </button>
           </div>
-
           <div class="flex items-center">
             <ul class="list-none sm:flex space-x-4 hidden items-center text-white">
               <li>
-                <a href="https://www.lionsclubs.org/" target="_blank"
-                  class="text-bold text-white hover:text-yellow-300 text-md">總會</a>
-              </li>
-              <li>
-                <a href="https://www.lionsclubs.org.hk/" target="_blank"
-                  class="text-bold text-white hover:text-yellow-300 text-md">區會</a
+                <a
+                  href="http://localhost:8000"
+                  target="_blank"
+                  class="text-bold text-white hover:text-yellow-300 text-md"
+                  >{{ $t('host') }}</a
                 >
               </li>
-              <li v-if="organization.parent_domain">
-                <a :href="organization.parent_domain" target="_blank"
-                  class="text-bold text-white hover:text-yellow-300 text-md">母會</a>
-              </li>
               <li>
-                <a href="https://www.leo303.org" target="_blank"
-                  class="text-bold text-white hover:text-yellow-300 text-md">會員</a>
+                <a href="https://www.lionsclubs.org/en" target="_blank"
+                  class="text-bold text-white hover:text-yellow-300 text-md">{{ $t('headquater') }}</a>
               </li>
-              
-              <template v-if="$page.props.user.id">
-                <li>
-                  <a
-                    :href="route('member.dashboard')"
-                    target="_blank"
-                    class="text-bold text-white hover:text-yellow-300 text-md"
-                    >{{ $t("member_dashboard") }}</a
-                  >
-                </li>
-                <li>
-                  <a @click="logout">{{ $t("log_out") }}</a>
-                </li>
-              </template>
-              <template v-else>
-                <li>
-                  <inertia-link :href="route('login')" class="text-bold text-white hover:text-yellow-300 text-md">{{
-                    $t("login") }}</inertia-link>
-                </li>
-                <li>
-                  <inertia-link :href="route('registration')"
-                    class="text-bold text-white hover:text-yellow-300 text-md">{{ $t("register") }}</inertia-link>
-                </li>
-              </template>
             </ul>
-            <!-- <div class="md:flex items-center hidden space-x-4 ml-8 lg:ml-12">
-                            <h1 class="text-text-gray-600  py-2 hover:cursor-pointer hover:text-indigo-600"><inertia-link
-                                    :href="route('login')">登入</inertia-link></h1>
-                            <h1
-                                class="text-text-gray-600  py-2 hover:cursor-pointer px-4 rounded text-white bg-gradient-to-tr from-indigo-600 to-green-600 hover:shadow-lg">
-                                <inertia-link :href="route('login')">後台</inertia-link>
-                            </h1>
-                        </div> -->
           </div>
+
         </div>
       </div>
       <!-- Responsive Navigation Menu -->
@@ -130,34 +93,20 @@ const showingNavigationDropdown = ref(false);
         class="sm:hidden bg-white"
       >
         <div class="pt-2 pb-3 space-y-1">
-          <ResponsiveNavLink :href="route('/')" :active="route().current('dashboard')">
+          <ResponsiveNavLink :href="route('host')" :active="route().current('dashboard')">
             {{ $t('dashboard') }}
           </ResponsiveNavLink>
         </div>
-
         <!-- Responsive Settings Options -->
         <div class="pt-4 pb-1 border-t border-gray-200">
           <div class="mt-3 space-y-1">
-            <ResponsiveNavLink
-              :href="route('member.dashboard')"
-              :active="route().current('member.dashboard')"
-            >
-              {{ $t("member_dashboard") }}
-            </ResponsiveNavLink>
-            <!-- Authentication -->
-            <template v-if="$page.props.user.id">
-              <form method="POST" @submit.prevent="logout">
-                <ResponsiveNavLink as="button"> {{ $t("log_out") }} </ResponsiveNavLink>
-              </form>
-            </template>
-            <template v-else>
-              <a :href="route('login')">
-                <ResponsiveNavLink as="button"> {{ $t('login') }}</ResponsiveNavLink>
-              </a>
-              <a :href="route('registration')">
-                <ResponsiveNavLink as="button"> {{ $t("register") }} </ResponsiveNavLink>
-              </a>
-            </template>
+            <a href="http://localhost:8000" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-50 hover:border-gray-300 focus:outline-none focus:text-gray-800 focus:bg-gray-50 focus:border-gray-300 transition">
+              {{ $t("host") }}
+            </a>
+
+            <a href="https://lionsclubs.org" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-50 hover:border-gray-300 focus:outline-none focus:text-gray-800 focus:bg-gray-50 focus:border-gray-300 transition">
+              {{ $t("headquater") }}
+            </a>
           </div>
         </div>
       </div>
