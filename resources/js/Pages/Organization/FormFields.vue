@@ -81,6 +81,7 @@
               <a-radio @click="addOptionItem">{{ $t("add_option") }}</a-radio>
             </a-radio-group>
           </a-form-item>
+          ss
           <a-form-item :label="$t('template')" name="optionTemplate">
             <a-select :options="templateOptions" @change="onChangeOptionTemplate" />
           </a-form-item>

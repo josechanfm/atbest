@@ -15,8 +15,8 @@
         <a-form-item :label="$t('form_welcome')" name="welcome" v-if="form.openWelcome">
           <quill-editor v-model:value="form.welcome" style="min-height: 200px" />
         </a-form-item>
-        <a-form-item :label="$t('description')" name="description">
-          <quill-editor v-model:value="form.description" style="min-height: 200px" />
+        <a-form-item :label="$t('content')" name="content">
+          <quill-editor v-model:value="form.content" style="min-height: 200px" />
         </a-form-item>
         <div class="text-right">
           <a @click="form.openThanks = !form.openThanks">{{ $t('form_thankyou') }}</a>

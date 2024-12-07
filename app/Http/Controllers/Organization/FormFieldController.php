@@ -27,6 +27,7 @@ class FormFieldController extends Controller
     {
         $this->authorize('view', $form);
         $templates=Config::item('template_options');
+        //dd($templates);
         $templates[]=[
             'value'=>'organizations',
             'label'=>'Organization',
