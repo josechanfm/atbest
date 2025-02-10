@@ -188,7 +188,7 @@ export default {
               <!-- card start -->
               <div class="mx-auto relative py-4 w-96 hover:scale-105 transform transition-transform mb-4">
                 <div :style="cardStyle['font_style']"
-                  class="absolute z-50 h-52 flex rounded-lg flex-col py-3 px-8 shadow-xl text-sm w-full"
+                  class="absolute z-10 h-52 flex rounded-lg flex-col py-3 px-8 shadow-xl text-sm w-full"
                   @click="onShowQrcode">
                   <div class="flex flex-col w-xl">
                     <div class="flex justify-center">

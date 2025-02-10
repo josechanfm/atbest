@@ -32,4 +32,13 @@ class BlogContent extends Model
     {
         return BlogContent::where('reply_id', $this->id)->orderBy('created_at', 'desc')->get();
     }
+    
+    public function parent()
+    {
+        return $this->belongsTo(BlogContent::class, 'reply_id')->orderBy('created_at');
+    }
+    public function children()
+    {
+        return $this->hasMany(BlogContent::class, 'reply_id')->orderBy('created_at');
+    }
 }
