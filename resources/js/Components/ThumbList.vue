@@ -20,7 +20,7 @@ const props = defineProps({
             alt="thumbnail"
             width="200px"
           />
-          <img v-else src="/images/site_logo.png" alt="Thumnail" />
+          <img v-else src="/storage/images/site_logo.png" alt="Thumnail" />
         </div>
         <div class="p-2">
           <a :href="route(routePath, { t: record.uuid })" target="_blank">

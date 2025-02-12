@@ -68,7 +68,7 @@ export default {
         },
       ],
       showQrcode: false,
-      qrcodeLogo:'/images/site_logo.png'
+      qrcodeLogo:'/storage/images/site_logo.png'
     };
   },
   created() {
@@ -76,7 +76,7 @@ export default {
     console.log(this.member, this.members)
     console.log(this.$page.props)
     if(this.cardStyle.logo){
-      this.qrcodeLogo='/images/'+this.cardStyle.logo
+      this.qrcodeLogo='/storage/images/'+this.cardStyle.logo
     }else if(this.$page.props.member.organization.logo){
       this.qrcodeLogo=this.$page.props.member.organization.logo
     }
@@ -220,7 +220,7 @@ export default {
                   </div>
                 </div>
                 <img class="relative object-cover w-96 h-52 rounded-lg z-0"
-                  :src="'/images/' + cardStyle['background']" />
+                  :src="'/storage/images/' + cardStyle['background']" />
               </div>
               <!-- card end -->
 

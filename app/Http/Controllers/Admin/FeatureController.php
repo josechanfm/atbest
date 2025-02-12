@@ -94,8 +94,8 @@ class FeatureController extends Controller
         if($request->file('image_upload')){
             $file=$request->file('image_upload');
             $fileName=$feature->id.'_'.$file->getClientOriginalName();
-            $file->move(public_path('thumbnail/features'), $fileName);
-            $data['image']='/thumbnail/features/'.$fileName;
+            $file->move(public_path('images/features'), $fileName);
+            $data['image']='/images/features/'.$fileName;
         }
         $feature->update($data);
         return to_route('admin.features.index');

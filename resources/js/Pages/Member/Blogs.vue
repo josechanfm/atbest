@@ -17,7 +17,7 @@
           <a :href="route('member.blogs.show', b.id)">
             <a-card hoverable>
               <template #cover>
-                <img alt="example" src="/images/site_icon.png" />
+                <img alt="example" src="/storage/images/site_icon.png" />
               </template>
               <a-card-meta :title="b.title">
                 <template #description>{{ b.description }}</template>

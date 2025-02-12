@@ -29,7 +29,7 @@ defineProps({
         </div>
         <div class="mt-5 md:mt-0 md:col-span-2">
             <div class="w-96 h-56 m-auto bg-red-100 rounded-lg relative text-white shadow-2xl transition-transform transform hover:scale-110" :style="organization.card_design.font_style">
-                <img class="relative object-cover w-full h-full rounded-lg" :src="'/images/'+organization.card_design.background"
+                <img class="relative object-cover w-full h-full rounded-lg" :src="'/storage/images/'+organization.card_design.background"
                     width="10px">
                 <div class="absolute w-full text-center text-lg" >{{ organization.cert_title }}</div>
                 <div class="w-full px-8 absolute top-8">
@@ -42,7 +42,7 @@ defineProps({
                                 {{ organization.pivot.display_name }}
                             </p>
                         </div>
-                        <img class="w-14 h-14" :src="'/images/'+organization.card_design.logo" />
+                        <img class="w-14 h-14" :src="'/storage/images/'+organization.card_design.logo" />
                     </div>
                     <div class="grid grid-cols-2 gap-2">
                         <div class="pt-1">

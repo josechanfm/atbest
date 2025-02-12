@@ -8,7 +8,7 @@ import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m';
 import Antd from 'ant-design-vue';
 import { i18nVue } from 'laravel-vue-i18n'
-import 'ant-design-vue/dist/reset.css';
+// import 'ant-design-vue/dist/reset.css';
 
 import  RolePermission  from './Directives/RolePermission.js';
 

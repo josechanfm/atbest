@@ -1,21 +1,10 @@
 <script>
-import {
-    ref,
-    onMounted
-} from "vue";
-import {
-    router
-} from "@inertiajs/vue3";
-import {
-    Head
-} from "@inertiajs/vue3";
+import { ref, onMounted } from "vue";
+import { router } from "@inertiajs/vue3";
+import { Head } from "@inertiajs/vue3";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink.vue";
-import {
-    gsap
-} from 'gsap';
-import {
-    ScrollTrigger
-} from 'gsap/ScrollTrigger';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 gsap.registerPlugin(ScrollTrigger);
 
 export default {
@@ -121,11 +110,11 @@ export default {
 <header class="">
 
     <!-- navbar and menu -->
-    <nav class="shadow" :style="{ 'background-image': 'linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url(/images/layout_background.jpg)' }">
+    <nav class="shadow" :style="{ 'background-image': 'linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url(/storage/images/layout_background.jpg)' }">
         <div class="flex justify-between items-center py-6 px-10 container mx-auto">
             <div class="flex">
                 <div class="shrink-0 flex items-center">
-                    <a href="/"><img src="/images/site_logo.png" class="block h-14 w-auto" /></a>
+                    <a href="/"><img src="/storage/images/site_logo.png" class="block h-14 w-auto" /></a>
                 </div>
                 <h1 class="ml-2 pt-4 text-2xl font-bold">
                     <a href="/" class="text-white">Sync Connect</a>

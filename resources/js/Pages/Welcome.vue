@@ -1,9 +1,7 @@
 <script>
 import DefaultLayout from '@/Layouts/DefaultLayout.vue';
 import ThumbList from "@/Components/ThumbList.vue";
-import {
-    gsap
-} from 'gsap';
+import { gsap } from 'gsap';
 
 export default {
     components: {
