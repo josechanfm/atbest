@@ -6,9 +6,12 @@
       </h2>
     </template>
     <div class="max-w-7xl mx-auto py-10 px-2 sm:px-6 lg:px-8">
-        <h2 class="font-bold text-2xl text-gray-800">
-            {{ event.title}}</h2>
+        <a-typography-title :level="3">{{ event.title}}</a-typography-title>
+        <div v-html="bannerImage"/>
         <div v-html="event.content"/>
+        <div v-if="event.form">
+          <inertia-link :href="route('form.item',{t:event.form.uuid})">{{ $t('applications') }}</inertia-link>
+        </div>
     </div>
   </DefaultLayout>
 </template>
@@ -87,6 +90,15 @@ export default {
     };
   },
   created() {},
+  computed:{
+    bannerImage(){
+      const banner=this.event.media.find(m=>m.collection_name=='banner');
+      if (!banner || !banner.original_url) {
+        return null;
+      }
+      return `<img src="${banner.original_url}" alt="Banner Image" style="width: 100%; height: auto;" />`;
+    }
+  },
   methods: {
     setCroppedImageData(data) {
       this.avatarPreview = data.imageUrl;

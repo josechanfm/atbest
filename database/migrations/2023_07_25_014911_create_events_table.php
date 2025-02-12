@@ -31,6 +31,7 @@ return new class extends Migration
             $table->boolean('for_member')->default(false);
             $table->boolean('published')->default(false);
             $table->boolean('with_attendance')->nullable();
+            $table->foreignId('form_id')->nullable();
             $table->timestamps();
         });
     }

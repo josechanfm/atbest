@@ -65,38 +65,34 @@
         <a-form-item :label="$t('with_attendance_note')" name="with_attendance">
           <a-switch v-model:checked="event.with_attendance"/>
         </a-form-item>
-
-
-
         <!-- Form images-->
         <a-form-item :label="$t('banner')" name="banner_image">
-              <div class="flex gap-5">
-                  <div v-if="event.banner_url" class="flex">
-                    <img :src="event.banner_url" width="100" />
-                    <div class="flex flex-col justify-end">
-                      <inertia-link :href="route('manage.event.deleteImage',{event:event,collection:'banner'})" method="delete" class="text-red-500">
-                        <DeleteOutlined />
-                      </inertia-link>
-                    </div>
-                  </div>
-                  <a-upload
-                    v-model:file-list="event.banner_image"
-                    :multiple="false"
-                    :max-count="1"
-                    :accept="'image/*'"
-                    list-type="picture-card"
-                    @change="handleBannerUpload"
-                    >
-                    <!--before upload preview-->
-                    <div v-if="!event.banner_image">
-                        <plus-outlined></plus-outlined>
-                        <div class="ant-upload-text">Upload</div>
-                    </div>
-                  </a-upload>
+          <div class="flex gap-5">
+              <div v-if="event.banner_url" class="flex">
+                <img :src="event.banner_url" width="100" />
+                <div class="flex flex-col justify-end">
+                  <inertia-link :href="route('manage.event.deleteImage',{event:event,collection:'banner'})" method="delete" class="text-red-500">
+                    <DeleteOutlined />
+                  </inertia-link>
+                </div>
               </div>
-            </a-form-item>
-
-            <a-form-item :label="$t('thumbnail')" name="thumb_image">
+              <a-upload
+                v-model:file-list="event.banner_image"
+                :multiple="false"
+                :max-count="1"
+                :accept="'image/*'"
+                list-type="picture-card"
+                @change="handleBannerUpload"
+                >
+                <!--before upload preview-->
+                <div v-if="!event.banner_image">
+                    <plus-outlined></plus-outlined>
+                    <div class="ant-upload-text">Upload</div>
+                </div>
+              </a-upload>
+          </div>
+        </a-form-item>
+        <a-form-item :label="$t('thumbnail')" name="thumb_image">
               <div class="flex gap-5">
                   <div v-if="event.thumb_url" class="flex">
                     <img :src="event.thumb_url" width="100" />
@@ -121,9 +117,10 @@
                     </div>
                   </a-upload>
               </div>
-            </a-form-item>
-
-
+        </a-form-item>
+        <a-form-item :label="$t('applications')" name="form_id">
+          <a-select v-model:value="event.form_id" :options="forms" :fieldNames="{value:'id',label:'title'}"/>
+        </a-form-item>
         <a-form-item :label="$t('remark')" name="remark">
           <quill-editor v-model:value="event.remark" style="min-height: 200px" />
         </a-form-item>
@@ -152,7 +149,7 @@ export default {
     dayjs,
     PlusOutlined, DeleteOutlined
   },
-  props: ["event", "categories"],
+  props: ["event", "categories","forms"],
   data() {
     return {
       breadcrumb: [

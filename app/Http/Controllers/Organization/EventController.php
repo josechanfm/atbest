@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Event;
 use App\Models\Config;
-use App\Models\Member;
+use App\Models\Form;
 use App\Models\Organization;
 
 class EventController extends Controller
@@ -90,10 +90,12 @@ class EventController extends Controller
     {
         // $event->banner_url=$event->getFirstMediaUrl('banner');
         // $event->thumb_url=$event->getFirstMediaUrl('thumb');
-        //dd($event);
+        //$forms=Form::where('organization_id',$event->organization_id)->where('published',true)->get();
+        // dd($event->organization_id, Form::recents($event->organization_id,false,true));
         return Inertia::render('Organization/Event', [
             'event' => $event,
-            'categories' => Config::item('event_categories', session('organization'))
+            'categories' => Config::item('event_categories', session('organization')),
+            'forms'=> Form::recents($event->organization_id,false,true)
         ]);
     }
 
@@ -106,7 +108,7 @@ class EventController extends Controller
      */
     public function update(Request $request, Event $event)
     {
-        //dd($event);
+        // dd($request->all());
         $event->update($request->all());
         if($request->file('banner_image')){
             $event->addMedia($request->file('banner_image')[0]['originFileObj'])->toMediaCollection('banner');

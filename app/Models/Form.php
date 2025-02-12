@@ -184,8 +184,27 @@ class Form extends Model implements HasMedia
     {
         return $this->fields()->exists();
     }
-    public static function recents(){
-        return self::publics();
+    public static function recents($organizationId=null, $forMember=null, $simple=false){
+        if($organizationId){
+            $forms=Form::where('organization_id',$organizationId)->where('published',true);
+        }else{
+            $forms=Form::where('published',true);
+        }
+        if($forMember!=null){
+            $forms->where('for_member',$forMember);
+        }
+        if($simple){
+            $forms->select('id','uuid','organization_id','title','require_login','for_member','valid_at','expire_at');
+        }
+        return $forms->where(function($query){
+                    $query->whereNull('valid_at')->orWhere('valid_at','<=',date('Y-m-d'));
+                })
+                ->where(function($query){
+                    $query->whereNull('expire_at')->orWhere('expire_at','>=',date('Y-m-d'));
+                })
+                ->orderBy('created_at','DESC')->get();
+
+        //return self::publics();
     }
     public static function publics(){
         return Form::where('published',true)->where('for_member',false)

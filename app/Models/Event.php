@@ -23,7 +23,7 @@ class Event extends Model implements HasMedia
     //     'credit'=>'',
     // ];
     protected $casts=['require_login'=>'boolean','for_member'=>'boolean','published'=>'boolean','with_attendance'=>'boolean'];
-    protected $appends=['banner_url','thumb_url'];
+    protected $appends=['form','banner_url','thumb_url'];
 
     public static function boot(){
         parent::boot();
@@ -37,6 +37,9 @@ class Event extends Model implements HasMedia
                 $model->uuid=Str::uuid();
             }
         });
+    }
+    public function getFormAttribute(){
+        return Form::where('id',$this->form_id)->select('id','uuid','title','valid_at','expire_at')->first();
     }
     public function getBannerUrlAttribute(){
         return $this->getFirstMediaUrl('banner');
