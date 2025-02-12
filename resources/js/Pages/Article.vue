@@ -1,21 +1,22 @@
 <script>
 import DefaultLayout from '@/Layouts/DefaultLayout.vue';
 
-
 export default {
     components: {
         DefaultLayout,
     },
-    props:['article'],
+    props: ['article'],
     data() {
-        return{
-            pageHeader:'Article',
+        return {
+            pageHeader: 'Article',
         }
     },
     created() {
-        axios.get(route("api.config.item", { key: 'article_categories' })).then((resp) => {
-            const articleCategory=resp.data.find(d=>d.value==this.article.category_code)
-            this.pageHeader=articleCategory?articleCategoryp.label:'Article'
+        axios.get(route("api.config.item", {
+            key: 'article_categories'
+        })).then((resp) => {
+            const articleCategory = resp.data.find(d => d.value == this.article.category_code)
+            this.pageHeader = articleCategory ? articleCategoryp.label : 'Article'
             // this.articleCategories = resp.data.reduce((acc, obj) => {
             //     acc[obj.value] = obj;
             //     return acc;
@@ -23,41 +24,44 @@ export default {
         })
     },
 }
-
 </script>
 
 <template>
-    <DefaultLayout title="Dashboard">
-        <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ pageHeader }}
-            </h2>
-        </template>
+<DefaultLayout title="Dashboard">
+    <template #header>
+        <div class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ pageHeader }}
+        </div>
+    </template>
+    <div class="flex flex-col gap-10">
 
-        <div class="container py-0 px-2 sm:px-6 lg:px-8">
+        <div class="ml-5 lg:ml-20 lg:w-4/5 py-5">
             <h2 class="font-bold text-2xl text-gray-800">
-                {{ article.title}}
+                {{ article.title }}
             </h2>
-            <img :src="article.banner_url" height="200"/>
-            <div v-html="article.content"/>
+            <img :src="article.banner_url" height="200" />
+            <div v-html="article.content" class="article" />
             <div class="text-center pt-10">
-            <a v-if="article.url" :href="article.url" target="_blank">Link</a>
+                <a v-if="article.url" :href="article.url" target="_blank">Link</a>
             </div>
         </div>
-        
-    </DefaultLayout>
-
-    
+    </div>
+</DefaultLayout>
 </template>
 
-<style >
+<style>
 .ql-align-right {
-	text-align: right;
+    text-align: right;
 }
+
 .ql-align-center {
-	text-align: center;
+    text-align: center;
 }
+
 .ql-align-left {
-	text-align: left;
+    text-align: left;
+}
+.article img{
+    width:100%;
 }
 </style>

@@ -33,14 +33,14 @@ const props = defineProps({
             <span v-else-if="routePath=='event.item'" class="bg-gray-200 text-gray-700 py-1 px-2 rounded-full text-sm">Event</span>
             <span v-if="record.category_code" class="bg-gray-200 text-gray-700 py-1 px-2 rounded-full text-sm">{{ record.category_code}}</span>
           </div>
-          <div class="mt-2 text-gray-600">
+          <div class="mt-3 text-gray-600">
             <div v-if="record.intro" class="text-justify">
               {{ record.intro }}
             </div>
             <div v-else-if="record.content">
               {{ record.content.replace(/<[^>]+>/g, "").substring(0, 100) }} ...
             </div>
-            <div v-if="record.url">
+            <div v-if="record.url" class="mt-2">
               <inertia-link :href="record.url" target="_blank">{{
                 $t("url_link")
               }}</inertia-link>

@@ -72,7 +72,6 @@ export default {
     };
   },
   created() {
-
     this.member = this.members[0]
     console.log(this.member, this.members)
     console.log(this.$page.props)
@@ -151,9 +150,11 @@ export default {
             </li>
           </ol>
 
+          <!-- Body List -->
+          <!-- ------------ -->
           <!-- News Section-->
           <div class="container mx-auto">
-              <ThumbList :records="articles" routePath="article.item"/>
+            <ThumbList :records="articles" routePath="article.item"/>
           </div>
           <!-- News Section end-->
         </div>

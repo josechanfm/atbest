@@ -18,7 +18,7 @@ return new class extends Migration
             $table->uuid('uuid')->nullable();
             $table->foreignId('organization_id');
             $table->string('category_code');
-            $table->tinyInteger('credit')->nullable();
+            $table->integer('credit')->nullable();
             $table->string('title');
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();

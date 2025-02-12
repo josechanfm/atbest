@@ -61,30 +61,6 @@ export default {
             //     pin: true,
             // });
 
-            gsap.to(".heroText", {
-				// y: "-250px",
-                filter: "blur(20px)",
-                opacity: 0,
-                scrollTrigger: {
-                    trigger: heroText.value,
-                    start: "top top",
-					end: "bottom top", // 到达 heroSection 底部时消失
-                    scrub: 1.5,
-                },
-				onComplete: () => {
-					gsap.from(".main-body", {
-						y: "250px", // 从下方滑入
-						duration: 1, // 动画持续时间
-						scrollTrigger: {
-							trigger: mainBody.value,
-							start: "top 80%", // 触发位置
-							end: "top 30%", // 结束位置
-							scrub: 1.5, // 平滑滚动
-						},
-					});
-				}
-            });
-
             // ScrollTrigger.create({
             //     trigger: mainBody.value,
             //     start: "top top", // 当 mainBody 的顶部到达视口的 80% 时开始
@@ -145,7 +121,7 @@ export default {
 <header class="">
 
     <!-- navbar and menu -->
-    <nav class="shadow" v-if="false" :style="{ 'background-image': 'linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url(/images/layout_background.jpg)' }">
+    <nav class="shadow" :style="{ 'background-image': 'linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url(/images/layout_background.jpg)' }">
         <div class="flex justify-between items-center py-6 px-10 container mx-auto">
             <div class="flex">
                 <div class="shrink-0 flex items-center">
@@ -245,17 +221,16 @@ export default {
     </nav>
 </header>
 <!-- Page Heading -->
-<header v-if="$slots.header" class="bg-gray-100 shadow">
-    <div class="mx-auto py-2 px-4 sm:px-6 lg:px-8">
+<div v-if="$slots.header" >
+    <div class="mx-auto max-w-7xl bg-white h-12 flex items-center py-2 ">
         <slot name="header" />
     </div>
-</header>
+</div>
 
-<main class="bg-gradient-to-b from-gray-50 to-gray-100">
+<main class="">
 
-    <!-- section hero -->
     <section class="">
-        <div ref="heroSection" class="hero-section relative min-h-screen p-0 lg:p-4 pt-2">
+        <div ref="heroSection" class="bg-slate-100 relative min-h-screen p-0 lg:p-4 pt-2">
             <!-- Hero 背景文字 -->
             <!-- <div ref="heroText" class="absolute top-[50%]  left-[50%] inset-0 z-10 overflow-hidden">
                 <div class="h-full w-full flex items-center justify-center ">
@@ -264,14 +239,14 @@ export default {
                     </div>
                 </div>
             </div> -->
-            <div ref="heroText" class="heroText">
+            <!-- <div ref="heroText" class="heroText">
                 <h1 class="text-3xl font-bold ">Hero text</h1>
-            </div>
+            </div> -->
 
             <!-- 主內容區 -->
             <div ref="mainBody" class="main-body relative z-10 grid grid-cols-1 lg:grid-cols-5 gap-6">
                 <!-- 左側主內容 -->
-
+                
                 <div class="col-span-4 ">
                     <!-- Page Content -->
                     <main>
@@ -334,36 +309,4 @@ export default {
     background-color: rgba(36, 60, 90, var(--bg-opacity));
 }
 
-.hero-image {
-    height: 50%;
-
-    /* Position and center the image to scale nicely on all screens */
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    position: relative;
-}
-
-/* Place text in the middle of the image */
-.hero-text {
-    text-align: center;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 1;
-}
-
-.heroText {
-    /* position: absolute; */
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100vh;
-    z-index: 100;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    @apply bg-blue-100 text-black text-4xl font-bold
-}
 </style>

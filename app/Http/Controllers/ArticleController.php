@@ -8,7 +8,9 @@ use App\Models\Article;
 
 class ArticleController extends Controller
 {
-    public function item(Request $request){
+    public function item(Request $request)
+    {
+        
         //dd(Article::where('uuid',$request->t)->where('published',true)->first());
         if(empty($request->t)){
             return to_route('/');

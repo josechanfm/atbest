@@ -98,6 +98,7 @@ class Form extends Model implements HasMedia
                 if ($f) {
                     if ($field->type == 'radio') {
                         $fieldOptions = $field->options;
+                        // $fieldOptions = json_decode($field->options, true);
                         $value = array_filter($fieldOptions, function ($item) use ($f) {
                             return $item['value'] == $f->field_value;
                         });

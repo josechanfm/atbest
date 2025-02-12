@@ -43,6 +43,8 @@ export default {
 
 <template>
 <DefaultLayout title="Dashboard">
+    
+
     <div class="flex flex-col gap-10 pt-10">
         <div class="lg:h-96 bg-gradient-to-tr bg-[#0081C8] rounded-md flex items-center">
             <div class="ml-5 lg:ml-20 lg:w-4/5 py-5">
@@ -64,28 +66,9 @@ export default {
                         此外，「公務人員聯合總會網首頁」也可能提供其他相關服務，例如公務人員培訓課程、就業資訊、法規法案解讀等。透過這些服務，公務人員可以更好地了解自己所屬的組織和行業的最新動態，並提升自身的專業能力。
                     </template>
                 </p>
-                <!-- <a href="#"
-          class="uppercase inline-block mt-8 text-sm bg-white py-2 px-4 rounded font-semibold hover:bg-indigo-100"> Learn More
-        </a> -->
             </div>
         </div>
         <div ref="section_news">
-            <div class="px-4 py-2 mt-2 bg-white rounded-md">
-
-                <h2 class="font-bold text-2xl text-gray-800 ">最新消息</h2>
-            </div>
-            <ThumbList :records="articles" routePath="article.item" />
-            <ThumbList :records="forms" routePath="form.item" />
-            <ThumbList :records="events" routePath="event.item" />
-            
-            <div class="px-4 py-2 mt-2 bg-white rounded-md">
-
-                <h2 class="font-bold text-2xl text-gray-800 ">最新消息</h2>
-            </div>
-            <ThumbList :records="articles" routePath="article.item" />
-            <ThumbList :records="forms" routePath="form.item" />
-            <ThumbList :records="events" routePath="event.item" />
-
             <div class="px-4 py-2 mt-2 bg-white rounded-md">
 
                 <h2 class="font-bold text-2xl text-gray-800 ">最新消息</h2>

@@ -27,12 +27,12 @@ return new class extends Migration
             $table->text('url')->nullable();
             $table->string('reference')->nullable();    
             $table->text('author')->nullable();
-            $table->string('tags')->nullable()->default('');
+            $table->string('tags')->nullable()->default('[]');
             $table->char('lang',2)->default('zh');
             $table->foreignId('user_id');
-            $table->boolean('public');
-            $table->boolean('published');
-            $table->boolean('for_member');
+            $table->boolean('public')->default('0');
+            $table->boolean('published')->default('0');
+            $table->boolean('for_member')->default('0');
             $table->string('thumbnail')->nullable();
             $table->timestamps();
         });
