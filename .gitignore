@@ -1,13 +1,13 @@
 /node_modules
-/public/build
-/public/hot
-/public/storage
-/public/profile
-/public/media
-/public/log
-/public/logos
+/public/*
+# /public/build
+# /public/hot
+# /public/storage
+# /public/profile
+# /public/media
+# /public/log
+# /public/logos
 /storage/*.key
-/storage/public
 /vendor
 .env
 .env.backup
