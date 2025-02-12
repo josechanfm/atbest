@@ -12,25 +12,22 @@
           </template>
           <template #bodyCell="{ column, text, record, index }">
             <template v-if="column.dataIndex == 'operation'">
-              <inertia-link :href="route('admin.form.entries.index', { form: record.id })" class="ant-btn">{{
-                $t("applications") }}</inertia-link>
-              <a :href="route('admin.entry.export', { form: record.id })" class="ant-btn">{{ $t("export") }}</a>
+              <inertia-link :href="route('admin.form.entries.index', { form: record.id })" class="ant-btn">
+                <a-button>{{ $t("applications") }}</a-button>
+              </inertia-link>
+              <a-button :href="route('admin.entry.export', { form: record.id })" class="ant-btn">{{ $t("export") }}</a-button>
               <inertia-link :href="route('admin.form.fields.index', { form: record.id })" class="ant-btn">
-                {{ $t("data_fields") }}
+                <a-button>{{ $t("data_fields") }}</a-button>
               </inertia-link>
               <inertia-link :href="route('admin.forms.edit', record.id)" class="ant-btn">
-                {{ $t("edit") }}
+                <a-button>{{ $t("edit") }}</a-button>
               </inertia-link>
 
               <a-popconfirm :title="$t('confirm_delete_record')" :ok-text="$t('yes')" :cancel-text="$t('no')"
                 @confirm="deleteConfirmed(record)" :disabled="record.entries_count > 0">
-                <a-button :disabled="record.entries_count > 0">{{
-                  $t("delete")
-                }}</a-button>
+                <a-button :disabled="record.entries_count > 0">{{ $t("delete") }}</a-button>
               </a-popconfirm>
-              <a-button @click="backupRecords(record)" v-if="record.entries_count > 0">{{
-                $t("backup")
-              }}</a-button>
+              <a-button @click="backupRecords(record)" v-if="record.entries_count > 0">{{ $t("backup") }}</a-button>
             </template>
             <template v-else-if="column.type == 'yesno'">
               <span v-if="record[column.dataIndex] == 1">{{ $t("yes") }}</span>

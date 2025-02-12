@@ -4,6 +4,8 @@
 /public/storage
 /public/profile
 /public/media
+/public/log
+/public/logos
 /storage/*.key
 /storage/public
 /vendor
