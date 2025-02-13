@@ -7,7 +7,7 @@
 # /public/media
 # /public/log
 # /public/logos
-/storage/*.key
+# /storage/*.key
 /vendor
 .env
 .env.backup
