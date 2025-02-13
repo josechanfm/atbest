@@ -189,7 +189,7 @@ export default {
               <!-- card start -->
               <div class="mx-auto relative py-4 w-96 hover:scale-105 transform transition-transform mb-4">
                 <div :style="cardStyle['font_style']"
-                  class="absolute z-10 h-52 flex rounded-lg flex-col py-3 px-8 shadow-xl text-sm w-full"
+                  class="absolute z-10 flex rounded-lg flex-col m-4 text-sm w-[350px]"
                   @click="onShowQrcode">
                   <div class="flex flex-col w-xl">
                     <div class="flex justify-center">
@@ -202,24 +202,24 @@ export default {
                         <div class="">會員編號：</div>
                         <div class="font-sans mb-2">{{ member.member_number }}</div>
                       </div>
-                      <div class="flex text-right">
+                      <div class="flex">
                         <img v-if="member.avatar" class="w-20 h-20" :src="member.avatar" />
                         <img v-else class="w-20 h-20" src="/avatars/dummy-avatar.jpg" />
                       </div>
                     </div>
-                  </div>
-                  <div class="flex text-xs">
-                    <div class="flex flex-col gap-1 flex-auto">
-                      <div class="">發出日期：</div>
-                      <div class="font-sans text-base">{{ member.valid_at }}</div>
-                    </div>
-                    <div class="flex flex-col gap-1 flex-auto">
-                      <div class="">有效日期：</div>
-                      <div class="font-sans text-base">{{ member.expired_at }}</div>
+                    <div class="flex text-xs">
+                      <div class="flex flex-colgap-1 flex-auto">
+                        <div class="">發出日期：</div>
+                        <div class="font-sans text-base">{{ member.valid_at }}</div>
+                      </div>
+                      <div class="flex flex-col gap-1 flex-auto">
+                        <div class="">有效日期：</div>
+                        <div class="font-sans text-base">{{ member.expired_at }}</div>
+                      </div>
                     </div>
                   </div>
                 </div>
-                <img class="relative object-cover w-96 h-52 rounded-lg z-0"
+                <img class="relative object-cover w-full h-52 rounded-lg z-0"
                   :src="'/storage/images/' + cardStyle['background']" />
               </div>
               <!-- card end -->
@@ -277,7 +277,7 @@ export default {
                         class="w-full border-t border-gray-100 text-gray-600 py-4 pl-6 pr-3 w-full block hover:bg-gray-100 transition duration-150">
                         <img src="https://avatars0.githubusercontent.com/u/35900628?v=4" alt=""
                           class="rounded-full h-6 shadow-md inline-block mr-2" />
-                        {{ portfolio.title }} - {{ portfolio.description }}
+                          {{ portfolio.title }} - {{ portfolio.description }}
                         <span class="text-gray-500 text-xs">{{ portfolio.start_date }}</span>
                       </a>
                     </template>
