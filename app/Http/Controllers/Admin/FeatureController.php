@@ -112,7 +112,9 @@ class FeatureController extends Controller
         //
     }
     public function deleteImage(Feature $feature){
-        unlink(public_path($feature->image));
+        if($feature->image && file_exists(public_path($feature->image))){
+            unlink(public_path($feature->image));
+        }
         $feature->image=null;
         $feature->save();
         return redirect()->back();
