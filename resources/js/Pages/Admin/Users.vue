@@ -276,7 +276,7 @@ export default {
       );
     },
     deleteRecord(record) {
-      this.$inertia.delete(route("admin.users.destroy"), record.id, {
+      this.$inertia.delete(route("admin.users.destroy", record.id), {
         onSuccess: (page) => {
           console.log(page);
         },

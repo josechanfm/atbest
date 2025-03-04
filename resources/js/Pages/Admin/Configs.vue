@@ -45,11 +45,10 @@
       >
         <a-input type="hidden" v-model:value="modal.data.id" />
         <a-form-item :label="$t('organization')" name="organization_id">
-          <a-select
-            v-model:value="modal.data.organization_id"
-            :options="organizations"
-            :fieldNames="{ value: 'id', label: 'name_zh' }"
-          />
+          <a-select v-model:value="modal.data.organization_id">
+            <a-select-option :value="0">General Config Item</a-select-option>
+              <a-select-option v-for="org in organizations" :value="org.value" :key="org.value">{{ org.name_zh }}</a-select-option>
+          </a-select>
         </a-form-item>
         <a-form-item :label="$t('key')" name="key">
           <a-input v-model:value="modal.data.key" />
@@ -131,7 +130,7 @@ export default {
     };
   },
   created() {
-    this.organizations.unshift({ id: 0, name_zh: "General Config Item" });
+    //this.organizations.unshift({ id: 0, name_zh: "General Config Item" });
   },
   methods: {
     createRecord() {
@@ -165,9 +164,11 @@ export default {
         });
     },
     storeRecord(data) {
+        data.json_value=JSON.parse(data.value);
         this.$inertia.post(route("admin.configs.store"), data, {
           onSuccess: (page) => {
             data = {};
+                // this.organizations.unshift({ id: 0, name_zh: "General Config Item" });
           },
           onError: (err) => {
             console.log(err);
@@ -175,12 +176,13 @@ export default {
         });
     },
     updateRecord(data) {
-      data.value=JSON.parse(data.value);
+      data.json_value=JSON.parse(data.value);
       this.$inertia.patch(
         route("admin.configs.update", data.id),data,
         {
           onSuccess: (page) => {
             data = {}
+            // this.organizations.unshift({ id: 0, name_zh: "General Config Item" });
           },
           onError: (error) => {
             console.log(error);

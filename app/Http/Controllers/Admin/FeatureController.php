@@ -33,7 +33,7 @@ class FeatureController extends Controller
         $feature = Feature::make();
         return Inertia::render('Admin/FeatureEdit', [
             'organizations' => Organization::all(),
-            'feature' => (object)[],
+            'feature' => (object)['sequence'=>0],
         ]);
     }
 

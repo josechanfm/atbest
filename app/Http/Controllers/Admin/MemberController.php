@@ -62,7 +62,9 @@ class MemberController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Member::create($request->all());
+        return redirect()->back();
+
     }
 
     /**

@@ -53,7 +53,7 @@ class ArticleController extends Controller
         return Inertia::render('Admin/Article', [
             'organizations' => Organization::all(),
             'articleCategories' => Config::item('article_categories'),
-            'article' => (object)[],
+            'article' => (object)['sequence'=>0],
         ]);
     }
 
@@ -118,6 +118,7 @@ class ArticleController extends Controller
     public function update(Request $request, Article $article)
     {
         $data = $request->all();
+
         if ($request->file('thumbnail_upload')) {
             $file = $request->file('thumbnail_upload');
             $fileName = $article->id . '_' . $file->getClientOriginalName();
@@ -125,6 +126,7 @@ class ArticleController extends Controller
             $data['thumbnail'] = '/articles/' . $fileName;
         }
         $article->update($data);
+        $article->save();
 
         return redirect()->route('admin.articles.index');
     }

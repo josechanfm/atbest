@@ -43,7 +43,6 @@
           <a-form-item :label="$t('intro')" name="intro">
             <a-textarea v-model:value="article.intro" :rows="5"/>
           </a-form-item>
-
           <a-form-item :label="$t('content')" name="content">
             <ckeditor
               ref="editorRef"

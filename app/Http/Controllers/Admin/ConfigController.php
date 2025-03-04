@@ -49,7 +49,9 @@ class ConfigController extends Controller
             'key' => 'required',
             'value'=>'required',
         ]);
-        Config::create($request->all());
+        $data=$request->all();
+        $data['value']=$data['json_value'];
+        Config::create($data);
         return redirect()->back();
     }
 
@@ -85,9 +87,11 @@ class ConfigController extends Controller
     public function update(Request $request, Config $config)
     {
         $data=$request->all();
+        $data['value']=$data['json_value'];
         $config->update($data);
         //$data['value']=json_encode($data['value']);
-        $config->update($data);
+        //$config->update($data);
+        $config->save();
         //return response()->json($request->all());   
         return redirect()->back();
     }

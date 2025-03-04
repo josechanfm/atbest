@@ -31,6 +31,7 @@
           class="w-32"
         ></a-input>
         <a-button type="primary" @click="searchData">{{ $t("search") }}</a-button>
+        <a-button type="primary" as="link" :href="route('admin.members.index')">{{ $t("clear") }}</a-button>
       </div>
     </div>
     <div class="container mx-auto pt-5">
@@ -179,7 +180,11 @@ export default {
         title: "Modal",
         mode: "",
       },
-      search: {},
+      search: {
+        organization:null,
+        given_name:null,
+        family_name:null
+      },
       pagination: {
         total: this.members.total,
         current: this.members.current_page,
@@ -246,9 +251,15 @@ export default {
   },
   created() {},
   mounted() {
-    this.search = {
-        organization: parseInt(this.route().params.search.organization) || null,
-    };
+    console.log(this.route().params)
+    if(this.route().params.search){
+      this.search = {
+          organization: parseInt(this.route().params.search.organization) || null,
+          given_name: this.route().params.search.given_name || null,
+          family_name: this.route().params.search.family_name || null,
+      };
+
+    }
     //this.search = this.route().params.search ?? {};
   },
   methods: {

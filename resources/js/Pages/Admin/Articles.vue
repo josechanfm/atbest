@@ -49,18 +49,10 @@
           :pagination="pagination"
           @change="onPaginationChange"
         >
-          <!-- <template #headerCell="{ column, record, index }">
-            <template v-if="isDraggable">
-                {{ $t(column.i18n) }}
-            </template>
-            <template v-else>
-              <span v-if="column.dataIndex=='dragger'"></span>
-              <span v-else>{{ $t(column.i18n) }}</span>
-            </template>
-          </template> -->
+
           <template #bodyCell="{ column, record, index }">
               <template v-if="column.dataIndex === 'operation'">
-                <a-button @click="editRecord(record)">{{ $t("edit") }}</a-button>
+                <a-button :href="route('admin.articles.edit',record.id)">{{ $t("edit") }}</a-button>
                 <a-button @click="deleteRecord(record)">{{ $t("delete") }}</a-button>
               </template>
               <template v-else-if="column.dataIndex==='category_code'">
@@ -97,10 +89,11 @@
         <a-form-item :label="$t('title')" name="title">
           <a-input v-model:value="modal.data.title" />
         </a-form-item>
-        <a-form-item :label="$t('content')" name="content_en">
+        sss
+        <a-form-item :label="$t('content')" name="content">
           <ckeditor
             :editor="editor"
-            v-model="modal.data.content_en"
+            v-model="modal.data.content"
             :config="editorConfig"
           />
         </a-form-item>
@@ -283,15 +276,7 @@ export default {
     }
   },
   watch:{
-    // isDraggable(val){
-    //   console.log(val)
-    //   if(val){
-    //     this.columns.unshift({title: "Dragger", i18n: "dragger_sort",dataIndex: "dragger"});
-    //   }else{
-    //     this.columns.shift();
 
-    //   }
-    // }
   },
   methods: {
     onShowSizeChange(current, pageSize) {
