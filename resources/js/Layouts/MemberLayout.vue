@@ -9,7 +9,7 @@ import DropdownLink from "@/Components/DropdownLink.vue";
 import NavLink from "@/Components/NavLink.vue";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink.vue";
 import { usePage } from "@inertiajs/vue3";
-import { loadLanguageAsync } from "laravel-vue-i18n";
+// import { loadLanguageAsync } from "laravel-vue-i18n";
 
 export default {
   components: {
@@ -21,7 +21,7 @@ export default {
     DropdownLink,
     NavLink,
     ResponsiveNavLink,
-    loadLanguageAsync,
+    // loadLanguageAsync,
   },
   props: ["title"],
   setup(props) {
@@ -47,7 +47,7 @@ export default {
       showingNavigationDropdown,
       switchToTeam,
       logout,
-      loadLanguageAsync,
+      // loadLanguageAsync,
     };
   },
   created() {},
@@ -122,7 +122,6 @@ export default {
 
             <div class="hidden sm:flex sm:items-center sm:ml-6">
               <!-- Teams Dropdown Here-->
-              <!--
               <div class="ml-0 relative">
                 <Dropdown align="right" width="20">
                   <template #trigger>
@@ -149,10 +148,10 @@ export default {
                   <template #content>
                     <div class="w-20">
                       <template v-if="$page.props.jetstream.hasTeamFeatures">
-                        <DropdownLink :href="route('language', 'zh-TW')">
+                        <DropdownLink as="a" href="/language/zh">
                           {{ $t("chinese") }}
                         </DropdownLink>
-                        <DropdownLink :href="route('language', 'en')">
+                        <DropdownLink as="a" href="/language/en">
                           {{ $t("english") }}
                         </DropdownLink>
                       </template>
@@ -160,7 +159,7 @@ export default {
                   </template>
                 </Dropdown>
               </div>
-              -->
+              
               <!-- Settings Dropdown -->
               <div class="ml-3 relative">
                 <Dropdown align="right" width="48">

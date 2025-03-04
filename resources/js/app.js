@@ -33,13 +33,13 @@ createInertiaApp({
             .use(Antd)
             .use(RolePermission)
             .use(i18nVue, {
-                lang: 'zh-TW',
                 resolve: async lang => {
                     const langs = import.meta.glob('../../lang/*.json');
                     return await langs[`../../lang/${lang}.json`]();
 
                 },
             })
+            
             .component('inertia-head', Head)
             .component('inertia-link', Link)
             .mount(el);

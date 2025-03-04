@@ -33,12 +33,14 @@ class ArticleController extends Controller
                 }
             }
         })->orderByRaw('ISNULL(sequence), sequence ASC')->paginate($request->per_page);
+        //dd($articles);
         return Inertia::render('Admin/Articles', [
             // 'classifies'=>Classify::whereBelongsTo(session('organization'))->get(),
             'organizations' => Organization::all(),
             'articleCategories' => Config::item('article_categories'),
             'articles' => $articles,
         ]);
+
     }
 
     /**

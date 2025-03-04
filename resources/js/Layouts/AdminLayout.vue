@@ -57,14 +57,13 @@
               </button>
             </span>
           </template>
-
           <template #content>
             <div class="w-20">
               <template v-if="$page.props.jetstream.hasTeamFeatures">
-                <DropdownLink :href="route('language', 'zh-TW')">
+                <DropdownLink as="a" href="/language/zh">
                   {{ $t("chinese") }}
                 </DropdownLink>
-                <DropdownLink :href="route('language', 'en')">
+                <DropdownLink as="a" href="/language/en">
                   {{ $t("english") }}
                 </DropdownLink>
               </template>
@@ -126,8 +125,6 @@ import DropdownLink from "@/Components/DropdownLink.vue";
 import PageHeader from "@/Components/Organization/PageHeader.vue";
 
 import { MenuUnfoldOutlined, MenuFoldOutlined } from "@ant-design/icons-vue";
-import { loadLanguageAsync } from "laravel-vue-i18n";
-import { getActiveLanguage } from "laravel-vue-i18n";
 
 import AdminMenu from "@/Components/Admin/AdminMenu.vue";
 
@@ -137,10 +134,8 @@ export default {
     Dropdown,
     DropdownLink,
     AdminMenu,
-    loadLanguageAsync,
     MenuUnfoldOutlined,
     MenuFoldOutlined,
-    getActiveLanguage,
   },
   props: ["title"],
   setup(props) {
@@ -149,7 +144,6 @@ export default {
       menuSelectKey: "",
     });
 
-    const showingNavigationDropdown = ref(false);
     const selectedKeys = ref(["1"]);
     const collapsed = ref(false);
 
@@ -165,19 +159,16 @@ export default {
       );
     };
     const page = usePage();
-    //loadLanguageAsync(page.props.value.lang);
     const logout = () => {
       router.post(route("logout"));
     };
 
     return {
-      showingNavigationDropdown,
       selectedKeys,
       menuKeys,
       collapsed,
       switchToTeam,
       logout,
-      loadLanguageAsync,
     };
   },
 };

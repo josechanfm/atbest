@@ -19,7 +19,7 @@
         <menu-fold-outlined v-else class="trigger" @click="() => (collapsed = !collapsed)" />
 
         <div class="flex-1"></div>
-        <!--
+        
         <Dropdown align="right" width="20">
           <template #trigger>
             <span class="inline-flex rounded-md">
@@ -37,17 +37,17 @@
           <template #content>
             <div class="w-20">
               <template v-if="$page.props.jetstream.hasTeamFeatures">
-                <DropdownLink :href="route('language', 'zh-TW')">
+                <DropdownLink as="a" href="/language/zh">
                   {{ $t("chinese") }}
                 </DropdownLink>
-                <DropdownLink :href="route('language', 'en')">
+                <DropdownLink as="a" href="/language/en">
                   {{ $t("english") }}
                 </DropdownLink>
               </template>
             </div>
           </template>
         </Dropdown>
-        -->
+       
         <a-dropdown placement="bottomRight">
           <a class="trigger" @click.prevent>
             <!-- {{ $page.props.currentUser.roles }} -->
@@ -127,18 +127,14 @@ import Dropdown from "@/Components/Dropdown.vue";
 import DropdownLink from "@/Components/DropdownLink.vue";
 import { MenuUnfoldOutlined, MenuFoldOutlined } from "@ant-design/icons-vue";
 import OrganizationMenu from "@/Components/Organization/OrganizationMenu.vue";
-import { loadLanguageAsync } from "laravel-vue-i18n";
-import { getActiveLanguage } from "laravel-vue-i18n";
 
 export default {
   components: {
     Dropdown,
     DropdownLink,
     OrganizationMenu,
-    loadLanguageAsync,
     MenuUnfoldOutlined,
     MenuFoldOutlined,
-    getActiveLanguage,
   },
   props: ["title", "breadcrumb"],
   setup(props) {
@@ -163,7 +159,6 @@ export default {
       );
     };
     const page = usePage();
-    //loadLanguageAsync(page.props.value.lang);
     const logout = () => {
       router.post(route("logout"));
     };
@@ -175,7 +170,6 @@ export default {
       collapsed,
       switchToTeam,
       logout,
-      loadLanguageAsync,
     };
   },
   mounted() {

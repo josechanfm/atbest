@@ -49,7 +49,7 @@
           :pagination="pagination"
           @change="onPaginationChange"
         >
-          <template #headerCell="{ column, record, index }">
+          <!-- <template #headerCell="{ column, record, index }">
             <template v-if="isDraggable">
                 {{ $t(column.i18n) }}
             </template>
@@ -57,7 +57,7 @@
               <span v-if="column.dataIndex=='dragger'"></span>
               <span v-else>{{ $t(column.i18n) }}</span>
             </template>
-          </template>
+          </template> -->
           <template #bodyCell="{ column, record, index }">
               <template v-if="column.dataIndex === 'operation'">
                 <a-button @click="editRecord(record)">{{ $t("edit") }}</a-button>
@@ -95,9 +95,6 @@
           />
         </a-form-item>
         <a-form-item :label="$t('title')" name="title">
-          <a-input v-model:value="modal.data.title" />
-        </a-form-item>
-        <a-form-item :label="$t('title')" name="title_fn">
           <a-input v-model:value="modal.data.title" />
         </a-form-item>
         <a-form-item :label="$t('content')" name="content_en">
@@ -225,44 +222,6 @@ export default {
         ],
         // The configuration of the editor.
       },
-      columns: [
-        {
-          title: "Dragger",
-          i18n: "dragger_sort",
-          dataIndex: "dragger",
-        },
-        {
-          title: "Category",
-          i18n: "article_category",
-          dataIndex: "category_code",
-        },
-        {
-          title: "Title",
-          i18n: "title",
-          dataIndex: "title",
-        },
-        {
-          title: "Validated at",
-          i18n: "valid_at",
-          dataIndex: "valid_at",
-        },
-        {
-          title: "Expired at",
-          i18n: "expired_at",
-          dataIndex: "expired_at",
-        },
-        {
-          title: "Published",
-          i18n: "published",
-          dataIndex: "published",
-        },
-        {
-          title: "Operation",
-          i18n: "operation",
-          dataIndex: "operation",
-          key: "operation",
-        },
-      ],
       rules: {
         category_code: { required: true },
         classify_id: { required: true },
@@ -290,11 +249,49 @@ export default {
     this.dataModel=this.articles.data
   },
   mounted() {
-    // this.pagination = {
-    //   currentPage: this.route().params.currentPage ?? 1,
-    //   pageSize: this.route().params.pageSize ?? 10,
-    // };
     this.search = this.route().params.search ?? {};
+  },
+  computed:{
+    columns(){
+      var dataColumns = [
+          {
+            title: this.$t("article_category"),
+            dataIndex: "category_code",
+          },{
+            title: this.$t("title"),
+            dataIndex: "title",
+          },{
+            title: this.$t("valid_at"),
+            i18n: "valid_at",
+            dataIndex: "valid_at",
+          },{
+            title: this.$t("expired_at"),
+            dataIndex: "expired_at",
+          },{
+            title: this.$t("published"),
+            dataIndex: "published",
+          },{
+            title: this.$t("operation"),
+            dataIndex: "operation",
+            key: "operation"
+          },
+      ];
+      if(this.isDraggable){
+        dataColumns.unshift({title: this.$t("dragger_sort"), dataIndex: "dragger"});
+      }
+      return dataColumns
+    }
+  },
+  watch:{
+    // isDraggable(val){
+    //   console.log(val)
+    //   if(val){
+    //     this.columns.unshift({title: "Dragger", i18n: "dragger_sort",dataIndex: "dragger"});
+    //   }else{
+    //     this.columns.shift();
+
+    //   }
+    // }
   },
   methods: {
     onShowSizeChange(current, pageSize) {
@@ -404,7 +401,7 @@ export default {
           onSuccess: (page) => {
             console.log(page);
           },
-          preserveState: true,
+          //preserveState: true,
         }
       );
     },

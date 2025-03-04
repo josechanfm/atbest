@@ -125,6 +125,7 @@ export default {
       previewImage: null,
       tagOptions: [{ 'value': '學習' }, { 'value': '公佈' }, { 'value': '交流' }, { 'value': '分享' }],
       rules: {
+        organization_id:{required:true},
         title_zh: { required: true },
       },
       validateMessages: {

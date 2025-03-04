@@ -246,11 +246,10 @@ export default {
   },
   created() {},
   mounted() {
-    // this.pagination = {
-    //   currentPage: this.route().params.currentPage ?? 1,
-    //   pageSize: this.route().params.pageSize ?? 10,
-    // };
-    this.search = this.route().params.search ?? {};
+    this.search = {
+        organization: parseInt(this.route().params.search.organization) || null,
+    };
+    //this.search = this.route().params.search ?? {};
   },
   methods: {
     filterOption(input, option) {
@@ -270,11 +269,13 @@ export default {
       });
     },
     createRecord() {
+      console.log(this.modal);
       this.modal.data = {};
       //this.modal.data.organization_id = [];
       this.modal.mode = "CREATE";
       this.modal.title = "create";
       this.modal.isOpen = true;
+      console.log(this.modal);
     },
     editRecord(record) {
       console.log(record.organizations);
@@ -346,7 +347,7 @@ export default {
           onSuccess: (page) => {
             console.log(page);
           },
-          preserveState: true,
+          // preserveState: true,
         }
       );
     },

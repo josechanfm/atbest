@@ -11,8 +11,8 @@ class WebsiteController extends Controller
     private $organization;
 
     public function __construct(Request $request){
-        $subdomain = $request->route()->parameter('abbr');
-        $this->organization = Organization::with('media')->where('subdomain', $subdomain)->first();
+        // $subdomain = $request->route()->parameter('abbr');
+        // $this->organization = Organization::with('media')->where('subdomain', $subdomain)->first();
         
     }
     public function home(){

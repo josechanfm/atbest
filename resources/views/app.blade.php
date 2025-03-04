@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="{{session('applocale')}}">
+{{-- <html lang="{{session('applocale')}}"> --}}
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
     <meta charset="utf-8">
@@ -14,8 +15,9 @@
     <!-- Scripts -->
     @routes
     @vite('resources/js/app.js')
+    {{-- @vite(['resources/js/app.js', "resources/js/Pages/{$page['component']}.vue"]) --}}
     @inertiaHead
-
+    
 </head>
 
 <body class="font-sans antialiased">

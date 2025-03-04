@@ -37,30 +37,13 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
-        //if($request->is(['manage', 'manage/*'])){
-        //dd(Auth()->user());
-        //dd($request->is(['manage', 'manage/*']));
-        //}
-        //dd(auth()->user());
-        //dd($request->all());
         $rolePermissions = $request->user() ? $request->user()->getPermissionsViaRoles()->pluck('name')->toArray() : [];
         $userPermission = $request->user() ? $request->user()->permissions()->pluck('name')->toArray() : [];
         $permissions = array_merge($rolePermissions, $userPermission);
-        if(!is_null($request->user()) && $request->user()->language){
-            Session::put('applocale',$request->user()->language);
-        }else{
-            if(!isset($_SESSION['applocale'])) {
-                Session::put('applocale',app()->getLocale());
-            }
-        }
         return array_merge(parent::share($request), [
-            // 'user.roles' => $request->user() ? $request->user()->roles->pluck('name') : [],
-            // //'user.permissions' => $request->user() ? $request->user()->getPermissionsViaRoles()->pluck('name') : [],
-            // 'user.permissions' => $permissions,
             'member' => session('member'),
             'guardian' => session('guardian'),
-            //'lang' => session('applocale'),
-            //'lt'=>$request->session()->get('lt') //??
+            'lang' => session('applocale')??app()->getLocale(),
         ]);
     }
 }
