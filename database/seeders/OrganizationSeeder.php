@@ -173,13 +173,23 @@ class OrganizationSeeder extends Seeder
         foreach($data as $org){
             Organization::create($org);
         }
-        $organization=Organization::find(11);
-        $user=User::where('email','organizer@example.com')->get();
-        $organization->users()->attach($user);
-        $user=User::where('email','member1@example.com')->get();
-        $organization->users()->attach($user);
+        $organization=Organization::where('abbr','MCSF')->first();
+        $member=Member::where('email','organizer@example.com')->first();
+        $member->organization_id=$organization->id;
+        $member->save();
+        $organization->users()->attach($member->user);
 
-        Member::whereBetween('id',[1,3])->update(['organization_id'=>$organization->id]);
+        $member=Member::where('email','member1@example.com')->first();
+        $member->organization_id=$organization->id;
+        $member->save();
+        $member=Member::where('email','member2@example.com')->first();
+        $member->organization_id=$organization->id;
+        $member->save();
+        $member=Member::where('email','member3@example.com')->first();
+        $member->organization_id=$organization->id;
+        $member->save();
+
+        Member::whereBetween('id',[11,13])->update(['organization_id'=>$organization->id]);
         // $member=Member::find(1);
         // $organization->members()->attach($member);
         // $member=Member::find(2);

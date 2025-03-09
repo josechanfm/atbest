@@ -80,41 +80,27 @@ export default {
                   :href="route('member.dashboard')"
                   :active="route().current('/')"
                 >
-                  {{ $t("dashboard") }}
+                  {{ $t("member_dashboard") }}
+                </NavLink>
+                <NavLink :href="route('member.profile.index')">
+                  {{ $t("profile") }}
                 </NavLink>
                 <NavLink :href="route('member.entries.index')">
                   {{ $t("form_filled") }}
                 </NavLink>
-
-                <NavLink :href="route('member.profile.index')">
-                  {{ $t("profile") }}
-                </NavLink>
-
                 <NavLink :href="route('member.blogs.index')">
                   {{ $t("blogs") }}
                 </NavLink>
-                <NavLink 
-                  v-role="['organizer']"
-                  :href="route('manage.dashboard')"
-                >
+                <NavLink v-role="['organizer']" :href="route('manage.dashboard')">
                   {{ $t("manager") }}
                 </NavLink>
-                <NavLink 
-                  :href="route('widget.admin.dashboard')"
-                  v-permission="['widget']"
-                >
+                <NavLink :href="route('widget.admin.dashboard')" v-permission="['widget']">
                   {{ $t("widget") }}
                 </NavLink>
-                <NavLink
-                  :href="route('member.guardian.back')"
-                  v-if="$page.props.by_guardian"
-                >
+                <NavLink :href="route('member.guardian.back')" v-if="$page.props.by_guardian">
                   {{ $t("guardian") }}
                 </NavLink>
-                <NavLink
-                  :href="route('manage.dashboard')"
-                  v-if="$page.props.user.roles.includes('organizer')"
-                >
+                <NavLink :href="route('manage.dashboard')" v-if="$page.props.user.roles.includes('organizer')">
                   {{ $t("manager") }}
                 </NavLink>
               </div>
@@ -269,12 +255,7 @@ export default {
                 class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition"
                 @click="showingNavigationDropdown = !showingNavigationDropdown"
               >
-                <svg
-                  class="h-6 w-6"
-                  stroke="currentColor"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
+                <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
                   <path
                     :class="{
                       hidden: showingNavigationDropdown,
@@ -311,7 +292,7 @@ export default {
         >
           <div class="pt-2 pb-3 space-y-1">
             <ResponsiveNavLink :href="route('host')" :active="route().current('dashboard')">
-              {{ $t("dashboard") }}
+              {{ $t("member_dashboard") }}
             </ResponsiveNavLink>
           </div>
 
@@ -337,12 +318,18 @@ export default {
             </div>
 
             <div class="mt-3 space-y-1">
-              <ResponsiveNavLink href="#"> {{ $t("portfolios") }} </ResponsiveNavLink>
+              <ResponsiveNavLink :href="route('member.dashboard')">{{ $t("member_dashboard") }} </ResponsiveNavLink>
               <ResponsiveNavLink
                 :href="route('member.profile.index')"
                 :active="route().current('member.profile.index')"
               >
                 {{ $t("profile") }}
+              </ResponsiveNavLink>
+              <ResponsiveNavLink
+                :href="route('member.profile.index')"
+                :active="route().current('member.entries.index')"
+              >
+                {{ $t("form_filled") }}
               </ResponsiveNavLink>
               <ResponsiveNavLink
                 v-if="$page.props.by_guardian"
@@ -358,16 +345,16 @@ export default {
               </ResponsiveNavLink>
               <ResponsiveNavLink
                 as="a"
+                :href="route('member.blogs.index')"
+              >
+                {{ $t("blogs") }}
+              </ResponsiveNavLink>
+              <ResponsiveNavLink
+                as="a"
                 :href="route('manage.dashboard')"
                 v-role="['organizer']"
               >
                 {{ $t("manager") }}
-              </ResponsiveNavLink>
-              <ResponsiveNavLink
-                as="a"
-                :href="route('member.blogs.index')"
-              >
-                {{ $t("blogs") }}
               </ResponsiveNavLink>
               <ResponsiveNavLink
                 v-if="$page.props.jetstream.hasApiFeatures"

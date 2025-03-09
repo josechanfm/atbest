@@ -55,16 +55,15 @@
           />
         </a-form-item>
         <a-form-item :label="$t('certificate_title')" name="cert_title">
-          <a-input v-model:value="modal.data.cert_title" />
+          <a-input type="input" v-model:value="modal.data.cert_title" />
         </a-form-item>
         <a-form-item :label="$t('certificate_body')" name="cert_body">
-          <a-input v-model:value="modal.data.cert_body" />
+          <a-input type="input" v-model:value="modal.data.cert_body" />
         </a-form-item>
         <a-form-item :label="$t('cert_logo')" name="cert_logo">
-          <a-button @click="cropper.showModal = true">{{
-            $t("upload_profile_image")
-          }}</a-button>
-
+          <a-button @click="cropper.showModal = true">
+            {{ $t("upload_profile_image") }}
+          </a-button>
           <CropperModal
             v-if="cropper.showModal"
             :minAspectRatioProp="{ width: 8, height: 8 }"
@@ -75,9 +74,9 @@
           <div class="flex flex-wrap mt-4 mb-6">
             <div class="w-full px-3">
               <div v-if="uploadPreview">
-                <img :src="uploadPreview" class="md:w-1/2" />
+                <img :src="uploadPreview" class="w-full" />
               </div>
-              <div v-else-if="modal.data.media">
+              <div v-else-if="modal.data.media && modal.data.media.length>0">
                 <inertia-link
                   :href="route('manage.certificate.deleteMedia', modal.data.media[0].id)"
                   class="float-right text-red-500"
@@ -89,7 +88,6 @@
                     width="1em"
                     height="1em"
                     fill="currentColor"
-                    aria-hidden="true"
                     viewBox="64 64 896 896"
                   >
                     <path
@@ -103,34 +101,34 @@
           </div>
         </a-form-item>
         <a-form-item :label="$t('certificate_template')" name="cert_template">
-          <a-input v-model:value="modal.data.cert_template" />
+          <a-input type="input" v-model:value="modal.data.cert_template" />
         </a-form-item>
         <a-form-item :label="$t('number_format')" name="number_format">
-          <a-input v-model:value="modal.data.number_format" />
+          <a-input type="input" v-model:value="modal.data.number_format" />
         </a-form-item>
         <a-form-item :label="$t('rank_caption')" name="rank_caption">
-          <a-input v-model:value="modal.data.rank_catption" />
+          <a-input type="input" v-model:value="modal.data.rank_catption" />
         </a-form-item>
         <a-form-item :label="$t('description')" name="description">
-          <a-input v-model:value="modal.data.description" />
+          <a-input type="input" v-model:value="modal.data.description" />
         </a-form-item>
       </a-form>
       <template #footer>
-        <a-button @click="onSubmit" type="primary">{{ $t("submit") }}</a-button>
-        <a-button
+        <a-button @click="onSubmit" type="primary">{{ $t("submit") }}..</a-button>
+        <!-- <a-button
           v-if="modal.mode == 'EDIT'"
           key="Update"
           type="primary"
           @click="updateRecord()"
-          >{{ $t("update") }}</a-button
+          >{{ $t("update") }}..</a-button
         >
         <a-button
           v-if="modal.mode == 'CREATE'"
           key="Store"
           type="primary"
           @click="storeRecord()"
-          >{{ $t("Add") }}</a-button
-        >
+          >{{ $t("Add") }}..</a-button
+        > -->
       </template>
     </a-modal>
     <!-- Modal End-->
@@ -165,7 +163,10 @@ export default {
       ],
       loading: false,
       uploadPreview: null,
-      uploadData: null,
+      uploadData: {
+        blog:null,
+        name:null,
+      },
       cropper: {
         showModal: false,
         preview: null,
@@ -235,9 +236,9 @@ export default {
   created() {},
   methods: {
     setCroppedImageData(data) {
+      console.log(data, data.file);
       this.uploadPreview = data.imageUrl;
       this.uploadData = data;
-      console.log(data.file.name);
     },
     createRecord() {
       this.modal.data = {};
@@ -273,19 +274,17 @@ export default {
       this.$refs.modalRef
         .validateFields()
         .then(() => {
-          this.modal.data.cert_logo_upload = {
-            filename: "abc",
-            file: this.uploadData.blob,
-          };
+          if(this.uploadData){
+            this.modal.data.cert_logo_upload = this.uploadData.blob;
+          }
           this.modal.data._method = "PATCH";
-          console.log(this.modal.data);
-          this.$inertia.patch(
+          this.$inertia.post(
             route("manage.certificates.update", this.modal.data.id),
             this.modal.data,
             {
               onSuccess: (page) => {
-                //this.modal.data = {};
-                //this.modal.isOpen = false;
+                this.modal.data = {};
+                this.modal.isOpen = false;
               },
               onError: (error) => {
                 console.log(error);
@@ -301,21 +300,37 @@ export default {
       //this.cropper.preview=null;
     },
     onSubmit() {
-      this.modal.data.cert_logo_upload = this.uploadData.blob;
-      this.modal.data.orignial_file_name = this.uploadData.file.name;
-      this.modal.data._method = "PATCH";
-      this.$inertia.post(
-        route("manage.certificates.update", this.modal.data.id),
-        this.modal.data,
-        {
-          onSuccess: (page) => {
-            //this.modal.isOpen = false;
-          },
-          onError: (error) => {
-            console.log(error);
-          },
-        }
-      );
+          this.$refs.modalRef
+            .validateFields()
+            .then(() => {
+              if(this.modal.data.id){
+            this.updateRecord();
+          }else{
+            this.storeRecord();
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
+      // if(this.uploadData.blog && this.blog.name){
+      //   this.modal.data.cert_logo_upload = this.uploadData.blob;
+      //   this.modal.data.orignial_file_name = this.uploadData.file.name;
+      // }
+      // console.log(this.modal.data)
+      // this.modal.data._method = "PATCH";
+      // this.$inertia.post(
+      //   route("manage.certificates.update", this.modal.data.id),
+      //   this.modal.data,
+      //   {
+      //     onSuccess: (page) => {
+      //       //this.modal.isOpen = false;
+      //     },
+      //     onError: (error) => {
+      //       console.log(error);
+      //     },
+      //   }
+      // );
     },
   },
 };

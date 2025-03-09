@@ -58,6 +58,12 @@ class CertificateController extends Controller
         $certificate= new Certificate($data);
         $certificate->organization()->associate(session('organization'));
         $certificate->save();
+        if($request->file('cert_logo_upload')){
+            $file=$request->file('cert_logo_upload');
+            $certificate->addMedia($file)->usingName(pathinfo($request->orignial_file_name,PATHINFO_FILENAME))->usingFileName($request->orignial_file_name)->toMediaCollection('cert_logo');
+
+        }
+
         return redirect()->back();
     }
 
@@ -93,9 +99,7 @@ class CertificateController extends Controller
     public function update(Certificate $certificate, Request $request)
     {
 
-        //dd($certificate);
         // dd($request->file());
-        // dd($request->all());
         $this->validate($request,[
             'id' => 'required',
             'category_code'=>'required',
@@ -106,9 +110,12 @@ class CertificateController extends Controller
             return redirect()->back();
         };
         
+        $certificate->update($request->all());
         if($request->file('cert_logo_upload')){
             $file=$request->file('cert_logo_upload');
-            $certificate->addMedia($file)->usingName(pathinfo($request->orignial_file_name,PATHINFO_FILENAME))->usingFileName($request->orignial_file_name)->toMediaCollection('cert_logo');
+            $certificate->addMedia($file)->toMediaCollection('cert_logo');
+
+            // $certificate->addMedia($file)->usingName(pathinfo($request->orignial_file_name,PATHINFO_FILENAME))->usingFileName($request->orignial_file_name)->toMediaCollection('cert_logo');
 
         }
 

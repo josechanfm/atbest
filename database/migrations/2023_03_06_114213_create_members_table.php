@@ -33,6 +33,7 @@ return new class extends Migration
             $table->date('valid_at')->nullable();
             $table->date('expired_at')->nullable();
             $table->boolean('default')->default(false);
+            $table->boolean('dismiss')->default(false);
             $table->timestamps();
         });
     }

@@ -122,9 +122,12 @@ class MemberController extends Controller
      */
     public function destroy(Member $member)
     {
+        // dd($member,session('organization'));
         if ($member->ownedBy(session('organization'))) {
-            $member->organizations()->detach();
-            $member->delete();
+            //$member->organizations()->detach();
+            //$member->delete();
+            $member->dismiss=true;
+            $member->save();
         }
         return redirect()->back();
     }

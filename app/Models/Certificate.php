@@ -27,7 +27,8 @@ class Certificate extends Model implements HasMedia
 
     public function registerMediaCollections(): void
     {
-        $this->addMediaCollection('cert_content');
+        $this->addMediaCollection('cert_logo')->singleFile()->useDisk('media');
+        $this->addMediaCollection('cert_body')->singleFile()->useDisk('media');
     }
 
     public function getCidAttribute(){

@@ -2,18 +2,20 @@ s
 <template>
   <OrganizationLayout :title="$t('members')" :breadcrumb="breadcrumb">
     <div class="flex-auto pb-3 text-right">
-        <a-button type="primary" class="!rounded" @click="createRecord()">{{
-          $t("create_member")
-        }}</a-button>
+        <a-button type="primary" class="!rounded" @click="createRecord()">
+          {{ $t("create_member") }}
+        </a-button>
     </div>
     <div class="container mx-auto">
       <div class="flex flex-auto gap-2">
         <a-input
+          type="input"
           v-model:value="search.given_name"
           :placeholder="$t('please_input_given_name')"
           class="w-64"
         ></a-input>
         <a-input
+          type="input"
           v-model:value="search.family_name"
           :placeholder="$t('please_input_family_name')"
           class="w-64"
@@ -29,24 +31,22 @@ s
           </template>
           <template #bodyCell="{ column, text, record, index }">
             <template v-if="column.dataIndex == 'operation'">
-              <a-button
-                :href="route('manage.members.show', record.id)"
-                as="link"
-              >
-              {{ $t("view") }}
+              <a-button :href="route('manage.members.show', record.id)">
+                {{ $t("view") }}
               </a-button>
-              <a-button @click="editRecord(record)">{{ $t("edit") }}</a-button>
+              <a-button @click="editRecord(record)" :disabled="record.dismiss">{{ $t("edit") }}</a-button>
               <a-popconfirm
                 :title="$t('confirm_delete_record')"
                 :ok-text="$t('yes')"
                 :cancel-text="$t('no')"
                 @confirm="deleteConfirmed(record.id)"
+                 :disabled="record.dismiss"
               >
-                <a-button>{{ $t("delete") }}</a-button>
+                <a-button :disabled="record.dismiss">{{ $t("dismiss") }}</a-button>
               </a-popconfirm>
-              <a-button @click="createLogin(record.id)" :disabled="record.user != null">{{
-                $t("create_login")
-              }}</a-button>
+              <a-button @click="createLogin(record.id)" :disabled="record.user != null | record.dimiss">
+                {{ $t("create_login") }}
+              </a-button>
             </template>
             <template v-else-if="column.dataIndex == 'avatar'">
               <img :src="record.avatar_url" width="60" />
@@ -364,3 +364,4 @@ export default {
   },
 };
 </script>
+
