@@ -17,9 +17,10 @@ class CertificateMemberController extends Controller
      */
     public function index(Certificate $certificate)
     {
-        $certificate->members;
+        // dd(session('organization'), $certificate->load('members'), session('organization')->members);
         return Inertia::render('Organization/CertificateMembers',[
-            'certificate'=>$certificate,
+            'organization'=>session('organization'),
+            'certificate'=>$certificate->load('members'),
             'members'=>session('organization')->members
         ]);
     }
@@ -42,7 +43,10 @@ class CertificateMemberController extends Controller
      */
     public function store(Certificate $certificate, Request $request)
     {
-        CertificateMember::create($request->all());
+        //dd($certificate, $request->all());
+        $certificate->members()->attach($request->member_id, $request->all());
+        //CertificateMember::create($request->all());
+
         return redirect()->back();
     }
 
@@ -75,12 +79,13 @@ class CertificateMemberController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Certificate $certificate)
+    public function update(Certificate $certificate, Member $member, Request $request)
     {   
+        //dd($certificate, $member, $request->all());
         $certificateMember=CertificateMember::find($request->id);
         $certificateMember->update($request->all());
         return redirect()->back();
-        //return response()->json($request->all());
+        //return response()->json($request->all()); 
     }
 
     /**
