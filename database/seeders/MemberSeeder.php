@@ -34,6 +34,8 @@ class MemberSeeder extends Seeder
         $user=User::where('email','organizer@example.com')->first();
         $member->email=$user->email;
         $member->user_id=$user->id;
+        $member->is_default=true;
+        $member->is_organizer=true;
         $member->save();
 
         $member=Member::find(4);
@@ -46,18 +48,22 @@ class MemberSeeder extends Seeder
         $user=User::where('email','member1@example.com')->first();
         $member->email=$user->email;
         $member->user_id=$user->id;
+        $member->is_default=true;
+        $member->is_organizer=flase;
         $member->save();
 
         $member=Member::find(6);
         $user=User::where('email','member2@example.com')->first();
         $member->email=$user->email;
         $member->user_id=$user->id;
+        $member->is_default=true;
         $member->save();
 
         $member=Member::find(7);
         $user=User::where('email','member3@example.com')->first();
         $member->email=$user->email;
         $member->user_id=$user->id;
+        $member->is_default=true;
         $member->save();
 
         Member::find(11)->update(['user_id'=>5,'display_name'=>'Ricky','family_name'=>'唐','given_name'=>'偉杰','email'=>'rickytong@example.com']);

@@ -29,11 +29,15 @@ class Member extends Model
         'address',
         'avatar',
         'valid_at',
-        'expired_at'
+        'expired_at',
+        'is_default',
+        'is_organizer',
+        'is_dismissed'
     ];
 
     protected $appends=['avatar_url','member_number'];
-
+    protected $casts=['id_default'=>'boolean','is_dismissed'=>'boolean','is_organizer'=>'boolean'];
+    
     public function getAvatarUrlAttribute(){
         return $this->avatar?Storage::url($this->avatar):'';
     }
@@ -57,7 +61,9 @@ class Member extends Model
     {
         return $this->belongsTo(User::class)->with('roles');
     }
-
+    public function isOrganizer(){
+        return $this->is_organizer;
+    }
     public function ownedBy($organization=null){
         return $this->organization_id==$organization->id;
         //return in_array($organization->id,$this->organizations()->get()->pluck('id')->toArray());

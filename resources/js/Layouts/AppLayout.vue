@@ -58,7 +58,7 @@ const logout = () => {
                                 <NavLink :href="route('member.membership')" >
                                     Membership
                                 </NavLink>
-                                <NavLink :href="route('manage.dashboard')" v-if="$page.props.user.roles.includes('admin')">
+                                <NavLink :href="route('organizer.dashboard')" v-if="$page.props.user.roles.includes('admin')">
                                     Admin
                                 </NavLink>
                             </div>
@@ -67,7 +67,7 @@ const logout = () => {
                         <div class="hidden sm:flex sm:items-center sm:ml-6">
                             <div class="ml-3 relative">
                                 <!-- Teams Dropdown -->
-                                <Dropdown v-if="$page.props.jetstream.hasTeamFeatures" align="right" width="60">
+                                <Dropdown v-if="$page.props.hasTeamFeatures" align="right" width="60">
                                     <template #trigger>
                                         <span class="inline-flex rounded-md">
                                             <button type="button" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:bg-gray-50 hover:text-gray-700 focus:outline-none focus:bg-gray-50 active:bg-gray-50 transition">
@@ -88,7 +88,7 @@ const logout = () => {
                                     <template #content>
                                         <div class="w-60">
                                             <!-- Team Management -->
-                                            <template v-if="$page.props.jetstream.hasTeamFeatures">
+                                            <template v-if="$page.props.hasTeamFeatures">
                                                 <div class="block px-4 py-2 text-xs text-gray-400">
                                                     Manage Team
                                                 </div>
@@ -98,7 +98,7 @@ const logout = () => {
                                                     Team Settings
                                                 </DropdownLink>
 
-                                                <DropdownLink v-if="$page.props.jetstream.canCreateTeams" :href="route('teams.create')">
+                                                <DropdownLink v-if="$page.props.canCreateTeams" :href="route('teams.create')">
                                                     Create New Team
                                                 </DropdownLink>
 
@@ -138,8 +138,8 @@ const logout = () => {
                             <div class="ml-3 relative">
                                 <Dropdown align="right" width="48">
                                     <template #trigger>
-                                        <button v-if="$page.props.jetstream.managesProfilePhotos" class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition">
-                                            <img class="h-8 w-8 rounded-full object-cover" :src="$page.props.user.profile_photo_url" :alt="$page.props.user.name">
+                                        <button >
+                                            <img class="h-8 w-8 rounded-full object-cover" :src="">
                                         </button>
 
                                         <span v-else class="inline-flex rounded-md">
@@ -168,7 +168,7 @@ const logout = () => {
                                             Profile
                                         </DropdownLink>
 
-                                        <DropdownLink v-if="$page.props.jetstream.hasApiFeatures" :href="route('api-tokens.index')">
+                                        <DropdownLink v-if="$page.props.hasApiFeatures" :href="route('api-tokens.index')">
                                             API Tokens
                                         </DropdownLink>
 
@@ -225,7 +225,7 @@ const logout = () => {
                     <!-- Responsive Settings Options -->
                     <div class="pt-4 pb-1 border-t border-gray-200">
                         <div class="flex items-center px-4">
-                            <div v-if="$page.props.jetstream.managesProfilePhotos" class="shrink-0 mr-3">
+                            <div v-if="$page.props.managesProfilePhotos" class="shrink-0 mr-3">
                                 <img class="h-10 w-10 rounded-full object-cover" :src="$page.props.user.profile_photo_url" :alt="$page.props.user.name">
                             </div>
 
@@ -244,7 +244,7 @@ const logout = () => {
                                 Profile
                             </ResponsiveNavLink>
 
-                            <ResponsiveNavLink v-if="$page.props.jetstream.hasApiFeatures" :href="route('api-tokens.index')" :active="route().current('api-tokens.index')">
+                            <ResponsiveNavLink v-if="$page.props.hasApiFeatures" :href="route('api-tokens.index')" :active="route().current('api-tokens.index')">
                                 API Tokens
                             </ResponsiveNavLink>
 
@@ -256,7 +256,7 @@ const logout = () => {
                             </form>
 
                             <!-- Team Management -->
-                            <template v-if="$page.props.jetstream.hasTeamFeatures">
+                            <template v-if="$page.props.hasTeamFeatures">
                                 <div class="border-t border-gray-200" />
 
                                 <div class="block px-4 py-2 text-xs text-gray-400">
@@ -268,7 +268,7 @@ const logout = () => {
                                     Team Settings
                                 </ResponsiveNavLink>
 
-                                <ResponsiveNavLink v-if="$page.props.jetstream.canCreateTeams" :href="route('teams.create')" :active="route().current('teams.create')">
+                                <ResponsiveNavLink v-if="$page.props.canCreateTeams" :href="route('teams.create')" :active="route().current('teams.create')">
                                     Create New Team
                                 </ResponsiveNavLink>
 

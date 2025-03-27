@@ -27,7 +27,7 @@ const submit = () => {
       ...data,
       remember: form.remember ? "on" : "",
     }))
-    .post(route("login"), {
+    .post(route("auth.login"), {
       onFinish: () => form.reset("password"),
     });
 };
@@ -40,7 +40,9 @@ const submit = () => {
     <template #logo>
       <AuthenticationCardLogo />
     </template>
+
     <form @submit.prevent="submit">
+      
       <div>
         <TextInput v-model="form.service" hidden/>
         <InputLabel for="email" :value="$t('email')" />

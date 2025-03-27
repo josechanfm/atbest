@@ -10,36 +10,35 @@ export default {
     ThumbList,
     QRCodeVue3,
   },
-  props: ["members", "features", "forms", "articles", "cardStyle"],
+  props: ["member","members", "features", "forms", "articles", "cardStyle"],
   data() {
     return {
-      member: null,
       qrcode: "",
       interval: 0,
-      features2: [
+      defaultFeatures: [
         {
-          image: "/features/0_news_events.png",
+          image: "/images/features/0_news_events.png",
           title_zh: "新聞與活動",
           content_zh: "新聞部分是用來發布組織的最新消息和事件，向公眾展示其在社會和環境領域中所做的工作，並提高對其使命的認識和理解。",
           tags: ["#通告"],
           link: "/",
         },
         {
-          image: "/features/0_form_application.png",
+          image: "/images/features/0_form_application.png",
           title_zh: "表格及報名",
           content_zh: "包括各種類型的表格和報名表，方便訪問者提交相關資訊並表達他們的參與意願。",
           tags: ["#報名"],
           link: "forms",
         },
         {
-          image: "/features/0_learn_share.png",
+          image: "/images/features/0_learn_share.png",
           title_zh: "學習興分享",
           content_zh: "提供教育資源、知識分享和學習機會的區域。提供有價值的學習內容，並促進知識交流和社群互動。",
           tags: ["#學習", "#分享"],
           link: "#",
         },
         {
-          image: "/features/0_community.png",
+          image: "/images/features/0_community.png",
           title_zh: "虛擬社區",
           content_zh: "交流和參與組織活動的線上平台。讓志願者、支持者和參與者能夠連結起來，分享資源、經驗和想法。",
           tags: ["#學習", "#交流"],
@@ -72,9 +71,10 @@ export default {
     };
   },
   created() {
-    this.member = this.members[0]
-    console.log(this.member, this.members)
-    console.log(this.$page.props)
+
+    if(this.features.length>0){
+      this.defaultFeatures=this.features
+    }
     if(this.cardStyle.logo){
       this.qrcodeLogo='/storage/images/'+this.cardStyle.logo
     }else if(this.$page.props.member.organization.logo){
@@ -116,7 +116,7 @@ export default {
           <!-- Feature Section -->
           <div class="container mx-auto mt-5 bg-white rounded-lg">
             <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 py-3 px-2">
-              <template v-for="feature in features">
+              <template v-for="feature in defaultFeatures">
                 <a :href="feature.link">
                   <div class="gutter-row">
                     <div class="max-w rounded overflow-hidden shadow-lg">
@@ -149,7 +149,6 @@ export default {
               <inertia-link :href="route('form.item', {t:form.uuid})">{{ form.title }}</inertia-link>
             </li>
           </ol>
-
           <!-- Body List -->
           <!-- ------------ -->
           <!-- News Section-->

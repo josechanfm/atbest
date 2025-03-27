@@ -43,53 +43,6 @@ export default {
                     opacity: 0
                 }
             );
-
-            // ScrollTrigger.create({
-            //     trigger: heroSection.value,
-            //     scrub: 1.5, // 調整數值控制動畫跟隨速度
-            //     pin: true,
-            // });
-
-            // ScrollTrigger.create({
-            //     trigger: mainBody.value,
-            //     start: "top top", // 当 mainBody 的顶部到达视口的 80% 时开始
-            //     end: "top top", // 结束的条件
-            //     scrub: 1, // 平滑滚动
-            // });
-
-            // 使 mainBody 从下方滑入
-            // gsap.from(".main-body", {
-            //     y: "20%", // 从视口底部滑入
-            //     opacity: 0.5, // 初始透明度为 0
-            //     duration: 1, // 动画持续时间
-            //     scrollTrigger: {
-            //         trigger: mainBody.value,
-            //         start: "top 250px", // 触发位置
-            //         end: "+=250px", // 结束位置
-            //         scrub: 1, // 平滑滚动
-            //     },
-            // });
-			
-            // ScrollTrigger.create({
-            // 	trigger: ".section",
-            // 	start: "top top",
-            // 	end: "+=100%",
-            // 	pin: ".section",
-            // 	pinSpacing: false
-            // });
-            // ScrollTrigger.create({
-            //     trigger: rightMenu.value,
-            //     start: "top 50%",
-            //     pin: true,
-            //     pinSpacing: false
-            // });
-
-            // ScrollTrigger.create({
-            //     trigger: heroText.value,
-            //     start: "top 30px",
-            //     pin: true,
-            //     pinSpacing: false
-            // });
         });
 
         return {

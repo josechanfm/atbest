@@ -37,7 +37,7 @@ export default class UploadAdapter {
             //let csrf = RegExp('XSRF-TOKEN[^;]+').exec(document.cookie)
             //csrf= decodeURIComponent(csrf ? csrf.toString().replace(/^[^=]+./, '') : '')
             //console.log(csrf);            
-            xhr.open( 'POST', route('manage.image_upload'), true );
+            xhr.open( 'POST', route('organizer.image_upload'), true );
             xhr.responseType = 'json';
         }
         // Initializes XMLHttpRequest listeners.

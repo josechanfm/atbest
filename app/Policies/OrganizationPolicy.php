@@ -31,13 +31,10 @@ class OrganizationPolicy
      */
     public function view(User $user, Organization $organization)
     {
-        if($user->hasRole('admin')){
+        if($user->hasRole('admin') || $user->isOrganizer()){
             return true;
         }
-        // dd($user);
-        // dd($organization);
-        //return auth()->user()->hasRole(['organizer','admin']) && $organization->hasUser($user);
-        return $organization->ownedBy($user);
+        return false;
     }
 
     /**

@@ -59,7 +59,7 @@
           </template>
           <template #content>
             <div class="w-20">
-              <template v-if="$page.props.jetstream.hasTeamFeatures">
+              <template v-if="$page.props.hasTeamFeatures">
                 <DropdownLink as="a" href="/language/zh">
                   {{ $t("chinese") }}
                 </DropdownLink>

@@ -74,8 +74,6 @@ Route::group([
     'prefix' => 'member',
     'middleware' => [
         'auth:sanctum',
-        config('jetstream.auth_session'),
-        'verified',
     ]
 ], function () {
     Route::get('/', [\App\Http\Controllers\Member\DashboardController::class, 'index'])->name('member.dashboard');
@@ -95,47 +93,44 @@ Route::group([
 
 //Manage
 Route::group([
-    'prefix' => '/manage',
+    'prefix' => '/organizer',
     'middleware' => [
         'auth:sanctum',
-        config('jetstream.auth_session'),
-        'verified',
-        'role:organizer|admin'
     ]
 ], function () {
-    Route::get('/', [App\Http\Controllers\Organization\DashboardController::class, 'index'])->name('manage.dashboard');
-    Route::post('organization/switch/{organization}', [App\Http\Controllers\Organization\OrganizationController::class, 'switch'])->name('manage.organization.switch');
-    Route::resource('organizations', App\Http\Controllers\Organization\OrganizationController::class)->names('manage.organizations');
-    Route::post('organization/delete_logo/{organization}', [App\Http\Controllers\Organization\OrganizationController::class, 'deleteLogo'])->name('manage.organization.deleteLogo');
-    Route::get('/{organization}/medias', [App\Http\Controllers\Organization\MediaController::class, 'getMedias'])->name('manage.medias');
-    Route::resource('members', App\Http\Controllers\Organization\MemberController::class)->names('manage.members');
-    Route::post('member/create/login/{member}', [App\Http\Controllers\Organization\MemberController::class, 'createLogin'])->name('manage.member.createLogin');
-    Route::post('member/{member}/reset_password', [\App\Http\Controllers\Organization\MemberController::class, 'resetPassword'])->name('member.member.resetPassword');
-    Route::resource('forms', App\Http\Controllers\Organization\FormController::class)->names('manage.forms');
-    Route::delete('form/delete_image/{form}', [App\Http\Controllers\Organization\FormController::class, 'deleteImage'])->name('manage.form.deleteImage');
-    Route::post('form/{form}/backup', [App\Http\Controllers\Organization\FormController::class, 'backup'])->name('manage.form.backup');
-    Route::resource('form/{form}/fields', App\Http\Controllers\Organization\FormFieldController::class)->names('manage.form.fields');
-    Route::post('form/{form}/fields_sequence', [App\Http\Controllers\Organization\FormFieldController::class, 'fieldsSequence'])->name('manage.form.fieldsSequence');
-    Route::resource('form/{form}/entries', App\Http\Controllers\Organization\EntryController::class)->names('manage.form.entries');
-    Route::get('form/{form}/entry/{entry}/success', [App\Http\Controllers\Organization\EntryController::class, 'success'])->name('manage.form.entry.success');
-    Route::post('form/{form}/createEventAttendees', [App\Http\Controllers\Organization\FormController::class, 'createEventAttendees'])->name('manage.form.createEventAttendees');
-    Route::get('member/export', [App\Http\Controllers\Organization\MemberController::class, 'export'])->name('member.member.export');
-    Route::get('entry/{form}/export', [App\Http\Controllers\Organization\EntryController::class, 'export'])->name('manage.entry.export');
-    Route::resource('approbates', App\Http\Controllers\Organization\ApprobateController::class)->names('manage.approbates');
-    Route::resource('bulletins', App\Http\Controllers\Organization\BulletinController::class)->names('manage.bulletins');
-    Route::resource('messages', App\Http\Controllers\Organization\MessageController::class)->names('manage.messages');
-    Route::resource('certificates', App\Http\Controllers\Organization\CertificateController::class)->names('manage.certificates');
-    Route::get('certificates/delete_media/{mediaId}', [App\Http\Controllers\Organization\CertificateController::class, 'deleteMedia'])->name('manage.certificate.deleteMedia');
-    Route::resource('certificate/{certificate}/members', App\Http\Controllers\Organization\CertificateMemberController::class)->names('manage.certificate.members');
-    Route::resource('emails', App\Http\Controllers\Organization\EmailController::class)->names('manage.emails');
-    Route::resource('blogs', App\Http\Controllers\Organization\BlogController::class)->names('manage.blogs');
-    Route::resource('blog-contents', App\Http\Controllers\Organization\BlogContentController::class)->names('manage.blog.contents');
-    Route::resource('articles', App\Http\Controllers\Organization\ArticleController::class)->names('manage.articles');
-    Route::delete('article/delete_image/{article}', [App\Http\Controllers\Organization\ArticleController::class, 'deleteImage'])->name('manage.article.deleteImage');
-    Route::resource('events', App\Http\Controllers\Organization\EventController::class)->names('manage.events');
-    Route::delete('event/delete_image/{event}', [App\Http\Controllers\Organization\EventController::class, 'deleteImage'])->name('manage.event.deleteImage');
-    Route::resource('configs', App\Http\Controllers\Organization\ConfigController::class)->names('manage.configs');
-    Route::get('image_upload', [App\Http\Controllers\Organization\UploaderController::class, 'image'])->name('manage.image_upload');
+    Route::get('/', [App\Http\Controllers\Organizer\DashboardController::class, 'index'])->name('organizer.dashboard');
+    Route::post('organization/switch/{organization}', [App\Http\Controllers\Organizer\OrganizationController::class, 'switch'])->name('organizer.organization.switch');
+    Route::resource('organizations', App\Http\Controllers\Organizer\OrganizationController::class)->names('organizer.organizations');
+    Route::post('organization/delete_logo/{organization}', [App\Http\Controllers\Organizer\OrganizationController::class, 'deleteLogo'])->name('organizer.organization.deleteLogo');
+    Route::get('/{organization}/medias', [App\Http\Controllers\Organizer\MediaController::class, 'getMedias'])->name('organizer.medias');
+    Route::resource('members', App\Http\Controllers\Organizer\MemberController::class)->names('organizer.members');
+    Route::post('member/create/login/{member}', [App\Http\Controllers\Organizer\MemberController::class, 'createLogin'])->name('organizer.member.createLogin');
+    Route::post('member/{member}/reset_password', [\App\Http\Controllers\Organizer\MemberController::class, 'resetPassword'])->name('member.member.resetPassword');
+    Route::resource('forms', App\Http\Controllers\Organizer\FormController::class)->names('organizer.forms');
+    Route::delete('form/delete_image/{form}', [App\Http\Controllers\Organizer\FormController::class, 'deleteImage'])->name('organizer.form.deleteImage');
+    Route::post('form/{form}/backup', [App\Http\Controllers\Organizer\FormController::class, 'backup'])->name('organizer.form.backup');
+    Route::resource('form/{form}/fields', App\Http\Controllers\Organizer\FormFieldController::class)->names('organizer.form.fields');
+    Route::post('form/{form}/fields_sequence', [App\Http\Controllers\Organizer\FormFieldController::class, 'fieldsSequence'])->name('organizer.form.fieldsSequence');
+    Route::resource('form/{form}/entries', App\Http\Controllers\Organizer\EntryController::class)->names('organizer.form.entries');
+    Route::get('form/{form}/entry/{entry}/success', [App\Http\Controllers\Organizer\EntryController::class, 'success'])->name('organizer.form.entry.success');
+    Route::post('form/{form}/createEventAttendees', [App\Http\Controllers\Organizer\FormController::class, 'createEventAttendees'])->name('organizer.form.createEventAttendees');
+    Route::get('member/export', [App\Http\Controllers\Organizer\MemberController::class, 'export'])->name('member.member.export');
+    Route::get('entry/{form}/export', [App\Http\Controllers\Organizer\EntryController::class, 'export'])->name('organizer.entry.export');
+    Route::resource('approbates', App\Http\Controllers\Organizer\ApprobateController::class)->names('organizer.approbates');
+    Route::resource('bulletins', App\Http\Controllers\Organizer\BulletinController::class)->names('organizer.bulletins');
+    Route::resource('messages', App\Http\Controllers\Organizer\MessageController::class)->names('organizer.messages');
+    Route::resource('certificates', App\Http\Controllers\Organizer\CertificateController::class)->names('organizer.certificates');
+    Route::get('certificates/delete_media/{mediaId}', [App\Http\Controllers\Organizer\CertificateController::class, 'deleteMedia'])->name('organizer.certificate.deleteMedia');
+    Route::resource('certificate/{certificate}/members', App\Http\Controllers\Organizer\CertificateMemberController::class)->names('organizer.certificate.members');
+    Route::resource('emails', App\Http\Controllers\Organizer\EmailController::class)->names('organizer.emails');
+    Route::resource('blogs', App\Http\Controllers\Organizer\BlogController::class)->names('organizer.blogs');
+    Route::resource('blog-contents', App\Http\Controllers\Organizer\BlogContentController::class)->names('organizer.blog.contents');
+    Route::resource('articles', App\Http\Controllers\Organizer\ArticleController::class)->names('organizer.articles');
+    Route::delete('article/delete_image/{article}', [App\Http\Controllers\Organizer\ArticleController::class, 'deleteImage'])->name('organizer.article.deleteImage');
+    Route::resource('events', App\Http\Controllers\Organizer\EventController::class)->names('organizer.events');
+    Route::delete('event/delete_image/{event}', [App\Http\Controllers\Organizer\EventController::class, 'deleteImage'])->name('organizer.event.deleteImage');
+    Route::resource('configs', App\Http\Controllers\Organizer\ConfigController::class)->names('organizer.configs');
+    Route::get('image_upload', [App\Http\Controllers\Organizer\UploaderController::class, 'image'])->name('organizer.image_upload');
 
 });
 
@@ -144,8 +139,6 @@ Route::group([
     'prefix' => '/admin',
     'middleware' => [
         'auth:sanctum',
-        config('jetstream.auth_session'),
-        'verified',
         'role:admin'
     ]
 ], function () {
@@ -191,8 +184,6 @@ Route::group([
         'prefix' => 'admin',
         'middleware' => [
             'auth:sanctum',
-            config('jetstream.auth_session'),
-            'verified',
             'role:organizer|admin'
         ]
     ], function () {
@@ -211,3 +202,4 @@ Route::group([
 
 
 });
+require __DIR__ . '/auth.php';

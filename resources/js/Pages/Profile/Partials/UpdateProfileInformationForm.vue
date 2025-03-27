@@ -91,7 +91,7 @@ const clearPhotoFileInput = () => {
     <template #form>
       <!-- Profile Photo -->
       <div
-        v-if="$page.props.jetstream.managesProfilePhotos"
+        v-if="$page.props.managesProfilePhotos"
         class="col-span-6 sm:col-span-4"
       >
         <!-- Profile Photo File Input -->
@@ -158,7 +158,7 @@ const clearPhotoFileInput = () => {
 
         <div
           v-if="
-            $page.props.jetstream.hasEmailVerification && user.email_verified_at === null
+            $page.props.hasEmailVerification && user.email_verified_at === null
           "
         >
           <p class="text-sm mt-2">

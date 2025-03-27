@@ -1,10 +1,10 @@
 import { usePage } from '@inertiajs/vue3';
 
 const hasPermission = (permission) => {
-    if(!usePage().props.user.permissions){
+    if(!usePage().props.auth.user.permissions){
         return false;
     }
-    const userPermissions=usePage().props.user.permissions.map(p=>p.name);
+    const userPermissions=usePage().props.auth.user.permissions.map(p=>p.name);
     if(Array.isArray(permission)){
         return permission.some(p=>{
             return userPermissions.includes(p)
@@ -24,7 +24,7 @@ function checkPermission(el, binding) {
 }
 
 const hasRole = (role) => {
-    const userRoles=usePage().props.user.roles.map(u=>u.name);
+    const userRoles=usePage().props.auth.user.roles.map(u=>u.name);
     if(Array.isArray(role)){
          return role.some(r=>{
             return userRoles.includes(r)

@@ -14,6 +14,7 @@ class BlogController extends Controller
     //
     public function index()
     {
+        auth()->user()->member->load('organization');
         return Inertia::render('Member/Blogs', [
             'blogs' => Blog::whereBelongsTo(session('member')->organization)->get()
         ]);

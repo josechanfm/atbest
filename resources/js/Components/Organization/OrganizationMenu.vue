@@ -12,7 +12,7 @@
           <PieChartOutlined />
         </template>
         <span>
-          <inertia-link :href="route('manage.dashboard')">
+          <inertia-link :href="route('organizer.dashboard')">
             {{ $t("organization_management") }}
           </inertia-link>
         </span>
@@ -22,7 +22,7 @@
           <TeamOutlined />
         </template>
         <span>
-          <inertia-link :href="route('manage.members.index')">
+          <inertia-link :href="route('organizer.members.index')">
             {{ $t("member") }}
           </inertia-link>
         </span>
@@ -32,7 +32,7 @@
           <FileProtectOutlined />
         </template>
         <span>
-          <inertia-link :href="route('manage.certificates.index')">
+          <inertia-link :href="route('organizer.certificates.index')">
             {{ $t("certificates") }}
           </inertia-link>
         </span>
@@ -42,7 +42,7 @@
           <FormOutlined />
         </template>
         <span>
-          <inertia-link :href="route('manage.forms.index')">
+          <inertia-link :href="route('organizer.forms.index')">
             {{ $t("forms") }}
           </inertia-link>
         </span>
@@ -52,7 +52,7 @@
           <CalendarOutlined />
         </template>
         <span>
-          <inertia-link :href="route('manage.events.index')">
+          <inertia-link :href="route('organizer.events.index')">
             {{ $t("events") }}
           </inertia-link>
         </span>
@@ -62,7 +62,7 @@
           <CopyOutlined />
         </template>
         <span>
-          <inertia-link :href="route('manage.articles.index')">
+          <inertia-link :href="route('organizer.articles.index')">
             {{ $t("articles") }}
           </inertia-link>
         </span>
@@ -72,7 +72,7 @@
           <MailOutlined />
         </template>
         <span>
-          <inertia-link :href="route('manage.messages.index')">
+          <inertia-link :href="route('organizer.messages.index')">
             {{ $t("messages") }}
           </inertia-link>
         </span>
@@ -82,7 +82,7 @@
           <MailOutlined />
         </template>
         <span>
-          <inertia-link :href="route('manage.emails.index')">
+          <inertia-link :href="route('organizer.emails.index')">
             {{ $t("email.management") }}
           </inertia-link>
         </span>
@@ -93,7 +93,7 @@
           <ProjectOutlined />
         </template>
         <span>
-          <inertia-link :href="route('manage.blogs.index')">
+          <inertia-link :href="route('organizer.blogs.index')">
             {{ $t("blogs.management") }}
           </inertia-link>
         </span>

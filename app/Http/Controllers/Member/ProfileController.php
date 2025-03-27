@@ -26,7 +26,7 @@ class ProfileController extends Controller
         $member->positions;
         $member->athlete;
         return Inertia::render('Member/Profile', [
-            'member' => $member,
+            'member' => auth()->user()->member->load('organization'),
         ]);
     }
 
