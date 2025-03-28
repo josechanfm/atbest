@@ -19,7 +19,7 @@ class OrganizationController extends Controller
 
     public function switch(Organization $organization){
         session(['organization'=>$organization]);
-        return to_route('manage.dashboard');
+        return to_route('organizer.dashboard');
     }
     /**
      * Display a listing of the resource.
@@ -33,7 +33,7 @@ class OrganizationController extends Controller
             return to_route('/');
         }
         if($organizations->count() == 1){
-            return to_route('manage.organizations.edit',$organizations[0]->id);
+            return to_route('organizer.organizations.edit',$organizations[0]->id);
         }
         return Inertia::render('Organizer/Organizations',[
             'organizations' => $organizations
@@ -86,7 +86,7 @@ class OrganizationController extends Controller
 
         //$this->authorize('update' , $organization);
 
-
+        // auth()->user()->member;
         return Inertia::render('Organizer/OrganizationEdit',[
             'organization'=>$organization,
         ]);
@@ -111,7 +111,7 @@ class OrganizationController extends Controller
         }
         $organization->update($data);
 
-        return to_route('manage.organizations.index');
+        return to_route('organizer.organizations.index');
     }
 
     /**

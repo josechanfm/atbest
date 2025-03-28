@@ -112,10 +112,12 @@
 <script>
 import OrganizerLayout from '@/Layouts/OrganizerLayout.vue';
 import { Modal } from 'ant-design-vue';
+import axios from 'axios';
 
 export default {
     components: {
         OrganizerLayout,
+        axios
     },
     props: ['organization'],
     data() {

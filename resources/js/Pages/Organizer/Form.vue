@@ -208,7 +208,7 @@ export default {
     onFinish(event) {
       if (this.form.id) {
         this.form._method = 'PATCH';
-        this.$inertia.post(route("manage.forms.update", this.form.id), this.form, {
+        this.$inertia.post(route("organizer.forms.update", this.form.id), this.form, {
           onSuccess: (page) => {
             console.log(page);
           },
@@ -217,7 +217,7 @@ export default {
           },
         });
       } else {
-        this.$inertia.post(route("manage.forms.store"), this.form, {
+        this.$inertia.post(route("organizer.forms.store"), this.form, {
           onSuccess: (page) => {
             // this.modal.data = {};
             // this.modal.isOpen = false;

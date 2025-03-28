@@ -46,7 +46,8 @@
           </a-col>
         </a-row>
         <a-form-item :label="$t('description')" name="content">
-          <quill-editor v-model:value="event.content" style="min-height: 200px" />
+          {{event.content}}
+          <!-- <quill-editor v-model:value="event.content" style="min-height: 200px" /> -->
         </a-form-item>
         <a-form-item :label="$t('require_login')" name="require_login">
           <a-switch v-model:checked="event.require_login" @change="event.for_member = false" />
@@ -122,7 +123,7 @@
           <a-select v-model:value="event.form_id" :options="forms" :fieldNames="{value:'id',label:'title'}"/>
         </a-form-item>
         <a-form-item :label="$t('remark')" name="remark">
-          <quill-editor v-model:value="event.remark" style="min-height: 200px" />
+          <!-- <quill-editor v-model:value="event.remark" style="min-height: 200px" /> -->
         </a-form-item>
         <div class="flex flex-row item-center justify-center">
           <a-button type="primary" html-type="submit">{{ $t("submit") }}</a-button>
@@ -134,20 +135,21 @@
 
 <script>
 import OrganizerLayout from "@/Layouts/OrganizerLayout.vue";
-import { quillEditor } from "vue3-quill";
 import { message } from "ant-design-vue";
 import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
 import { PlusOutlined, DeleteOutlined } from "@ant-design/icons-vue";
+import MyQuillEditor from '@/Components/MyQuillEditor.vue'; // Adjust the path accordingly
 
 dayjs.extend(duration);
 export default {
   components: {
     OrganizerLayout,
-    quillEditor,
     message,
     dayjs,
-    PlusOutlined, DeleteOutlined
+    PlusOutlined, DeleteOutlined,
+    MyQuillEditor
+
   },
   props: ["event", "categories","forms"],
   data() {
@@ -188,7 +190,7 @@ export default {
   methods: {
     onFinish() {
       if (this.event.id === undefined) {
-        this.$inertia.post(route("manage.events.store"), this.event, {
+        this.$inertia.post(route("organizer.events.store"), this.event, {
           onSuccess: (page) => {
             console.log(page);
           },
@@ -198,7 +200,7 @@ export default {
         });
       } else {
         this.event._method = 'PATCH';
-        this.$inertia.post(route("manage.events.update", this.event.id), this.event, {
+        this.$inertia.post(route("organizer.events.update", this.event.id), this.event, {
           onSuccess: (page) => {
             console.log(page);
           },

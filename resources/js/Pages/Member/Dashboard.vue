@@ -101,7 +101,7 @@ export default {
     },
     switchOrganization(member) {
       this.$inertia.post(route('member.membership.switch', { member: member.id }))
-      this.member=this.members.find(m=>m.id==member.id)
+      //this.member=this.members.find(m=>m.id==member.id)
     }
 
   },

@@ -227,7 +227,7 @@ export default {
         .then(() => {
           console.log(this.modal.data);
           this.$inertia.post(
-            route("manage.certificate.members.store", {
+            route("organizer.certificate.members.store", {
               certificate: this.certificate.id,
             }),
             this.modal.data.pivot,
@@ -251,7 +251,7 @@ export default {
         .validateFields()
         .then(() => {
           this.$inertia.put(
-            route("manage.certificate.members.update", {
+            route("organizer.certificate.members.update", {
               certificate: this.certificate.id,
               member: this.modal.data.pivot.member_id,
             }),

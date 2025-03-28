@@ -73,9 +73,7 @@
                   <div v-if="article.banner_url" class="flex">
                     <img :src="article.banner_url" width="100" />
                     <div class="flex flex-col justify-end">
-                      <inertia-link :href="route('organizer.article.deleteImage',{article:article,collection:'banner'})" method="delete" class="text-red-500">
-                        <DeleteOutlined />
-                      </inertia-link>
+                      <a @click="handleFileDelete(article,'banner')" class="text-red-500"><DeleteOutlined /></a>
                     </div>
                   </div>
                   <a-upload
@@ -120,19 +118,12 @@
               </div>
             </a-upload>
           </div>
-          
         </a-form-item>
-
-
-
-
         <div class="flex flex-row item-center justify-center">
           <a-button type="primary" html-type="submit">{{ $t("submit") }}</a-button>
         </div>
       </a-form>
     </div>
-
-
 
     <a :href="route('article.item',{t:article.uuid})" target="_blank" ref="articleUrl">{{ route('article.item',{t:article.uuid}) }}</a>
     <a-button @click="copyUrl">{{ $t('copy_to_clipboard') }}</a-button>
@@ -276,7 +267,7 @@ export default {
      //this.article.banner_image=this.thumbnailUpload;
       if (this.article.id) {
         this.article._method='PATCH';
-        this.$inertia.post(route("manage.articles.update", this.article.id), this.article, {
+        this.$inertia.post(route("organizer.articles.update", this.article.id), this.article, {
           onSuccess: (page) => {
             console.log(page);
           },
@@ -285,7 +276,7 @@ export default {
           },
         });
       } else {
-        this.$inertia.post(route("manage.articles.store"), this.article, {
+        this.$inertia.post(route("organizer.articles.store"), this.article, {
           onSuccess: (page) => {
           },
           onError: (err) => {
@@ -299,7 +290,7 @@ export default {
     },
     afterOpenChange(bool) {
       if (bool) {
-        axios.get(route("manage.medias", 22)).then((response) => {
+        axios.get(route("organizer.medias", 22)).then((response) => {
           this.medias = response.data;
         });
       }
@@ -320,8 +311,8 @@ export default {
       this.file = file;
       this.thumbnailUpload= file
     },  
-    handleFileDelete(file){
-      this.$inertia.post(route('organizer.article.deleteImage', this.article), {
+    handleFileDelete(article,collection){
+      this.$inertia.delete(route('organizer.article.deleteImage', {article:article,collection:collection}), {
         onSuccess: (page) => {
           console.log(page)
         },

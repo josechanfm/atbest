@@ -81,7 +81,7 @@ class ArticleController extends Controller
             $article->addMedia($request->file('thumb_image')[0]['originFileObj'])->toMediaCollection('thumb');
         }
 
-        return redirect()->route('manage.articles.index');
+        return redirect()->route('organizer.articles.index');
     }
 
     /**
@@ -128,7 +128,7 @@ class ArticleController extends Controller
         if($request->file('thumb_image')){
             $article->addMedia($request->file('thumb_image')[0]['originFileObj'])->toMediaCollection('thumb');
         }
-        return redirect()->route('manage.articles.index');
+        return redirect()->route('organizer.articles.index');
     }
 
     /**

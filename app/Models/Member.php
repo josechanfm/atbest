@@ -37,7 +37,8 @@ class Member extends Model
 
     protected $appends=['avatar_url','member_number'];
     protected $casts=['id_default'=>'boolean','is_dismissed'=>'boolean','is_organizer'=>'boolean'];
-    
+    protected $with=['organization'];
+
     public function getAvatarUrlAttribute(){
         return $this->avatar?Storage::url($this->avatar):'';
     }
@@ -89,7 +90,7 @@ class Member extends Model
     }
     public function certificates(){
         return $this->belongsToMany(Certificate::class)->withPivot(
-            'id','display_name','number','number_display','issue_date','valid_from','valid_until','authorize_by','rank','avatar');
+            'id','display_name','number','number_display','issue_date','valid_from','valid_until','authorized_by','rank','avatar');
     }
 
 }

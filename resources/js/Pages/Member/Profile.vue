@@ -82,7 +82,7 @@
               </a-collapse-panel>
               <a-collapse-panel key="3" :header="$t('picture_title')">
                 <div v-if="member.avatar">
-                  <img :src="member.avatar"/>
+                  <img :src="member.avatar" class="w-full md:w-1/2 lg:w-1/3 h-auto"/>
                 </div>
                 <a-button @click="showCropModal = true">{{$t("upload_profile_image")}}</a-button>
                 <CropperModal
@@ -126,7 +126,6 @@
                       >
                         <a-input-password v-model:value="password.new" />
                       </a-form-item>
-
                       <a-form-item
                         :label="$t('confirm_password')"
                         name="confirm"
@@ -134,8 +133,6 @@
                       >
                         <a-input-password v-model:value="password.confirm" />
                       </a-form-item>
-
-
                       <a-form-item :wrapper-col="{ offset: 8, span: 16 }">
                         <a-button danger html-type="submit"> {{ $t('confirm') }}</a-button>
                       </a-form-item>
@@ -143,10 +140,7 @@
                 </a-form>
               </a-collapse-panel>
             </a-collapse>
-            <a-form-item
-              :wrapper-col="{ offset: 10, span: 24 }"
-              style="padding-top: 20px"
-            >
+            <a-form-item :wrapper-col="{ offset: 10, span: 24 }" style="padding-top: 20px">
               <a-button @click="onSubmit" type="primary">{{ $t("submit") }}</a-button>
             </a-form-item>
           </a-form>

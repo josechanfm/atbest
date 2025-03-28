@@ -22,7 +22,7 @@ class CompetitionApplicationController extends Controller
             'competition'=>$competition,
             'categories_weights'=>Config::categories_weights(),
             'roles'=>Config::item('competition_roles'),
-            'member'=>auth()->user()->member
+            // 'member'=>auth()->user()->member
         ]);
     }
 

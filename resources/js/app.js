@@ -39,7 +39,6 @@ createInertiaApp({
 
                 },
             })
-            
             .component('inertia-head', Head)
             .component('inertia-link', Link)
             .mount(el);

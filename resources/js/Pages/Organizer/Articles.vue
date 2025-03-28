@@ -181,7 +181,7 @@ export default {
   methods: {
     onPaginationChange(page, filters, sorter) {
       console.log(page);
-      this.$inertia.get(route("manage.articles.index"), {
+      this.$inertia.get(route("organizer.articles.index"), {
         page: page,
         per_page: this.pagination.pageSize,
       });
@@ -206,7 +206,7 @@ export default {
       this.$refs.modalRef
         .validateFields()
         .then(() => {
-          this.$inertia.post(route("manage.articles.store"), this.modal.data, {
+          this.$inertia.post(route("organizer.articles.store"), this.modal.data, {
             onSuccess: (page) => {
               this.modal.data = {};
               this.modal.isOpen = false;
@@ -226,7 +226,7 @@ export default {
         .validateFields()
         .then(() => {
           this.$inertia.put(
-            route("manage.articles.update", this.modal.data.id),
+            route("organizer.articles.update", this.modal.data.id),
             this.modal.data,
             {
               onSuccess: (page) => {
@@ -245,7 +245,7 @@ export default {
         });
     },
     deleteConfirmed(record) {
-      this.$inertia.delete(route("manage.articles.destroy", record.id), {
+      this.$inertia.delete(route("organizer.articles.destroy", record.id), {
         onSuccess: (page) => {
           console.log(page);
         },
@@ -275,7 +275,7 @@ export default {
     },
     searchData() {
       this.$inertia.get(
-        route("manage.articles.index"),
+        route("organizer.articles.index"),
         { search: this.search, pagination: this.pagination },
         {
           onSuccess: (page) => {

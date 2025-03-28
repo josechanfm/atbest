@@ -23,7 +23,7 @@ class FortifyServiceProvider extends ServiceProvider
     {
 
         // if (request()->is(['master', 'master/*'])) {
-        //     config(['fortify.home' => '/manage']);
+        //     config(['fortify.home' => '/organizer']);
         //     config(['fortify.guard' => 'admin_web']);
         // }
 

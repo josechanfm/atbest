@@ -3,6 +3,7 @@
 namespace App\Policies;
 
 use App\Models\Certificate;
+use App\Models\Organization;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -33,7 +34,7 @@ class CertificatePolicy
         if($user->hasRole('admin')){
             return true;
         }
-        return $certificate->organization->hasUser($user);
+        return session()->has('organization') && session('organization')->id==$certificate->organization->id;
         
     }
 
@@ -48,7 +49,7 @@ class CertificatePolicy
         if($user->hasRole(['admin','organizer'])){
             return true;
         }
-        return $certificate->organization->hasUser($user);
+        return session()->has('organization') && session('organization')->id==$certificate->organization->id;
     }
 
     /**
@@ -63,7 +64,7 @@ class CertificatePolicy
         if($user->hasRole(['admin','organizer'])){
             return true;
         }
-        return $certificate->organization->hasUser($user);
+        return session()->has('organization') && session('organization')->id==$certificate->organization->id;
     }
 
     /**

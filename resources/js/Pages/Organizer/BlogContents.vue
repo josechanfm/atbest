@@ -208,7 +208,7 @@ export default {
       this.$refs.modalRef
         .validateFields()
         .then(() => {
-          this.$inertia.post(route("manage.blog.contents.store"), this.modal.data, {
+          this.$inertia.post(route("organizer.blog.contents.store"), this.modal.data, {
             preserveState: false,
             onSuccess: (page) => {
               this.modal.isOpen = false;
@@ -234,7 +234,7 @@ export default {
         .then(() => {
           this.modal.data._method = "PATCH";
           this.$inertia.post(
-            route("manage.blogs.update", this.modal.data.id),
+            route("organizer.blogs.update", this.modal.data.id),
             this.modal.data,
             {
               preserveState: false,
@@ -254,7 +254,7 @@ export default {
         });
     },
     deleteRecord(recordId) {
-      this.$inertia.delete(route("manage.blog.contents.destroy", recordId), {
+      this.$inertia.delete(route("organizer.blog.contents.destroy", recordId), {
         preserveState: false,
         onSuccess: (page) => {
           console.log(page);

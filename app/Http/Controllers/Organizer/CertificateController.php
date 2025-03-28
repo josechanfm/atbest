@@ -97,8 +97,7 @@ class CertificateController extends Controller
      */
     public function update(Certificate $certificate, Request $request)
     {
-
-        // dd($request->file());
+        // dd($certificate, $request->all());
         $this->validate($request,[
             'id' => 'required',
             'category_code'=>'required',
@@ -108,7 +107,6 @@ class CertificateController extends Controller
         if($organization->id!=session('organization')->id){
             return redirect()->back();
         };
-        
         $certificate->update($request->all());
         //dd($request->all(), $request->file());
         if($request->file('cert_logo_upload')){

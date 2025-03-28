@@ -23,11 +23,9 @@
           </template>
           <template #bodyCell="{ column, text, record, index }">
             <template v-if="column.dataIndex == 'operation'">
-              <inertia-link
-                :href="route('organizer.events.edit', record.id)"
-                class="ant-btn"
-                >{{ $t("edit") }}</inertia-link
-              >
+              <a-button :href="route('organizer.events.edit', record.id)" class="ant-btn">
+                {{ $t("edit") }}
+              </a-button>
             </template>
             <template v-else>
               {{ record[column.dataIndex] }}
@@ -115,7 +113,7 @@ export default {
   methods: {
     searchData() {
       this.$inertia.get(
-        route("manage.events.index"),
+        route("organizer.events.index"),
         { search: this.search, pagination: this.pagination },
         {
           onSuccess: (page) => {

@@ -32,7 +32,9 @@ class MemberController extends Controller
     {
         $pageSize = $request->pagination['pageSize'] ?? 10;
         $currentPage = $request->pagination['currentPage'] ?? 1;
-        $members = Organization::find(session('organization')->id)->members()->where(function ($query) use ($request) {
+        // dd(session('organization'));
+
+        $members = session('organization')->members()->where(function ($query) use ($request) {
             if (!empty($request->search)) {
                 if (!empty($request->search['given_name'])) {
                     $query->where('given_name', 'like', '%' . $request->search['given_name'] . '%');

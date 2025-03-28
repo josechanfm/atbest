@@ -206,7 +206,7 @@ export default {
       this.$refs.modalRef
         .validateFields()
         .then(() => {
-          this.$inertia.post(route("manage.messages.store"), this.modal.data, {
+          this.$inertia.post(route("organizer.messages.store"), this.modal.data, {
             preserveState: false,
             onSuccess: (page) => {
               this.modal.isOpen = false;
@@ -227,7 +227,7 @@ export default {
         .then(() => {
           this.modal.data._method = "PATCH";
           this.$inertia.post(
-            route("manage.messages.update", this.modal.data.id),
+            route("organizer.messages.update", this.modal.data.id),
             this.modal.data,
             {
               preserveState: false,
@@ -247,7 +247,7 @@ export default {
     },
 
     deleteRecord(recordId) {
-      this.$inertia.delete(route("manage.messages.destroy", recordId), {
+      this.$inertia.delete(route("organizer.messages.destroy", recordId), {
         preserveState: false,
         onSuccess: (page) => {
           message.success("Delete Successful.");
@@ -260,7 +260,7 @@ export default {
     },
     onPaginationChange(page, filters, sorter) {
       this.$inertia.get(
-        route("manage.messages.index"),
+        route("organizer.messages.index"),
         {
           page: page.current,
           per_page: page.pageSize,

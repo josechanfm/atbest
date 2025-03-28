@@ -170,7 +170,7 @@ export default {
     deleteConfirmed(record) {
       console.log("delete");
       console.log(record);
-      this.$inertia.delete(route("manage.forms.destroy", { form: record.id }), {
+      this.$inertia.delete(route("organizer.forms.destroy", { form: record.id }), {
         onSuccess: (page) => {
           console.log(page);
         },
@@ -181,7 +181,7 @@ export default {
     },
     backupRecords(record) {
       if (!confirm("Do you sure want to backup?")) return;
-      this.$inertia.post(route("manage.form.backup", record.id), {
+      this.$inertia.post(route("organizer.form.backup", record.id), {
         onSuccess: (page) => {
           console.log(page);
         },
@@ -192,7 +192,7 @@ export default {
     },
     searchData() {
       this.$inertia.get(
-        route("manage.forms.index"),
+        route("organizer.forms.index"),
         { search: this.search, pagination: this.pagination },
         {
           onSuccess: (page) => {

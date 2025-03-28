@@ -17,21 +17,16 @@ class DashboardController extends Controller
     }
 
     public function index(){
-        // if(empty(session('organization'))){
-        //     if(empty(session('member'))){
-        //         return Inertia::render('Error', [
-        //             'message' => "You are not a organization manager."
-        //         ]);
-        //     };
-        //     session(['organization'=>session('member')->organization]);
-        // }
-        $user=auth()->user();
-        $organization=$user->member->organization;
-        $this->authorize('view',$organization);
+        if(empty(session('organization'))){
+            session(['organization'=>auth()->user()->member->organization]);
+        }
+        // dd(session('organization'),auth()->user()->organizations());
+        //$organization=auth()->user()->member->organization;
+        $this->authorize('view',session('organization'));
         return Inertia::render('Organizer/Dashboard',[
-            'currentOrganization'=>$organization,
-            'organizations' => auth()->user()->organizations,
-            'member'=>auth()->user()->member,
+            'currentOrganization'=>session('organization'),
+            'organizations' => auth()->user()->organizations(),
+            // 'member'=>auth()->user()->member,
         ]);
     }
     

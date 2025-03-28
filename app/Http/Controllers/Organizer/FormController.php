@@ -91,7 +91,7 @@ class FormController extends Controller
         if($request->file('thumb_image')){
             $form->addMedia($request->file('thumb_image')[0]['originFileObj'])->toMediaCollection('thumb');
         }
-        return to_route('manage.forms.index');
+        return to_route('organizer.forms.index');
     }
 
     /**
@@ -148,7 +148,7 @@ class FormController extends Controller
         if($request->file('thumb_image')){
             $form->addMedia($request->file('thumb_image')[0]['originFileObj'])->toMediaCollection('thumb');
         }
-        return to_route('manage.forms.index');
+        return to_route('organizer.forms.index');
     }
 
     /**

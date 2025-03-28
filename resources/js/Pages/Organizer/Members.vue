@@ -289,7 +289,7 @@ export default {
       this.$refs.modalRef
         .validateFields()
         .then(() => {
-          this.$inertia.post(route("manage.members.store"), this.modal.data, {
+          this.$inertia.post(route("organizer.members.store"), this.modal.data, {
             onSuccess: (page) => {
               this.modal.data = {};
               this.modal.isOpen = false;
@@ -308,7 +308,7 @@ export default {
         .validateFields()
         .then(() => {
           this.$inertia.patch(
-            route("manage.members.update", this.modal.data.id),
+            route("organizer.members.update", this.modal.data.id),
             this.modal.data,
             {
               onSuccess: (page) => {
@@ -327,11 +327,11 @@ export default {
         });
     },
     deleteConfirmed(recordId) {
-      this.$inertia.delete(route("manage.members.destroy", { member: recordId }));
+      this.$inertia.delete(route("organizer.members.destroy", { member: recordId }));
     },
 
     createLogin(recordId) {
-      axios.post(route("manage.member.createLogin", recordId)).then((response) => {
+      axios.post(route("organizer.member.createLogin", recordId)).then((response) => {
         if (response.data.result == false) {
           PopupModal.warning({
             title: "Email Duplicated",
@@ -351,7 +351,7 @@ export default {
     },
     searchData() {
       this.$inertia.get(
-        route("manage.members.index"),
+        route("organizer.members.index"),
         { search: this.search, pagination: this.pagination },
         {
           onSuccess: (page) => {

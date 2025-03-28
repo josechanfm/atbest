@@ -42,9 +42,9 @@ class Organization extends Model implements HasMedia
         return $this->hasMany(Member::class)->with('user');
     }
 
-    public function hasUser($user){
-        return in_array($user->id,$this->users()->get()->pluck('id')->toArray());
-    }
+    // public function hasUser($user){
+    //     return in_array($user->id,$this->users()->get()->pluck('id')->toArray());
+    // }
 
     public function approbates(){
         return $this->hasMany(Approbate::class);

@@ -25,7 +25,7 @@
             <Dropdown align="right" width="48">
               <template #trigger>
                 <button v-if="$page.props.auth.user.member.avatar"
-                  class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition"
+                  class="text-sm border-2 border-transparent rounded-full mt-5"
                 >
                   <img
                     class="h-8 w-8 rounded-full object-cover"

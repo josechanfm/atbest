@@ -67,7 +67,7 @@ class EventController extends Controller
             $event->addMedia($request->file('thumb_image')[0]['originFileObj'])->toMediaCollection('thumb');
         }
 
-        return to_route('manage.events.index');
+        return to_route('organizer.events.index');
     }
 
     /**
@@ -117,7 +117,7 @@ class EventController extends Controller
             $event->addMedia($request->file('thumb_image')[0]['originFileObj'])->toMediaCollection('thumb');
         }
 
-        return to_route('manage.events.index');
+        return to_route('organizer.events.index');
     }
 
     /**

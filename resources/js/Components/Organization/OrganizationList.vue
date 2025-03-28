@@ -23,18 +23,18 @@
           </template>
           <a-list-item-meta :description="item.description">
             <template #title>
-                <inertia-link :href="'/manage/organization/'+item.id+'/members'">{{ item.title }}</inertia-link>
+                <inertia-link :href="'/organizer/organization/'+item.id+'/members'">{{ item.title }}</inertia-link>
 
             </template>
             <template #avatar><a-avatar :src="item.avatar" /></template>
           </a-list-item-meta>
           {{ item.content }}
           <br>
-          <inertia-link :href="'/manage/organization/'+item.id+'/members'">Members</inertia-link>
+          <inertia-link :href="'/organizer/organization/'+item.id+'/members'">Members</inertia-link>
           <br>
-          <inertia-link :href="'/manage/organizations/'+item.id+'/edit'">Profile</inertia-link>
+          <inertia-link :href="'/organizer/organizations/'+item.id+'/edit'">Profile</inertia-link>
           <br>
-          <inertia-link :href="'/manage/select/'+item.id">Dashboard</inertia-link>
+          <inertia-link :href="'/organizer/select/'+item.id">Dashboard</inertia-link>
         </a-list-item>
       </template>
     </a-list>

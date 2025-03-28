@@ -153,7 +153,7 @@ export default {
       this.$refs.modalRef
         .validateFields()
         .then(() => {
-          this.$inertia.post(route("manage.emails.store"), this.modal.data, {
+          this.$inertia.post(route("organizer.emails.store"), this.modal.data, {
             preserveState: false,
             onSuccess: (page) => {
               this.modal.isOpen = false;
@@ -174,7 +174,7 @@ export default {
         .then(() => {
           this.modal.data._method = "PATCH";
           this.$inertia.post(
-            route("manage.emails.update", this.modal.data.id),
+            route("organizer.emails.update", this.modal.data.id),
             this.modal.data,
             {
               preserveState: false,
@@ -193,7 +193,7 @@ export default {
         });
     },
     deleteRecord(recordId) {
-      this.$inertia.delete(route("manage.emails.destroy", recordId), {
+      this.$inertia.delete(route("organizer.emails.destroy", recordId), {
         preserveState: false,
         onSuccess: (page) => {
           message.success("Delete Successful.");
@@ -206,7 +206,7 @@ export default {
     },
     onPaginationChange(page, filters, sorter) {
       this.$inertia.get(
-        route("manage.emails.index"),
+        route("organizer.emails.index"),
         {
           page: page.current,
           per_page: page.pageSize,

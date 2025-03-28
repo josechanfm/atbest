@@ -50,7 +50,7 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-    protected $with=['roles'];
+    protected $with=['roles','member'];
     /**
      * The accessors to append to the model's array form.
      *
@@ -85,7 +85,11 @@ class User extends Authenticatable
         return $this->name.'===';
     }
     public function organizations(){
-        return $this->belongsToMany(Organization::class);
+        return Organization::whereIn('id', function ($query) {
+            $query->select('organization_id')
+                  ->from('members') // The members table
+                  ->where('user_id', $this->id);
+        })->get();
     }
     public function issues(){
         return $this->hasMany(Issue::class);

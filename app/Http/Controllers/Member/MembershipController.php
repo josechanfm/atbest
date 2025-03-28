@@ -9,10 +9,10 @@ use App\Models\Member;
 class MembershipController extends Controller
 {
     public function index(){
-        $member=auth()->user()->member;
+        // $member=auth()->user()->member;
         $certificates=Auth()->user()->member->certificates;
         return Inertia::render('Member/Membership',[
-            'member'=>$member,
+            // 'member'=>$member,
             'certificates'=>$certificates
         ]);
     }

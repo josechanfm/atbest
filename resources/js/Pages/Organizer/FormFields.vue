@@ -151,7 +151,7 @@ export default {
   data() {
     return {
       breadcrumb: [
-        { label: "表格列表", url: route("manage.forms.index") },
+        { label: "表格列表", url: route("organizer.forms.index") },
         { label: "表格欄位", url: null },
       ],
       //templateOptions:[],
@@ -259,7 +259,7 @@ export default {
     },
     storeRecord(data) {
       this.$inertia.post(
-        route("manage.form.fields.store", {
+        route("organizer.form.fields.store", {
           form: data.form_id,
         }),
         data,
@@ -275,7 +275,7 @@ export default {
     },
     updateRecord(data) {
       this.$inertia.patch(
-        route("manage.form.fields.update", {
+        route("organizer.form.fields.update", {
           form: data.form_id,
           field: data,
         }),
@@ -407,7 +407,7 @@ export default {
               console.log(item);
             })
             this.dataModel=arr
-            this.$inertia.post(route("manage.form.fieldsSequence", this.form.id), this.dataModel, {
+            this.$inertia.post(route("organizer.form.fieldsSequence", this.form.id), this.dataModel, {
               onSuccess: (page) => {
                 console.log(page);
               },

@@ -43,12 +43,12 @@ class DatabaseSeeder extends Seeder
         $roleOrganization = Role::create(['name' => 'organization', 'guard_name' => 'admin_web']);
         $roleMember = Role::create(['name' => 'member', 'guard_name' => 'web']);
 
-        // $permissionCourse=Permission::create(['name'=>'manage course','guard_name' => 'admin_web']);
-        // $permissionOffer=Permission::create(['name'=>'manage offer','guard_name' => 'admin_web']);
-        // $permissionTeacher=Permission::create(['name'=>'manage teacher','guard_name' => 'admin_web']);
-        // $permissionStudent=Permission::create(['name'=>'manage student','guard_name' => 'admin_web']);
-        // $permissionGuardian=Permission::create(['name'=>'manage guardian','guard_name' => 'admin_web']);
-        // $permissionAttendance=Permission::create(['name'=>'manage attendance','guard_name' => 'admin_web']);
+        // $permissionCourse=Permission::create(['name'=>'organizer course','guard_name' => 'admin_web']);
+        // $permissionOffer=Permission::create(['name'=>'organizer offer','guard_name' => 'admin_web']);
+        // $permissionTeacher=Permission::create(['name'=>'organizer teacher','guard_name' => 'admin_web']);
+        // $permissionStudent=Permission::create(['name'=>'organizer student','guard_name' => 'admin_web']);
+        // $permissionGuardian=Permission::create(['name'=>'organizer guardian','guard_name' => 'admin_web']);
+        // $permissionAttendance=Permission::create(['name'=>'organizer attendance','guard_name' => 'admin_web']);
 
         // $roleMaster->givePermissionTo($permissionCourse);
         // $roleMaster->givePermissionTo($permissionOffer);

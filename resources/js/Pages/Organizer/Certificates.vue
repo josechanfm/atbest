@@ -2,9 +2,9 @@
   <OrganizerLayout title="證書" :breadcrumb="breadcrumb">
     
       <div class="flex-auto pb-3 text-right">
-        <a-button type="primary" class="!rounded" @click="createRecord()">{{
-          $t("create_certificate")
-        }}</a-button>
+        <a-button type="primary" class="!rounded" @click="createRecord()">
+          {{ $t("create_certificate") }}
+        </a-button>
       </div>
       <div class="bg-white relative shadow rounded-lg overflow-x-auto">
         <a-table :dataSource="certificates" :columns="columns">
@@ -14,11 +14,12 @@
           <template #bodyCell="{ column, text, record, index }">
             <template v-if="column.dataIndex == 'operation'">
               <a-button @click="editRecord(record)">{{ $t("edit") }}</a-button>
-              <inertia-link
+              <a-button
                 :href="route('organizer.certificate.members.index', record.id)"
                 class="ant-btn"
-                >{{ $t("members") }}</inertia-link
               >
+                {{ $t("members") }}
+              </a-button>
             </template>
             <template v-else-if="column.dataIndex == 'state'">
               {{ teacherStateLabels[text] }}
@@ -114,7 +115,7 @@
         </a-form-item>
       </a-form>
       <template #footer>
-        <a-button @click="onSubmit" type="primary">{{ $t("submit") }}..</a-button>
+        <a-button @click="onSubmit" type="primary">{{ $t("submit") }}</a-button>
         <!-- <a-button
           v-if="modal.mode == 'EDIT'"
           key="Update"
@@ -256,7 +257,7 @@ export default {
       this.$refs.modalRef
         .validateFields()
         .then(() => {
-          this.$inertia.post(route("manage.certificates.store"), this.modal.data, {
+          this.$inertia.post(route("organizer.certificates.store"), this.modal.data, {
             onSuccess: (page) => {
               this.modal.data = {};
               this.modal.isOpen = false;
@@ -279,7 +280,7 @@ export default {
           }
           this.modal.data._method = "PATCH";
           this.$inertia.post(
-            route("manage.certificates.update", this.modal.data.id),
+            route("organizer.certificates.update", this.modal.data.id),
             this.modal.data,
             {
               onSuccess: (page) => {
@@ -320,7 +321,7 @@ export default {
       // console.log(this.modal.data)
       // this.modal.data._method = "PATCH";
       // this.$inertia.post(
-      //   route("manage.certificates.update", this.modal.data.id),
+      //   route("organizer.certificates.update", this.modal.data.id),
       //   this.modal.data,
       //   {
       //     onSuccess: (page) => {
