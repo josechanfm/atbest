@@ -34,7 +34,7 @@ return new class extends Migration
             $table->date('expired_at')->nullable();
             $table->boolean('is_default')->default(false);
             $table->boolean('is_organizer')->default(false);
-            $table->boolean('is_dismissed')->default(false);
+            $table->boolean('is-dismissed')->default(false);
             $table->timestamps();
         });
     }
