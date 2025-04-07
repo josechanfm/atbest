@@ -80,7 +80,7 @@
           <a-input v-model:value="modal.data.title" />
         </a-form-item>
         <a-form-item :label="$t('content')" name="content">
-          <quill-editor v-model:value="modal.data.content" style="min-height: 200px" />
+          <!-- <quill-editor v-model:value="modal.data.content" style="min-height: 200px" /> -->
         </a-form-item>
       </a-form>
       <template #footer>
@@ -108,7 +108,7 @@
 import OrganizerLayout from "@/Layouts/OrganizerLayout.vue";
 import { UploadOutlined } from "@ant-design/icons-vue";
 import Icon, { RestFilled } from "@ant-design/icons-vue";
-import { quillEditor } from "vue3-quill";
+// import { quillEditor } from "vue3-quill";
 import { message } from "ant-design-vue";
 
 export default {
@@ -116,7 +116,7 @@ export default {
     OrganizerLayout,
     UploadOutlined,
     RestFilled,
-    quillEditor,
+    // quillEditor,
   },
   props: ["messageCategories", "messages", "members"],
   data() {

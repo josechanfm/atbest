@@ -32,14 +32,14 @@ import MemberLayout from '@/Layouts/MemberLayout.vue';
 import { PlusOutlined, LoadingOutlined } from '@ant-design/icons-vue';
 import { message } from 'ant-design-vue';
 
-import { quillEditor } from 'vue3-quill';
+// import { quillEditor } from 'vue3-quill';
 
 export default {
     components: {
         MemberLayout,
         PlusOutlined,
         LoadingOutlined,
-        quillEditor
+        // quillEditor
     },
     props: ['member', 'approbates', 'portfolio'],
     data() {

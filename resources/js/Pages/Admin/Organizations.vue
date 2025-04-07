@@ -49,16 +49,13 @@
               </a-popconfirm>
               <a-button @click="masqueradeOrganization(record)" class="ant-btn">{{ $t("masquerade") }}</a-button>
             </div>
-            <template v-else-if="column.dataIndex == 'parish'">
-              {{ getOptionLabel(parishes, text) }}
-            </template>
-            <template v-else-if="column.dataIndex == 'manager'">
+            <!-- <template v-else-if="column.dataIndex == 'manager'">
               <ol class="list-decimal">
                 <li v-for="user in record['users']">
                   {{ user.name }}
                 </li>
               </ol>
-            </template>
+            </template> -->
             <template v-else>
               {{ record[column.dataIndex] }}
             </template>
@@ -118,7 +115,8 @@
           <a-input v-model:value="modal.data.avatar" />
         </a-form-item>
         <a-form-item :label="$t('card_style')" name="card_style">
-          <a-select v-model:value="modal.data.card_style" :options="cardStyles" />
+          {{ cardStyles }}
+          <!-- <a-select v-model:value="modal.data.card_style" :options="cardStyles" /> -->
         </a-form-item>
         <a-form-item :label="$t('content')" name="content">
           <a-textarea v-model:value="modal.data.content" />
@@ -163,7 +161,7 @@ export default {
     AdminLayout,
     Pagination,
   },
-  props: ["parishes", "organizations", "users"],
+  props: ["organizations", "users"],
   data() {
     return {
       modal: {
@@ -233,13 +231,19 @@ export default {
     };
   },
   created() {
-    axios.get(route("api.config.item", { key: "card_styles" })).then((resp) => {
-      Object.entries(resp.data).forEach(([key, card]) => {
-        this.cardStyles.push({ value: key, label: card.name });
-      });
-    });
+    // axios.get(route("api.config.item", { key: "card_styles" })).then((resp) => {
+    //   Object.entries(resp.data).forEach(([key, card]) => {
+    //     this.cardStyles.push({ value: key, label: card.name });
+    //   });
+    // });
   },
   mounted() {
+    // axios.get(route("api.config.item", { key: "card_styles" })).then((resp) => {
+    //   Object.entries(resp.data).forEach(([key, card]) => {
+    //     this.cardStyles.push({ value: key, label: card.name });
+    //   });
+    // });
+
     this.pagination = {
       currentPage: this.route().params.currentPage ?? 1,
       pageSize: this.route().params.pageSize ?? 10,
@@ -256,7 +260,7 @@ export default {
     },
     editRecord(record) {
       this.modal.data = { ...record };
-      this.modal.data.user_ids = record.users.map((item) => item.id)
+      //this.modal.data.user_ids = record.users.map((item) => item.id)
       this.modal.mode = "EDIT"
       this.modal.title = this.$t('organization')+' '+this.$t('edit')
       this.modal.isOpen = true

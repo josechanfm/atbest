@@ -22,7 +22,7 @@ class UserController extends Controller
     {
         return Inertia::render('Admin/Users',[
             'organizations'=>Organization::all(),
-            'users'=>User::with('organizations')->with('roles')->with('permissions')->paginate($request->per_page),
+            'users'=>User::with('members')->with('roles')->with('permissions')->paginate($request->per_page),
             'roles'=>\Spatie\Permission\Models\Role::all(),
             'permissions'=>Permission::all()
         ]);

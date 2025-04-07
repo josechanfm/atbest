@@ -30,10 +30,10 @@
           <a-textarea v-model:value="article.intro" :rows="5"/>
         </a-form-item>
         <a-form-item :label="$t('content')" name="content">
-          <quill-editor 
+          <!-- <quill-editor 
             v-model:value="article.content" 
             @paste="handleImagePaste"
-          />
+          /> -->
         </a-form-item>
         <a-form-item :label="$t('valid_at')" name="valid_at">
           <a-date-picker
@@ -170,7 +170,7 @@ import UploadAdapter from "@/Components/ImageUploadAdapter.vue";
 import { message } from "ant-design-vue";
 import { PlusOutlined, DeleteOutlined, UploadOutlined } from '@ant-design/icons-vue'
 import FileUploader from '@/Components/FileUploader.vue'
-import { quillEditor } from 'vue3-quill';
+// import { quillEditor } from 'vue3-quill';
 
 export default {
   components: {
@@ -178,7 +178,7 @@ export default {
     UploadAdapter,
     PlusOutlined, UploadOutlined, DeleteOutlined,
     FileUploader,
-    quillEditor,
+    // quillEditor,
     //UploadAdapter
   },
   props: ["classifies", "articleCategories", "article"],

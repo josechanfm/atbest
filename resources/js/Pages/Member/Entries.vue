@@ -49,12 +49,12 @@
 
 <script>
 import MemberLayout from '@/Layouts/MemberLayout.vue';
-import { quillEditor } from 'vue3-quill';
+// import { quillEditor } from 'vue3-quill';
 
 export default {
     components: {
         MemberLayout,
-        quillEditor
+        // quillEditor
     },
     props: ['entries'],
     data() {

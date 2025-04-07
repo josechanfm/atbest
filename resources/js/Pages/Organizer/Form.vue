@@ -13,16 +13,16 @@
           <a @click="form.openWelcome = !form.openWelcome">{{ $t('form_welcome') }}</a>
         </div>
         <a-form-item :label="$t('form_welcome')" name="welcome" v-if="form.openWelcome">
-          <quill-editor v-model:value="form.welcome" style="min-height: 200px" />
+          <RichTextEditor v-model="form.welcome"/>
         </a-form-item>
         <a-form-item :label="$t('content')" name="content">
-          <quill-editor v-model:value="form.content" style="min-height: 200px" />
+          <RichTextEditor v-model="form.content"/>
         </a-form-item>
         <div class="text-right">
           <a @click="form.openThanks = !form.openThanks">{{ $t('form_thankyou') }}</a>
         </div>
         <a-form-item :label="$t('form_thankyou')" name="thanks" v-if="form.openThanks">
-          <quill-editor v-model:value="form.thanks" style="min-height: 200px" />
+          <RichTextEditor v-model="form.thanks"/>
         </a-form-item>
         <a-form-item :label="$t('valid_at')" name="valid_at">
           <a-date-picker
@@ -128,14 +128,14 @@
 
 <script>
 import OrganizerLayout from "@/Layouts/OrganizerLayout.vue";
-import { quillEditor, Quill } from "vue3-quill";
 import { message } from "ant-design-vue";
 import { PlusOutlined,DeleteOutlined } from "@ant-design/icons-vue";
+import RichTextEditor from '@/Components/RichTextEditor.vue'; // Adjust the path accordingly
 
 export default {
   components: {
     OrganizerLayout,
-    quillEditor,
+    RichTextEditor,
     message,
     PlusOutlined, DeleteOutlined
   },

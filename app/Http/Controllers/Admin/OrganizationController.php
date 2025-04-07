@@ -34,9 +34,9 @@ class OrganizationController extends Controller
                     $query->where('name_zh', 'like', '%' . $request->search['name_zh'] . '%');
                 }
             }
-        })->with('users')->with('members')->paginate($pageSize, ['*'], 'page', $currentPage);
+        })->with('members')->paginate($pageSize, ['*'], 'page', $currentPage);
         return Inertia::render('Admin/Organizations', [
-            'parishes' => Config::item('parishes'),
+            'cardStyles' => Config::item('card_styles'),
             'organizations' => $organizations,
             'users' => User::all()
         ]);

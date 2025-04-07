@@ -82,10 +82,10 @@
               :name="field.id"
               :rules="[{ required: field.required }]"
             >
-              <quill-editor
+              <!-- <quill-editor
                 v-model:value="formData[field.id]"
                 style="min-height: 200px"
-              />
+              /> -->
             </a-form-item>
           </div>
           <div v-else-if="field.type == 'radio'">
@@ -230,13 +230,13 @@
 import AdminLayout from "@/Layouts/AdminLayout.vue";
 import { message } from "ant-design-vue";
 import CropperModal from "@/Components/Member/CropperModal.vue";
-import { quillEditor } from 'vue3-quill';
+// import { quillEditor } from 'vue3-quill';
 
 export default {
   components: {
     AdminLayout,
     CropperModal,
-    quillEditor
+    // quillEditor
   },
   props: ["form", "entries", "entryColumns"],
   data() {

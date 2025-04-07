@@ -27,25 +27,25 @@
                     <a @click="form.openWelcome=!form.openWelcome">{{ $t('form_welcome') }}</a>
                 </div>
             <a-form-item :label="$t('form_welcome')" name="welcome" v-if="form.openWelcome">
-                <quill-editor
+                <!-- <quill-editor
                     v-model:value="form.welcome"
                     style="min-height: 200px"
-                />
+                /> -->
             </a-form-item>
             <a-form-item :label="$t('description')" name="content">
-                <quill-editor
+                <!-- <quill-editor
                     v-model:value="form.content"
                     style="min-height: 200px"
-                />
+                /> -->
             </a-form-item>
             <div class="text-right">
                 <a @click="form.openThankyou=!form.openThankyou">{{ $t('form_thankyou') }}</a>
             </div>
             <a-form-item :label="$t('form_thankyou')" name="thankyou" v-if="form.openThankyou">
-                <quill-editor
+                <!-- <quill-editor
                     v-model:value="form.thankyou"
                     style="min-height: 200px"
-                />
+                /> -->
             </a-form-item>
             <a-form-item :label="$t('require_login')" name="require_login">
                 <a-switch
@@ -160,7 +160,7 @@ import {
   InfoCircleFilled,
 } from "@ant-design/icons-vue";
 import Icon, { RestFilled } from "@ant-design/icons-vue";
-import { quillEditor, Quill } from "vue3-quill";
+// import { quillEditor, Quill } from "vue3-quill";
 import { message } from "ant-design-vue";
 
 export default {
@@ -170,7 +170,7 @@ export default {
     LoadingOutlined,
     PlusOutlined,
     RestFilled,
-    quillEditor,
+    // quillEditor,
     message,
   },
   props: ["organizations", "form"],

@@ -72,7 +72,7 @@
         </Dropdown>
         <a-dropdown placement="bottomRight">
           <a class="trigger" @click.prevent>
-            {{ $page.props.user.name }}
+            {{ $page.props.auth.user.name }}
           </a>
           <template #overlay>
             <a-menu>

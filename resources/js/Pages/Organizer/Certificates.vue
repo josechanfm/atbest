@@ -111,7 +111,7 @@
           <a-input type="input" v-model:value="modal.data.rank_catption" />
         </a-form-item>
         <a-form-item :label="$t('description')" name="description">
-          <a-input type="input" v-model:value="modal.data.description" />
+          <RichTextEditor v-model="modal.data.description"/>
         </a-form-item>
       </a-form>
       <template #footer>
@@ -146,6 +146,7 @@ import {
 } from "@ant-design/icons-vue";
 import { defineComponent, reactive } from "vue";
 import CropperModal from "@/Components/Member/CropperModal.vue";
+import RichTextEditor from '@/Components/RichTextEditor.vue'; // Adjust the path accordingly
 
 export default {
   components: {
@@ -155,6 +156,7 @@ export default {
     PlusOutlined,
     InfoCircleFilled,
     CropperModal,
+    RichTextEditor
   },
   props: ["certificates", "certificate_categories"],
   data() {

@@ -98,14 +98,14 @@ import OrganizerLayout from "@/Layouts/OrganizerLayout.vue";
 import { UploadOutlined } from "@ant-design/icons-vue";
 import { message } from "ant-design-vue";
 import Icon, { RestFilled } from "@ant-design/icons-vue";
-import { quillEditor } from "vue3-quill";
+// import { quillEditor } from "vue3-quill";
 
 export default {
   components: {
     OrganizerLayout,
     UploadOutlined,
     RestFilled,
-    quillEditor,
+    // quillEditor,
   },
   props: ["blog", "contents"],
   data() {

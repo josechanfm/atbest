@@ -154,7 +154,7 @@
 import MemberLayout from "@/Layouts/MemberLayout.vue";
 import { PlusOutlined, LoadingOutlined } from "@ant-design/icons-vue";
 import { message } from "ant-design-vue";
-import { quillEditor } from "vue3-quill";
+// import { quillEditor } from "vue3-quill";
 import { UploadOutlined } from "@ant-design/icons-vue";
 import CropperModal from "@/Components/Member/CropperModal.vue";
 
@@ -163,7 +163,7 @@ export default {
     MemberLayout,
     PlusOutlined,
     LoadingOutlined,
-    quillEditor,
+    // quillEditor,
     UploadOutlined,
     CropperModal,
   },

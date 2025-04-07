@@ -66,14 +66,9 @@
           <a-input v-model:value="modal.data.password" />
         </a-form-item>
         <a-form-item :label="$t('organization_manager')" name="organization_ids">
-          <a-select
-            v-model:value="modal.data.organization_ids"
-            mode="multiple"
-            show-search
-            :filter-option="filterOption"
-            :options="organizations"
-            :fieldNames="{ value: 'id', label: 'name_zh' }"
-          />
+          <div v-for="member in modal.data.members">
+            {{ member.family_name }}{{ member.given_name }} {{ member.organization.abbr}} {{member.organization.name_zh }}
+          </div>
         </a-form-item>
         <a-row>
           <a-col :span="4"></a-col>
@@ -233,7 +228,7 @@ export default {
     },
     editRecord(record) {
       this.modal.data = { ...record };
-      this.modal.data.organization_ids = record.organizations.map((item) => item.id);
+      //this.modal.data.organization_ids = record.organizations.map((item) => item.id);
       this.modal.data.role_ids = record.roles.map((item) => item.id);
       this.modal.data.permission_ids = record.permissions.map((item) => item.id);
       this.modal.mode = "EDIT";

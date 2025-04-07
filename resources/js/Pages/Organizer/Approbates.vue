@@ -39,7 +39,7 @@
                 <a-input v-model:value="modal.data.title" />
             </a-form-item>
             <a-form-item label="Description" name="description">
-                <quill-editor v-model:value="modal.data.description" style="min-height:200px;" />
+                <!-- <quill-editor v-model:value="modal.data.description" style="min-height:200px;" /> -->
             </a-form-item>
             <a-form-item label="Start Date" name="start_date">
                 <a-date-picker v-model:value="modal.data.start_date" :bordered="false" />
@@ -88,14 +88,14 @@
 import OrganizerLayout from '@/Layouts/OrganizerLayout.vue';
 import { UploadOutlined } from '@ant-design/icons-vue';
 import Icon, { RestFilled } from '@ant-design/icons-vue';
-import { quillEditor } from 'vue3-quill';
+// import { quillEditor } from 'vue3-quill';
 
 export default {
     components: {
         OrganizerLayout,
         UploadOutlined,
         RestFilled,
-        quillEditor,   
+        // quillEditor,   
     },
     props: ['approbates'],
     data() {

@@ -20,13 +20,13 @@
 import MemberLayout from "@/Layouts/MemberLayout.vue";
 import DefaultLayout from "@/Layouts/DefaultLayout.vue";
 import CropperModal from "@/Components/Member/CropperModal.vue";
-import { quillEditor } from "vue3-quill";
+// import { quillEditor } from "vue3-quill";
 
 export default {
   components: {
     MemberLayout,
     DefaultLayout,
-    quillEditor,
+    // quillEditor,
     CropperModal,
   },
   props: ["event"],

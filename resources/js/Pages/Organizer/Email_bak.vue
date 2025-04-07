@@ -34,14 +34,14 @@
 
 <script>
 import OrganizerLayout from "@/Layouts/OrganizerLayout.vue";
-import { quillEditor } from 'vue3-quill';
+// import { quillEditor } from 'vue3-quill';
 import { message } from "ant-design-vue";
 import dayjs from 'dayjs';
 
 export default {
   components: {
     OrganizerLayout,
-    quillEditor,
+    // quillEditor,
     message,
     dayjs,
   },

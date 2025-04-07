@@ -46,7 +46,8 @@
           </a-col>
         </a-row>
         <a-form-item :label="$t('description')" name="content">
-          {{event.content}}
+
+          <RichTextEditor v-model="event.content"/>
           <!-- <quill-editor v-model:value="event.content" style="min-height: 200px" /> -->
         </a-form-item>
         <a-form-item :label="$t('require_login')" name="require_login">
@@ -123,6 +124,7 @@
           <a-select v-model:value="event.form_id" :options="forms" :fieldNames="{value:'id',label:'title'}"/>
         </a-form-item>
         <a-form-item :label="$t('remark')" name="remark">
+          <RichTextEditor v-model="event.remark"/>
           <!-- <quill-editor v-model:value="event.remark" style="min-height: 200px" /> -->
         </a-form-item>
         <div class="flex flex-row item-center justify-center">
@@ -139,7 +141,7 @@ import { message } from "ant-design-vue";
 import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
 import { PlusOutlined, DeleteOutlined } from "@ant-design/icons-vue";
-import MyQuillEditor from '@/Components/MyQuillEditor.vue'; // Adjust the path accordingly
+import RichTextEditor from '@/Components/RichTextEditor.vue'; // Adjust the path accordingly
 
 dayjs.extend(duration);
 export default {
@@ -148,7 +150,7 @@ export default {
     message,
     dayjs,
     PlusOutlined, DeleteOutlined,
-    MyQuillEditor
+    RichTextEditor
 
   },
   props: ["event", "categories","forms"],

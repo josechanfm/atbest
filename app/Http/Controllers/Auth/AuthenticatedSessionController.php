@@ -33,6 +33,7 @@ class AuthenticatedSessionController extends Controller
         $request->session()->flush();
         $request->authenticate();
         $request->session()->regenerate();
+
         if(auth()->user()){
             if(auth()->user()->hasRole('admin')){
                 return redirect()->intended('admin');

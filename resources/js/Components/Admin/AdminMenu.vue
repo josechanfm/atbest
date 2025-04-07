@@ -62,7 +62,7 @@
           </inertia-link>
         </span>
       </a-menu-item>
-      <a-menu-item key="6">
+      <a-menu-item key="7">
         <template #icon>
           <PieChartOutlined />
         </template>
@@ -92,7 +92,7 @@
           </inertia-link>
         </span>
       </a-menu-item>
-      <a-sub-menu key="sub1">
+      <!-- <a-sub-menu key="sub1">
         <template #icon>
           <MailOutlined />
         </template>
@@ -113,7 +113,7 @@
           <a-menu-item key="1121">Option 11</a-menu-item>
           <a-menu-item key="1122">Option 12</a-menu-item>
         </a-sub-menu>
-      </a-sub-menu>
+      </a-sub-menu> -->
     </a-menu>
   </div>
 </template>
