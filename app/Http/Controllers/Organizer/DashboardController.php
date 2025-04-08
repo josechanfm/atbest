@@ -17,7 +17,6 @@ class DashboardController extends Controller
     }
 
     public function index(){
-        dd(auth()->user());
         if(empty(session('organization'))){
             session(['organization'=>auth()->user()->member->organization]);
         }

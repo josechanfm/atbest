@@ -76,7 +76,7 @@
           </a>
           <template #overlay>
             <a-menu>
-              <a-menu-item>
+              <!-- <a-menu-item>
                 <inertia-link
                   :href="route('profile.show')"
                   :active="route().current('dashboard')"
@@ -88,7 +88,7 @@
                 <inertia-link :href="route('member.profile.index')">{{
                   $t("profile")
                 }}</inertia-link>
-              </a-menu-item>
+              </a-menu-item> -->
               <a-menu-item @click="logout">
                 <a>{{ $t("log_out") }}</a>
               </a-menu-item>
@@ -98,13 +98,13 @@
       </a-layout-header>
 
       <a-layout-content>
-        <PageHeader v-if="$slots.header" :menuKeys="menuKeys">
+        <!-- <PageHeader v-if="$slots.header" :menuKeys="menuKeys">
           <template #header>
             <div>
               <slot name="header" />
             </div>
           </template>
-        </PageHeader>
+        </PageHeader> -->
 
         <div class="mx-6">
           <main>

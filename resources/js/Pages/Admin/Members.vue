@@ -79,7 +79,7 @@
       <a-form
         ref="modalRef"
         :model="modal.data"
-        name="Teacher"
+        name="member"
         :label-col="{ span: 3 }"
         :wrapper-col="{ span: 16 }"
         autocomplete="off"

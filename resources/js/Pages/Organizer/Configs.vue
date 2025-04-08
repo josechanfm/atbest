@@ -72,7 +72,6 @@ export default {
                 title: "Modal",
                 mode: ""
             },
-            teacherStateLabels: {},
             columns: [
                 {
                     title: 'Key',

@@ -33,7 +33,10 @@
         ref="modalRef"
         :model="modal.data"
         :label-col="{ span: 4 }"
+        :wrapper-col="{ span: 20 }"
         autocomplete="off"
+        :rules="rules"
+        :validate-messages="validateMessages"
       >
         <a-form-item :label="$t('email.sender')">
           <a-input v-model:value="modal.data.sender" />
@@ -51,7 +54,7 @@
           <a-input v-model:value="modal.data.subject" />
         </a-form-item>
         <a-form-item :label="$t('email.message')">
-          <a-textarea v-model:value="modal.data.message" />
+          <a-textarea v-model:value="modal.data.message" :rows="5"/>
         </a-form-item>
       </a-form>
       <template #footer>
@@ -109,9 +112,11 @@ export default {
         },
       ],
       rules: {
-        name_zh: { required: true },
-        mobile: { required: true },
-        state: { required: true },
+        sender: { required: true, type:'email' },
+        recipient: { required: true, type:'email' },
+        cc: { required: true, type:'email' },
+        bcc: { required: true, type:'email' },
+        subject: { required: true },
       },
       validateMessages: {
         required: "${label} is required!",

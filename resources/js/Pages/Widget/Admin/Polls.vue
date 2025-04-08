@@ -40,10 +40,10 @@
 </WidgetLayout>
         <!-- Modal Start-->
         <a-modal v-model:open="modal.isOpen" :title="modal.title" width="60%">
-            <a-form ref="modalRef" :model="modal.data" name="Teacher" :label-col="{ span: 4}"
+            <a-form ref="modalRef" :model="modal.data" name="poll" :label-col="{ span: 4}"
                 :wrapper-col="{ span: 18 }" autocomplete="off" :rules="rules" :validate-messages="validateMessages">
                 <a-form-item label="Question" name="question">
-                    <!-- <quill-editor v-model:value="modal.data.question" style="min-height:200px;"/> -->
+                    <RichTextEditor v-model="modal.data.question"/>
                 </a-form-item>
                 <a-form-item label="Option A" name="option_a">
                     <a-textarea v-model:value="modal.data.option_a" />
@@ -74,14 +74,14 @@
 
 <script>
 import WidgetLayout from '@/Layouts/WidgetLayout.vue';
-// import { quillEditor } from 'vue3-quill';
 import { message } from 'ant-design-vue';
+import RichTextEditor from '@/Components/RichTextEditor.vue'; 
 
 export default {
     components: {
         WidgetLayout,
-        // quillEditor,
-        message
+        message,
+        RichTextEditor
     },
     props: ['polls', 'configs'],
     data() {

@@ -61,7 +61,7 @@
           <a-input v-model:value="modal.data.title" />
         </a-form-item>
         <a-form-item :label="$t('description')" name="description">
-          <a-input v-model:value="modal.data.description" />
+          <a-textarea v-model:value="modal.data.description" :rows="5"/>
         </a-form-item>
         <!-- <a-form-item :label="$t('image')" name="images">
           <a-upload

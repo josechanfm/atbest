@@ -125,7 +125,6 @@
         </a-form-item>
         <a-form-item :label="$t('remark')" name="remark">
           <RichTextEditor v-model="event.remark"/>
-          <!-- <quill-editor v-model:value="event.remark" style="min-height: 200px" /> -->
         </a-form-item>
         <div class="flex flex-row item-center justify-center">
           <a-button type="primary" html-type="submit">{{ $t("submit") }}</a-button>

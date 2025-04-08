@@ -56,7 +56,7 @@ class PollController extends Controller
     public function show(Poll $poll)
     {
         $poll->responses;
-        return Inertia::render('Widget/Admin/PollResult',[
+        return Inertia::render('Widget/Admin/Poll',[
             'poll'=>$poll
         ]);
         

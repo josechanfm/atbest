@@ -37,7 +37,6 @@ export default {
         title: "Modal",
         mode: "",
       },
-      teacherStateLabels: {},
       columns: [
         {
           title: "姓名(中文)",

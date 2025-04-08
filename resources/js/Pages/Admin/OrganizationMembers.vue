@@ -40,7 +40,7 @@
       <a-form
         ref="modalRef"
         :model="modal.data"
-        name="Teacher"
+        name="member"
         :label-col="{ span: 8 }"
         :wrapper-col="{ span: 16 }"
         autocomplete="off"
@@ -102,7 +102,6 @@ export default {
         title: "Modal",
         mode: "",
       },
-      teacherStateLabels: {},
       columns: [
         {
           title: "Given Name",

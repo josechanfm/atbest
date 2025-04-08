@@ -22,12 +22,14 @@ class MemberSeeder extends Seeder
         $user=User::where('email','master@example.com')->first();
         $member->email=$user->email;
         $member->user_id=$user->id;
+        $member->is_default=true;
         $member->save();
 
         $member=Member::find(2);
         $user=User::where('email','admin@example.com')->first();
         $member->email=$user->email;
         $member->user_id=$user->id;
+        $member->is_default=true;
         $member->save();
 
         $member=Member::find(3);
@@ -42,6 +44,7 @@ class MemberSeeder extends Seeder
         $user=User::where('email','guardian@example.com')->first();
         $member->email=$user->email;
         $member->user_id=$user->id;
+        $member->is_default=true;
         $member->save();
 
         $member=Member::find(5);
@@ -49,7 +52,7 @@ class MemberSeeder extends Seeder
         $member->email=$user->email;
         $member->user_id=$user->id;
         $member->is_default=true;
-        $member->is_organizer=flase;
+        $member->is_organizer=false;
         $member->save();
 
         $member=Member::find(6);
@@ -72,12 +75,4 @@ class MemberSeeder extends Seeder
     }
 }
 
-/*
-master@example.com
-admin@example.com
-organizer@example.com
-guardian@example.com
-member1@example.com
-member2@example.com
-member3@example.com
-*/
+

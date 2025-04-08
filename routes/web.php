@@ -71,6 +71,15 @@ Route::get('content', [App\Http\Controllers\ContentController::class,'page'])->n
 
 //Member
 Route::group([
+    'prefix' => 'guest',
+    'middleware' => [
+        'auth:sanctum',
+    ]
+], function () {
+    Route::get('/', [\App\Http\Controllers\Guest\DashboardController::class, 'index'])->name('guest.dashboard');
+});
+//Member
+Route::group([
     'prefix' => 'member',
     'middleware' => [
         'auth:sanctum',

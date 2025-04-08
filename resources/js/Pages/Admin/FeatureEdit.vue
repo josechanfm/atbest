@@ -7,7 +7,7 @@
     </template>
     <div class="container mx-auto pt-5">
       <div class="bg-white relative shadow rounded-lg overflow-x-auto p-5">
-        <a-form ref="modalRef" :model="feature" name="Teacher" :label-col="{ span: 4 }" :wrapper-col="{ span: 20 }"
+        <a-form ref="modalRef" :model="feature" name="feature" :label-col="{ span: 4 }" :wrapper-col="{ span: 20 }"
           autocomplete="off" :rules="rules" :validate-messages="validateMessages" @finish="onFinish"
           enctype="multipart/form-data">
           <a-form-item :label="$t('organization')" name="organization_id">

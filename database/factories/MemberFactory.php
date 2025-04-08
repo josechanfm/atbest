@@ -28,6 +28,7 @@ class MemberFactory extends Factory
             'family_name' => $this->faker->lastName(),
             'display_name' => $this->faker->name,
             'email' => $this->faker->unique()->safeEmail(),
+            'is_default'=>false,
         ];
     }
 

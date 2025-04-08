@@ -8,7 +8,7 @@
     <div class="bg-white relative shadow rounded-lg overflow-x-auto p-5">
       <a-form
         :model="article"
-        name="Teacher"
+        name="article"
         layout="vertical"
         autocomplete="off"
         :rules="rules"
@@ -30,10 +30,7 @@
           <a-textarea v-model:value="article.intro" :rows="5"/>
         </a-form-item>
         <a-form-item :label="$t('content')" name="content">
-          <!-- <quill-editor 
-            v-model:value="article.content" 
-            @paste="handleImagePaste"
-          /> -->
+          <RichTextEditor v-model="article.content"/>
         </a-form-item>
         <a-form-item :label="$t('valid_at')" name="valid_at">
           <a-date-picker
@@ -98,9 +95,7 @@
             <div v-if="article.thumb_url" class="flex">
               <img :src="article.thumb_url" width="100" />
               <div class="flex flex-col justify-end">
-                <inertia-link :href="route('organizer.article.deleteImage',{article:article,collection:'thumb'})" method="delete" class="text-red-500">
-                  <DeleteOutlined />
-                </inertia-link>
+                <a @click="handleFileDelete(article,'thumb')" class="text-red-500"><DeleteOutlined /></a>
               </div>
             </div>
             <a-upload
@@ -163,14 +158,11 @@
 <script>
 import OrganizerLayout from "@/Layouts/OrganizerLayout.vue";
 import { defineComponent, reactive } from "vue";
-//import Editor from 'ckeditor5-custom-build/build/ckeditor';
-//import CKEditor from "@ckeditor/ckeditor5-vue";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import UploadAdapter from "@/Components/ImageUploadAdapter.vue";
 import { message } from "ant-design-vue";
 import { PlusOutlined, DeleteOutlined, UploadOutlined } from '@ant-design/icons-vue'
 import FileUploader from '@/Components/FileUploader.vue'
-// import { quillEditor } from 'vue3-quill';
+import RichTextEditor from '@/Components/RichTextEditor.vue'; 
 
 export default {
   components: {
@@ -178,7 +170,7 @@ export default {
     UploadAdapter,
     PlusOutlined, UploadOutlined, DeleteOutlined,
     FileUploader,
-    // quillEditor,
+    RichTextEditor
     //UploadAdapter
   },
   props: ["classifies", "articleCategories", "article"],
@@ -218,18 +210,6 @@ export default {
           },
         },
       },
-      editor: ClassicEditor,
-      editorData: "<p>Content of the editor.</p>",
-      editorConfig: {
-        extraPlugins: [
-          function (editor) {
-            editor.plugins.get("FileRepository").createUploadAdapter = (loader) => {
-              return new UploadAdapter(loader);
-            };
-          },
-        ],
-        // The configuration of the editor.
-      },
       rules: {
         category_code: { required: true },
         title: { required: true },
@@ -263,8 +243,6 @@ export default {
       };
     },
     onFinish(event) {
-     //this.article.thumbnail_upload=this.thumbnailUpload;
-     //this.article.banner_image=this.thumbnailUpload;
       if (this.article.id) {
         this.article._method='PATCH';
         this.$inertia.post(route("organizer.articles.update", this.article.id), this.article, {

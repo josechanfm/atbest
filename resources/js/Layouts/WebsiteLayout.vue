@@ -30,10 +30,11 @@ const showingNavigationDropdown = ref(false);
       <div class="flex justify-between items-center py-6 px-10 container mx-auto ">
         <div class="flex">
           <div class="shrink-0 flex items-center">
-            <a v-if="organization.logo" href="/"><img :src="organization.logo" class="block h-14 w-auto"/></a>
+            <a v-if="organization?.logo" href="/"><img :src="organization.logo" class="block h-14 w-auto"/></a>
           </div>
           <h1 class="ml-2 pt-4 text-2xl font-bold">
-            <a href="/" class="text-white">{{organization.name_zh}}</a>
+            <a href="/" class="text-white" v-if="organization">{{organization.name_zh}}</a>
+            <div>Organization Name</div>
           </h1>
         </div>
 

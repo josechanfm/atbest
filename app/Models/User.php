@@ -75,7 +75,7 @@ class User extends Authenticatable
     }
 
     public function member() {
-        return $this->hasOne(Member::class)->where('default',true);
+        return $this->hasOne(Member::class)->where('is_default',true);
     }
     public function members() {
         return $this->hasMany(Member::class);

@@ -115,8 +115,7 @@
           <a-input v-model:value="modal.data.avatar" />
         </a-form-item>
         <a-form-item :label="$t('card_style')" name="card_style">
-          {{ cardStyles }}
-          <!-- <a-select v-model:value="modal.data.card_style" :options="cardStyles" /> -->
+          <a-select v-model:value="modal.data.card_style" :options="cardStyles" />
         </a-form-item>
         <a-form-item :label="$t('content')" name="content">
           <a-textarea v-model:value="modal.data.content" />
@@ -155,6 +154,7 @@
 import AdminLayout from "@/Layouts/AdminLayout.vue";
 import Pagination from "@/Components/Pagination.vue";
 import { defineComponent, reactive } from "vue";
+import axios from 'axios';
 
 export default {
   components: {
@@ -231,19 +231,13 @@ export default {
     };
   },
   created() {
-    // axios.get(route("api.config.item", { key: "card_styles" })).then((resp) => {
-    //   Object.entries(resp.data).forEach(([key, card]) => {
-    //     this.cardStyles.push({ value: key, label: card.name });
-    //   });
-    // });
+    axios.get(route("api.config.item", { key: "card_styles" })).then((resp) => {
+      Object.entries(resp.data).forEach(([key, card]) => {
+        this.cardStyles.push({ value: key, label: card.name });
+      });
+    });
   },
   mounted() {
-    // axios.get(route("api.config.item", { key: "card_styles" })).then((resp) => {
-    //   Object.entries(resp.data).forEach(([key, card]) => {
-    //     this.cardStyles.push({ value: key, label: card.name });
-    //   });
-    // });
-
     this.pagination = {
       currentPage: this.route().params.currentPage ?? 1,
       pageSize: this.route().params.pageSize ?? 10,

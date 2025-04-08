@@ -48,7 +48,7 @@
       <a-form
         ref="modalRef"
         :model="modal.data"
-        name="Teacher"
+        name="message"
         :label-col="{ span: 4 }"
         :wrapper-col="{ span: 20 }"
         autocomplete="off"
@@ -80,7 +80,7 @@
           <a-input v-model:value="modal.data.title" />
         </a-form-item>
         <a-form-item :label="$t('content')" name="content">
-          <!-- <quill-editor v-model:value="modal.data.content" style="min-height: 200px" /> -->
+          <RichTextEditor v-model="modal.data.content"/>
         </a-form-item>
       </a-form>
       <template #footer>
@@ -108,15 +108,15 @@
 import OrganizerLayout from "@/Layouts/OrganizerLayout.vue";
 import { UploadOutlined } from "@ant-design/icons-vue";
 import Icon, { RestFilled } from "@ant-design/icons-vue";
-// import { quillEditor } from "vue3-quill";
 import { message } from "ant-design-vue";
+import RichTextEditor from '@/Components/RichTextEditor.vue';
 
 export default {
   components: {
     OrganizerLayout,
     UploadOutlined,
     RestFilled,
-    // quillEditor,
+    RichTextEditor
   },
   props: ["messageCategories", "messages", "members"],
   data() {

@@ -36,7 +36,7 @@ class Member extends Model
     ];
 
     protected $appends=['avatar_url','member_number'];
-    protected $casts=['id_default'=>'boolean','is_dismissed'=>'boolean','is_organizer'=>'boolean'];
+    protected $casts=['is_default'=>'boolean','is_dismissed'=>'boolean','is_organizer'=>'boolean'];
     protected $with=['organization'];
 
     public function getAvatarUrlAttribute(){

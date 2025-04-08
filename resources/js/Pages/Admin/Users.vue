@@ -45,7 +45,7 @@
       <a-form
         ref="modalRef"
         :model="modal.data"
-        name="Teacher"
+        name="user"
         :label-col="{ span: 4 }"
         :wrapper-col="{ span: 20 }"
         autocomplete="off"
@@ -144,7 +144,6 @@ export default {
         current: this.users.current_page,
         pageSize: this.users.per_page,
       },
-      teacherStateLabels: {},
       columns: [
         {
           title: "Username",

@@ -177,7 +177,8 @@ class OrganizationSeeder extends Seeder
         $member=Member::where('email','organizer@example.com')->first();
         $member->organization_id=$organization->id;
         $member->save();
-        $organization->users()->attach($member->user);
+        // $organization->users()->attach($member->user);
+        
 
         $member=Member::where('email','member1@example.com')->first();
         $member->organization_id=$organization->id;

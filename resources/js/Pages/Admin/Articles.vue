@@ -74,7 +74,7 @@
       <a-form
         ref="modalRef"
         :model="modal.data"
-        name="Teacher"
+        name="article"
         layout="vertical"
         autocomplete="off"
         :rules="rules"
@@ -157,9 +157,6 @@
 import AdminLayout from "@/Layouts/AdminLayout.vue";
 import Pagination from "@/Components/Pagination.vue";
 import { defineComponent, reactive } from "vue";
-//import Editor from 'ckeditor5-custom-build/build/ckeditor';
-import CKEditor from "@ckeditor/ckeditor5-vue";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import UploadAdapter from "@/Components/ImageUploadAdapter.vue";
 import { VueDraggableNext } from "vue-draggable-next";
 import { HolderOutlined } from "@ant-design/icons-vue";
@@ -169,7 +166,6 @@ export default {
   components: {
     AdminLayout,
     Pagination,
-    ckeditor: CKEditor.component,
     UploadAdapter,
     draggable: VueDraggableNext,
     HolderOutlined,
@@ -203,18 +199,6 @@ export default {
         pageSize: this.articles.per_page,
       },
       originalSequences: [],
-      editor: ClassicEditor,
-      editorData: "<p>Content of the editor.</p>",
-      editorConfig: {
-        extraPlugins: [
-          function (editor) {
-            editor.plugins.get("FileRepository").createUploadAdapter = (loader) => {
-              return new UploadAdapter(loader);
-            };
-          },
-        ],
-        // The configuration of the editor.
-      },
       rules: {
         category_code: { required: true },
         classify_id: { required: true },

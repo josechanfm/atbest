@@ -35,7 +35,7 @@ class FormSeeder extends Seeder
             'field_name'=>'gender',
             'field_label'=>'Gender',
             'type'=>'radio',
-            'options'=>'[{"value":"M","label":"Male"},{"value":"F","label":"Female"}]'
+            'options'=>json_decode('[{"value":"M","label":"Male"},{"value":"F","label":"Female"}]')
         ]);
         $form->fields()->create([
             'sequence'=>3,
@@ -48,7 +48,7 @@ class FormSeeder extends Seeder
             'field_name'=>'education',
             'field_label'=>'Education',
             'type'=>'select',
-            'options'=>'[{"value":"B","label":"Bachalor"},{"value":"M","label":"Master"},{"value":"D","label":"PhD."}]'
+            'options'=>json_decode('[{"value":"B","label":"Bachalor"},{"value":"M","label":"Master"},{"value":"D","label":"PhD."}]')
         ]);
         $form->fields()->create([
             'sequence'=>5,
@@ -101,7 +101,7 @@ class FormSeeder extends Seeder
             'sequence'=>2,
             'field_name'=>'性別',
             'field_label'=>'性別',
-            'options'=>'[{"value":"M","label":"\u7537"},{"value":"F","label":"\u5973"}]',
+            'options'=>json_decode('[{"value":"M","label":"\u7537"},{"value":"F","label":"\u5973"}]'),
             'direction'=>'V',
             'in_column'=>'1',
             'type'=>'radio',

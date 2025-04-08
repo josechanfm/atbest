@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('entry_records', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('entry_id')->reference('id')->on('entries')->onDelete('restric')->onUpdate('cascade');
+            $table->foreignId('entry_id')->constrained('entries')->onDelete('restrict')->onUpdate('cascade');
             $table->foreignId('form_field_id');
             $table->text('field_value');
             $table->timestamps();

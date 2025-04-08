@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('certificate_member', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('certificate_id')->reference('id')->on('certificates')->onDelete('restric')->onUpdate('cascade');
+            $table->foreignId('certificate_id')->constrained('certificates')->onDelete('restrict')->onUpdate('cascade');
             $table->foreignId('member_id');
             $table->integer('number')->nullable();
             $table->integer('number_display')->nullable();

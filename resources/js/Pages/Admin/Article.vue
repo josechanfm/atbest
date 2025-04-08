@@ -15,7 +15,6 @@
       <div class="bg-white relative shadow rounded-lg overflow-x-auto p-5">
         <a-form
           :model="article"
-          name="Teacher"
           layout="vertical"
           autocomplete="off"
           :rules="rules"
@@ -177,9 +176,6 @@
 <script>
 import AdminLayout from "@/Layouts/AdminLayout.vue";
 import { defineComponent, reactive } from "vue";
-//import Editor from 'ckeditor5-custom-build/build/ckeditor';
-import CKEditor from "@ckeditor/ckeditor5-vue";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import UploadAdapter from "@/Components/ImageUploadAdapter.vue";
 
 export default {
@@ -198,18 +194,6 @@ export default {
       isDrawerVisible: false,
       tagOptions: [{ 'value': '學習' }, { 'value': '公佈' }, { 'value': '交流' }, { 'value': '分享' }],
       dateFormat: "YYYY-MM-DD",
-      editor: ClassicEditor,
-      editorData: "<p>Content of the editor.</p>",
-      editorConfig: {
-        extraPlugins: [
-          function (editor) {
-            editor.plugins.get("FileRepository").createUploadAdapter = (loader) => {
-              return new UploadAdapter(loader);
-            };
-          },
-        ],
-        // The configuration of the editor.
-      },
       rules: {
         organization_id: { required: true },
         category_code: { required: true },

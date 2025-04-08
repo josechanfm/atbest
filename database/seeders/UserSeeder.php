@@ -31,11 +31,11 @@ class UserSeeder extends Seeder
             'password' => Hash::make('password'),
         ]);
         $user->assignRole('master');
-        $user->ownedTeams()->save(Team::forceCreate([
-            'user_id' => $user->id,
-            'name' => explode(' ', $user->name, 2)[0]."'s Team",
-            'personal_team' => true,
-        ]));
+        // $user->ownedTeams()->save(Team::forceCreate([
+        //     'user_id' => $user->id,
+        //     'name' => explode(' ', $user->name, 2)[0]."'s Team",
+        //     'personal_team' => true,
+        // ]));
 
         $user=User::create([
             'name' => 'Admin',
@@ -43,11 +43,11 @@ class UserSeeder extends Seeder
             'password' => Hash::make('password'),
         ]);
         $user->assignRole('admin');
-        $user->ownedTeams()->save(Team::forceCreate([
-            'user_id' => $user->id,
-            'name' => explode(' ', $user->name, 2)[0]."'s Team",
-            'personal_team' => true,
-        ]));
+        // $user->ownedTeams()->save(Team::forceCreate([
+        //     'user_id' => $user->id,
+        //     'name' => explode(' ', $user->name, 2)[0]."'s Team",
+        //     'personal_team' => true,
+        // ]));
 
         $user=User::create([
             'name' => 'Organizer',
@@ -55,33 +55,33 @@ class UserSeeder extends Seeder
             'password' => Hash::make('password'),
         ]);
         $user->assignRole('organizer');
-        $user->ownedTeams()->save(Team::forceCreate([
-            'user_id' => $user->id,
-            'name' => explode(' ', $user->name, 2)[0]."'s Team",
-            'personal_team' => true,
-        ]));
+        // $user->ownedTeams()->save(Team::forceCreate([
+        //     'user_id' => $user->id,
+        //     'name' => explode(' ', $user->name, 2)[0]."'s Team",
+        //     'personal_team' => true,
+        // ]));
 
         $user=User::create([
             'name' => 'Guardian',
             'email' => 'guardian@example.com',
             'password' => Hash::make('password'),
         ]);
-        $user->ownedTeams()->save(Team::forceCreate([
-            'user_id' => $user->id,
-            'name' => explode(' ', $user->name, 2)[0]."'s Team",
-            'personal_team' => true,
-        ]));
+        // $user->ownedTeams()->save(Team::forceCreate([
+        //     'user_id' => $user->id,
+        //     'name' => explode(' ', $user->name, 2)[0]."'s Team",
+        //     'personal_team' => true,
+        // ]));
 
         $user=User::create([
             'name' => 'Member 1',
             'email' => 'member1@example.com',
             'password' => Hash::make('password'),
         ]);
-        $user->ownedTeams()->save(Team::forceCreate([
-            'user_id' => $user->id,
-            'name' => explode(' ', $user->name, 2)[0]."'s Team",
-            'personal_team' => true,
-        ]));
+        // $user->ownedTeams()->save(Team::forceCreate([
+        //     'user_id' => $user->id,
+        //     'name' => explode(' ', $user->name, 2)[0]."'s Team",
+        //     'personal_team' => true,
+        // ]));
         $user->assignRole('organizer');
         // Member::find(1)->update(['user_id'=>$user->id]);
 
@@ -90,11 +90,11 @@ class UserSeeder extends Seeder
             'email' => 'member2@example.com',
             'password' => Hash::make('password'),
         ]);
-        $user->ownedTeams()->save(Team::forceCreate([
-            'user_id' => $user->id,
-            'name' => explode(' ', $user->name, 2)[0]."'s Team",
-            'personal_team' => true,
-        ]));
+        // $user->ownedTeams()->save(Team::forceCreate([
+        //     'user_id' => $user->id,
+        //     'name' => explode(' ', $user->name, 2)[0]."'s Team",
+        //     'personal_team' => true,
+        // ]));
         // Member::find(2)->update(['user_id'=>$user->id]);
 
         $user=User::create([
@@ -102,11 +102,11 @@ class UserSeeder extends Seeder
             'email' => 'member3@example.com',
             'password' => Hash::make('password'),
         ]);
-        $user->ownedTeams()->save(Team::forceCreate([
-            'user_id' => $user->id,
-            'name' => explode(' ', $user->name, 2)[0]."'s Team",
-            'personal_team' => true,
-        ]));
+        // $user->ownedTeams()->save(Team::forceCreate([
+        //     'user_id' => $user->id,
+        //     'name' => explode(' ', $user->name, 2)[0]."'s Team",
+        //     'personal_team' => true,
+        // ]));
         // Member::find(3)->update(['user_id'=>$user->id]);
         
     }

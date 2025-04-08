@@ -83,6 +83,7 @@ import WidgetLayout from '@/Layouts/WidgetLayout.vue';
 import { message } from 'ant-design-vue';
 import { DoughnutChart } from 'vue-chart-3';
 import { Chart, registerables } from "chart.js";
+import axios from 'axios';
 
 Chart.register(...registerables);
 

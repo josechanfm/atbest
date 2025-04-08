@@ -181,7 +181,6 @@ export default {
         title: "Modal",
         mode: "",
       },
-      teacherStateLabels: {},
       columns: [
         {
           title: "Cert Title",
