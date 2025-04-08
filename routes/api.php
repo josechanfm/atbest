@@ -16,10 +16,14 @@ use App\Models\Config;
 */
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+    dd($request->all());
+    //return $request->user();
 });
+Route::get('search/members',[App\Http\Controllers\Api\DataController::class, 'searchMembers'])->name('api.search.members');
+
 Route::get('config/item', function(Request $request){
     return response()->json(Config::item($request->key));
 
 })->name('api.config.item');        
+
 

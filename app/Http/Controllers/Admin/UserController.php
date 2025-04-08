@@ -8,6 +8,7 @@ use App\Models\Organization;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\User;
+use App\Models\Member;
 use App\Models\Team;
 use Spatie\Permission\Models\Permission;
 
@@ -63,9 +64,6 @@ class UserController extends Controller
             'name' => explode(' ', $user->name, 2)[0]."'s Team",
             'personal_team' => true,
         ]));
-        if($request->organization_ids){
-            $user->organizations()->sync($request->organization_ids);
-        }
 
         return redirect()->back();
     }
@@ -109,10 +107,13 @@ class UserController extends Controller
         }
         $user->update($data);
         $user->roles()->sync($request->role_ids);
+        $user->members()->whereNotIn('id',$request->member_ids)->update(['user_id'=>null]);
+        Member::whereIn('id',$request->member_ids)->update(['user_id'=>$user->id]);
+        // dd($request->member_ids, Member::whereIn('id',$request->member_ids)->get());
         //dd($request->all());
         //$user->givePermissionTo($request->permission_ids);
         $user->syncPermissions($request->permission_ids);
-        $user->organizations()->sync($request->organization_ids);
+        //$user->organizations()->sync($request->organization_ids);
         return redirect()->back();
     }
 

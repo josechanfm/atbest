@@ -67,9 +67,29 @@
         </a-form-item>
         <a-form-item :label="$t('organization_manager')" name="organization_ids">
           <div v-for="member in modal.data.members">
-            {{ member.family_name }}{{ member.given_name }} {{ member.organization.abbr}} {{member.organization.name_zh }}
+            <span v-if="member">{{ member.family_name }} {{ member.given_name }}</span>
+            <span v-if="member.organization">{{ member.organization.abbr}} {{member.organization.name_zh }}</span>
           </div>
         </a-form-item>
+        <a-form-item :label="$t('project_members')" name="staffs">
+              <a-select
+                v-model:value="memberList.members"
+                mode="multiple"
+                label-in-value
+                placeholder="Select users"
+                style="width: 100%"
+                :filter-option="false"
+                :not-found-content="fetching ? undefined : null"
+                :options="memberList.data"
+                @search="(value)=>fetchMembers(value,'member')"
+              >
+              <template v-if="fetching" #notFoundContent>
+                  <a-spin size="small" />
+                </template>
+              </a-select>
+            </a-form-item>
+
+
         <a-row>
           <a-col :span="4"></a-col>
           <a-col :span="10">
@@ -125,6 +145,7 @@
 <script>
 import AdminLayout from "@/Layouts/AdminLayout.vue";
 import { defineComponent, reactive } from "vue";
+import axios from 'axios';
 
 export default {
   components: {
@@ -133,6 +154,12 @@ export default {
   props: ["organizations", "users", "roles","permissions"],
   data() {
     return {
+      fetching:false,
+      error:null,
+      memberList:{
+        data:[],
+        members:[]
+      },
       modal: {
         isOpen: false,
         data: {},
@@ -201,7 +228,9 @@ export default {
       },
     };
   },
-  created() {},
+  created() {
+
+  },
   methods: {
     filterOption(input, option) {
       return option.full_name.toLowerCase().indexOf(input.toLowerCase()) >= 0;
@@ -233,6 +262,14 @@ export default {
       this.modal.mode = "EDIT";
       this.modal.title = "edit";
       this.modal.isOpen = true;
+      this.memberList.members=[];
+      this.modal.data.members.forEach(member=>{
+        this.memberList.members.push({
+          value:member.id,
+          label:member.family_name+', '+member.given_name,
+        })
+    })
+
     },
     storeRecord() {
       this.$refs.modalRef
@@ -254,6 +291,8 @@ export default {
     },
     updateRecord() {
       console.log(this.modal.data);
+      console.log(this.memberList.members);
+      this.modal.data.member_ids=this.memberList.members.map(member=>member.value)
       this.$inertia.patch(
         route("admin.users.update", this.modal.data.id),
         this.modal.data,
@@ -279,6 +318,28 @@ export default {
         },
       });
     },
+    async fetchMembers(searchText,component) {
+        this.fetching=true;
+        this.error = null; // Reset error message
+        console.log('fetch and add to staffList',component)
+
+        try {
+          const response = await axios.get(route('api.search.members'), {
+            params: { name: searchText }
+          });
+          // this.staffList = response.data; // Assuming the API returns an array of staff
+          this.memberList.data = response.data.map(member => ({
+            value: member.id,
+            label: member.family_name+', '+member.given_name ,
+            disabled: member.organization_id!=null
+          }))
+          this.fetching=false;
+        } catch (err) {
+          this.error = 'An error occurred while fetching staff.';
+          console.error(err);
+        }
+      },
+
   },
 };
 </script>
