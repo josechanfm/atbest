@@ -113,7 +113,7 @@ export default {
                     $t("login") }}</inertia-link>
                             </li>
                             <li>
-                                <inertia-link :href="route('registration')" class="text-bold text-white hover:text-yellow-300 text-md">{{ $t("register") }}</inertia-link>
+                                <inertia-link :href="route('register')" class="text-bold text-white hover:text-yellow-300 text-md">{{ $t("register") }}</inertia-link>
                             </li>
                         </template>
                     </ul>
@@ -153,7 +153,7 @@ export default {
                         <a :href="route('login')">
                             <ResponsiveNavLink as="button"> {{ $t('login') }}</ResponsiveNavLink>
                         </a>
-                        <a :href="route('registration')">
+                        <a :href="route('register')">
                             <ResponsiveNavLink as="button"> {{ $t("register") }} </ResponsiveNavLink>
                         </a>
                     </template>

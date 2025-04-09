@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Organization;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
@@ -35,12 +36,23 @@ class RegisteredUserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'registration_code' => 'required|exists:organizations,registration_code',
         ]);
-
+        
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+        ]);
+        $organization=Organization::where('registration_code',$request->registration_code)->first();
+        $organization->members()->create([
+            'user_id'=>$user->id,
+            'given_name'=>$request->given_name,
+            'middle_name'=>$request->middle_name??null,
+            'family_name'=>$request->family_name,
+            'display_name'=>$request->name,
+            'email'=>$request->email,
+            'is_default'=>true,
         ]);
 
         event(new Registered($user));

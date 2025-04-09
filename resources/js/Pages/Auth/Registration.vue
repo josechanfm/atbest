@@ -58,11 +58,11 @@ export default {
                         :rules="[{ required: true, message: 'Please input your family_name!' }]">
                         <a-input v-model:value="formState.family_name" />
                     </a-form-item>
-                    <a-form-item :label="$t('affiliate')" name="organization_id"
+                    <!-- <a-form-item :label="$t('affiliate')" name="organization_id"
                         :rules="[{ required: true, message: 'Please input your organization belongs to!' }]">
                         <a-select v-model:value="formState.organization_id" :options="organizations"
                             :fieldNames="{ value: 'id', label: 'name_zh' }" />
-                    </a-form-item>
+                    </a-form-item> -->
                     <a-form-item :label="$t('registration_code')" name="registration_code"
                         :rules="[{ required: true, message: 'Please input the organization registration' }]">
                         <a-input v-model:value="formState.registration_code" />

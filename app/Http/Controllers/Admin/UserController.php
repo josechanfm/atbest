@@ -109,11 +109,7 @@ class UserController extends Controller
         $user->roles()->sync($request->role_ids);
         $user->members()->whereNotIn('id',$request->member_ids)->update(['user_id'=>null]);
         Member::whereIn('id',$request->member_ids)->update(['user_id'=>$user->id]);
-        // dd($request->member_ids, Member::whereIn('id',$request->member_ids)->get());
-        //dd($request->all());
-        //$user->givePermissionTo($request->permission_ids);
         $user->syncPermissions($request->permission_ids);
-        //$user->organizations()->sync($request->organization_ids);
         return redirect()->back();
     }
 

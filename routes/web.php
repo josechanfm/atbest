@@ -53,8 +53,6 @@ Route::get('/language/{language}', function ($language) {
     return Redirect::back();
 })->name('language');
 
-Route::get('registration', [\App\Http\Controllers\RegistrationController::class, 'create'])->name('registration');
-Route::post('registration', [\App\Http\Controllers\RegistrationController::class, 'store'])->name('registration.store');
 
 Route::get('article', [\App\Http\Controllers\ArticleController::class, 'item'])->name('article.item');
 // Route::resource('forms', App\Http\Controllers\FormController::class)->names('forms');
