@@ -1,10 +1,16 @@
-<script setup>
-import { UserOutlined } from "@ant-design/icons-vue";
+<script>
+import { gsap } from 'gsap';
 
-const props = defineProps({
-  records: Object,
-  routePath:String,
-});
+export default {
+  components: {
+  },
+  props: ["records", "routePath", "forms", "articles", "cardStyle"],
+  data(){
+    return {
+      
+    }
+  }
+}
 </script>
 
 <template>

@@ -3,6 +3,7 @@ import MemberLayout from "@/Layouts/MemberLayout.vue";
 import ThumbList from "@/Components/ThumbList.vue";
 import axios from "axios";
 import QRCodeVue3 from "qrcode-vue3";
+import { gsap } from 'gsap';
 
 export default {
   components: {
@@ -81,7 +82,22 @@ export default {
       this.qrcodeLogo=this.$page.props.member.organization.logo
     }
   },
-  mounted() { },
+  mounted() { 
+
+    this.features.forEach((feature, index) => {
+      const duration = 0.5 + ( index / 4 ); 
+      gsap.fromTo(
+        `.feature:nth-child(${index + 1})`,
+        { x: '100%', opacity: 0 }, // 從右側進入
+        {
+          x: '0%',   // 移動到原位
+          opacity: 1, // 透明度變為 1
+          duration: index == 0 ? 0.5 : duration, // 動畫持續時間
+        }
+      );
+    });
+
+  },
   methods: {
     getQrcode() {
       axios.get(route("member.getQrcode")).then((response) => {
@@ -111,17 +127,18 @@ export default {
 <template>
   <MemberLayout title="Dashboard">
     <div class="container mx-auto">
-      <div class="flex flex-col-reverse md:flex-row gap-6">
+      <div class="flex flex-col-reverse md:flex-row gap-6 ">
         <div class="flex-auto">
           <!-- Feature Section -->
-          <div class="container mx-auto mt-5 bg-white rounded-lg">
+          <div class="container mx-auto my-5 bg-slate-200 rounded-lg">
             <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 py-3 px-2">
-              <template v-for="feature in defaultFeatures">
+              <div class="feature bg-white" v-for="feature in defaultFeatures">
                 <a :href="feature.link">
-                  <div class="gutter-row">
+                  <div ref="feature_content" class="gutter-row">
                     <div class="max-w rounded overflow-hidden shadow-lg">
                       <img class="w-full" alt="Use any sample image here..." :src="feature.image">
-                      <div class="px-2 py-4 xs:h-64 lg:h-48">
+                      <!-- <img class="w-full min-h-10" alt="Use any sample image here..." src="https://picsum.photos/200/300"> -->
+                      <div  class="px-2 py-4 xs:h-64 lg:h-48">
                         <inertia-link v-if="feature.url" :href="feature.url">
                           <div class="font-bold text-xl mb-2">{{ feature.title_zh }}</div>
                         </inertia-link>
@@ -139,7 +156,7 @@ export default {
                     </div>
                   </div>
                 </a>
-              </template>
+              </div>
             </div>
           </div>
           <!-- Feature Section end-->

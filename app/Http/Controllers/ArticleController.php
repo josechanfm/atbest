@@ -10,10 +10,10 @@ class ArticleController extends Controller
 {
     public function item(Request $request)
     {
-        
         //dd(Article::where('uuid',$request->t)->where('published',true)->first());
         if(empty($request->t)){
-            return to_route('/');
+            // return to_route('/');
+            return response()->redirectTo("/");
         }else if(session('member') || (auth()->user() && auth()->user()->hasRole('admin'))){
             $article=Article::where('uuid',$request->t)->where('published',true)->first();
         }else{

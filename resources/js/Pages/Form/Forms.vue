@@ -16,19 +16,17 @@
                         </template>
                         <template v-else-if="column.dataIndex=='abbr'">
                             <span v-if="record.organization">
-                                {{record.organization.abbr}}
-                            </span>
-                            <span>
-                                General From
+                                {{record.organization.abbr}}<br>
+                                {{record.organization?.name_zh}}
                             </span>
                             
                         </template>
                         <template v-else-if="column.type=='yesno'">
                             <span v-if="record[column.dataIndex]==1">
-                                Yes
+                                ✔
                             </span>
                             <span v-else>
-                                No
+                                --
                             </span>
                         </template>
                         <template v-else>
