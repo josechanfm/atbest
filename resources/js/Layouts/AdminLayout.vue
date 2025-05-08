@@ -106,7 +106,7 @@
           </template>
         </PageHeader> -->
 
-        <div class="mx-6">
+        <div class="xs:p-2 p-4">
           <main>
             <slot />
           </main>

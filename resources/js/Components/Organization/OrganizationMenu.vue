@@ -7,7 +7,7 @@
       theme="light"
       :inline-collapsed="collapsed"
     >
-      <a-menu-item key="1">
+      <a-menu-item key="dashboard">
         <template #icon>
           <PieChartOutlined />
         </template>

@@ -1,7 +1,10 @@
-s
+
 <template>
   <OrganizerLayout :title="$t('members')" :breadcrumb="breadcrumb">
-    <div class="flex-auto pb-3 text-right">
+    <div class="flex gap-2 pb-3 text-right justify-end">
+        <a-button type="primary" class="!rounded" @click="() => (visible = true)">
+          {{ $t("import_members")}}
+        </a-button>
         <a-button type="primary" class="!rounded" @click="createRecord()">
           {{ $t("create_member") }}
         </a-button>
@@ -30,7 +33,10 @@ s
             {{ column.i18n ? $t(column.i18n) : column.title }}
           </template>
           <template #bodyCell="{ column, text, record, index }">
-            <template v-if="column.dataIndex == 'operation'">
+            <template v-if="column.dataIndex == 'gender'">
+              {{ record.gender == 0 ? '男' : '女' }}
+            </template>
+            <template v-else-if="column.dataIndex == 'operation'">
               <a-button :href="route('organizer.members.show', record.id)">
                 {{ $t("view") }}
               </a-button>
@@ -163,6 +169,60 @@ s
         >
       </template>
     </a-modal>
+    <a-modal :title="$t('import_athletes_list')" v-model:open="visible">
+      <a-upload-dragger
+        v-model:fileList="files"
+        name="file"
+        :beforeUpload="() => false"
+        :multiple="false"
+        accept=".xls,.xlsx"
+      >
+        <p class="ant-upload-drag-icon">
+          <file-excel-outlined />
+        </p>
+        <p class="ant-upload-text">{{$t('import_athletes_information')}}</p>
+        <p class="ant-upload-hint">
+          {{$t('import_athletes_description')}}
+        </p>
+      </a-upload-dragger>
+
+      <div class="mt-3" v-if="imported">
+        <div class="font-bold my-3 text-green-500" v-if="errors.length === 0">
+          {{$t('import_success')}}
+        </div>
+        <div class="font-bold my-3 text-yellow-500" v-else>
+          {{$t('import_some_error')}}
+        </div>
+        <p v-for="(error, index) in errors" :key="index" class="font-mono m-0">
+          <warning-outlined class="!text-yellow-500" />
+          <template v-if="lang == 'zh'">
+            {{$t('row')}} {{ error.row }}, {{ error.errors[0] }}
+          </template>
+          <template v-else>
+            {{ error.row }} {{$t('row')}}, {{ error.errors[0] }}
+          </template>
+        </p>
+      </div>
+      <template #footer>
+        <div class="flex w-full justify-between">
+          <a href="/templates/member_list.xlsx">
+            <a-button type="link">
+              <template #icon>
+                <DownloadOutlined />
+              </template>
+              {{$t('download_member_list_template')}}
+            </a-button>
+          </a>
+          <a-button
+            type="primary"
+            class="bg-blue-500"
+            @click="handleImport"
+            :disabled="files.length === 0"
+            >{{$t('import')}}</a-button
+          >
+        </div>
+      </template>
+    </a-modal>
     <!-- Modal End-->
   </OrganizerLayout>
 </template>
@@ -171,19 +231,32 @@ s
 import OrganizerLayout from "@/Layouts/OrganizerLayout.vue";
 import { Modal as PopupModal } from "ant-design-vue";
 import Pagination from "@/Components/Pagination.vue";
+import axios from 'axios';
 import { defineComponent, reactive } from "vue";
+import {
+  ExclamationCircleOutlined,
+  DownloadOutlined,
+  FileExcelOutlined,
+  WarningOutlined,
+} from "@ant-design/icons-vue";
+import { getActiveLanguage } from 'laravel-vue-i18n';
 
 export default {
   components: {
     OrganizerLayout,
     PopupModal,
     Pagination,
+    DownloadOutlined,
+    FileExcelOutlined,
+    WarningOutlined,
+    ExclamationCircleOutlined,
   },
   props: ["members"],
   data() {
     return {
       breadcrumb: [{ label: "會員列表", url: null }],
       dateFormat: "YYYY-MM-DD",
+      lang:getActiveLanguage(),
       modal: {
         isOpen: false,
         data: {},
@@ -191,6 +264,8 @@ export default {
         mode: "",
       },
       search: {},
+      errors: [],
+      files: [],
       pagination: {
         total: this.members.total,
         current: this.members.current_page,
@@ -258,6 +333,8 @@ export default {
           width: "150px",
         },
       },
+      visible: false,
+      imported: false,
     };
   },
   created() {},
@@ -360,6 +437,33 @@ export default {
           preserveState: true,
         }
       );
+    },
+    handleImport() {
+      const formData = new FormData();
+      formData.append("file", this.files[0].originFileObj);
+
+      // TODO: handle import athlete list
+      axios
+        .post(
+          route("organizer.members.import"),
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        )
+        .then(({ data }) => {
+          this.$message.success("匯入成功");
+          this.files = [];
+          this.errors = data.errors;
+          this.imported = true;
+
+          this.$emit("imported");
+        })
+        .catch(() => {
+          this.$message.error("匯入失敗");
+        });
     },
   },
 };

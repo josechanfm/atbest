@@ -10,6 +10,7 @@ use App\Models\Organization;
 use App\Models\Member;
 use App\Models\User;
 use App\Exports\MemberExport;
+use App\Imports\MemberImport;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Mail;
@@ -181,5 +182,17 @@ class MemberController extends Controller
         });
         Email::create($data);
         return redirect()->back()->with('success', 'Email sent successfully!');
+    }
+
+    public function import(Request $request){
+
+       $organization = session('organization');
+       $import = new MemberImport($organization);
+
+       $import->import(request()->file('file'));
+
+       return response()->json([
+        'errors' => $import->failures()
+    ]);
     }
 }

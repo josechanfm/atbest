@@ -3,14 +3,13 @@
     <a-layout-sider v-model:collapsed="collapsed" :trigger="null" collapsible theme="light" width="250px"
       class="shadow-md">
       <div class="m-4 text-center text-lg" v-if="collapsed">
-        <inertia-link href="/">{{ $page.props.currentOrganization.abbr }}</inertia-link>
+        <inertia-link href="/">{{ $page.props.auth.user.member.organization.abbr }}</inertia-link>
       </div>
       <div class="m-4 text-center text-lg" v-else>
-        <inertia-link :href="route('organizer.dashboard')" v-if="$page.props.currentOrganization">
-          {{ $page.props.currentOrganization['name_'+$t('lang')] }}
+        <inertia-link :href="route('organizer.dashboard')" v-if="$page.props.auth.user.member.organization">
+          {{ $page.props.auth.user.member.organization['name_'+$t('lang')] }}
         </inertia-link>
       </div>
-
       <OrganizationMenu :menuKeys="menuKeys" />
     </a-layout-sider>
     <a-layout>

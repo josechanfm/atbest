@@ -22,7 +22,7 @@ class ConfigController extends Controller
     {
         return Inertia::render('Admin/Configs',[
             'organizations'=>Organization::all(),
-            'users'=>User::with('organizations')->get(),
+            // 'users'=>User::with('organizations')->get(),
             'configs'=>Config::all(),
         ]);
     }

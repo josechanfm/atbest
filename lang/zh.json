@@ -326,5 +326,12 @@
     "contents_management": "內容管理",
     "content.user": "留言人",
     "masquerade":"偽裝",
-    "widget":"小工具"
+    "widget":"小工具",
+    "import_members": "匯入會員",
+    "import_athletes_list": "匯入會員名單",
+    "import_athletes_information": "點擊或拖曳檔案至此處以匯入運動員",
+    "import_athletes_description": "支援xml, xlsx 檔案上傳。上傳前請確認資料格式與範本一致。",
+    "import_success":"匯入成功!",
+    "import_some_error":"部分資訊未匯入!",
+    "download_member_list_template":"下載會員名單範本"
 }

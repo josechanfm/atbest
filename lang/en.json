@@ -307,5 +307,12 @@
     "blogs.management": "Blogs Management",
     "create_blog": "Create Blog",
     "contents_management": "Contents Management",
-    "content.user": "Commenter"
+    "content.user": "Commenter",
+    "import_members": "Import Members",
+    "import_athletes_list": "Import athletes list",
+    "import_athletes_information":"Click or drag files here to import athletes",
+    "import_athletes_description": "Supports xml, xlsx file upload. Please confirm that the data format is consistent with the template before uploading.",
+    "import_success":"Import Success!",
+    "import_some_error":"Some information are not import!",
+    "download_member_list_template":"Download member list template"
 }

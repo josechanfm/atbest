@@ -110,6 +110,7 @@ Route::group([
     Route::resource('organizations', App\Http\Controllers\Organizer\OrganizationController::class)->names('organizer.organizations');
     Route::post('organization/delete_logo/{organization}', [App\Http\Controllers\Organizer\OrganizationController::class, 'deleteLogo'])->name('organizer.organization.deleteLogo');
     Route::get('/{organization}/medias', [App\Http\Controllers\Organizer\MediaController::class, 'getMedias'])->name('organizer.medias');
+    Route::post('members/import',[\App\Http\Controllers\Organizer\MemberController::class,'import'])->name('organizer.members.import');
     Route::resource('members', App\Http\Controllers\Organizer\MemberController::class)->names('organizer.members');
     Route::post('member/create/login/{member}', [App\Http\Controllers\Organizer\MemberController::class, 'createLogin'])->name('organizer.member.createLogin');
     Route::post('member/{member}/reset_password', [\App\Http\Controllers\Organizer\MemberController::class, 'resetPassword'])->name('member.member.resetPassword');
