@@ -14,7 +14,7 @@ class Certificate extends Model implements HasMedia
     use HasFactory;
     use InteractsWithMedia;
 
-    protected $fillable=['organization_id','category_code','name','cert_title','cert_body','cert_template','number_format','rank_catption','descreption'];
+    protected $fillable=['organization_id','category_code','name','cert_title','cert_body','cert_template','number_format','rank_caption','descreption'];
     protected $appends=['cid','cert_number'];
 
     public function registerMediaConversions(Media $media = null): void

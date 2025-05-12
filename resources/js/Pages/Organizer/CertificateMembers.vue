@@ -1,5 +1,5 @@
 <template>
-  <OrganizerLayout title="Dashboard" :organization="organization">
+  <OrganizerLayout :title="$t('certificates')" :organization="organization">
     <template #header>
       <h2 class="font-semibold text-xl text-gray-800 leading-tight">
         {{ $t("certificates") }}

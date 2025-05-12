@@ -3,23 +3,22 @@
     <a-layout-sider v-model:collapsed="collapsed" :trigger="null" collapsible theme="light" width="250px"
       class="shadow-md">
       <div class="m-4 text-center text-lg" v-if="collapsed">
-        <inertia-link href="/">{{ $page.props.auth.user.member.organization.abbr }}</inertia-link>
+        <inertia-link href="/">{{ $page.props.auth.organization.abbr }}</inertia-link>
       </div>
       <div class="m-4 text-center text-lg" v-else>
-        <inertia-link :href="route('organizer.dashboard')" v-if="$page.props.auth.user.member.organization">
-          {{ $page.props.auth.user.member.organization['name_'+$t('lang')] }}
+        <inertia-link :href="route('organizer.dashboard')" v-if="$page.props.auth.organization">
+          {{ $page.props.auth.organization.name_zh }}
         </inertia-link>
       </div>
       <OrganizationMenu :menuKeys="menuKeys" />
     </a-layout-sider>
     <a-layout>
-      <a-layout-header class="shadow-md border-b-2 border-red-600 flex" style="background: #fff; padding: 0">
+      <a-layout-header class="shadow-md border-b-2 border-red-600 flex justify-between" style="background: #fff; padding: 0">
         <menu-unfold-outlined v-if="collapsed" class="trigger" @click="() => (collapsed = !collapsed)" />
         <menu-fold-outlined v-else class="trigger" @click="() => (collapsed = !collapsed)" />
-
-        <div class="flex-1"></div>
         <div class="sm:flex sm:items-center sm:ml-6">
           <!-- Settings Dropdown -->
+          <language-switcher />
           <div class="ml-3 relative">
             <Dropdown align="right" width="48">
               <template #trigger>
@@ -137,6 +136,7 @@ import Dropdown from "@/Components/Dropdown.vue";
 import DropdownLink from "@/Components/DropdownLink.vue";
 import { MenuUnfoldOutlined, MenuFoldOutlined } from "@ant-design/icons-vue";
 import OrganizationMenu from "@/Components/Organization/OrganizationMenu.vue";
+import LanguageSwitcher from "@/Components/LanguageSwitcher.vue";
 
 export default {
   components: {
@@ -145,6 +145,7 @@ export default {
     OrganizationMenu,
     MenuUnfoldOutlined,
     MenuFoldOutlined,
+    LanguageSwitcher,
   },
   props: ["title", "breadcrumb"],
   setup(props) {

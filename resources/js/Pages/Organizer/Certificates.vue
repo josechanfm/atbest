@@ -1,6 +1,6 @@
 <template>
-  <OrganizerLayout title="證書" :breadcrumb="breadcrumb">
-    
+  <OrganizerLayout :title="$t('certificates')" :breadcrumb="breadcrumb">
+    <div>
       <div class="flex-auto pb-3 text-right">
         <a-button type="primary" class="!rounded" @click="createRecord()">
           {{ $t("create_certificate") }}
@@ -108,7 +108,7 @@
           <a-input type="input" v-model:value="modal.data.number_format" />
         </a-form-item>
         <a-form-item :label="$t('rank_caption')" name="rank_caption">
-          <a-input type="input" v-model:value="modal.data.rank_catption" />
+          <a-input type="input" v-model:value="modal.data.rank_caption" />
         </a-form-item>
         <a-form-item :label="$t('description')" name="description">
           <RichTextEditor v-model="modal.data.description"/>
@@ -132,6 +132,7 @@
         > -->
       </template>
     </a-modal>
+    </div>
     <!-- Modal End-->
   </OrganizerLayout>
 </template>
@@ -243,9 +244,9 @@ export default {
       this.uploadData = data;
     },
     createRecord() {
-      this.modal.data = {};
-      this.modal.mode = "CREATE";
-      this.modal.title = "create";
+      // this.modal.data = {};
+      // this.modal.mode = "CREATE";
+      // this.modal.title = "create";
       this.modal.isOpen = true;
     },
     editRecord(record) {
