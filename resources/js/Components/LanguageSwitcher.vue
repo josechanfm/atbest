@@ -1,10 +1,10 @@
 <template>
    <Dropdown align="right" width="20">
     <template #trigger>
-<a-button type="text" class="text-lg flex justify-between items-center">
-    <GlobalOutlined />
-    {{locale}}
-</a-button>
+    <a-button type="text" class="text-lg flex justify-between items-center">
+        <GlobalOutlined />
+        <span v-if="page.props.lang" class="text-sm">{{$t(page.props.lang)}}</span>
+    </a-button>
     </template>
     <template #content>
         <div class="w-20 text-center">

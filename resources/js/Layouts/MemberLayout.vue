@@ -9,6 +9,7 @@ import DropdownLink from "@/Components/DropdownLink.vue";
 import NavLink from "@/Components/NavLink.vue";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink.vue";
 import { usePage } from "@inertiajs/vue3";
+import LanguageSwitcher from "@/Components/LanguageSwitcher.vue";
 // import { loadLanguageAsync } from "laravel-vue-i18n";
 
 export default {
@@ -21,6 +22,7 @@ export default {
     DropdownLink,
     NavLink,
     ResponsiveNavLink,
+    LanguageSwitcher,
     // loadLanguageAsync,
   },
   props: ["title"],
@@ -107,8 +109,9 @@ export default {
               </div>
             </div>
 
-            <div class="sm:flex sm:items-center sm:ml-6">
+            <div class="flex items-center sm:ml-6">
               <!-- Settings Dropdown -->
+              <language-switcher />
               <div class="ml-3 relative p-4">
                 <Dropdown align="right" width="48">
                   <template #trigger>

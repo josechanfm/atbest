@@ -16,7 +16,7 @@
       <a-layout-header class="shadow-md border-b-2 border-red-600 flex justify-between" style="background: #fff; padding: 0">
         <menu-unfold-outlined v-if="collapsed" class="trigger" @click="() => (collapsed = !collapsed)" />
         <menu-fold-outlined v-else class="trigger" @click="() => (collapsed = !collapsed)" />
-        <div class="sm:flex sm:items-center sm:ml-6">
+        <div class="flex items-center sm:ml-6">
           <!-- Settings Dropdown -->
           <language-switcher />
           <div class="ml-3 relative">
