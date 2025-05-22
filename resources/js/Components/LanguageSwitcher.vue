@@ -1,9 +1,9 @@
 <template>
    <Dropdown align="right" width="20">
     <template #trigger>
-<a-button type="text" class="text-lg flex justify-between items-center">
+    <a-button type="text" class="text-lg flex justify-between items-center">
     <GlobalOutlined />
-    {{locale}}
+    <span v-if="page.props.lang" class="text-sm">{{$t(page.props.lang)}}</span>
 </a-button>
     </template>
     <template #content>

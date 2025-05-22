@@ -18,28 +18,28 @@ export default {
       interval: 0,
       defaultFeatures: [
         {
-          image: "/images/features/0_news_events.png",
+          image: "/images/features/1_news_events.png",
           title_zh: "新聞與活動",
           content_zh: "新聞部分是用來發布組織的最新消息和事件，向公眾展示其在社會和環境領域中所做的工作，並提高對其使命的認識和理解。",
           tags: ["#通告"],
           link: "/",
         },
         {
-          image: "/images/features/0_form_application.png",
+          image: "/images/features/2_form_application.png",
           title_zh: "表格及報名",
           content_zh: "包括各種類型的表格和報名表，方便訪問者提交相關資訊並表達他們的參與意願。",
           tags: ["#報名"],
           link: "forms",
         },
         {
-          image: "/images/features/0_learn_share.png",
+          image: "/images/features/3_learn_share.png",
           title_zh: "學習興分享",
           content_zh: "提供教育資源、知識分享和學習機會的區域。提供有價值的學習內容，並促進知識交流和社群互動。",
           tags: ["#學習", "#分享"],
           link: "#",
         },
         {
-          image: "/images/features/0_community.png",
+          image: "/images/features/4_community.png",
           title_zh: "虛擬社區",
           content_zh: "交流和參與組織活動的線上平台。讓志願者、支持者和參與者能夠連結起來，分享資源、經驗和想法。",
           tags: ["#學習", "#交流"],
