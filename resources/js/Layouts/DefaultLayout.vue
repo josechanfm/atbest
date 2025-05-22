@@ -35,7 +35,42 @@ export default {
             router.post(route("logout"));
         };
 
+        const nav = ref(null)
+        const placeholderHeight = ref(0)
+        let animation
+
+        const setupAnimation = () => {
+            // 配置 GSAP 时间轴
+            animation = gsap.timeline({
+                paused: true,
+                defaults: { 
+                duration: 0.6,
+                ease: "power4.out" 
+                }
+            })
+            
+            // 定义缩小状态动画
+            animation.to(nav.value, {
+                height: "4rem",
+                boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)"
+            }, 0)
+        }
+
+        const handleScroll = () => {
+            const progress = Math.min(window.scrollY / 100, 1)
+            animation.progress(progress)
+        }
+        // 佔 nav 的高度
+        const updateHeight = () => {
+            placeholderHeight.value = nav.value.offsetHeight
+        }
+        
         onMounted(() => {
+            setupAnimation()
+            updateHeight()
+            window.addEventListener('resize', updateHeight)
+            window.addEventListener('scroll', handleScroll, { passive: true })
+
             gsap.from(
                 menuBar.value, {
                     x: 150,
@@ -46,6 +81,8 @@ export default {
         });
 
         return {
+            nav,
+            placeholderHeight,
             menuBar,
             rightMenu,
             heroText,
@@ -63,14 +100,16 @@ export default {
 <header class="">
 
     <!-- navbar and menu -->
-    <nav class="shadow" :style="{ 'background-image': 'linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url(/storage/images/layout_background.jpg)' }">
+    <nav  ref="nav" class="fixed w-full z-50 transition-all duration-300 flex"
+        :style="{ 'background-image': 'linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url(/storage/images/layout_background.jpg)' }">
+
         <div class="flex justify-between items-center py-6 px-10 container mx-auto">
             <div class="flex">
                 <div class="shrink-0 flex items-center">
                     <a href="/"><img src="/storage/images/site_logo.png" class="block h-14 w-auto" /></a>
                 </div>
-                <h1 class="ml-2 pt-4 text-2xl font-bold">
-                    <a href="/" class="text-white">Sync Connect</a>
+                <h1 class="ml-2 text-2xl font-bold">
+                    <a href="/" class="text-white">Atbest</a>
                 </h1>
             </div>
 
@@ -161,6 +200,8 @@ export default {
             </div>
         </div>
     </nav>
+     <!-- 动态占位元素 -->
+    <div :style="{ height: placeholderHeight + 'px' }"  class="" ></div>
 </header>
 <!-- Page Heading -->
 <div v-if="$slots.header" >
@@ -171,8 +212,9 @@ export default {
 
 <main class="">
 
-    <section class="">
-        <div ref="heroSection" class="bg-slate-100 relative min-h-screen p-0 lg:p-4 pt-2">
+    <section class=""  >
+        <div ref="heroSection" 
+            class="bg-slate-100 relative min-h-screen p-0 lg:p-4 pt-2">
             <!-- Hero 背景文字 -->
             <!-- <div ref="heroText" class="absolute top-[50%]  left-[50%] inset-0 z-10 overflow-hidden">
                 <div class="h-full w-full flex items-center justify-center ">
@@ -251,4 +293,13 @@ export default {
     background-color: rgba(36, 60, 90, var(--bg-opacity));
 }
 
+/* 自定義滾動行為 */
+nav {
+  will-change: height, background;
+  transform: translateZ(0);
+}
+
+.router-link-active {
+  @apply text-blue-600 font-medium;
+}
 </style>
