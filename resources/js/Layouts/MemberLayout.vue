@@ -109,7 +109,7 @@ export default {
               </div>
             </div>
 
-            <div class="sm:flex sm:items-center sm:ml-6">
+            <div class="flex items-center sm:ml-6">
               <!-- Settings Dropdown -->
               <language-switcher />
               <div class="ml-3 relative p-4">
