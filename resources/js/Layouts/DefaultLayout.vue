@@ -3,6 +3,7 @@ import { ref, onMounted } from "vue";
 import { router } from "@inertiajs/vue3";
 import { Head } from "@inertiajs/vue3";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink.vue";
+import menuDashboard from "@/Components/menuDashboard.vue";
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 gsap.registerPlugin(ScrollTrigger);
@@ -11,6 +12,7 @@ export default {
     components: {
         Head,
         ResponsiveNavLink,
+        menuDashboard,
     },
     props: {
         canLogin: Boolean,
@@ -28,7 +30,6 @@ export default {
         const heroText = ref(null);
         const heroSection = ref(null);
         const mainBody = ref(null);
-        const showingNavigationDropdown = ref(false);
 
         const logout = () => {
             console.log("logout");
@@ -88,7 +89,6 @@ export default {
             heroText,
             mainBody,
             logout,
-            showingNavigationDropdown,
         };
     },
 };
@@ -100,7 +100,7 @@ export default {
 <header class="">
 
     <!-- navbar and menu -->
-    <nav  ref="nav" class="fixed w-full z-50 transition-all duration-300 flex"
+    <nav  ref="nav" class="fixed w-full z-50 transition-all duration-300 flex "
         :style="{ 'background-image': 'linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url(/storage/images/layout_background.jpg)' }">
 
         <div class="flex justify-between items-center py-6 px-10 container mx-auto">
@@ -109,80 +109,26 @@ export default {
                     <a href="/"><img src="/storage/images/site_logo.png" class="block h-14 w-auto" /></a>
                 </div>
                 <h1 class="ml-2 text-2xl font-bold">
-                    <a href="/" class="text-white">Atbest</a>
+                    <a href="/" class="hidden md:block text-white">Atbest</a>
                 </h1>
             </div>
 
-            <div>
-                <!-- Hamburger -->
-                <div class="-mr-2 flex items-center sm:hidden">
-                    <button class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 bg-white hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition" @click="showingNavigationDropdown = !showingNavigationDropdown">
-                        <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                            <path :class="{
-                    hidden: showingNavigationDropdown,
-                    'inline-flex': !showingNavigationDropdown,
-                  }" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                            <path :class="{
-                    hidden: !showingNavigationDropdown,
-                    'inline-flex': showingNavigationDropdown,
-                  }" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
-                </div>
-
-                <div class="flex items-center" ref="menuBar">
-                    <ul class="list-none sm:flex space-x-4 hidden items-center text-white">
-                        <li>
-                            <a href="http://www.faom.org.mo/portal/" target="_blank" class="text-bold text-white hover:text-yellow-300 text-md">工聯</a>
-                        </li>
-                        <li>
-                            <a href="https://www.mo.gov.mo" target="_blank" class="text-bold text-white hover:text-yellow-300 text-md">一戶通</a>
-                        </li>
-                        <template v-if="$page.props.user">
-                            <li>
-                                <a :href="route('member.dashboard')" target="_blank" class="text-bold text-white hover:text-yellow-300 text-md">{{ $t("member_dashboard") }}</a>
-                            </li>
-                            <li>
-                                <a class="cursor-pointer text-bold text-white hover:text-yellow-300 text-md" @click="logout">{{ $t("log_out") }}</a>
-                            </li>
-                        </template>
-                        <template v-else>
-                            <li>
-                                <inertia-link :href="route('login')" class="text-bold text-white hover:text-yellow-300 text-md">{{
-                    $t("login") }}</inertia-link>
-                            </li>
-                            <li>
-                                <inertia-link :href="route('register')" class="text-bold text-white hover:text-yellow-300 text-md">{{ $t("register") }}</inertia-link>
-                            </li>
-                        </template>
-                    </ul>
-                    <!-- <div class="md:flex items-center hidden space-x-4 ml-8 lg:ml-12">
-                            <h1 class="text-text-gray-600  py-2 hover:cursor-pointer hover:text-indigo-600"><inertia-link
-                                    :href="route('login')">登入</inertia-link></h1>
-                            <h1
-                                class="text-text-gray-600  py-2 hover:cursor-pointer px-4 rounded text-white bg-gradient-to-tr from-indigo-600 to-green-600 hover:shadow-lg">
-                                <inertia-link :href="route('login')">後台</inertia-link>
-                            </h1>
-                        </div> -->
-                </div>
-            </div>
+            <menuDashboard />
         </div>
 
         <!-- Responsive Navigation Menu -->
-        <div :class="{ block: showingNavigationDropdown, hidden: !showingNavigationDropdown }" class="sm:hidden bg-white">
+        <!-- <div :class="{ block: showingNavigationDropdown, hidden: !showingNavigationDropdown }" class="sm:hidden bg-white">
             <div class="pt-2 pb-3 space-y-1">
                 <ResponsiveNavLink :href="route('host')" :active="route().current('dashboard')">
                     {{ $t('dashboard') }}
                 </ResponsiveNavLink>
             </div>
-
-            <!-- Responsive Settings Options -->
             <div class="pt-4 pb-1 border-t border-gray-200">
                 <div class="mt-3 space-y-1">
                     <ResponsiveNavLink :href="route('member.dashboard')" :active="route().current('member.dashboard')">
                         {{ $t("member_dashboard") }}
                     </ResponsiveNavLink>
-                    <!-- Authentication -->
+                    
                     <template v-if="$page.props.user">
                         <form method="POST" @submit.prevent="logout">
                             <ResponsiveNavLink as="button"> {{ $t("log_out") }} </ResponsiveNavLink>
@@ -198,7 +144,7 @@ export default {
                     </template>
                 </div>
             </div>
-        </div>
+        </div> -->
     </nav>
      <!-- 动态占位元素 -->
     <div :style="{ height: placeholderHeight + 'px' }"  class="" ></div>
@@ -215,18 +161,7 @@ export default {
     <section class=""  >
         <div ref="heroSection" 
             class="bg-slate-100 relative min-h-screen p-0 lg:p-4 pt-2">
-            <!-- Hero 背景文字 -->
-            <!-- <div ref="heroText" class="absolute top-[50%]  left-[50%] inset-0 z-10 overflow-hidden">
-                <div class="h-full w-full flex items-center justify-center ">
-                    <div class=" text-[50px] font-bold text-gray-400 tracking-wide transform rotate-6">
-                        HERO TEXT
-                    </div>
-                </div>
-            </div> -->
-            <!-- <div ref="heroText" class="heroText">
-                <h1 class="text-3xl font-bold ">Hero text</h1>
-            </div> -->
-
+            
             <!-- 主內容區 -->
             <div ref="mainBody" class="main-body relative z-10 grid grid-cols-1 lg:grid-cols-5 gap-6">
                 <!-- 左側主內容 -->
