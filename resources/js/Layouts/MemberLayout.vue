@@ -167,8 +167,9 @@ export default {
                     <div class="border-t border-gray-100" />
 
                     <!-- Authentication -->
-                    <form @submit.prevent="logout">
-                      <DropdownLink as="button"> {{ $t("log_out") }} </DropdownLink>
+                     
+                    <form method="POST" @submit.prevent="logout">
+                        <DropdownLink as="button"> {{ $t("log_out") }} </DropdownLink>
                     </form>
                   </template>
                 </Dropdown>

@@ -41,10 +41,11 @@ export default {
 </script>
 
 <template>
-    <DefaultLayout title="Dashboard">
-        <div class="flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
-            <a-typography-title :level="3">{{$t('account_registration')}}</a-typography-title>
-            <div class="w-full max-w-lg mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg"><!--v-if-->
+    <!-- <DefaultLayout title="Dashboard"> -->
+        <div class="register-background flex flex-col h-screen sm:justify-center items-center pt-6 sm:pt-0">
+            
+            <a-typography-title :level="2" class="text-xl">{{$t('account_registration')}}</a-typography-title>
+            <div class="w-full max-w-lg mt-6 px-6 py-4 bg-gray-50 shadow-md overflow-hidden sm:rounded-lg"><!--v-if-->
                 <a-form :model="formState" name="basic" layout="vertical" autocomplete="off" @finish="onFinish"
                     @finishFailed="onFinishFailed">
                     <a-form-item :label="$t('given_name')" name="given_name"
@@ -81,6 +82,13 @@ export default {
                 </a-form>
             </div>
         </div>
-    </DefaultLayout>
+    <!-- </DefaultLayout> -->
 </template>
 
+
+<style>
+.register-background {
+    background: rgb(210, 220, 230);
+    background: linear-gradient(135deg, rgba(160, 175, 200, 0.3) 0%, rgba(190, 205, 220, 0.583) 25%, rgba(200, 215, 225, 0.538) 60%, rgba(210, 220, 230, 0.8) 100%);
+}
+</style>

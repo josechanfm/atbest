@@ -4,6 +4,8 @@ import { router } from "@inertiajs/vue3";
 import { Head } from "@inertiajs/vue3";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink.vue";
 import menuDashboard from "@/Components/menuDashboard.vue";
+import LayoutBackground from "@/Components/LayoutBackground.vue";
+import RSSNews from "@/Components/RSSNews.vue";
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 gsap.registerPlugin(ScrollTrigger);
@@ -13,6 +15,8 @@ export default {
         Head,
         ResponsiveNavLink,
         menuDashboard,
+        LayoutBackground,
+        RSSNews,
     },
     props: {
         canLogin: Boolean,
@@ -21,14 +25,19 @@ export default {
         phpVersion: String,
         title: String,
     },
+    data() {
+        return {
+            feedItems: [],
+            loading: true,
+            error: null
+        };
+    },
     mounted() {
-
     },
     setup() {
         const menuBar = ref(null);
         const rightMenu = ref(null);
         const heroText = ref(null);
-        const heroSection = ref(null);
         const mainBody = ref(null);
 
         const logout = () => {
@@ -91,6 +100,7 @@ export default {
             logout,
         };
     },
+    
 };
 </script>
 
@@ -147,7 +157,7 @@ export default {
         </div> -->
     </nav>
      <!-- 动态占位元素 -->
-    <div :style="{ height: placeholderHeight + 'px' }"  class="" ></div>
+    <div class="bg-gray-200" :style="{ height: placeholderHeight + 'px' }"  ></div>
 </header>
 <!-- Page Heading -->
 <div v-if="$slots.header" >
@@ -158,9 +168,11 @@ export default {
 
 <main class="">
 
+    <LayoutBackground />
+
     <section class=""  >
-        <div ref="heroSection" 
-            class="bg-slate-100 relative min-h-screen p-0 lg:p-4 pt-2">
+        <div 
+            class="bg-slate-200 relative min-h-screen p-0 lg:p-4 pt-2">
             
             <!-- 主內容區 -->
             <div ref="mainBody" class="main-body relative z-10 grid grid-cols-1 lg:grid-cols-5 gap-6">
@@ -202,6 +214,8 @@ export default {
                             </li>
                         </div>
                     </div>
+                    
+                    <RSSNews />
                 </div>
             </div>
         </div>
@@ -237,4 +251,5 @@ nav {
 .router-link-active {
   @apply text-blue-600 font-medium;
 }
+
 </style>

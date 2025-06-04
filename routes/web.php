@@ -46,6 +46,7 @@ Route::domain('{abbr}.' . env('APP_DOMAIN'))->middleware('check_subdomain')->gro
 });
 
 Route::get('/', [\App\Http\Controllers\WelcomeController::class, 'dashboard'])->name('host');
+Route::get('/getRss', [\App\Http\Controllers\WelcomeController::class, 'getRss'])->name('host.getRss');
 // Route::get('/', [\App\Http\Controllers\WelcomeController::class, 'dashboard'])->name('/');
 
 Route::get('/language/{language}', function ($language) {

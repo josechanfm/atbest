@@ -12,23 +12,23 @@
             </svg>
         </a>
     </div>
-    <div class="block md:hidden absolute top-0 -z-10">
+    <div class="block sm:hidden md:hidden absolute top-0 -z-10">
         
-        <a ref="bubble1" 
+        <a ref="bubble1" href="http://www.faom.org.mo/portal/" 
             class="absolute bubble flex justify-center items-center bg-green-600 rounded-full " >
-            <a href="http://www.faom.org.mo/portal/" target="_blank" class=" text-white hover:text-yellow-300 text-md">工聯</a>
+            <a target="_blank" class=" text-white hover:text-yellow-300 text-md">工聯</a>
         </a>
-        <a ref="bubble2" 
+        <a ref="bubble2" href="https://www.mo.gov.mo" 
             class="absolute bubble flex justify-center items-center bg-amber-600 rounded-full" >
-            <a href="https://www.mo.gov.mo" target="_blank" class=" text-white hover:text-yellow-300 text-md">一戶通</a>
+            <a target="_blank" class=" text-white hover:text-yellow-300 text-md">一戶通</a>
         </a>
-        <a ref="bubble3" 
+        <a ref="bubble3" :href="$page.props.user? route('member.dashboard') : route('login')" 
             class="absolute bubble flex justify-center items-center bg-sky-600 rounded-full " >
             <template v-if="$page.props.user">
-                <a :href="route('member.dashboard')" target="_blank" class="font-serif text-white hover:text-yellow-300 text-md">{{ $t("member_dashboard") }}</a>
+                <a target="_blank" class="font-serif text-white hover:text-yellow-300 text-md">Member</a>
             </template>
             <template v-else>
-                <inertia-link :href="route('login')" class="font-serif text-white hover:text-yellow-300 text-md">{{ $t("login") }}</inertia-link>            
+                <inertia-link class="font-serif text-white hover:text-yellow-300 text-md">{{ $t("login") }}</inertia-link>            
             </template>
         </a>
         <a ref="bubble4" 
@@ -52,7 +52,7 @@
             </li>
             <template v-if="$page.props.user">
                 <li>
-                    <a :href="route('member.dashboard')" target="_blank" class="text-bold text-white hover:text-yellow-300 text-md">{{ $t("member_dashboard") }}</a>
+                    <a :href="route('member.dashboard')" target="_blank" class="text-bold text-white hover:text-yellow-300 text-md">Member</a>
                 </li>
                 <li>
                     <a class="cursor-pointer text-bold text-white hover:text-yellow-300 text-md" @click="logout">{{ $t("log_out") }}</a>
@@ -76,6 +76,7 @@
 <script setup>
 import {  ref, onMounted } from 'vue';
 import { gsap } from 'gsap';
+import { router } from '@inertiajs/vue3';
 
 const showingNavigationDropdown = ref(false);
 const bubbleHead = ref(null);
@@ -107,6 +108,10 @@ const handleScroll = () => {
     showingNavigation()
   }
 }
+
+const logout = () => {
+    router.post(route("logout"));
+};
 
 function showingNavigation(){
     showingNavigationDropdown.value = !showingNavigationDropdown.value
