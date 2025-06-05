@@ -2,13 +2,16 @@
 <div>
     <h1>最近新聞</h1>
     <div v-if="loading">載入中...</div>
-    <div v-else>
+    <div v-else class="shadow-md py-1 px-4 bg-white rounded-lg">
         <!-- {{ parseXml( feedItems ) }} -->
-        <div v-for="item in parseXml(feedItems).slice(0,4)" :key="item.guid" 
-            class="my-2 pb-4 news-item overflow-auto shadow-md py-1 px-4 bg-white rounded-lg">
-            <h2 class="px-2 py-1 bg-cyan-800 text-white rounded">{{ item.title }}</h2>
-            <p class="w-full" v-html="item.description"></p>
-            <a class="bg-blue-700 text-white hover:text-gray-200 mx-4 px-2 py-1 rounded-lg " :href="item.link" target="_blank">閱讀更多</a>
+        <div v-for="item in parseXml(feedItems).slice(0,15)" :key="item.guid" 
+            class="my-2 pb-4 news-item overflow-auto underline">
+            <h2 class="px-2 rounded">{{ item.title }}</h2>
+            <!-- <p class="w-full" v-html="item.description"></p> -->
+            <div class="flex justify-end">
+                <a class="text-blue-700 hover:text-blue-800 mx-4 " :href="item.link" target="_blank">閱讀更多</a>
+            </div>
+            <a-divider class="mt-3 mb-1"/>
         </div>
     </div>
 </div>

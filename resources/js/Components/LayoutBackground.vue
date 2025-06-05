@@ -1,13 +1,29 @@
 <template>
-<div class="fixed inset-0 z-10 w-full h-screen overflow-hidden bg-gradient-to-b from-indigo-50 to-purple-100">
+<div 
+    class="fixed inset-0 z-10 w-full h-screen overflow-hidden bg-gradient-to-b from-indigo-50 to-purple-100">
     <!-- 多層雲朵 -->
-    <div v-for="(cloud, index) in clouds" :key="index" class="absolute rounded-full" :class="`cloud-layer-${cloud.layer}`" :style="{
-          width: `${cloud.size}px`,
-          height: `${cloud.size}px`,
-          left: `${cloud.x}px`,
-          top: `${cloud.y}px`,
-          backgroundColor: cloud.color,
-        }" ref="cloudElements"></div>
+    <div v-for="(cloud, index) in clouds" :key="index" 
+        class="absolute rounded-full" :class="`cloud-layer-${cloud.layer}`" :style="{
+        width: `${cloud.size}px`,
+        height: `${cloud.size}px`,
+        left: `${cloud.x}px`,
+        top: `${cloud.y}px`,
+        backgroundColor: cloud.color,
+    }" ref="cloudElements"></div>
+
+    <!-- dotted -->
+    <div 
+        v-for="(item, index) in particles" 
+        :key="index" 
+        class="dotted absolute rounded-full bg-slate-400/40 "
+        :style="{
+            width: `${item.size}px`,
+            height: `${item.size}px`,
+            left: `${item.x}px`,
+            top: `${item.y}px`,
+        }"
+    ></div>
+        
 </div>
 </template>
 
@@ -64,6 +80,85 @@ const clouds = ref([
     }))
 ])
 
+// 初始化粒子
+const initParticles = () => {
+    for (let i = 0; i < particleCount; i++) {
+    particles.value.push({
+        x: Math.random() * window.innerWidth,
+        y: Math.random() * window.innerHeight,
+        size: Math.random() * 15 + 5,
+        xSpeed: Math.random() * 0.5 - 0.25,
+        ySpeed: Math.random() * 0.5 - 0.25
+    });
+    }
+};
+    
+const particles = ref([]);
+const particleCount = 50;
+const mouse = { x: 0, y: 0 };
+
+// 更新粒子位置
+const updateParticles = () => {
+    const mouseInfluence = 0.2;
+    
+    particles.value.forEach(particle => {
+        // 計算粒子到滑鼠的距離
+        const dx = mouse.x - particle.x;
+        const dy = mouse.y - particle.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        
+        // 如果滑鼠靠近粒子，則施加力
+        if (distance < 300) {
+            const angle = Math.atan2(dy, dx);
+            const force = (150 - distance) / 150 * mouseInfluence;
+            
+            particle.xSpeed += Math.cos(angle) * force;
+            particle.ySpeed += Math.sin(angle) * force;
+        }
+        
+        // 應用速度
+        particle.x += particle.xSpeed;
+        particle.y += particle.ySpeed;
+        
+        // 添加一些隨機運動
+        particle.xSpeed += (Math.random() * 0.2 - 0.1);
+        particle.ySpeed += (Math.random() * 0.2 - 0.1);
+        
+        // 限制速度
+        const maxSpeed = 2;
+        const speed = Math.sqrt(particle.xSpeed * particle.xSpeed + particle.ySpeed * particle.ySpeed);
+        if (speed > maxSpeed) {
+            particle.xSpeed = (particle.xSpeed / speed) * maxSpeed;
+            particle.ySpeed = (particle.ySpeed / speed) * maxSpeed;
+        }
+        
+        // 邊界檢查
+        if (particle.x < 0) {
+            particle.x = 0;
+            particle.xSpeed *= -0.5;
+        } else if (particle.x > window.innerWidth) {
+            particle.x = window.innerWidth;
+            particle.xSpeed *= -0.5;
+        }
+        
+        if (particle.y < 0) {
+            particle.y = 0;
+            particle.ySpeed *= -0.5;
+        } else if (particle.y > window.innerHeight) {
+            particle.y = window.innerHeight;
+            particle.ySpeed *= -0.5;
+        }
+    });
+    
+    requestAnimationFrame(updateParticles);
+};
+
+// 監聽滑鼠移動
+const handleMouseMove = (e) => {
+    mouse.x = e.clientX;
+    mouse.y = e.clientY;
+};
+
 const cloudElements = ref([])
 
 // 動畫函數
@@ -94,6 +189,11 @@ const animateClouds = () => {
 }
 
 onMounted(() => {
+    
+    initParticles();
+      updateParticles();
+      window.addEventListener('mousemove', handleMouseMove);
+
     animateClouds()
 
     // 響應式調整
@@ -143,5 +243,9 @@ html {
 .cloud-layer-3 {
     will-change: transform, opacity;
     transform: translateZ(0);
+}
+
+.dotted{
+    filter: blur(4px);
 }
 </style>

@@ -72,7 +72,7 @@ export default {
     };
   },
   created() {
-
+    console.log("feature animate")
     if(this.features.length>0){
       this.defaultFeatures=this.features
     }
@@ -83,20 +83,20 @@ export default {
     }
   },
   mounted() { 
+    const featureBox = gsap.utils.toArray('.feature');
 
-    this.features.forEach((feature, index) => {
-      const duration = 0.5 + ( index / 4 ); 
-      gsap.fromTo(
-        `.feature:nth-child(${index + 1})`,
-        { x: '100%', opacity: 0 }, // 從右側進入
+    featureBox.forEach((feature, index) => {
+      gsap.fromTo(feature, 
+        { x: '100%', opacity: 0 },
         {
-          x: '0%',   // 移動到原位
-          opacity: 1, // 透明度變為 1
-          duration: index == 0 ? 0.5 : duration, // 動畫持續時間
+          x: '0%',
+          opacity: 1,
+          duration: index === 0 ? 0.5 : 0.5 + (index * 0.25),
+          delay: index * 0.25,
+          ease: 'power2.out'
         }
       );
     });
-
   },
   methods: {
     getQrcode() {
