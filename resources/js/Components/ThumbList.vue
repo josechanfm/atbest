@@ -40,7 +40,7 @@ export default {
                     ease: 'power3.out',
                     overwrite: 'auto',
                 });
-                let delay = 0.5 + 1* ( ( index ) / 10 )
+                let delay = 0.2 + 1* ( ( index ) / 10 )
                 ScrollTrigger.create({
                     trigger: section,
                     start: 'top bottom',
@@ -97,6 +97,9 @@ export default {
                 </div>
                 <div v-else-if="record.content">
                     {{ record.content.replace(/<[^>]+>/g, "").substring(0, 100) }} ...
+                </div>
+                <div v-else-if="record.description">
+                    {{ record.description.replace(/<[^>]+>/g, "").substring(0, 100) }} ...
                 </div>
             </div>
             <a-divider class="my-3 " />
