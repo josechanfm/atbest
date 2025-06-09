@@ -169,15 +169,15 @@ export default {
 
                       <!-- Authentication -->
                       
-                      <div>
+                      <!-- <div>
                         <a @click="logout" 
                           class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition" href="">
                           {{ $t("log_out") }}
                         </a>
-                      </div>
+                      </div> -->
 
                       <!-- <form method="POST" @submit.prevent="logout"> -->
-                        <!-- <DropdownLink @click="logout"> {{ $t("log_out") }} </DropdownLink> -->
+                        <DropdownLink @click="logout"> {{ $t("log_out") }} </DropdownLink>
                       <!-- </form> -->
                     </div>
                   </template>
