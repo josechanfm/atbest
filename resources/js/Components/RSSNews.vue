@@ -6,7 +6,7 @@
         <!-- {{ parseXml( feedItems ) }} -->
         <div v-for="item in parseXml(feedItems).slice(0,15)" :key="item.guid" 
             class="my-2 pb-4 news-item overflow-auto underline">
-            <h2 class="px-2 rounded">{{ item.title }}</h2>
+            <h2 class="px-2 text-xl rounded">{{ item.title }}</h2>
             <!-- <p class="w-full" v-html="item.description"></p> -->
             <div class="flex justify-end">
                 <a class="text-blue-700 hover:text-blue-800 mx-4 " :href="item.link" target="_blank">閱讀更多</a>

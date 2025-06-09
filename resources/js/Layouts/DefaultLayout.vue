@@ -72,7 +72,7 @@ export default {
         }
         // 佔 nav 的高度
         const updateHeight = () => {
-            placeholderHeight.value = nav.value.offsetHeight
+            placeholderHeight.value = nav.value?.offsetHeight
         }
         
         onMounted(() => {
@@ -175,7 +175,7 @@ export default {
             class="bg-slate-200 relative min-h-screen p-0 lg:p-4 pt-2">
             
             <!-- 主內容區 -->
-            <div ref="mainBody" class="main-body relative z-10 grid grid-cols-1 lg:grid-cols-5 gap-6">
+            <div ref="mainBody" class="main-body relative z-10 grid grid-cols-1 lg:grid-cols-5 md:gap-6">
                 <!-- 左側主內容 -->
                 
                 <div class="col-span-4 ">
@@ -186,7 +186,7 @@ export default {
                 </div>
 
                 <!-- 右邊欄 -->
-                <div ref="rightMenu" class="">
+                <div ref="rightMenu" class="col-span-1 flex flex-col gap-4">
 
                     <div class="bg-slate-50/80 py-3 px-4 rounded-lg flex justify-around items-center shadow">
                         <input type="text" :placeholder="$t('search')" class="bg-gray-100 rounded-md outline-none pl-2 ring-indigo-700 w-full mr-2 p-2" />
@@ -195,7 +195,7 @@ export default {
                             </svg>
                         </span>
                     </div>
-                    <div class="bg-slate-50/80 backdrop-blur-sm shadow-md rounded-md">
+                    <div class="bg-white backdrop-blur-sm shadow-md rounded-md">
                         <h1 class="text-center text-xl my-4 py-2 rounded-md border-b-2 cursor-pointer text-gray-600">
                             {{ $t('service') }}
                         </h1>

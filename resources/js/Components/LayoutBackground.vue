@@ -12,7 +12,7 @@
     }" ref="cloudElements"></div>
 
     <!-- dotted -->
-    <div 
+    <!-- <div 
         v-for="(item, index) in particles" 
         :key="index" 
         class="dotted absolute rounded-full bg-slate-400/40 "
@@ -22,7 +22,7 @@
             left: `${item.x}px`,
             top: `${item.y}px`,
         }"
-    ></div>
+    ></div> -->
         
 </div>
 </template>
@@ -93,6 +93,8 @@ const initParticles = () => {
     }
 };
     
+// 浮動粒子 
+// --------------------
 const particles = ref([]);
 const particleCount = 50;
 const mouse = { x: 0, y: 0 };
@@ -152,6 +154,7 @@ const updateParticles = () => {
     
     requestAnimationFrame(updateParticles);
 };
+// 粒子 ------
 
 // 監聽滑鼠移動
 const handleMouseMove = (e) => {

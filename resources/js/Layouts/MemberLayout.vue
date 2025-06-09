@@ -10,7 +10,7 @@ import NavLink from "@/Components/NavLink.vue";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink.vue";
 import { usePage } from "@inertiajs/vue3";
 import LanguageSwitcher from "@/Components/LanguageSwitcher.vue";
-// import { loadLanguageAsync } from "laravel-vue-i18n";
+import { loadLanguageAsync } from "laravel-vue-i18n";
 
 export default {
   components: {
@@ -43,7 +43,7 @@ export default {
       return page.props.auth.user.member.is_organizer==true
     }
     const page = usePage();
-    //loadLanguageAsync(page.props.value.lang);
+    loadLanguageAsync(page.props.lang);
 
     const logout = () => {
       router.post(route("logout"));
@@ -53,7 +53,7 @@ export default {
       switchToTeam,
       logout,
       isOrganizer,
-      // loadLanguageAsync,
+      loadLanguageAsync,
     };
   },
   created() {},
@@ -75,7 +75,7 @@ export default {
             <div class="flex">
               <!-- Logo -->
               <div class="shrink-0 flex items-center">
-                <Link :href="route('host')" v-if="$page.props.auth.user.member">
+                <Link :href="route('host')??null" v-if="$page.props.auth.user.member">
                   <img v-if="$page.props.auth.user.member.organization.logo" :src="$page.props.auth.user.member.organization.logo" class="block h-14 w-auto" />
                   <img v-else src="/storage/images/site_logo.png" class="block h-14 w-auto" />
                 </Link>
@@ -148,29 +148,38 @@ export default {
                   </template>
 
                   <template #content>
-                    <!-- Account Management -->
-                    <div class="block px-4 py-2 text-xs text-gray-400">
-                      {{ $t("manage_account") }}
+                    <div class="flex flex-col relative z-30">
+                      <!-- Account Management -->
+                      <div class="block px-4 py-2 text-xs text-gray-400">
+                        {{ $t("manage_account") }}
+                      </div>
+
+                      <DropdownLink :href="route('member.profile.index')??null">
+                        {{ $t("account") }}
+                      </DropdownLink>
+
+                      <DropdownLink
+                        v-if="$page.props.hasApiFeatures"
+                        :href="route('api-tokens.index')??null"
+                      >
+                        {{ $t("api_tokens") }}
+                      </DropdownLink>
+
+                      <div class="border-t border-gray-50 " />
+
+                      <!-- Authentication -->
+                      
+                      <div>
+                        <a @click="logout" 
+                          class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition" href="">
+                          {{ $t("log_out") }}
+                        </a>
+                      </div>
+
+                      <!-- <form method="POST" @submit.prevent="logout"> -->
+                        <!-- <DropdownLink @click="logout"> {{ $t("log_out") }} </DropdownLink> -->
+                      <!-- </form> -->
                     </div>
-
-                    <DropdownLink :href="route('member.profile.index')">
-                      {{ $t("account") }}
-                    </DropdownLink>
-
-                    <DropdownLink
-                      v-if="$page.props.hasApiFeatures"
-                      :href="route('api-tokens.index')"
-                    >
-                      {{ $t("api_tokens") }}
-                    </DropdownLink>
-
-                    <div class="border-t border-gray-100" />
-
-                    <!-- Authentication -->
-                     
-                    <form method="POST" @submit.prevent="logout">
-                        <DropdownLink as="button"> {{ $t("log_out") }} </DropdownLink>
-                    </form>
                   </template>
                 </Dropdown>
               </div>

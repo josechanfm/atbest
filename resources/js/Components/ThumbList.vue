@@ -43,7 +43,7 @@ export default {
                 let delay = 0.2 + 1* ( ( index ) / 10 )
                 ScrollTrigger.create({
                     trigger: section,
-                    start: 'top bottom',
+                    start: 'top 80%',
                     // markers: true,
                     onEnter: () => gsap.to(section, {
                         y: 0,
