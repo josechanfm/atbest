@@ -84,7 +84,7 @@ export default {
 		const flipCardAnimation = () => {
 			getQrcode()
 			const duration = 0.6
-			const ease = "back.out(1.7)"
+			const ease = "back.out(1)"
 			
 			if (!isFlipped.value) {
 				// 正面翻转到背面
@@ -239,7 +239,7 @@ export default {
                     <div class="bg-white relative shadow rounded-lg flip-card  hover:scale-105 transform transition-transform " ref="flipCard">
                         
                         <!-- card start -->
-                        <div class="mx-auto z-10 relative py-4 w-96 mb-4 flip-card-front" ref="front">
+                        <div class="mx-auto z-10 relative w-96 mb-4 flip-card-front" ref="front">
                             <div :style="cardStyle['font_style']" class="absolute z-10 flex rounded-lg flex-col m-4 text-sm w-[350px]" >
                                 <div class="flex flex-col w-xl">
                                     <div class="flex justify-center">
@@ -248,9 +248,9 @@ export default {
                                     <div class="flex">
                                         <div class="flex flex-col flex-auto gap-1">
                                             <div class="">姓名：</div>
-                                            <div class="mb-2">{{ member.family_name }}{{ member.given_name }}</div>
+                                            <div class="mb-2 ml-4">{{ member.family_name }}{{ member.given_name }}</div>
                                             <div class="">會員編號：</div>
-                                            <div class="font-sans mb-2">{{ member.member_number }}</div>
+                                            <div class="font-sans mb-2 ml-4">{{ member.member_number }}</div>
                                         </div>
                                         <div class="flex">
                                             <img v-if="member.avatar" class="w-20 h-20" :src="member.avatar" />
@@ -273,7 +273,7 @@ export default {
                         <!-- card end -->
 						 <!-- QRcode -->
 						<div class="flex flip-card-back z-10" ref="back">
-                            <div class="flex gap-6" > 
+                            <div class="flex" > 
                                 <QRCodeVue3 :key="qrcode" v-bind:value="qrcode" :image="qrcodeLogo" :dotsOptions="{
 										type: 'dots',
 										color: '#26249a',
@@ -292,9 +292,9 @@ export default {
 									:cornersDotOptions="{color: '#e00404'}" 
 								/>
                             </div>
-							<div class="flex flex-col">
-								<div class="w-full pt-6">
-									<h3 class="text-xl font-bold mb-4 text-center text-red-400">會員卡</h3>
+							<div class="flex flex-col px-4">
+								<div class="w-full ">
+									<h3 class="text-xl font-bold mb-4 text-center text-orange-700">會員卡</h3>
 									
 									<div class="space-y-3 text-sm ">
 										<div class="flex items-start">
@@ -303,16 +303,20 @@ export default {
 											</svg>
 											<span>專屬會員活動優先報名</span>
 										</div>
-										
+										<div class="flex items-start">
+											<svg class="w-5 h-5 mr-2 text-blue-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+												<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+											</svg>
+											<span>使用二維碼累計積分</span>
+										</div>
 									</div>
-									
-									<div class="mt-6 text-xs text-gray-400 text-center">
+									<div class="mt-6 text-xs text-center text-gray-600">
 										<p>客服專線: 0000-0000</p>
 									</div>
 								</div>
 							</div>
                         </div>
-						<img class="relative object-cover w-full h-52 rounded-lg z-0" :src="'/storage/images/' + cardStyle['background']" />
+						<img class="relative object-cover w-full h-full rounded-lg z-0 shadow-lg " :src="'/storage/images/' + cardStyle['background']" />
 						<!-- QRcode -->
 					</div>
 				</div>
@@ -346,7 +350,7 @@ export default {
                                     <h3 class="font-medium text-gray-900 text-left px-6">Your Organizations</h3>
                                     <div class="mt-5 w-full flex flex-col items-center overflow-hidden text-sm">
                                         <template v-for="member in members">
-                                            <a href="#" class="w-full border-t bor  der-gray-100 text-gray-600 py-4 pl-6 pr-3 w-full block hover:bg-gray-100 transition duration-150">
+                                            <a href="#" class="w-full border-t bor  der-gray-100 text-gray-600 py-4 pl-6 pr-3 block hover:bg-gray-100 transition duration-150">
                                                 <img src="https://avatars0.githubusercontent.com/u/35900628?v=4" alt="" class="rounded-full h-6 shadow-md inline-block mr-2" />
                                                 {{ member.organization.abbr }} - {{ member.organization['name_' + $t('lang')] }}
                                                 <span class="text-gray-500 text-xs float-right pr-2" v-if="members.length > 1">
@@ -360,7 +364,7 @@ export default {
                                 <h3 class="font-medium text-gray-900 text-left px-6">Recent updates</h3>
                                 <div class="mt-5 w-full flex flex-col items-center overflow-hidden text-sm">
                                     <template v-for="portfolio in member.portfolios">
-                                        <a href="#" class="w-full border-t border-gray-100 text-gray-600 py-4 pl-6 pr-3 w-full block hover:bg-gray-100 transition duration-150">
+                                        <a href="#" class="w-full border-t border-gray-100 text-gray-600 py-4 pl-6 pr-3 block hover:bg-gray-100 transition duration-150">
                                             <img src="https://avatars0.githubusercontent.com/u/35900628?v=4" alt="" class="rounded-full h-6 shadow-md inline-block mr-2" />
                                             {{ portfolio.title }} - {{ portfolio.description }}
                                             <span class="text-gray-500 text-xs">{{ portfolio.start_date }}</span>
@@ -412,7 +416,6 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 10px;
 }
 
 .flip-card-front {
