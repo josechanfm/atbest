@@ -29,11 +29,11 @@
                                     <div class="text-xl">Timer:</div>
                                     <a-form :label-col="{ span: 4 }">
                                         <a-form-item label="Minutes" for="min">
-                                            <a-input type="input" type="number" v-model:value="timer.minutes" min="0" max="59"
+                                            <a-input type="number" v-model:value="timer.minutes" min="0" max="59"
                                                 style="width:100px" />
                                         </a-form-item>
                                         <a-form-item label="Seconds" for="min">
-                                            <a-input type="input" type="number" v-model:value="timer.secondes" min="0" max="59"
+                                            <a-input type="number" v-model:value="timer.secondes" min="0" max="59"
                                                 style="width:100px" />
                                         </a-form-item>
                                         <a-button @click="timerStart" :disabled="timer.started">Start</a-button>
