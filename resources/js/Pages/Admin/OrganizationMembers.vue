@@ -47,7 +47,7 @@
         :rules="rules"
         :validate-messages="validateMessages"
       >
-        <a-input type="input" type="hidden" v-model:value="modal.data.id" />
+        <a-input type="hidden" v-model:value="modal.data.id" />
         <a-form-item :label="$t('name_zh')" name="name_zh">
           <a-input type="input" v-model:value="modal.data.name_zh" />
         </a-form-item>

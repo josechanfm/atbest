@@ -43,7 +43,7 @@
         :validate-messages="validateMessages"
         @finish="onFormFinish"
       >
-        <a-input type="input" type="hidden" v-model:value="modal.data.id" />
+        <a-input type="hidden" v-model:value="modal.data.id" />
         <a-form-item :label="$t('organization')" name="organization_id">
           <a-select v-model:value="modal.data.organization_id">
             <a-select-option :value="0">General Config Item</a-select-option>
