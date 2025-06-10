@@ -11,13 +11,25 @@ export default {
     props: ["records", "routePath", "forms", "articles", "cardStyle"],
     data() {
         return {
-
+            ListSize: 3, 
         }
     },
     mounted() {
-        this.setupCardAnimations();
+        this.updateKeyBasedOnScreenSize(); // 初始化
+        window.addEventListener("resize", this.updateKeyBasedOnScreenSize);
+        
+        this.$nextTick(() => {
+            this.setupCardAnimations();
+        })
     },
     methods: {
+        updateKeyBasedOnScreenSize() {
+            const width = window.innerWidth;
+            if (width >= 1024) this.ListSize = 3; // lg
+            else if (width >= 768) this.ListSize = 2; // md
+            else this.ListSize = 1; // sm 或更小
+        },
+
         scaleUp(event) {
             gsap.to(event.currentTarget.querySelector('div'), {
                 scale: 1.05,
@@ -40,7 +52,8 @@ export default {
                     ease: 'power3.out',
                     overwrite: 'auto',
                 });
-                let delay = 0.2 + 1* ( ( index ) / 10 )
+                console.log( this.ListSize  )
+                let delay = 0.2 + 1* ( ( index % this.ListSize ) / 10 )
                 ScrollTrigger.create({
                     trigger: section,
                     start: 'top 80%',

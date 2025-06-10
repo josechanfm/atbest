@@ -1,14 +1,14 @@
 <template>
-<div>
-    <h1>最近新聞</h1>
+<div class="flex flex-col gap-3 my-4">
+    <div class="text-xl font-mono">最近新聞</div>
     <div v-if="loading">載入中...</div>
     <div v-else class="shadow-md py-1 px-4 bg-white rounded-lg">
         <!-- {{ parseXml( feedItems ) }} -->
         <div v-for="item in parseXml(feedItems).slice(0,15)" :key="item.guid" 
             class="my-2 pb-4 news-item overflow-auto underline">
-            <h2 class="px-2 text-xl rounded">{{ item.title }}</h2>
+            <div class="px-2 text-lg rounded ">{{ item.title }}</div>
             <!-- <p class="w-full" v-html="item.description"></p> -->
-            <div class="flex justify-end">
+            <div class="flex justify-end mt-2">
                 <a class="text-blue-700 hover:text-blue-800 mx-4 " :href="item.link" target="_blank">閱讀更多</a>
             </div>
             <a-divider class="mt-3 mb-1"/>
