@@ -30,7 +30,7 @@
            -->
           <template v-if="selectedLang == 'zh'">
             <a-form-item :label="$t('title')" name="title_zh">
-              <a-input v-model:value="feature.title_zh" />
+              <a-input type="input" v-model:value="feature.title_zh" />
             </a-form-item>
             <a-form-item :label="$t('content')" name="content_zh">
               <a-textarea v-model:value="feature.content_zh" :rows="5" />
@@ -43,29 +43,29 @@
           <!-- Hide other languages-->
           <template v-if="selectedLang == 'en'">
             <a-form-item :label="$t('title')">
-              <a-input v-model:value="feature.title_en" />
+              <a-input type="input" v-model:value="feature.title_en" />
             </a-form-item>
             <a-form-item :label="$t('content')">
               <a-textarea v-model:value="feature.content_en" :rows="5" />
             </a-form-item>
             <a-form-item :label="$t('tag')">
-              <a-input v-model:value="feature.tags_en" />
+              <a-input type="input" v-model:value="feature.tags_en" />
             </a-form-item>
           </template>
 
           <template v-if="selectedLang == 'pt'">
             <a-form-item :label="$t('title')">
-              <a-input v-model:value="feature.title_pt" />
+              <a-input type="input" v-model:value="feature.title_pt" />
             </a-form-item>
             <a-form-item :label="$t('content')">
               <a-textarea v-model:value="feature.content_pt" :rows="5" />
             </a-form-item>
             <a-form-item :label="$t('tag')">
-              <a-input v-model:value="feature.tags_pt" />
+              <a-input type="input" v-model:value="feature.tags_pt" />
             </a-form-item>
           </template>
           <a-form-item :label="$t('url')">
-            <a-input v-model:value="feature.url" />
+            <a-input type="input" v-model:value="feature.url" />
           </a-form-item>
           <a-form-item :label="$t('image')">
             <template v-if="feature.image">

@@ -47,18 +47,18 @@
         :rules="rules"
         :validate-messages="validateMessages"
       >
-        <a-input type="hidden" v-model:value="modal.data.id" />
+        <a-input type="input" type="hidden" v-model:value="modal.data.id" />
         <a-form-item :label="$t('name_zh')" name="name_zh">
-          <a-input v-model:value="modal.data.name_zh" />
+          <a-input type="input" v-model:value="modal.data.name_zh" />
         </a-form-item>
         <a-form-item :label="$t('name_fn')" name="name_fn">
-          <a-input v-model:value="modal.data.name_fn" />
+          <a-input type="input" v-model:value="modal.data.name_fn" />
         </a-form-item>
         <a-form-item :label="$t('nickname')" name="nickname">
-          <a-input v-model:value="modal.data.nickname" />
+          <a-input type="input" v-model:value="modal.data.nickname" />
         </a-form-item>
         <a-form-item :label="$t('mobile_number')" name="mobile">
-          <a-input v-model:value="modal.data.mobile" />
+          <a-input type="input" v-model:value="modal.data.mobile" />
         </a-form-item>
         <a-form-item :label="$t('status')" name="status">
           <a-select v-model:value="modal.data.state" :options="employmentStates" />

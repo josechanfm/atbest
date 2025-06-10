@@ -9,7 +9,7 @@
                     @finishFialed="onFinishFialed"
                 >
                 <a-form-item name="username" label="Nick Name:">
-                    <a-input v-model:value="poll.username"/>
+                    <a-input type="input" v-model:value="poll.username"/>
                 </a-form-item>
                 
                 <div v-html="poll.question" class="w-full h-auto overflow-hidden"/>

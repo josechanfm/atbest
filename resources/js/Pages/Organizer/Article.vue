@@ -24,7 +24,7 @@
           />
         </a-form-item>
         <a-form-item :label="$t('title')" name="title">
-          <a-input v-model:value="article.title" />
+          <a-input type="input" v-model:value="article.title" />
         </a-form-item>
         <a-form-item :label="$t('intro')" name="intro">
           <a-textarea v-model:value="article.intro" :rows="5"/>
@@ -43,7 +43,7 @@
           <a-date-picker v-model:value="article.expire_at" :valueFormat="dateFormat" :format="dateFormat"/>
         </a-form-item>
         <a-form-item :label="$t('url')" name="url">
-          <a-input v-model:value="article.url" />
+          <a-input type="input" v-model:value="article.url" />
         </a-form-item>
         <a-row>
           <a-col>

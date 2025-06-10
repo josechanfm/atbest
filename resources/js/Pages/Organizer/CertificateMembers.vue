@@ -75,10 +75,10 @@
             <a-select v-model:value="modal.data.pivot.member_id" :options="memberOptions()"/>
         </a-form-item>
         <a-form-item label="Cert display name" name="display_nmae">
-            <a-input v-model:value="modal.data.pivot.display_name" />
+            <a-input type="input" v-model:value="modal.data.pivot.display_name" />
         </a-form-item>
         <a-form-item label="Cert number" name="number_display">
-            <a-input v-model:value="modal.data.pivot.number_display" />
+            <a-input type="input" v-model:value="modal.data.pivot.number_display" />
         </a-form-item>
         <a-form-item :label="$t('issue_date')" name="issue_date">
           <a-date-picker
@@ -102,13 +102,13 @@
           />
         </a-form-item>
         <a-form-item :label="$t('authorized_by')" name="authorized_by">
-          <a-input v-model:value="modal.data.pivot.authorized_by" />
+          <a-input type="input" v-model:value="modal.data.pivot.authorized_by" />
         </a-form-item>
         <a-form-item :label="$t('remark')" name="remark">
           <a-textarea v-model:value="modal.data.pivot.remark" />
         </a-form-item>
         <!-- <a-form-item label="Avata" name="avata">
-                    <a-input v-model:value="modal.data.avata" />
+                    <a-input type="input" v-model:value="modal.data.avata" />
                 </a-form-item> -->
       </a-form>
       <template #footer>

@@ -58,7 +58,7 @@
         :validate-messages="validateMessages"
       >
         <a-form-item :label="$t('title')" name="title">
-          <a-input v-model:value="modal.data.title" />
+          <a-input type="input" v-model:value="modal.data.title" />
         </a-form-item>
         <a-form-item :label="$t('description')" name="description">
           <a-textarea v-model:value="modal.data.description" :rows="5"/>

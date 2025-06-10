@@ -52,10 +52,10 @@
         :validate-messages="validateMessages"
       >
         <a-form-item :label="$t('title')" name="title">
-          <a-input v-model:value="modal.data.title" />
+          <a-input type="input" v-model:value="modal.data.title" />
         </a-form-item>
         <a-form-item :label="$t('content')" name="content">
-          <a-input v-model:value="modal.data.content" />
+          <a-input type="input" v-model:value="modal.data.content" />
         </a-form-item>
         <!-- <a-form-item :label="$t('image')" name="images">
             <a-upload

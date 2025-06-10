@@ -1,21 +1,21 @@
 <template>
    <Dropdown align="right" width="20">
-    <template #trigger>
-    <a-button type="text" class="text-lg flex justify-between items-center">
-        <GlobalOutlined />
-        <span v-if="page.props.lang" class="text-sm">{{$t(page.props.lang)}}</span>
-    </a-button>
-    </template>
-    <template #content>
-        <div class="w-20 text-center">
-            <DropdownLink :href="route('language', 'zh')">
-                {{ $t("chinese") }}
-            </DropdownLink>
-            <DropdownLink :href="route('language', 'en')">
-                {{ $t("english") }}
-            </DropdownLink>
-        </div>
-    </template>
+        <template #trigger>
+            <a type="text" class="flex gap-2 justify-between items-center text-white text-base hover:text-gray-100 bg-transparent border-0 cursor-pointer" >
+                <GlobalOutlined />
+                <span v-if="page.props.lang" class="">{{$t(page.props.lang)}}</span>
+            </a>
+        </template>
+        <template #content>
+            <div class="w-20 text-center ">
+                <DropdownLink :href="route('language', 'zh')">
+                    {{ $t("chinese") }}
+                </DropdownLink>
+                <DropdownLink :href="route('language', 'en')">
+                    {{ $t("english") }}
+                </DropdownLink>
+            </div>
+        </template>
     </Dropdown>
 </template>
 

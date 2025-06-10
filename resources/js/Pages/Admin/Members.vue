@@ -98,22 +98,22 @@
         </a-form-item>
 
         <a-form-item :label="$t('given_name')" name="given_name">
-          <a-input v-model:value="modal.data.given_name" />
+          <a-input type="input" v-model:value="modal.data.given_name" />
         </a-form-item>
         <a-form-item :label="$t('middle_name')" name="middle_name">
-          <a-input v-model:value="modal.data.middle_name" />
+          <a-input type="input" v-model:value="modal.data.middle_name" />
         </a-form-item>
         <a-form-item :label="$t('family_name')" name="family_name">
-          <a-input v-model:value="modal.data.family_name" />
+          <a-input type="input" v-model:value="modal.data.family_name" />
         </a-form-item>
         <a-form-item :label="$t('display_name')" name="display_name">
-          <a-input v-model:value="modal.data.display_name" />
+          <a-input type="input" v-model:value="modal.data.display_name" />
         </a-form-item>
 
         <a-row :span="24">
           <a-col :span="18">
             <a-form-item :label="$t('email')" :label-col="{ span: 4 }" name="email">
-              <a-input v-model:value="modal.data.email" />
+              <a-input type="input" v-model:value="modal.data.email" />
             </a-form-item>
             <a-form-item :label="$t('gender')" :label-col="{ span: 4 }" name="gender">
               <a-switch

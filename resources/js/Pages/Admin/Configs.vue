@@ -43,7 +43,7 @@
         :validate-messages="validateMessages"
         @finish="onFormFinish"
       >
-        <a-input type="hidden" v-model:value="modal.data.id" />
+        <a-input type="input" type="hidden" v-model:value="modal.data.id" />
         <a-form-item :label="$t('organization')" name="organization_id">
           <a-select v-model:value="modal.data.organization_id">
             <a-select-option :value="0">General Config Item</a-select-option>
@@ -51,7 +51,7 @@
           </a-select>
         </a-form-item>
         <a-form-item :label="$t('key')" name="key">
-          <a-input v-model:value="modal.data.key" />
+          <a-input type="input" v-model:value="modal.data.key" />
         </a-form-item>
         <a-form-item :label="$t('value')" name="value">
           <a-textarea v-model:value="modal.data.value" :rows="15" />

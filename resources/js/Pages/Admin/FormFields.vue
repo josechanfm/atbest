@@ -63,10 +63,10 @@
         @finish="onFormFinish"
       >
         <!-- <a-form-item label="Field name" name="field_name">
-                <a-input v-model:value="modal.data.field_name" />
+                <a-input type="input" v-model:value="modal.data.field_name" />
             </a-form-item> -->
         <a-form-item :label="$t('field_label')" name="field_label">
-          <a-input v-model:value="modal.data.field_label" @blur="onFieldLabelChanged" />
+          <a-input type="input" v-model:value="modal.data.field_label" @blur="onFieldLabelChanged" />
         </a-form-item>
         <a-form-item :label="$t('field_type')" name="type">
           <a-select
@@ -90,7 +90,7 @@
             <a-radio-group>
               <template v-for="option in modal.data.options">
                 <a-radio :style="verticalStyle" :value="option.value">
-                  <a-input v-model:value="option.label" />
+                  <a-input type="input" v-model:value="option.label" />
                 </a-radio>
               </template>
               <a-radio @click="addOptionItem"> Add option</a-radio>
@@ -118,7 +118,7 @@
           />
         </a-form-item>
         <!-- <a-form-item label="規則" name="rule">
-                <a-input v-model:value="modal.data.rule" />
+                <a-input type="input" v-model:value="modal.data.rule" />
             </a-form-item> -->
         <a-form-item :label="$t('column_data')" name="in_column" v-if="modal.data.required">
           <a-switch

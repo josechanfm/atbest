@@ -87,7 +87,7 @@
           />
         </a-form-item>
         <a-form-item :label="$t('title')" name="title">
-          <a-input v-model:value="modal.data.title" />
+          <a-input type="input" v-model:value="modal.data.title" />
         </a-form-item>
         sss
         <a-form-item :label="$t('content')" name="content">
@@ -108,7 +108,7 @@
           <a-date-picker v-model:value="modal.data.expire_at" :valueFormat="dateFormat" />
         </a-form-item>
         <a-form-item :label="$t('url')" name="url">
-          <a-input v-model:value="modal.data.url" />
+          <a-input type="input" v-model:value="modal.data.url" />
         </a-form-item>
         <a-row>
           <a-col>

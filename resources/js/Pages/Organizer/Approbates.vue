@@ -33,10 +33,10 @@
             
         >
             <a-form-item label="Name" name="name">
-                <a-input v-model:value="modal.data.name" />
+                <a-input type="input" v-model:value="modal.data.name" />
             </a-form-item>
             <a-form-item label="Title" name="title">
-                <a-input v-model:value="modal.data.title" />
+                <a-input type="input" v-model:value="modal.data.title" />
             </a-form-item>
             <a-form-item label="Description" name="description">
                 <!-- <quill-editor v-model:value="modal.data.description" style="min-height:200px;" /> -->

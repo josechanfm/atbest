@@ -15,7 +15,7 @@
         @finishFailed="onFinishFailed"
       >
         <a-form-item :label="$t('event_title')" name="title">
-          <a-input v-model:value="event.title" />
+          <a-input type="input" v-model:value="event.title" />
         </a-form-item>
         <a-form-item :label="$t('type')" name="category_code">
           <a-select v-model:value="event.category_code" :options="categories" />

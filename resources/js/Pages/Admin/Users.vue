@@ -53,17 +53,17 @@
         :validate-messages="validateMessages"
       >
         <a-form-item :label="$t('username')" name="name">
-          <a-input v-model:value="modal.data.name" />
+          <a-input type="input" v-model:value="modal.data.name" />
         </a-form-item>
         <a-form-item :label="$t('email')" name="email">
-          <a-input v-model:value="modal.data.email" />
+          <a-input type="input" v-model:value="modal.data.email" />
         </a-form-item>
         <a-form-item
           :label="$t('password')"
           name="password"
           v-if="modal.mode == 'CREATE'"
         >
-          <a-input v-model:value="modal.data.password" />
+          <a-input type="input" v-model:value="modal.data.password" />
         </a-form-item>
         <a-form-item :label="$t('organization_manager')" name="organization_ids">
           <div v-for="member in modal.data.members">
@@ -117,7 +117,7 @@
           </a-col>
         </a-row>
         <a-form-item :label="$t('password')" name="password" v-if="modal.mode == 'EDIT'">
-          <a-input v-model:value="modal.data.password" />
+          <a-input type="input" v-model:value="modal.data.password" />
         </a-form-item>
 
       </a-form>

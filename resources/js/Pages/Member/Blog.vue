@@ -51,7 +51,7 @@
             :validate-messages="validateMessages"
           >
             <a-form-item :label="$t('title')" name="title">
-              <a-input v-model:value="new_blog_content.title"></a-input>
+              <a-input type="input" v-model:value="new_blog_content.title"></a-input>
             </a-form-item>
             <a-form-item :label="$t('content')" name="content">
               <a-textarea v-model:value="new_blog_content.content"></a-textarea>

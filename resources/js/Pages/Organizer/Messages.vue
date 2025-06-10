@@ -74,10 +74,10 @@
           />
         </a-form-item>
         <a-form-item :label="$t('sender')" name="sender">
-          <a-input v-model:value="modal.data.sender" />
+          <a-input type="input" v-model:value="modal.data.sender" />
         </a-form-item>
         <a-form-item :label="$t('title')" name="title">
-          <a-input v-model:value="modal.data.title" />
+          <a-input type="input" v-model:value="modal.data.title" />
         </a-form-item>
         <a-form-item :label="$t('content')" name="content">
           <RichTextEditor v-model="modal.data.content"/>

@@ -39,19 +39,19 @@
         :validate-messages="validateMessages"
       >
         <a-form-item :label="$t('email.sender')">
-          <a-input v-model:value="modal.data.sender" />
+          <a-input type="input" v-model:value="modal.data.sender" />
         </a-form-item>
         <a-form-item :label="$t('email.recipient')">
-          <a-input v-model:value="modal.data.recipient" />
+          <a-input type="input" v-model:value="modal.data.recipient" />
         </a-form-item>
         <a-form-item :label="$t('email.cc')">
-          <a-input v-model:value="modal.data.cc" />
+          <a-input type="input" v-model:value="modal.data.cc" />
         </a-form-item>
         <a-form-item :label="$t('email.bcc')">
-          <a-input v-model:value="modal.data.bcc" />
+          <a-input type="input" v-model:value="modal.data.bcc" />
         </a-form-item>
         <a-form-item :label="$t('email.subject')">
-          <a-input v-model:value="modal.data.subject" />
+          <a-input type="input" v-model:value="modal.data.subject" />
         </a-form-item>
         <a-form-item :label="$t('email.message')">
           <a-textarea v-model:value="modal.data.message" :rows="5"/>

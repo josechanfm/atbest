@@ -223,7 +223,7 @@ export default {
 </main>
 </template>
 
-<style>
+<style scoped>
 .bg-primary {
     --bg-opacity: 1;
     background-color: #ff69b4;

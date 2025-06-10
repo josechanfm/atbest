@@ -78,7 +78,7 @@
     <style scoped>
     /* 基礎卡片樣式 */
     .card {
-        @apply relative z-10 flex flex-col gap-4 text-center backdrop-blur-sm bg-gray-100/70 p-6 md:px-12 rounded-lg shadow-xl border border-slate-600 overflow-hidden;
+        @apply relative z-10 flex flex-col gap-4 text-center backdrop-blur-sm bg-gray-100/70 p-6 md:px-12 rounded-lg shadow-xl border overflow-hidden;
         transition: all 0.3s ease;
         will-change: transform, box-shadow, border-color;
     }

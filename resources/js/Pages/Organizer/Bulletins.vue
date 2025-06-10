@@ -46,10 +46,10 @@
             <a-date-picker v-model:value="modal.data.date" :format="dateFormat" :valueFormat="dateFormat" />
           </a-form-item>
           <a-form-item :label="$t('title')" name="title">
-            <a-input v-model:value="modal.data.title" />
+            <a-input type="input" v-model:value="modal.data.title" />
           </a-form-item>
           <a-form-item :label="$t('description')" name="description">
-            <a-input v-model:value="modal.data.description" />
+            <a-input type="input" v-model:value="modal.data.description" />
           </a-form-item>
           <a-form-item :label="$t('content')" name="content">
             <a-textarea v-model:value="modal.data.content" />

@@ -25,18 +25,18 @@
                 <a-row :gutter="24" :span="24">
                   <a-col :span="12">
                     <a-form-item :label="$t('family_name')" name="family_name">
-                      <a-input v-model:value="member.family_name" />
+                      <a-input type="input" v-model:value="member.family_name" />
                     </a-form-item>
                     <a-form-item :label="$t('middle_name')" name="middle_name">
-                      <a-input v-model:value="member.middle_name" />
+                      <a-input type="input" v-model:value="member.middle_name" />
                     </a-form-item>
                   </a-col>
                   <a-col :span="12">
                     <a-form-item :label="$t('given_name')" name="given_name">
-                      <a-input v-model:value="member.given_name" />
+                      <a-input type="input" v-model:value="member.given_name" />
                     </a-form-item>
                     <a-form-item :label="$t('display_name')" name="display_name">
-                      <a-input v-model:value="member.display_name" />
+                      <a-input type="input" v-model:value="member.display_name" />
                     </a-form-item>
                   </a-col>
                 </a-row>
@@ -52,16 +52,16 @@
                       />
                     </a-form-item>
                     <a-form-item :label="$t('country')" name="country">
-                      <a-input v-model:value="member.country" />
+                      <a-input type="input" v-model:value="member.country" />
                     </a-form-item>
                     <a-form-item :label="$t('nationality')" name="nationality">
-                      <a-input v-model:value="member.nationality" />
+                      <a-input type="input" v-model:value="member.nationality" />
                     </a-form-item>
                     <a-form-item :label="$t('address')" name="address">
-                      <a-input v-model:value="member.address" />
+                      <a-input type="input" v-model:value="member.address" />
                     </a-form-item>
                     <a-form-item :label="$t('email')" name="email">
-                      <a-input v-model:value="member.email" />
+                      <a-input type="input" v-model:value="member.email" />
                     </a-form-item>
                   </a-col>
                   <a-col :span="12">
@@ -72,10 +72,10 @@
                       </a-radio-group>
                     </a-form-item>
                     <a-form-item :label="$t('city')" name="city">
-                      <a-input v-model:value="member.city" />
+                      <a-input type="input" v-model:value="member.city" />
                     </a-form-item>
                     <a-form-item :label="$t('mobile_number')" name="mobile">
-                      <a-input v-model:value="member.mobile" />
+                      <a-input type="input" v-model:value="member.mobile" />
                     </a-form-item>
                   </a-col>
                 </a-row>

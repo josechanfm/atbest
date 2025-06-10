@@ -84,7 +84,7 @@
           </a-col>
         </a-row>
         <a-form-item :label="$t('given_name')" name="given_name">
-          <a-input v-model:value="modal.data.given_name" />
+          <a-input type="input" v-model:value="modal.data.given_name" />
         </a-form-item>
         <a-row :span="24">
           <a-col :span="12">
@@ -93,7 +93,7 @@
               name="middle_name"
               :label-col="{ span: 8 }"
             >
-              <a-input v-model:value="modal.data.middle_name" />
+              <a-input type="input" v-model:value="modal.data.middle_name" />
             </a-form-item>
           </a-col>
           <a-col :span="12">
@@ -102,12 +102,12 @@
               name="family_name"
               :label-col="{ span: 6 }"
             >
-              <a-input v-model:value="modal.data.family_name" />
+              <a-input type="input" v-model:value="modal.data.family_name" />
             </a-form-item>
           </a-col>
         </a-row>
         <a-form-item :label="$t('display_name')" name="display_name">
-          <a-input v-model:value="modal.data.display_name" />
+          <a-input type="input" v-model:value="modal.data.display_name" />
         </a-form-item>
         <a-row :span="24">
           <a-col :span="12">
@@ -136,7 +136,7 @@
               :label-col="{ span: 8 }"
               :wrapper-col="{ span: 14, offset: 0 }"
             >
-              <a-input v-model:value="modal.data.email" />
+              <a-input type="input" v-model:value="modal.data.email" />
             </a-form-item>
           </a-col>
           <a-col :span="12">
@@ -145,7 +145,7 @@
               name="mobile"
               :label-col="{ span: 8 }"
             >
-              <a-input v-model:value="modal.data.mobile" />
+              <a-input type="input" v-model:value="modal.data.mobile" />
             </a-form-item>
           </a-col>
         </a-row>

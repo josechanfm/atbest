@@ -17,49 +17,49 @@
                     <a-row :gutter="5">
                         <a-col :span="8">
                             <a-form-item label="Abbr" name="abbr" :labelCol="{ span: 9 }">
-                                <a-input v-model:value="organization.abbr" />
+                                <a-input type="input" v-model:value="organization.abbr" />
                             </a-form-item>
                         </a-col>
                         <a-col :span="16">
                             <a-form-item label="Name Zh" name="name_zh">
-                                <a-input v-model:value="organization.name_zh" />
+                                <a-input type="input" v-model:value="organization.name_zh" />
                             </a-form-item>
                         </a-col>
                     </a-row>
                     <a-row :gutter="5">
                         <a-col :span="8">
                             <a-form-item :label="$t('email')" name="email" :labelCol="{ span: 9 }">
-                                <a-input v-model:value="organization.email" />
+                                <a-input type="input" v-model:value="organization.email" />
                             </a-form-item>
                         </a-col>
                         <a-col :span="8">
                             <a-form-item :label="$t('phone')" :labelCol="{ span: 9 }">
-                                <a-input v-model:value="organization.phone" />
+                                <a-input type="input" v-model:value="organization.phone" />
                             </a-form-item>
                         </a-col>
                         <a-col :span="8">
                             <a-form-item :label="$t('country')" :labelCol="{ span: 9 }">
-                                <a-input v-model:value="organization.country" />
+                                <a-input type="input" v-model:value="organization.country" />
                             </a-form-item>
                         </a-col>
                     </a-row>
                     <a-form-item :label="$t('address')">
-                        <a-input v-model:value="organization.address" />
+                        <a-input type="input" v-model:value="organization.address" />
                     </a-form-item>
                     <a-form-item label="Website">
-                        <a-input v-model:value="organization.href" />
+                        <a-input type="input" v-model:value="organization.href" />
                     </a-form-item>
                     <a-form-item label="Description">
-                        <a-input v-model:value="organization.description" />
+                        <a-input type="input" v-model:value="organization.description" />
                     </a-form-item>
                     <a-form-item label="Content">
-                        <a-input v-model:value="organization.content" />
+                        <a-input type="input" v-model:value="organization.content" />
                     </a-form-item>
                     <a-form-item label="Card Style">
                         <a-select v-model:value="organization.card_style" :options="cardStyles" />
                     </a-form-item>
                     <a-form-item label="Logo">
-                        <a-input v-model:value="organization.logo" />
+                        <a-input type="input" v-model:value="organization.logo" />
                     </a-form-item>
 
                     <a-form-item :label="$t('logo')">

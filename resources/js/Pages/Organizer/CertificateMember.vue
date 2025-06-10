@@ -31,18 +31,18 @@
             :rules="rules"
             :validate-messages="validateMessages"
         >
-            <a-input type="hidden" v-model:value="modal.data.id"/>
+            <a-input type="input" type="hidden" v-model:value="modal.data.id"/>
             <a-form-item label="姓名(中文)" name="name_zh">
-                <a-input v-model:value="modal.data.name_zh" />
+                <a-input type="input" v-model:value="modal.data.name_zh" />
             </a-form-item>
             <a-form-item label="姓名(外文)" name="name_zh">
-                <a-input v-model:value="modal.data.name_fn" />
+                <a-input type="input" v-model:value="modal.data.name_fn" />
             </a-form-item>
             <a-form-item label="別名" name="nickname">
-                <a-input v-model:value="modal.data.nickname" />
+                <a-input type="input" v-model:value="modal.data.nickname" />
             </a-form-item>
             <a-form-item label="手機" name="mobile">
-                <a-input v-model:value="modal.data.mobile" />
+                <a-input type="input" v-model:value="modal.data.mobile" />
             </a-form-item>
         </a-form>
         <template #footer>

@@ -52,7 +52,7 @@
             </li>
             <template v-if="$page.props.user">
                 <li>
-                    <a :href="route('member.dashboard')" target="_blank" class="text-bold text-white hover:text-yellow-300 text-md">Member</a>
+                    <a :href="route('member.dashboard')" target="_blank" class="text-bold text-white hover:text-yellow-300 text-md">{{ $t("member") }}</a>
                 </li>
                 <li>
                     <a class="cursor-pointer text-bold text-white hover:text-yellow-300 text-md" @click="logout">{{ $t("log_out") }}</a>

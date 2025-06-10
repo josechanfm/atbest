@@ -11,13 +11,13 @@
           @finishFailed="onFinishFailed"
         >
           <a-form-item :label="$t('email.sender')" name="sender">
-            <a-input v-model:value="email.sender" />
+            <a-input type="input" v-model:value="email.sender" />
           </a-form-item>
           <a-form-item :label="$t('email.recipient')" name="recipient">
-            <a-input v-model:value="email.recipient" />
+            <a-input type="input" v-model:value="email.recipient" />
           </a-form-item>
           <a-form-item :label="$t('email.subject')" name="subject">
-            <a-input v-model:value="email.subject" />
+            <a-input type="input" v-model:value="email.subject" />
           </a-form-item>
           <a-form-item :label="$t('email.message')" name="message">
             <a-textarea v-model:value="email.message" />

@@ -192,7 +192,7 @@ export default {
 // });
 </script>
 
-<style>
+<style scoped>
 #app .trigger {
   font-size: 18px;
   line-height: 64px;

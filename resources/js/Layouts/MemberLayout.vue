@@ -68,7 +68,7 @@ export default {
     <Head :title="title" />
     <Banner />
     <div class="min-h-screen bg-gray-100">
-      <nav class="bg-white border-b border-gray-100">
+      <nav class="menu-bar text-white shadow-lg">
         <!-- Primary Navigation Menu -->
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div class="flex justify-between h-16">
@@ -81,37 +81,38 @@ export default {
                 </Link>
               </div>
               <!-- Navigation Links -->
-              <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                <NavLink
+              <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex font-bold">
+                <a class="inline-flex items-center px-1 pt-1"
                   :href="route('member.dashboard')"
                   :active="route().current('/')"
                 >
                   {{ $t("member_dashboard") }}
-                </NavLink>
-                <NavLink :href="route('member.profile.index')">
+                </a>
+                <a class="inline-flex items-center px-1 pt-1" :href="route('member.profile.index')">
                   {{ $t("profile") }}
-                </NavLink>
-                <NavLink :href="route('member.entries.index')">
+                </a>
+                <a class="inline-flex items-center px-1 pt-1" :href="route('member.entries.index')">
                   {{ $t("form_filled") }}
-                </NavLink>
-                <NavLink :href="route('member.blogs.index')">
+                </a>
+                <a class="inline-flex items-center px-1 pt-1" :href="route('member.blogs.index')">
                   {{ $t("blogs") }}
-                </NavLink>
-                <NavLink :href="route('widget.admin.dashboard')" v-permission="['widget']">
+                </a>
+                <a class="inline-flex items-center px-1 pt-1" :href="route('widget.admin.dashboard')" v-permission="['widget']">
                   {{ $t("widget") }}
-                </NavLink>
-                <NavLink :href="route('member.guardian.back')" v-if="$page.props.by_guardian">
+                </a>
+                <a class="inline-flex items-center px-1 pt-1" :href="route('member.guardian.back')" v-if="$page.props.by_guardian">
                   {{ $t("guardian") }}
-                </NavLink>
-                <NavLink v-if="isOrganizer()" :href="route('organizer.dashboard')">
+                </a>
+                <a class="inline-flex items-center px-1 pt-1" v-if="isOrganizer()" :href="route('organizer.dashboard')">
                   {{ $t("manager") }} 
-                </NavLink>
+                </a>
               </div>
             </div>
 
             <div class="flex items-center sm:ml-6">
               <!-- Settings Dropdown -->
               <language-switcher />
+
               <div class="ml-3 relative p-4">
                 <Dropdown align="right" width="48">
                   <template #trigger>
@@ -125,10 +126,10 @@ export default {
                       />
                     </button>
                     <a-avatar v-else>{{ $page.props.auth.user.member.given_name.charAt($page.props.auth.user.member.given_name.length-1) }}</a-avatar>
-                    <span class="inline-flex rounded-md">
+                    <span class="inline-flex rounded-md mx-2">
                       <button
                         type="button"
-                        class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition"
+                        class="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-xl text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition"
                       >
                         {{ $page.props.auth.user.member.given_name }}
                         <svg
@@ -176,9 +177,9 @@ export default {
                         </a>
                       </div> -->
 
-                      <!-- <form method="POST" @submit.prevent="logout"> -->
-                        <DropdownLink @click="logout"> {{ $t("log_out") }} </DropdownLink>
-                      <!-- </form> -->
+                      <form method="POST" @submit.prevent="logout">
+                        <DropdownLink as="button"> {{ $t("log_out") }} </DropdownLink>
+                      </form>
                     </div>
                   </template>
                 </Dropdown>
@@ -206,3 +207,11 @@ export default {
     </div>
   </div>
 </template>
+
+<style scroped>
+.menu-bar {
+
+  @apply bg-gradient-to-r from-blue-800 from-0% via-[#2a5298] via-70% to-indigo-800 to-90%
+}
+
+</style>

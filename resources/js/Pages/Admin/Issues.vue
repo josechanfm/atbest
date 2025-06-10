@@ -43,7 +43,7 @@
         :validate-messages="validateMessages"
         @finish="onFormFinish"
       >
-        <a-input type="hidden" v-model:value="modal.data.id" />
+        <a-input type="input" type="hidden" v-model:value="modal.data.id" />
         <a-form-item :label="$t('topic')" name="topic">
           <a-select
             v-model:value="modal.data.topic"
@@ -51,7 +51,7 @@
           />
         </a-form-item>
         <a-form-item :label="$t('title')" name="title">
-          <a-input v-model:value="modal.data.title" />
+          <a-input type="input" v-model:value="modal.data.title" />
         </a-form-item>
         <a-form-item :label="$t('content')" name="content">
           <a-textarea v-model:value="modal.data.content" :rows="10" />

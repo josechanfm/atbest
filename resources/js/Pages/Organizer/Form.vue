@@ -4,10 +4,10 @@
       <a-form ref="modalRef" :model="form" name="From" layout="vertical" autocomplete="off" :rules="rules"
         :validate-messages="validateMessages" @finish="onFinish" @finishFailed="onFinishFailed">
         <a-form-item :label="$t('form_name')" name="name">
-          <a-input v-model:value="form.name" />
+          <a-input type="input" v-model:value="form.name" />
         </a-form-item>
         <a-form-item :label="$t('title')" name="title">
-          <a-input v-model:value="form.title" />
+          <a-input type="input" v-model:value="form.title" />
         </a-form-item>
         <div class="text-right">
           <a @click="form.openWelcome = !form.openWelcome">{{ $t('form_welcome') }}</a>

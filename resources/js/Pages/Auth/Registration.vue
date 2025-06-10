@@ -53,18 +53,18 @@ export default {
                     @finishFailed="onFinishFailed">
                     <a-form-item :label="$t('name')" name="name"
                         :rules="[{ required: true, message: $t('please_input_name') }]">
-                        <a-input v-model:value="formState.name" />
+                        <a-input type="input" v-model:value="formState.name" />
                     </a-form-item>
                     <a-form-item :label="$t('given_name')" name="given_name"
                         :rules="[{ required: true, message: $t('please_input_given_name') }]">
-                        <a-input v-model:value="formState.given_name" />
+                        <a-input type="input" v-model:value="formState.given_name" />
                     </a-form-item>
                     <!-- <a-form-item :label="$t('middle_name')" name="middle_name">
-                        <a-input v-model:value="formState.middle_name" />
+                        <a-input type="input" v-model:value="formState.middle_name" />
                     </a-form-item> -->
                     <a-form-item :label="$t('family_name')" name="family_name"
                         :rules="[{ required: true, message: $t('please_input_family_name') }]">
-                        <a-input v-model:value="formState.family_name" />
+                        <a-input type="input" v-model:value="formState.family_name" />
                     </a-form-item>
                     <!-- <a-form-item :label="$t('affiliate')" name="organization_id"
                         :rules="[{ required: true, message: 'Please input your organization belongs to!' }]">
@@ -73,11 +73,11 @@ export default {
                     </a-form-item> -->
                     <a-form-item :label="$t('registration_code')" name="registration_code"
                         :rules="[{ required: true, message: $t('please_input_registration_code') }]">
-                        <a-input v-model:value="formState.registration_code" />
+                        <a-input type="input" v-model:value="formState.registration_code" />
                     </a-form-item>
                     <a-form-item :label="$t('login_email')" name="email"
                         :rules="[{ required: true, message: $t('please_input_email') }]">
-                        <a-input v-model:value="formState.email" type="email" />
+                        <a-input type="input" v-model:value="formState.email"/>
                     </a-form-item>
                     <a-form-item :label="$t('password')" name="password"
                         :rules="[{ required: true, message: $t('please_input_password') }]">
@@ -97,7 +97,7 @@ export default {
 </template>
 
 
-<style>
+<style >
 .register-background {
     background: rgb(210, 220, 230);
     background: linear-gradient(135deg, rgba(160, 175, 200, 0.3) 0%, rgba(190, 205, 220, 0.583) 25%, rgba(200, 215, 225, 0.538) 60%, rgba(210, 220, 230, 0.8) 100%);

@@ -6,6 +6,7 @@ import QRCodeVue3 from "qrcode-vue3";
 import {
     gsap
 } from 'gsap';
+import { ref } from 'vue'
 
 export default {
     components: {
@@ -71,6 +72,80 @@ export default {
             qrcodeLogo: '/storage/images/site_logo.png'
         };
     },
+	setup() {
+		const flipCard = ref(null)
+		const front = ref(null)
+		const back = ref(null)
+		const isFlipped = ref(false)
+
+		// 初始化设置
+		gsap.set(back.value, { rotationY: -180 })
+
+		const flipCardAnimation = () => {
+			getQrcode()
+			const duration = 0.6
+			const ease = "back.out(1.7)"
+			
+			if (!isFlipped.value) {
+				// 正面翻转到背面
+				gsap.timeline()
+				.to(flipCard.value, {
+					rotationY: 180,
+					duration,
+					ease
+				})
+				.to(front.value, { 
+					opacity: 0,
+					duration: duration/2,
+					ease: "power1.in"
+				}, 0)
+				.to(back.value, { 
+					opacity: 1,
+					duration: duration/2,
+					ease: "power1.out"
+				}, duration/2)
+			} else {
+				// 背面翻转到正面
+				gsap.timeline()
+				.to(flipCard.value, { rotationY: 0, duration, ease })
+				.to(back.value, { opacity: 0, duration: duration/2, ease: "power1.in" }, 0)
+				.to(front.value, { opacity: 1, duration: duration/2, ease: "power1.out" }, duration/2)
+			}
+			
+			isFlipped.value = !isFlipped.value
+		}
+
+		const qrcode = ref('');
+        const showQrcode = ref(false);
+        const interval = ref(null);
+
+        const getQrcode = () => {
+            axios.get(route("member.getQrcode")).then((response) => {
+                qrcode.value = response.data;
+            });
+        };
+
+        const onShowQrcode = () => {
+            showQrcode.value = !showQrcode.value;
+            if (showQrcode.value) {
+                // getQrcode();
+                interval.value = setInterval(() => {
+                    getQrcode();
+                }, 5000);
+            } else {
+                clearInterval(interval.value);
+            }
+        };
+
+		return {
+			flipCard,
+			front,
+			back,
+			flipCardAnimation,
+			
+            qrcode, showQrcode, getQrcode, onShowQrcode,
+		}
+	},
     created() {
         console.log("feature animate")
         if (this.features.length > 0) {
@@ -99,29 +174,12 @@ export default {
         });
     },
     methods: {
-        getQrcode() {
-            axios.get(route("member.getQrcode")).then((response) => {
-                this.qrcode = response.data;
-            });
-        },
-        onShowQrcode() {
-            this.showQrcode = !this.showQrcode;
-            if (this.showQrcode) {
-                this.getQrcode();
-                this.interval = setInterval(() => {
-                    this.getQrcode();
-                }, 10000);
-            } else {
-                clearInterval(this.interval);
-            }
-        },
         switchOrganization(member) {
             this.$inertia.post(route('member.membership.switch', {
                 member: member.id
             }))
             //this.member=this.members.find(m=>m.id==member.id)
         }
-
     },
 };
 </script>
@@ -176,34 +234,13 @@ export default {
                 <!-- News Section end-->
             </div>
 
-            <div class="flex-none w-[400px] mx-auto">
-                <div class="container mx-auto pt-5">
-                    <div class="bg-white relative shadow rounded-lg">
-                        <!-- QRcode -->
-                        <div class="flex flex-col justify-center items-center" v-if="showQrcode">
-                            <div>
-                                <QRCodeVue3 :key="qrcode" v-bind:value="qrcode" :image="qrcodeLogo" :dotsOptions="{
-                      type: 'dots',
-                      color: '#26249a',
-                      gradient: {
-                        type: 'linear',
-                        rotation: 0,
-                        colorStops: [
-                          { offset: 0, color: '#26249a' },
-                          { offset: 1, color: '#26249a' },
-                        ],
-                      },
-                    }" :cornersSquareOptions="{
-                      type: 'square',
-                      color: '#e00404'
-                    }" :cornersDotOptions="{
-                      color: '#e00404'
-                    }" />
-                            </div>
-                        </div>
+            <div class="flex-none w-[400px] mx-auto ">
+                <div class="container mx-auto pt-12 flip-card-container" @click="flipCardAnimation">
+                    <div class="bg-white relative shadow rounded-lg flip-card  hover:scale-105 transform transition-transform " ref="flipCard">
+                        
                         <!-- card start -->
-                        <div class="mx-auto relative py-4 w-96 hover:scale-105 transform transition-transform mb-4">
-                            <div :style="cardStyle['font_style']" class="absolute z-10 flex rounded-lg flex-col m-4 text-sm w-[350px]" @click="onShowQrcode">
+                        <div class="mx-auto z-10 relative py-4 w-96 mb-4 flip-card-front" ref="front">
+                            <div :style="cardStyle['font_style']" class="absolute z-10 flex rounded-lg flex-col m-4 text-sm w-[350px]" >
                                 <div class="flex flex-col w-xl">
                                     <div class="flex justify-center">
                                         <div class="text-lg font-bold">{{ member.organization['name_' + $t('lang')] }}</div>
@@ -232,11 +269,56 @@ export default {
                                     </div>
                                 </div>
                             </div>
-                            <img class="relative object-cover w-full h-52 rounded-lg z-0" :src="'/storage/images/' + cardStyle['background']" />
                         </div>
                         <!-- card end -->
-
-                        <div class="mt-16">
+						 <!-- QRcode -->
+						<div class="flex flip-card-back z-10" ref="back">
+                            <div class="flex gap-6" > 
+                                <QRCodeVue3 :key="qrcode" v-bind:value="qrcode" :image="qrcodeLogo" :dotsOptions="{
+										type: 'dots',
+										color: '#26249a',
+										gradient: {
+											type: 'linear',
+											rotation: 0,
+											colorStops: [
+											{ offset: 0, color: '#26249a' },
+											{ offset: 1, color: '#26249a' },
+											],
+										},
+									}" 
+									:width="150"
+									:height="150"
+									:cornersSquareOptions="{ type: 'square', color: '#e00404'}" 
+									:cornersDotOptions="{color: '#e00404'}" 
+								/>
+                            </div>
+							<div class="flex flex-col">
+								<div class="w-full pt-6">
+									<h3 class="text-xl font-bold mb-4 text-center text-red-400">會員卡</h3>
+									
+									<div class="space-y-3 text-sm ">
+										<div class="flex items-start">
+											<svg class="w-5 h-5 mr-2 text-blue-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+												<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+											</svg>
+											<span>專屬會員活動優先報名</span>
+										</div>
+										
+									</div>
+									
+									<div class="mt-6 text-xs text-gray-400 text-center">
+										<p>客服專線: 0000-0000</p>
+									</div>
+								</div>
+							</div>
+                        </div>
+						<img class="relative object-cover w-full h-52 rounded-lg z-0" :src="'/storage/images/' + cardStyle['background']" />
+						<!-- QRcode -->
+					</div>
+				</div>
+				<div class="container mx-auto ">
+					<div class="bg-white shadow-md mt-10 rounded-lg">
+                        <div class="py-10">
                             <h1 class="font-bold text-center text-3xl text-gray-900">
                                 {{ member.family_name }}{{ member.given_name }}
                             </h1>
@@ -296,12 +378,51 @@ export default {
 </MemberLayout>
 </template>
 
-<style>
+<style scoped>
 #pure-html {
     all: initial;
 }
 
 #pure-html * {
     all: revert;
+}
+
+
+.flip-card-container {
+  perspective: 1000px;
+  /* width: 300px; */
+  height: 250px; 
+  cursor: pointer;
+}
+
+
+.flip-card {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.6s;
+}
+
+.flip-card-front, .flip-card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+}
+
+.flip-card-front {
+  /* background: linear-gradient(135deg, #6B73FF 0%, #000DFF 100%); */
+  color: white;
+}
+
+.flip-card-back {
+  /* background: linear-gradient(135deg, #FF6B6B 0%, #FF0000 100%); */
+  opacity: 0;
+  transform: rotateY(-180deg);
 }
 </style>

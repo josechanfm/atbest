@@ -11,7 +11,7 @@
                     <a-form ref="formRef" name="Form" autocomplete="off" v-bind="layout" :model="member" layout="vertical"
                         :rules="rules" :validate-messages="validateMessages" @finish="onFinish">
                         <a-form-item label="Family Name" name="family_name">
-                            <a-input v-model:value="member.family_name" />
+                            <a-input type="input" v-model:value="member.family_name" />
                         </a-form-item>
                         <div class="flex flex-row item-center justify-center">
                             <a-button type="primary" html-type="submit">{{$t('submit')}}</a-button>

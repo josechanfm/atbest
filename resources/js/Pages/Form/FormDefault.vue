@@ -29,7 +29,7 @@
                 :name="field.id"
                 :rules="[{ required: field.required }]"
               >
-                <a-input v-model:value="$page.props.user.id" />
+                <a-input type="input" v-model:value="$page.props.user.id" />
               </a-form-item>
             </div>
 
@@ -39,7 +39,7 @@
                 :name="field.id"
                 :rules="[{ required: field.required }]"
               >
-                <a-input v-model:value="formData[field.id]" />
+                <a-input type="input" v-model:value="formData[field.id]" />
               </a-form-item>
             </div>
             <div v-else-if="field.type == 'textarea'">
@@ -151,7 +151,7 @@
                 :name="field.id"
                 :rules="[{ required: field.required }, { type: 'email' }]"
               >
-                <a-input v-model:value="formData[field.id]" />
+                <a-input type="input" v-model:value="formData[field.id]" />
               </a-form-item>
             </div>
             <div v-else-if="field.type == 'photo'">

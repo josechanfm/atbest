@@ -85,34 +85,34 @@
           name="abbr"
           :rules="[{ required: true }]"
         >
-          <a-input v-model:value="modal.data.abbr" />
+          <a-input type="input" v-model:value="modal.data.abbr" />
         </a-form-item>
         <a-form-item :label="$t('organization_name_zh')" name="name_zh">
-          <a-input v-model:value="modal.data.name_zh" />
+          <a-input type="input" v-model:value="modal.data.name_zh" />
         </a-form-item>
         <a-form-item :label="$t('organization_name_en')" name="name_en">
-          <a-input v-model:value="modal.data.name_en" />
+          <a-input type="input" v-model:value="modal.data.name_en" />
         </a-form-item>
         <a-form-item :label="$t('organization_name_pt')" name="name_pt">
-          <a-input v-model:value="modal.data.name_pt" />
+          <a-input type="input" v-model:value="modal.data.name_pt" />
         </a-form-item>
         <a-form-item :label="$t('email')" name="email">
-          <a-input v-model:value="modal.data.email" />
+          <a-input type="input" v-model:value="modal.data.email" />
         </a-form-item>
         <a-form-item :label="$t('phone')" name="phone">
-          <a-input v-model:value="modal.data.phone" />
+          <a-input type="input" v-model:value="modal.data.phone" />
         </a-form-item>
         <a-form-item :label="$t('address')" name="address">
-          <a-input v-model:value="modal.data.address" />
+          <a-input type="input" v-model:value="modal.data.address" />
         </a-form-item>
         <a-form-item :label="$t('website')" name="href">
-          <a-input v-model:value="modal.data.href" />
+          <a-input type="input" v-model:value="modal.data.href" />
         </a-form-item>
         <a-form-item :label="$t('registration_code')" name="registration_code">
-          <a-input v-model:value="modal.data.registration_code" />
+          <a-input type="input" v-model:value="modal.data.registration_code" />
         </a-form-item>
         <a-form-item :label="$t('avatar')" name="avatar">
-          <a-input v-model:value="modal.data.avatar" />
+          <a-input type="input" v-model:value="modal.data.avatar" />
         </a-form-item>
         <a-form-item :label="$t('card_style')" name="card_style">
           <a-select v-model:value="modal.data.card_style" :options="cardStyles" />
@@ -121,7 +121,7 @@
           <a-textarea v-model:value="modal.data.content" />
         </a-form-item>
         <a-form-item :label="$t('president')" name="president">
-          <a-input v-model:value="modal.data.president" />
+          <a-input type="input" v-model:value="modal.data.president" />
         </a-form-item>
         <a-form-item :label="$t('status')" name="status">
           <a-switch
