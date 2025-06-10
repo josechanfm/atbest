@@ -56,10 +56,10 @@
           />
         </a-form-item>
         <a-form-item :label="$t('certificate_title')" name="cert_title">
-          <a-input type="input" type="input" v-model:value="modal.data.cert_title" />
+          <a-input type="input" v-model:value="modal.data.cert_title" />
         </a-form-item>
         <a-form-item :label="$t('certificate_body')" name="cert_body">
-          <a-input type="input" type="input" v-model:value="modal.data.cert_body" />
+          <a-input type="input" v-model:value="modal.data.cert_body" />
         </a-form-item>
         <a-form-item :label="$t('cert_logo')" name="cert_logo">
           <a-button @click="cropper.showModal = true">
@@ -102,13 +102,13 @@
           </div>
         </a-form-item>
         <a-form-item :label="$t('certificate_template')" name="cert_template">
-          <a-input type="input" type="input" v-model:value="modal.data.cert_template" />
+          <a-input type="input" v-model:value="modal.data.cert_template" />
         </a-form-item>
         <a-form-item :label="$t('number_format')" name="number_format">
-          <a-input type="input" type="input" v-model:value="modal.data.number_format" />
+          <a-input type="input" v-model:value="modal.data.number_format" />
         </a-form-item>
         <a-form-item :label="$t('rank_caption')" name="rank_caption">
-          <a-input type="input" type="input" v-model:value="modal.data.rank_caption" />
+          <a-input type="input" v-model:value="modal.data.rank_caption" />
         </a-form-item>
         <a-form-item :label="$t('description')" name="description">
           <RichTextEditor v-model="modal.data.description"/>

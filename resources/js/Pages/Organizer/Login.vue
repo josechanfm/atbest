@@ -12,7 +12,7 @@
             <p class="font-medium text-xl mb-20">系統登入</p>
             <a-form>
                 <a-form-item name="email">
-                    <a-input
+                    <a-input type="input"
                         placeholder="Email"
                         v-model:value="form.email"
                         size="large"

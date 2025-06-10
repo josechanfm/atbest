@@ -114,8 +114,8 @@ export default {
         :style="{ 'background-image': 'linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url(/storage/images/layout_background.jpg)' }">
 
         <div class="flex justify-between items-center py-6 px-10 container mx-auto">
-            <div class="flex">
-                <div class="shrink-0 flex items-center">
+            <div class="flex items-center">
+                <div class="shrink-0 flex ">
                     <a href="/"><img src="/storage/images/site_logo.png" class="block h-14 w-auto" /></a>
                 </div>
                 <h1 class="ml-2 text-2xl font-bold">
@@ -200,16 +200,16 @@ export default {
                             {{ $t('service') }}
                         </h1>
                         <div class="rounded-md list-none text-center">
-                            <li class="py-3 border-b-2">
+                            <li class="py-3 ">
                                 <inertia-link :href="route('forms')">報名表格</inertia-link>
                             </li>
-                            <li class="py-3 border-b-2">
+                            <li class="py-3 ">
                                 <inertia-link :href="route('events')">活動列表</inertia-link>
                             </li>
-                            <li class="py-3 border-b-2">
+                            <li class="py-3 ">
                                 <a href="https://www.gcs.gov.mo" target="_blank" class="list-none hover:text-indigo-600">新聞局</a>
                             </li>
-                            <li class="py-3 border-b-2">
+                            <li class="py-3 ">
                                 <a href="https://www.io.gov.mo/cn/home/" class="list-none hover:text-indigo-600" target="_blank">印務局</a>
                             </li>
                         </div>

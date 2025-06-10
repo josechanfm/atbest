@@ -248,9 +248,9 @@ export default {
                                     <div class="flex">
                                         <div class="flex flex-col flex-auto gap-1">
                                             <div class="">姓名：</div>
-                                            <div class="mb-2 ml-4">{{ member.family_name }}{{ member.given_name }}</div>
+                                            <div class="mb-2 ml-4 font-bold">{{ member.family_name }}{{ member.given_name }}</div>
                                             <div class="">會員編號：</div>
-                                            <div class="font-sans mb-2 ml-4">{{ member.member_number }}</div>
+                                            <div class="font-sans mb-2 ml-4 font-bold">{{ member.member_number }}</div>
                                         </div>
                                         <div class="flex">
                                             <img v-if="member.avatar" class="w-20 h-20" :src="member.avatar" />

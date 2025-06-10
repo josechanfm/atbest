@@ -11,12 +11,12 @@
     </div>
     <div class="container mx-auto">
       <div class="flex flex-auto gap-2">
-        <a-input
+        <a-input type="input"
           v-model:value="search.name"
           :placeholder="$t('please_input_name')"
           class="w-64"
         ></a-input>
-        <a-input
+        <a-input type="input"
           v-model:value="search.title"
           :placeholder="$t('please_input_title')"
           class="w-64"
