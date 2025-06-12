@@ -161,6 +161,7 @@ class FormController extends Controller
     }
 
     public function item(Request $request){
+        
         if(empty($request->t)){ 
             return redirect('forms');
         };
