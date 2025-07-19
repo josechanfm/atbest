@@ -75,6 +75,7 @@
       </div>
     </div>
     <p>From CAN NOT be delete, if Response is not empty.</p>
+    {{$t('From CAN NOT be delete, if Response is not empty.')}}
   </OrganizerLayout>
 </template>
 

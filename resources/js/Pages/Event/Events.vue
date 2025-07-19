@@ -7,7 +7,7 @@
             </h2>
         </template>
         <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow sm:rounded-lg ">
+            <div class="bg-white overflow-hidden shadow sm:rounded-lg ">
                 <a-table :dataSource="events" :columns="columns">
                     <template #bodyCell="{column, text, record, index}">
                         <template v-if="column.dataIndex=='operation'">

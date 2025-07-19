@@ -86,7 +86,7 @@ class ProfileController extends Controller
             //     }
             // }
             $file = $request->file('avatar');
-            $fileName=$member->id.'_avatar'.'.png';
+            $fileName=$member->id.'_'.time().'.png';
             $file->move(public_path('avatars'), $fileName);
             // $path = Storage::putFile('public/images/avatars', $file);
             $data['avatar']='/avatars/'.$fileName;

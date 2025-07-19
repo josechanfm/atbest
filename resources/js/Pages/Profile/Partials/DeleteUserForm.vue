@@ -74,6 +74,7 @@ const closeModal = () => {
                             type="password"
                             class="mt-1 block w-3/4"
                             placeholder="Password"
+                            autocomplete="current-password"
                             @keyup.enter="deleteUser"
                         />
 
@@ -87,7 +88,7 @@ const closeModal = () => {
                     </SecondaryButton>
 
                     <DangerButton
-                        class="ml-3"
+                        class="ms-3"
                         :class="{ 'opacity-25': form.processing }"
                         :disabled="form.processing"
                         @click="deleteUser"
