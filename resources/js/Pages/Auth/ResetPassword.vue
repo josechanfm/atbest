@@ -44,7 +44,6 @@ const submit = () => {
                     class="mt-1 block w-full"
                     required
                     autofocus
-                    autocomplete="username"
                 />
                 <InputError class="mt-2" :message="form.errors.email" />
             </div>

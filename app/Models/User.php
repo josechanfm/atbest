@@ -9,6 +9,11 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles;
+use Spatie\Permission\Traits\HasPermissions;
+use App\Notifications\SetPasswordNotification;
+use Attribute;
+use Illuminate\Auth\Notifications\ResetPassword as ResetPasswordNotification;
 
 class User extends Authenticatable
 {
@@ -17,6 +22,8 @@ class User extends Authenticatable
     use HasProfilePhoto;
     use Notifiable;
     use TwoFactorAuthenticatable;
+    use HasRoles;
+    use HasPermissions;
 
     /**
      * The attributes that are mass assignable.
@@ -55,7 +62,48 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
+
+    protected $with=['roles','member'];
+     
     protected $appends = [
         'profile_photo_url',
     ];
+
+    public function sendPasswordResetNotification($token)
+    {
+        if ($this->password === 'need-to-set') {
+            $this->notify(new SetPasswordNotification($token));
+            return;
+        }
+
+        $this->notify(new ResetPasswordNotification($token));
+    }
+
+    public function hasPasswordSet () {
+        return $this->password !== 'need-to-set';
+    }
+    public function isOrganizer(){
+        return $this->member?->isOrganizer();
+    }
+
+    public function member() {
+        return $this->hasOne(Member::class)->where('is_default',true);
+    }
+    public function members() {
+        return $this->hasMany(Member::class);
+    }
+
+    public function membership() : Attribute {
+        return $this->name.'===';
+    }
+    public function organizations(){
+        return Organization::whereIn('id', function ($query) {
+            $query->select('organization_id')
+                  ->from('members') // The members table
+                  ->where('user_id', $this->id);
+        })->get();
+    }
+    public function issues(){
+        return $this->hasMany(Issue::class);
+    }
 }
