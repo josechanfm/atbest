@@ -9,7 +9,8 @@ import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 
 defineProps({
-  canResetPassword: Boolean,
+    status: String,
+    canResetPassword: Boolean,
 });
 
 
@@ -40,6 +41,10 @@ const submit = () => {
     <template #logo>
       <AuthenticationCardLogo />
     </template>
+
+    <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
+        {{ status }}
+    </div>
 
     <form @submit.prevent="submit">
       <div>
