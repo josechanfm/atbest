@@ -158,7 +158,12 @@ export default {
                       <DropdownLink :href="route('member.profile.index')??null">
                         {{ $t("account") }}
                       </DropdownLink>
-
+                      <DropdownLink :href="route('member.entries.index')??null">
+                        {{ $t("form_filled") }}
+                      </DropdownLink>
+                      <DropdownLink :href="route('member.blogs.index')??null">
+                        {{ $t("blogs") }}
+                      </DropdownLink>
                       <DropdownLink
                         v-if="$page.props.hasApiFeatures"
                         :href="route('api-tokens.index')??null"

@@ -91,7 +91,7 @@
           </div>
           <nav class="text-sm" v-if="breadcrumb">
             <ol class="list-none flex">
-              <li class="breadcrumb-item hidden md:inline" v-for="(item, idx) in breadcrumb">
+              <li class="breadcrumb-item hidden md:inline" v-for="(item, idx) in breadcrumb" :key="idx">
                 <inertia-link v-if="item.url" :href="item.url">{{ item.label }}</inertia-link>
                 <span v-else>{{ item.label }}</span>
                 <span class="pl-2 pr-2" v-if="idx < breadcrumb.length - 1">&gt;</span>

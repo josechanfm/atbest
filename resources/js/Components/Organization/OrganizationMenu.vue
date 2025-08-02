@@ -110,7 +110,7 @@
         </span>
       </a-menu-item>
       
-      <a-sub-menu key="sub2">
+      <!-- <a-sub-menu key="sub2">
         <template #icon>
           <AppstoreOutlined />
         </template>
@@ -121,7 +121,7 @@
           <a-menu-item key="1121">Option 11</a-menu-item>
           <a-menu-item key="1122">Option 12</a-menu-item>
         </a-sub-menu>
-      </a-sub-menu>
+      </a-sub-menu> -->
     </a-menu>
   </div>
 </template>
