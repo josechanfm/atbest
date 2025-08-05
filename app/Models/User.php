@@ -67,7 +67,16 @@ class User extends Authenticatable
      
     protected $appends = [
         'profile_photo_url',
+        'is_organizer',
+        'organizer',
     ];
+
+    public function getOrganizerAttribute(){
+        return $this->organizer()->get();
+    }
+    public function getisOrganizerAttribute(){
+        return $this->isOrganizer();
+    }
 
     public function sendPasswordResetNotification($token)
     {
@@ -82,8 +91,12 @@ class User extends Authenticatable
     public function hasPasswordSet () {
         return $this->password !== 'need-to-set';
     }
+    
     public function isOrganizer(){
         return $this->member?->isOrganizer();
+    }
+    public function organizer(){
+        return $this->belongsToMany(Organization::class, 'organization_user');
     }
 
     public function member() {
@@ -96,7 +109,8 @@ class User extends Authenticatable
     public function membership() : Attribute {
         return $this->name.'===';
     }
-    public function organizations(){
+    public function organizations()
+    {
         return Organization::whereIn('id', function ($query) {
             $query->select('organization_id')
                   ->from('members') // The members table

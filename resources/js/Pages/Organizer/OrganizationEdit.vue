@@ -1,5 +1,5 @@
 <template>
-    <OrganizerLayout title="Dashboard">
+    <OrganizerLayout :title="$t('organization_edit')">
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 課程規劃

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Organizer;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\AdminUser;
+use App\Models\User;
 use App\Models\Organization;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Storage;
@@ -29,6 +30,7 @@ class OrganizationController extends Controller
     public function index()
     {
         $organizations=auth()->user()->organizations;
+        // dd($organizations);
         if(empty($organizations)){
             return to_route('/');
         }
