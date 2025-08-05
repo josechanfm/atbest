@@ -127,7 +127,7 @@ export default {
             previewImage: null,
             rules: {
                 name_zh: { required: true },
-                email: { required: true },
+                // email: { required: true },
                 state: { required: true },
             },
             validateMessages: {

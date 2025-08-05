@@ -117,7 +117,7 @@ export default {
                 <Dropdown align="right" width="48">
                   <template #trigger>
                     <button v-if="$page.props.auth.user.member.avatar"
-                      class="text-sm border-2 border-transparent rounded-full mt-5"
+                      class="absolute bottom-0 -left-2 text-sm border-2 border-transparent rounded-full mt-5"
                     >
                       <img
                         class="h-8 w-8 rounded-full object-cover"
@@ -126,7 +126,7 @@ export default {
                       />
                     </button>
                     <a-avatar v-else>{{ $page.props.auth.user.member.given_name.charAt($page.props.auth.user.member.given_name.length-1) }}</a-avatar>
-                    <span class="inline-flex rounded-md mx-2">
+                    <div class="ml-8 inline-flex rounded-md mx-2">
                       <button
                         type="button"
                         class="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-xl text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition"
@@ -145,7 +145,7 @@ export default {
                           />
                         </svg>
                       </button>
-                    </span>
+                    </div>
                   </template>
 
                   <template #content>
