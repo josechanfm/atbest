@@ -27,9 +27,11 @@ class MembershipController extends Controller
     public function switch(Member $member){
         Member::where('user_id',$member->user->id)->update(['is_default'=>false]);
         // dd($member);
-        $member->is_default=true;
-        $member->save();
-        $member->organization;
+        Member::where('id',$member->id)->update(['is_default'=>true]);
+        // $member->is_default=true;
+        // $member->save();
+        //dd($member->toArray());
+        //$member->organization;
         
         return to_route('member.dashboard');
     }
