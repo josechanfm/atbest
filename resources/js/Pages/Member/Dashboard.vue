@@ -68,7 +68,6 @@ export default {
                     content: "Competition ABC is now open for registration",
                 },
             ],
-            showQrcode: false,
             qrcodeLogo: '/storage/images/site_logo.png'
         };
     },
@@ -82,12 +81,12 @@ export default {
 		gsap.set(back.value, { rotationY: -180 })
 
 		const flipCardAnimation = () => {
-			getQrcode()
 			const duration = 0.6
 			const ease = "back.out(1)"
 			
 			if (!isFlipped.value) {
 				// 正面翻转到背面
+                onShowQrcode()
 				gsap.timeline()
 				.to(flipCard.value, {
 					rotationY: 180,
@@ -106,6 +105,7 @@ export default {
 				}, duration/2)
 			} else {
 				// 背面翻转到正面
+                clearInterval(interval.value);
 				gsap.timeline()
 				.to(flipCard.value, { rotationY: 0, duration, ease })
 				.to(back.value, { opacity: 0, duration: duration/2, ease: "power1.in" }, 0)
@@ -124,17 +124,11 @@ export default {
                 qrcode.value = response.data;
             });
         };
-
         const onShowQrcode = () => {
-            showQrcode.value = !showQrcode.value;
-            if (showQrcode.value) {
-                // getQrcode();
-                interval.value = setInterval(() => {
-                    getQrcode();
-                }, 5000);
-            } else {
-                clearInterval(interval.value);
-            }
+            getQrcode();
+            interval.value = setInterval(() => {
+                getQrcode();
+            }, 5000);
         };
 
 		return {
@@ -142,15 +136,13 @@ export default {
 			front,
 			back,
 			flipCardAnimation,
-			
             qrcode, showQrcode, getQrcode, onShowQrcode,
 		}
 	},
     created() {
-        console.log("feature animate")
-        if (this.features.length > 0) {
-            // this.defaultFeatures = this.features
-        }
+        // if (this.features.length > 0) {
+        //     this.defaultFeatures = this.features
+        // }
         if (this.cardStyle.logo) {
             this.qrcodeLogo = '/storage/images/' + this.cardStyle.logo
         } else if (this.$page.props.member.organization.logo) {
@@ -179,7 +171,8 @@ export default {
                 member: member.id
             }))
             //this.member=this.members.find(m=>m.id==member.id)
-        }
+        },
+        
     },
 };
 </script>
@@ -190,9 +183,9 @@ export default {
         <div class="flex flex-col-reverse md:flex-row gap-6 ">
             <div class="flex-auto flex flex-col-reverse md:flex-col ">
                 <!-- Feature Section -->
-                <div class="px-4 mx-auto my-5 bg-slate-200 rounded-lg">
+                <div class="px-4 mx-auto my-5 bg-slate-200 rounded-lg" v-if="features.length>0">
                     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 py-3 px-2">
-                        <div class="feature bg-white" v-for="feature in defaultFeatures">
+                        <div class="feature bg-white" v-for="(feature, i) in features" :key="i">
                             <a :href="feature.link">
                                 <div ref="feature_content" class="gutter-row">
                                     <div class="max-w rounded overflow-hidden shadow-lg">
@@ -210,7 +203,7 @@ export default {
                                             </p>
                                         </div>
                                         <div class="px-6 py-4">
-                                            <span v-for="tag in feature.tags_zh" class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">{{ tag }}</span>
+                                            <span v-for="(tag, i) in feature.tags_zh" class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2" :key="i">{{ tag }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -221,7 +214,7 @@ export default {
                 <!-- Feature Section end-->
 
                 <ol class="list-disc">
-                    <li v-for="form in forms">
+                    <li v-for="form in forms" :key="form.id">
                         <inertia-link :href="route('form.item', {t:form.uuid})">{{ form.title }}</inertia-link>
                     </li>
                 </ol>
@@ -237,7 +230,6 @@ export default {
             <div class="flex-none w-[400px] mx-auto ">
                 <div class="container mx-auto pt-12 flip-card-container" @click="flipCardAnimation">
                     <div class="bg-white relative shadow rounded-lg flip-card  hover:scale-105 transform transition-transform " ref="flipCard">
-                        
                         <!-- card start -->
                         <div class="mx-auto z-10 relative w-96 mb-4 flip-card-front" ref="front">
                             <div :style="cardStyle['font_style']" class="absolute z-10 flex rounded-lg flex-col m-4 text-sm w-[350px]" >
@@ -349,7 +341,7 @@ export default {
                                 <div v-if="members.length > 1">
                                     <h3 class="font-medium text-gray-900 text-left px-6">Your Organizations</h3>
                                     <div class="mt-5 w-full flex flex-col items-center overflow-hidden text-sm">
-                                        <template v-for="member in members">
+                                        <template v-for="member in members" :key="member.id">
                                             <a href="#" class="w-full border-t bor  der-gray-100 text-gray-600 py-4 pl-6 pr-3 block hover:bg-gray-100 transition duration-150">
                                                 <img src="https://avatars0.githubusercontent.com/u/35900628?v=4" alt="" class="rounded-full h-6 shadow-md inline-block mr-2" />
                                                 {{ member.organization.abbr }} - {{ member.organization['name_' + $t('lang')] }}
@@ -360,10 +352,9 @@ export default {
                                         </template>
                                     </div>
                                 </div>
-
                                 <h3 class="font-medium text-gray-900 text-left px-6">Recent updates</h3>
                                 <div class="mt-5 w-full flex flex-col items-center overflow-hidden text-sm">
-                                    <template v-for="portfolio in member.portfolios">
+                                    <template v-for="(portfolio,i) in member.portfolios" :key="i">
                                         <a href="#" class="w-full border-t border-gray-100 text-gray-600 py-4 pl-6 pr-3 block hover:bg-gray-100 transition duration-150">
                                             <img src="https://avatars0.githubusercontent.com/u/35900628?v=4" alt="" class="rounded-full h-6 shadow-md inline-block mr-2" />
                                             {{ portfolio.title }} - {{ portfolio.description }}
