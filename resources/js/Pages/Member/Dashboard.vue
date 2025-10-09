@@ -1,182 +1,3 @@
-<script>
-import MemberLayout from "@/Layouts/MemberLayout.vue";
-import ThumbList from "@/Components/ThumbList.vue";
-import axios from "axios";
-import QRCodeVue3 from "qrcode-vue3";
-import {
-    gsap
-} from 'gsap';
-import { ref } from 'vue'
-
-export default {
-    components: {
-        MemberLayout,
-        ThumbList,
-        QRCodeVue3,
-    },
-    props: ["member", "members", "features", "forms", "articles", "cardStyle"],
-    data() {
-        return {
-            qrcode: "",
-            interval: 0,
-            defaultFeatures: [{
-                    image: "/images/features/1_news_events.png",
-                    title_zh: "新聞與活動",
-                    content_zh: "新聞部分是用來發布組織的最新消息和事件，向公眾展示其在社會和環境領域中所做的工作，並提高對其使命的認識和理解。",
-                    tags: ["#通告"],
-                    link: "/",
-                },
-                {
-                    image: "/images/features/2_form_application.png",
-                    title_zh: "表格及報名",
-                    content_zh: "包括各種類型的表格和報名表，方便訪問者提交相關資訊並表達他們的參與意願。",
-                    tags: ["#報名"],
-                    link: "forms",
-                },
-                {
-                    image: "/images/features/3_learn_share.png",
-                    title_zh: "學習興分享",
-                    content_zh: "提供教育資源、知識分享和學習機會的區域。提供有價值的學習內容，並促進知識交流和社群互動。",
-                    tags: ["#學習", "#分享"],
-                    link: "#",
-                },
-                {
-                    image: "/images/features/4_community.png",
-                    title_zh: "虛擬社區",
-                    content_zh: "交流和參與組織活動的線上平台。讓志願者、支持者和參與者能夠連結起來，分享資源、經驗和想法。",
-                    tags: ["#學習", "#交流"],
-                },
-            ],
-            data: [{
-                    title: "News",
-                    url: "./",
-                    content: "Competition ABC is now open for registration",
-                },
-                {
-                    title: "Ant Design Title 2",
-                    url: "",
-                    content: "Competition ABC is now open for registration",
-                },
-                {
-                    title: "Ant Design Title 3",
-                    url: "",
-                    content: "Competition ABC is now open for registration",
-                },
-                {
-                    title: "Ant Design Title 4",
-                    url: "",
-                    content: "Competition ABC is now open for registration",
-                },
-            ],
-            qrcodeLogo: '/storage/images/site_logo.png'
-        };
-    },
-	setup() {
-		const flipCard = ref(null)
-		const front = ref(null)
-		const back = ref(null)
-		const isFlipped = ref(false)
-
-		// 初始化设置
-		gsap.set(back.value, { rotationY: -180 })
-
-		const flipCardAnimation = () => {
-			const duration = 0.6
-			const ease = "back.out(1)"
-			
-			if (!isFlipped.value) {
-				// 正面翻转到背面
-                onShowQrcode()
-				gsap.timeline()
-				.to(flipCard.value, {
-					rotationY: 180,
-					duration,
-					ease
-				})
-				.to(front.value, { 
-					opacity: 0,
-					duration: duration/2,
-					ease: "power1.in"
-				}, 0)
-				.to(back.value, { 
-					opacity: 1,
-					duration: duration/2,
-					ease: "power1.out"
-				}, duration/2)
-			} else {
-				// 背面翻转到正面
-                clearInterval(interval.value);
-				gsap.timeline()
-				.to(flipCard.value, { rotationY: 0, duration, ease })
-				.to(back.value, { opacity: 0, duration: duration/2, ease: "power1.in" }, 0)
-				.to(front.value, { opacity: 1, duration: duration/2, ease: "power1.out" }, duration/2)
-			}
-			
-			isFlipped.value = !isFlipped.value
-		}
-
-		const qrcode = ref('');
-        const showQrcode = ref(false);
-        const interval = ref(null);
-
-        const getQrcode = () => {
-            axios.get(route("member.getQrcode")).then((response) => {
-                qrcode.value = response.data;
-            });
-        };
-        const onShowQrcode = () => {
-            getQrcode();
-            interval.value = setInterval(() => {
-                getQrcode();
-            }, 5000);
-        };
-
-		return {
-			flipCard,
-			front,
-			back,
-			flipCardAnimation,
-            qrcode, showQrcode, getQrcode, onShowQrcode,
-		}
-	},
-    created() {
-        // if (this.features.length > 0) {
-        //     this.defaultFeatures = this.features
-        // }
-        if (this.cardStyle.logo) {
-            this.qrcodeLogo = '/storage/images/' + this.cardStyle.logo
-        } else if (this.$page.props.member.organization.logo) {
-            this.qrcodeLogo = this.$page.props.member.organization.logo
-        }
-    },
-    mounted() {
-        const featureBox = gsap.utils.toArray('.feature');
-
-        featureBox.forEach((feature, index) => {
-            gsap.fromTo(feature, {
-                x: '100%',
-                opacity: 0
-            }, {
-                x: '0%',
-                opacity: 1,
-                duration: index === 0 ? 0.5 : 0.5 + (index * 0.25),
-                delay: index * 0.25,
-                ease: 'power2.out'
-            });
-        });
-    },
-    methods: {
-        switchOrganization(member) {
-            this.$inertia.post(route('member.membership.switch', {
-                member: member.id
-            }))
-            //this.member=this.members.find(m=>m.id==member.id)
-        },
-        
-    },
-};
-</script>
-
 <template>
 <MemberLayout title="Dashboard">
     <div class="container mx-auto">
@@ -372,6 +193,191 @@ export default {
 
 </MemberLayout>
 </template>
+
+
+
+
+<script>
+import MemberLayout from "@/Layouts/MemberLayout.vue";
+import ThumbList from "@/Components/ThumbList.vue";
+import axios from "axios";
+import QRCodeVue3 from "qrcode-vue3";
+import {
+    gsap
+} from 'gsap';
+import { ref } from 'vue'
+
+export default {
+    components: {
+        MemberLayout,
+        ThumbList,
+        QRCodeVue3,
+    },
+    props: ["member", "members", "features", "forms", "articles", "cardStyle"],
+    data() {
+        return {
+            qrcode: "",
+            interval: 0,
+            defaultFeatures: [{
+                    image: "/images/features/1_news_events.png",
+                    title_zh: "新聞與活動",
+                    content_zh: "新聞部分是用來發布組織的最新消息和事件，向公眾展示其在社會和環境領域中所做的工作，並提高對其使命的認識和理解。",
+                    tags: ["#通告"],
+                    link: "/",
+                },
+                {
+                    image: "/images/features/2_form_application.png",
+                    title_zh: "表格及報名",
+                    content_zh: "包括各種類型的表格和報名表，方便訪問者提交相關資訊並表達他們的參與意願。",
+                    tags: ["#報名"],
+                    link: "forms",
+                },
+                {
+                    image: "/images/features/3_learn_share.png",
+                    title_zh: "學習興分享",
+                    content_zh: "提供教育資源、知識分享和學習機會的區域。提供有價值的學習內容，並促進知識交流和社群互動。",
+                    tags: ["#學習", "#分享"],
+                    link: "#",
+                },
+                {
+                    image: "/images/features/4_community.png",
+                    title_zh: "虛擬社區",
+                    content_zh: "交流和參與組織活動的線上平台。讓志願者、支持者和參與者能夠連結起來，分享資源、經驗和想法。",
+                    tags: ["#學習", "#交流"],
+                },
+            ],
+            data: [{
+                    title: "News",
+                    url: "./",
+                    content: "Competition ABC is now open for registration",
+                },
+                {
+                    title: "Ant Design Title 2",
+                    url: "",
+                    content: "Competition ABC is now open for registration",
+                },
+                {
+                    title: "Ant Design Title 3",
+                    url: "",
+                    content: "Competition ABC is now open for registration",
+                },
+                {
+                    title: "Ant Design Title 4",
+                    url: "",
+                    content: "Competition ABC is now open for registration",
+                },
+            ],
+            qrcodeLogo: '/storage/images/site_logo.png'
+        };
+    },
+	setup() {
+		const flipCard = ref(null)
+		const front = ref(null)
+		const back = ref(null)
+		const isFlipped = ref(false)
+
+		// 初始化设置
+		gsap.set(back.value, { rotationY: -180 })
+
+		const flipCardAnimation = () => {
+			const duration = 0.6
+			const ease = "back.out(1)"
+			
+			if (!isFlipped.value) {
+				// 正面翻转到背面
+                onShowQrcode()
+				gsap.timeline()
+				.to(flipCard.value, {
+					rotationY: 180,
+					duration,
+					ease
+				})
+				.to(front.value, { 
+					opacity: 0,
+					duration: duration/2,
+					ease: "power1.in"
+				}, 0)
+				.to(back.value, { 
+					opacity: 1,
+					duration: duration/2,
+					ease: "power1.out"
+				}, duration/2)
+			} else {
+				// 背面翻转到正面
+                clearInterval(interval.value);
+				gsap.timeline()
+				.to(flipCard.value, { rotationY: 0, duration, ease })
+				.to(back.value, { opacity: 0, duration: duration/2, ease: "power1.in" }, 0)
+				.to(front.value, { opacity: 1, duration: duration/2, ease: "power1.out" }, duration/2)
+			}
+			
+			isFlipped.value = !isFlipped.value
+		}
+
+		const qrcode = ref('');
+        const showQrcode = ref(false);
+        const interval = ref(null);
+
+        const getQrcode = () => {
+            axios.get(route("member.getQrcode")).then((response) => {
+                qrcode.value = response.data;
+            });
+        };
+        const onShowQrcode = () => {
+            getQrcode();
+            interval.value = setInterval(() => {
+                getQrcode();
+            }, 5000);
+        };
+
+		return {
+			flipCard,
+			front,
+			back,
+			flipCardAnimation,
+            qrcode, showQrcode, getQrcode, onShowQrcode,
+		}
+	},
+    created() {
+        // if (this.features.length > 0) {
+        //     this.defaultFeatures = this.features
+        // }
+        if (this.cardStyle.logo) {
+            this.qrcodeLogo = '/storage/images/' + this.cardStyle.logo
+        } else if (this.$page.props.member.organization.logo) {
+            this.qrcodeLogo = this.$page.props.member.organization.logo
+        }
+    },
+    mounted() {
+        const featureBox = gsap.utils.toArray('.feature');
+
+        featureBox.forEach((feature, index) => {
+            gsap.fromTo(feature, {
+                x: '100%',
+                opacity: 0
+            }, {
+                x: '0%',
+                opacity: 1,
+                duration: index === 0 ? 0.5 : 0.5 + (index * 0.25),
+                delay: index * 0.25,
+                ease: 'power2.out'
+            });
+        });
+    },
+    methods: {
+        switchOrganization(member) {
+            this.$inertia.post(route('member.membership.switch', {
+                member: member.id
+            }))
+            //this.member=this.members.find(m=>m.id==member.id)
+        },
+        
+    },
+};
+</script>
+
+
+
 
 <style scoped>
 #pure-html {

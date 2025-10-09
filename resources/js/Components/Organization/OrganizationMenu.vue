@@ -122,7 +122,7 @@
             {{ $t("widget") }}
           </inertia-link>
         </span>
-      </a-menu-item>
+
             
       <!-- <a-sub-menu key="sub2">
         <template #icon>

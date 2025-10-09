@@ -12,17 +12,20 @@ export default {
         }
     },
     created() {
+    },
+    mounted(){
         axios.get(route("api.config.item", {
             key: 'article_categories'
         })).then((resp) => {
-            const articleCategory = resp.data.find(d => d.value == this.article.category_code)
-            this.pageHeader = articleCategory ? articleCategoryp.label : 'Article'
+            // const articleCategory = resp.data.find(d => d.value == this.article.category_code)
+            // this.pageHeader = articleCategory ? articleCategoryp.label : 'Article'
             // this.articleCategories = resp.data.reduce((acc, obj) => {
             //     acc[obj.value] = obj;
             //     return acc;
             // }, {});
         })
-    },
+
+    }
 }
 </script>
 
@@ -34,7 +37,6 @@ export default {
         </div>
     </template>
     <div class="flex flex-col gap-10">
-
         <div class="ml-5 lg:ml-20 lg:w-4/5 py-5">
             <h2 class="font-bold text-2xl text-gray-800">
                 {{ article.title }}

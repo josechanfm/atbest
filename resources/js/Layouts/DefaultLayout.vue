@@ -159,18 +159,20 @@ export default {
      <!-- 动态占位元素 -->
     <div class="bg-gray-200" :style="{ height: placeholderHeight + 'px' }"  ></div>
 </header>
-<!-- Page Heading -->
-<div v-if="$slots.header" >
-    <div class="mx-auto max-w-7xl bg-white h-12 flex items-center py-2 ">
-        <slot name="header" />
-    </div>
-</div>
+
 
 <main class="">
 
     <LayoutBackground />
 
+    <!-- Page Heading -->
+    <div v-if="$slots.header" >
+        <div class="mx-auto max-w-7xl bg-white h-12 flex items-center py-2 ">
+            <slot name="header" />
+        </div>
+    </div>
     <section class=""  >
+        
         <div 
             class="bg-slate-200 relative min-h-screen p-0 lg:p-4 pt-2">
             
