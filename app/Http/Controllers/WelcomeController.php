@@ -33,7 +33,8 @@ class WelcomeController extends Controller
 
         try {
             // 使用 Laravel HTTP 客戶端獲取 RSS 內容
-            $response = Http::get($rssUrl);
+            $response = Http::withoutVerifying()->get($rssUrl)
+                ;
             
             if (!$response->successful()) {
                 return response()->json([

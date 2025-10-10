@@ -39,11 +39,10 @@ export default {
             try {
                 // 注意這裡使用的是你的 Laravel 後端 API 地址
                 const response = await fetch(route('host.getRss'));
-
+                console.log(response)
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
-
                 // 如果後端返回的是 XML，你需要在前端解析
                 const text = await response.text();
                 // 使用 DOMParser 或其他 XML 解析庫解析
