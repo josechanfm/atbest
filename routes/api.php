@@ -23,7 +23,6 @@ Route::get('search/members',[App\Http\Controllers\Api\DataController::class, 'se
 
 Route::get('config/item', function(Request $request){
     return response()->json(Config::item($request->key));
-
-})->name('api.config.item');        
+})->name('api.config.item');
 
 

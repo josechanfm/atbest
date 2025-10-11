@@ -128,7 +128,7 @@ import { MenuUnfoldOutlined, MenuFoldOutlined } from "@ant-design/icons-vue";
 
 import AdminMenu from "@/Components/Admin/AdminMenu.vue";
 
-export default {
+export  {
   components: {
     PageHeader,
     Dropdown,
