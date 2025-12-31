@@ -15,11 +15,13 @@
       <div class="flex flex-auto gap-2">
         <a-input
           v-model:value="search.abbr"
+          type="input"
           :placeholder="$t('please_input_abbr')"
           class="w-64"
         ></a-input>
         <a-input
           v-model:value="search.name_zh"
+          type="input"
           :placeholder="$t('please_input_name_zh')"
           class="w-64"
         ></a-input>
