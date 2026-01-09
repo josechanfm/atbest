@@ -13,15 +13,15 @@
     </div>
     <div class="block sm:hidden md:hidden absolute top-0 z-10">
         
-        <a ref="bubble1" href="http://www.faom.org.mo/portal/" 
+        <div ref="bubble1" target="_blank" href="http://www.faom.org.mo/portal/" 
             class="absolute bubble flex justify-center items-center bg-green-600 rounded-full " >
-            <a target="_blank" class=" text-white hover:text-yellow-300 text-md">工聯</a>
-        </a>
-        <a ref="bubble2" href="https://www.mo.gov.mo" 
+            <a  class=" text-white hover:text-yellow-300 text-md">工聯</a>
+        </div>
+        <div ref="bubble2" href="https://www.mo.gov.mo" 
             class="absolute bubble flex justify-center items-center bg-amber-600 rounded-full" >
             <a target="_blank" class=" text-white hover:text-yellow-300 text-md">一戶通</a>
-        </a>
-        <a ref="bubble3"
+        </div>
+        <div ref="bubble3"
             class="absolute bubble text-white flex justify-center items-center bg-sky-600 rounded-full " >
             <template v-if="$page.props.user">
                 <a :href="route('member.dashboard')" target="_blank" class="tracking-tight font-serif text-white hover:text-yellow-300 text-md">Member</a>
@@ -29,9 +29,9 @@
             <template v-else>
                 <a class="cursor-pointer font-serif hover:text-yellow-300 text-md" @click="login">{{ $t("login") }}</a>
             </template>
-        </a>
+        </div>
         
-        <a ref="bubble4" 
+        <div ref="bubble4" 
             class="text-sm absolute bubble text-white flex justify-center items-center bg-rose-600 rounded-full " >
             <template v-if="$page.props.user">
                 <a class="cursor-pointer font-serif hover:text-yellow-300 text-md" @click="logout">{{ $t("log_out") }}</a>
@@ -39,7 +39,7 @@
             <template v-else>
                 <a class="cursor-pointer font-serif hover:text-yellow-300 text-md" @click="register">{{ $t("register") }}</a>
             </template>
-        </a>
+        </div>
     </div>
 
     <div class="flex items-center" ref="menuBar">

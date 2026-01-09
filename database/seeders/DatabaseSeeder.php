@@ -38,10 +38,10 @@ class DatabaseSeeder extends Seeder
         ]);
 
 
-        $roleMaster = Role::create(['name' => 'master', 'guard_name' => 'admin_web']);
-        $roleAdmin = Role::create(['name' => 'admin', 'guard_name' => 'admin_web']);
-        $roleOrganization = Role::create(['name' => 'organization', 'guard_name' => 'admin_web']);
-        $roleMember = Role::create(['name' => 'member', 'guard_name' => 'web']);
+        // $roleMaster = Role::create(['name' => 'master', 'guard_name' => 'admin_web']);
+        // $roleAdmin = Role::create(['name' => 'admin', 'guard_name' => 'admin_web']);
+        // $roleOrganization = Role::create(['name' => 'organization', 'guard_name' => 'admin_web']);
+        // $roleMember = Role::create(['name' => 'member', 'guard_name' => 'web']);
 
         // $permissionCourse=Permission::create(['name'=>'organizer course','guard_name' => 'admin_web']);
         // $permissionOffer=Permission::create(['name'=>'organizer offer','guard_name' => 'admin_web']);
