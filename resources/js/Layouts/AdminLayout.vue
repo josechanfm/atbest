@@ -118,8 +118,7 @@
 
 <script>
 import { ref, reactive } from "vue";
-import { usePage } from "@inertiajs/vue3";
-import { router } from "@inertiajs/vue3";
+import { usePage, router } from "@inertiajs/vue3";
 import Dropdown from "@/Components/Dropdown.vue";
 import DropdownLink from "@/Components/DropdownLink.vue";
 import PageHeader from "@/Components/Organization/PageHeader.vue";
@@ -159,6 +158,7 @@ export default {
       );
     };
     const page = usePage();
+    console.log(page.url);
     const logout = () => {
       router.post(route("logout"));
     };

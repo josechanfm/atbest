@@ -43,7 +43,7 @@
         :validate-messages="validateMessages"
         @finish="onFormFinish"
       >
-        <a-input type="hidden" v-model:value="modal.data.id" />
+        <a-input type="input" v-model:value="modal.data.id" />
         <a-form-item :label="$t('topic')" name="topic">
           <a-select
             v-model:value="modal.data.topic"
