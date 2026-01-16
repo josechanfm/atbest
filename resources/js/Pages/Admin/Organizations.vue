@@ -406,18 +406,18 @@
                 allow-clear
               />
             </a-form-item>
-
             <a-form-item
               :label="$t('manager')"
               name="manager"
             >
+
               <a-select
-                v-model:value="modal.data.user_ids"
+                v-model:value="modal.data.organizer_member_ids"
                 mode="multiple"
                 :placeholder="$t('select_managers')"
                 allow-clear
                 :options="modal.data.members?.filter((m) => m.user_id != null)"
-                :fieldNames="{ value: 'user_id', label: 'given_name' }"
+                :fieldNames="{ value: 'id', label: 'given_name' }"
                 class="w-full"
               />
             </a-form-item>
@@ -465,7 +465,7 @@
           <a-button
             type="primary"
             :loading="loading"
-            @click="$refs.modalRef.submit()"
+            @click="$refs.modalRef.$emit('finish')"
             class="!bg-indigo-600 hover:!bg-indigo-700"
           >
             <template #icon>

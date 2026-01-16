@@ -117,11 +117,6 @@
                 </span>
             </a-menu-item>
         </template>
-        <span>
-          <inertia-link :href="route('widget.admin.dashboard')">
-            {{ $t("widget") }}
-          </inertia-link>
-        </span>
 
             
       <!-- <a-sub-menu key="sub2">

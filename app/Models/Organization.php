@@ -16,6 +16,7 @@ class Organization extends Model implements HasMedia
 
     protected $fillable=['parish','territory','abbr','name_zh','name_en','name_pt','email','phone','address','country','href','title','avatar','description','content','president','registration_code','card_style','logo','website','founded_at','status'];
     protected $casts=['status'=>'boolean'];
+    protected $appends = ['organizer_member_ids'];
     
     public function registerMediaConversions(Media $media = null): void
     {
@@ -34,6 +35,7 @@ class Organization extends Model implements HasMedia
     public function ownedBy($user=null){
         return in_array($user->id,$this->users()->get()->pluck('id')->toArray());
     }
+
     public function users(){
         return $this->belongsToMany(User::class);
     }
@@ -73,4 +75,18 @@ class Organization extends Model implements HasMedia
         return $this->hasMany(Article::class);
     }
 
+    public function getOrganizersAttribute()
+    {
+        // 確保 members 已經被載入
+        if (!$this->relationLoaded('members')) {
+            return collect();
+        }
+        
+        return $this->members->where('is_organizer', 1);
+    }
+
+    public function getOrganizerMemberIdsAttribute()
+    {
+        return $this->organizers->pluck('id')->toArray();
+    }
 }
