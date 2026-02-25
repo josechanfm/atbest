@@ -2,7 +2,7 @@
   <div>
     <a-menu v-model:openKeys="openKeys" v-model:selectedKeys="selectedKeys" mode="inline" theme="light"
       :inline-collapsed="collapsed">
-      <a-menu-item key="1">
+      <a-menu-item key="dashboard">
         <template #icon>
           <PieChartOutlined />
         </template>
@@ -12,7 +12,7 @@
           </inertia-link>
         </span>
       </a-menu-item>
-      <a-menu-item key="2">
+      <a-menu-item key="organizations.index">
         <template #icon>
           <PieChartOutlined />
         </template>
@@ -22,7 +22,7 @@
           </inertia-link>
         </span>
       </a-menu-item>
-      <a-menu-item key="3">
+      <a-menu-item key="features.index">
         <template #icon>
           <PieChartOutlined />
         </template>
@@ -32,7 +32,7 @@
           </inertia-link>
         </span>
       </a-menu-item>
-      <a-menu-item key="4">
+      <a-menu-item key="articles.index">
         <template #icon>
           <PieChartOutlined />
         </template>
@@ -42,7 +42,7 @@
           </inertia-link>
         </span>
       </a-menu-item>
-      <a-menu-item key="5">
+      <a-menu-item key="members.index">
         <template #icon>
           <PieChartOutlined />
         </template>
@@ -52,7 +52,7 @@
           </inertia-link>
         </span>
       </a-menu-item>
-      <a-menu-item key="6">
+      <a-menu-item key="users.index">
         <template #icon>
           <PieChartOutlined />
         </template>
@@ -62,7 +62,7 @@
           </inertia-link>
         </span>
       </a-menu-item>
-      <a-menu-item key="7">
+      <a-menu-item key="configs.index">
         <template #icon>
           <PieChartOutlined />
         </template>
@@ -72,7 +72,7 @@
           </inertia-link>
         </span>
       </a-menu-item>
-      <a-menu-item key="8">
+      <a-menu-item key="issues.index">
         <template #icon>
           <PieChartOutlined />
         </template>
@@ -142,7 +142,7 @@ export default defineComponent({
   setup() {
     const state = reactive({
       collapsed: false,
-      selectedKeys: ["1"],
+      selectedKeys: [],
       openKeys: ["sub1"],
       preOpenKeys: ["sub1"],
     });
@@ -159,6 +159,10 @@ export default defineComponent({
       ...toRefs(state),
       toggleCollapsed,
     };
+  },
+  mounted() {
+    console.log(route().current().split(".").slice(1).join("."));
+    this.selectedKeys.push(route().current().split(".").slice(1).join("."));
   },
 });
 </script>

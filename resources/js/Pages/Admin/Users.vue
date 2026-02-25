@@ -67,7 +67,6 @@
         </a-form-item>
         <a-form-item :label="$t('organization_manager')" name="organization_ids">
           <div v-for="member in modal.data.members">
-            <span v-if="member">{{ member.family_name }} {{ member.given_name }}</span>
             <span v-if="member.organization">{{ member.organization.abbr}} {{member.organization.name_zh }}</span>
           </div>
         </a-form-item>

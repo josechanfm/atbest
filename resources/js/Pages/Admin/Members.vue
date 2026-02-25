@@ -21,11 +21,13 @@
           :fieldNames="{ value: 'id', label: 'abbr' }"
         ></a-select>
         <a-input
+          type="input"
           v-model:value="search.given_name"
           :placeholder="$t('please_input_given_name')"
           class="w-32"
         ></a-input>
         <a-input
+          type="input"
           v-model:value="search.family_name"
           :placeholder="$t('please_input_family_name')"
           class="w-32"

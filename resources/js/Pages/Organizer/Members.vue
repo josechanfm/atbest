@@ -34,7 +34,7 @@
           </template>
           <template #bodyCell="{ column, text, record, index }">
             <template v-if="column.dataIndex == 'gender'">
-              {{ record.gender == 0 ? '男' : '女' }}
+              {{ record.gender == 'M' ? $t('male') : $t('female') }}
             </template>
             <template v-else-if="column.dataIndex == 'operation'">
               <a-button :href="route('organizer.members.show', record.id)">

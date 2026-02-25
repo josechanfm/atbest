@@ -1,7 +1,7 @@
 <template>
    <Dropdown align="right" width="20">
         <template #trigger>
-            <a type="text" class="flex gap-2 justify-between items-center text-white text-base hover:text-gray-100 bg-transparent border-0 cursor-pointer" >
+            <a type="text" class="flex gap-2 justify-between items-center text-base hover:text-gray-500 bg-transparent border-0 cursor-pointer" >
                 <GlobalOutlined />
                 <span v-if="page.props.lang" class="">{{$t(page.props.lang)}}</span>
             </a>

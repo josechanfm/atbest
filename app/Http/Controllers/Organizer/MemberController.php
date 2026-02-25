@@ -138,21 +138,35 @@ class MemberController extends Controller
     public function createLogin(Member $member)
     {
         $this->authorize('update', $member);
-        if (empty($member->user)) {
-            $user = User::where('email', $member->email)->first();
-            if ($user) {
-                return response()->json(['result' => false, 'message' => 'Email already in used!']);
-            } else {
-                $user = $member->createUser();
-            }
-        } else {
+        
+        if (!empty($member->user)) {
             return response()->json(['result' => false, 'message' => 'Login Account already created!']);
-            $user = $member->user;
         }
-        Password::broker(config('fortify.passwords'))->sendResetLink(
-            ['email' => $user->email]
-        );
-        return response()->json(['result' => true, 'message' => 'Login account created, please check you email.']);
+
+        $user = User::where('email', $member->email)->first();
+        if ($user) {
+            return response()->json(['result' => false, 'message' => 'Email already in used!']);
+        }
+
+        try {
+            $user = $member->createUser();
+            if (!$user) {
+                throw new \Exception('Failed to create user');
+            }
+
+            $sendmail = Password::broker(config('fortify.passwords'))->sendResetLink(
+                ['email' => $user->email]
+            );
+
+            if (!$sendmail) {
+                throw new \Exception('Failed to send reset link');
+            }
+
+            return response()->json(['result' => true, 'message' => 'Login account created, please check your email.']);
+
+        } catch (\Exception $e) {
+            return response()->json(['result' => false, 'message' => 'Error: '.$e->getMessage()]);
+        }
     }
     public function export()
     {

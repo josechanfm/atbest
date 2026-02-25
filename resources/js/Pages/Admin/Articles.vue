@@ -31,6 +31,7 @@
           :options="articleCategories"
         ></a-select>
         <a-input
+          type="input"
           v-model:value="search.title"
           :placeholder="$t('please_input_title')"
           class="w-64"

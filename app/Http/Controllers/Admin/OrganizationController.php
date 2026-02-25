@@ -95,9 +95,51 @@ class OrganizationController extends Controller
      */
     public function update(Request $request, Organization $organization)
     {
-        $organization->update($request->all());
-        $organization->users()->sync($request->user_ids);
-        return redirect()->back();
+        $validated = $request->validate([
+            // 必要欄位
+            'parish' => 'nullable|string|max:255',
+            'abbr' => 'nullable|string|max:50',
+            'name_zh' => 'nullable|string|max:255',
+            'name_en' => 'nullable|string|max:255',
+            'email' => 'nullable|email|max:255',
+            'registration_code' => 'nullable|string|max:100',
+            'president' => 'nullable|string|max:255',
+            'card_style' => 'nullable|string|max:50',
+            
+            // 可選欄位
+            'name_pt' => 'nullable|string|max:255',
+            'phone' => 'nullable|string|max:50',
+            'address' => 'nullable|string',
+            'country' => 'nullable|string|max:100',
+            'href' => 'nullable|string|max:255',
+            'avatar' => 'nullable|string|max:500',
+            'description' => 'nullable|string',
+            'content' => 'nullable|string',
+            'logo' => 'nullable|string|max:500',
+            'website' => 'nullable|string|max:255',
+            'founded_at' => 'nullable|date',
+            'status' => 'nullable|boolean',
+            
+            'organizer_member_ids' => 'nullable',
+        ]);
+
+        try {
+            // 更新基本資訊
+            $organization->update($validated);
+            
+            // 處理用戶關聯
+            if ($request->has('organizer_member_ids')) {
+                $organization->users()->sync($request->organizer_member_ids);
+            }
+            
+            // 處理組織者設定
+            $this->updateOrganizers($organization, $request->organizer_member_ids ?? []);
+            
+            return redirect()->back()->with('success', '組織資訊更新成功！');
+        
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
+        }
     }
     /**
      * Remove the specified resource from storage.
@@ -137,5 +179,32 @@ class OrganizationController extends Controller
     {
         session(['organization' => $organization]);
         return to_route('organizer.dashboard');
+    }
+
+    private function updateOrganizers(Organization $organization, array $organizerIds)
+    {
+        // 開始資料庫事務
+        try {
+            // 1. 先將該組織所有成員的 is_organizer 設為 0
+            $organization->members()->update(['is_organizer' => 0]);
+            
+            // 2. 如果有指定組織者，將他們設為 1
+            if (!empty($organizerIds)) {
+                // 只更新屬於這個組織的成員
+                $validMemberIds = $organization->members()
+                    ->whereIn('id', $organizerIds)
+                    ->pluck('id')
+                    ->toArray();
+                
+                if (!empty($validMemberIds)) {
+                    $organization->members()
+                        ->whereIn('id', $validMemberIds)
+                        ->update(['is_organizer' => 1]);
+                }
+            }
+            
+        } catch (\Exception $e) {
+            throw $e;
+        }
     }
 }

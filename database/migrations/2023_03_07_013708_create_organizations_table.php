@@ -36,8 +36,7 @@ return new class extends Migration
             $table->string('subdomain')->nullable();
             $table->date('founted_at')->nullable();
             $table->boolean('status')->nullable();
-            $table->timestamps();
-      
+            $table->timestamps();  
         });
     }
 
