@@ -27,8 +27,17 @@ class RedirectIfAuthenticated
             // 只檢查 'web' guard
             if ($guard === 'web' && Auth::guard($guard)->check()) {
                 $user = Auth::guard($guard)->user();
+                //dd($user->member, $user->member->is_organizer);
                 // 根據角色跳轉到不同頁面
-                return $this->redirectBasedOnRole($user->roles[0]);
+                
+                if($user->roles->count()>0){
+                    return $this->redirectBasedOnRole($user);
+                }else if($user->member){
+                    return redirect()->route('member.dashboard');
+                }else{
+                    return redirect(RouteServiceProvider::HOME);
+                }
+                
             }
             
             // 其他 guard 的處理（保持原樣）
@@ -40,17 +49,18 @@ class RedirectIfAuthenticated
         return $next($request);
     }
 
-    protected function redirectBasedOnRole($role): Response
+    protected function redirectBasedOnRole($user): Response
     {   
+        
         switch ($role->name) {
             case 'admin':
                 return redirect()->route('admin.dashboard'); // 假設你有命名路由
             case 'master':
                 return redirect()->route('master.dashboard');
-            case 'member':
-                return redirect()->route('member.dashboard');
-            case 'organizer':
-                return redirect()->route('organizer.dashboard');
+            // case 'member':
+            //     return redirect()->route('member.dashboard');
+            // case 'organizer':
+            //     return redirect()->route('organizer.dashboard');
             default:
                 return redirect(RouteServiceProvider::HOME);
         }

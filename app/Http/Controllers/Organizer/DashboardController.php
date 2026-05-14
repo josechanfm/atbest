@@ -20,7 +20,7 @@ class DashboardController extends Controller
         if(empty(session('organization'))){
             session(['organization'=>auth()->user()->member->organization]);
         }
-        // dd(session('organization'),auth()->user()->organizations());
+        //dd(session('organization'),auth()->user()->organizations());
         //$organization=auth()->user()->member->organization;
         $this->authorize('view',session('organization'));
         return Inertia::render('Organizer/Dashboard',[
