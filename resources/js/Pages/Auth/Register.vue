@@ -17,6 +17,7 @@ const form = useForm({
   name: "",
   given_name: "",
   family_name: "",
+  mobile: "",
   registration_code: "",
   email: "",
   password: "",
@@ -78,6 +79,19 @@ const submit = () => {
           autocomplete="family_name"
         />
         <InputError class="mt-2" :message="form.errors.family_name" />
+      </div>
+      <div class="mt-4">
+        <InputLabel for="mobile" :value="$t('mobile')" />
+        <TextInput
+          id="mobile"
+          v-model="form.mobile"
+          type="text"
+          class="mt-1 block w-full"
+          required
+          autofocus
+          autocomplete="mobile"
+        />
+        <InputError class="mt-2" :message="form.errors.mobile" />
       </div>
       <div class="mt-4">
         <InputLabel for="registration_code">

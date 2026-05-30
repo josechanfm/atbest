@@ -38,7 +38,6 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'registration_code' => 'required|exists:organizations,registration_code',
         ]);
-        // dd($request->all());
         
         $user = User::create([
             'name' => $request->name,
@@ -61,5 +60,77 @@ class RegisteredUserController extends Controller
         Auth::login($user);
 
         return redirect(RouteServiceProvider::HOME);
+    }
+
+    public function sendSMSVarificationCode(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'phone_number' => 'required|string|phone:AUTO',
+        ]); 
+        
+		$sms_from=env('SMS_FROM');
+		$sms_username=env('SMS_USER');
+		$sms_password=env('SMS_PWD');
+		$sms_url=env('SMS_URL');
+
+		
+		if( $message_language == 'full_english'){
+			$language = "";
+		}else{
+			$language = "&locale=utf-8";
+			$content = urlencode($content);
+		}
+
+
+		foreach ($recipients as $key => $value) {
+			if(strpos($value, "853") !== false){
+				$to = trim($value," ");
+			}else{
+				$to = "853" . trim($value," ");
+			}
+			$url = $sms_url."/"."?username=".$sms_username."&password=".$sms_password."&from=".$sms_from."&to=".$to.$language."&text=".$content;
+		
+			
+
+			$curl = curl_init($url);
+			curl_setopt($curl, CURLOPT_URL, $url);
+			curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+
+			//for debug only!
+			// curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+			// curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+
+			$resp = curl_exec($curl);
+			curl_close($curl);
+
+			$str = (string) $resp;
+			// 返回 id 即是成功, 檢查是不是全數字且長度大於7
+			// 1. 如果是純數字(Float/Int)，用 number_format 強制轉成完整數字字串，避免科學記號
+			// 2. 如果是字串，直接處理
+			if (is_numeric($resp)) {
+				$str = number_format($resp, 0, '', '');
+			} else {
+				$str = (string)$resp;
+			}
+
+			// 3. 使用正則表達式移除所有「非數字」的字元 (包含逗號、空格、點、E+等)
+			$cleanStr = preg_replace('/\D/', '', $str);
+
+			// 4. 檢查清理後的字串長度是否大於 7
+			// 注意：這裡不需再用 is_numeric，因為 preg_replace 已經保證剩下的全是數字
+			if (strlen($cleanStr) > 7) {
+				$status = 'success';
+			} else {
+				$status = 'fail';
+			}
+			
+			$this->db->insert('sms_responses', array(
+				'sms_id' => $sms_id, 
+				'status' => $status, 
+				'number' => $to, 
+				'response' => $resp 
+			));
+
     }
 }
