@@ -1,5 +1,4 @@
 <script>
-import { onMounted, ref } from "vue";
 import { router } from "@inertiajs/vue3";
 import { Head, Link } from "@inertiajs/vue3";
 import ApplicationMark from "@/Components/ApplicationMark.vue";
@@ -8,7 +7,6 @@ import Dropdown from "@/Components/Dropdown.vue";
 import DropdownLink from "@/Components/DropdownLink.vue";
 import NavLink from "@/Components/NavLink.vue";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink.vue";
-import { usePage } from "@inertiajs/vue3";
 import LanguageSwitcher from "@/Components/LanguageSwitcher.vue";
 import { loadLanguageAsync } from "laravel-vue-i18n";
 
@@ -23,46 +21,43 @@ export default {
     NavLink,
     ResponsiveNavLink,
     LanguageSwitcher,
-    // loadLanguageAsync,
   },
   props: ["title"],
-  setup(props) {
-    const showingNavigationDropdown = ref(false);
-    const switchToTeam = (team) => {
-      router.put(
-        route("current-team.update"),
-        {
-          team_id: team.id,
-        },
-        {
-          preserveState: false,
-        }
-      );
-    };
-    const isOrganizer = () =>{
-      return page.props.auth.user.member.is_organizer==true
-    }
-    const page = usePage();
-    loadLanguageAsync(page.props.lang);
-
-    const logout = () => {
-      router.post(route("logout"));
-    };
+  data() {
     return {
-      showingNavigationDropdown,
-      switchToTeam,
-      logout,
-      isOrganizer,
-      loadLanguageAsync,
+      showingNavigationDropdown: false,
     };
   },
-  created() {},
+  computed: {
+    // Expose $page for easier access in template (optional)
+    page() {
+      return this.$page;
+    },
+  },
+  methods: {
+    switchToTeam(team) {
+      router.put(
+        route("current-team.update"),
+        { team_id: team.id },
+        { preserveState: false }
+      );
+    },
+    isOrganizer() {
+      return this.$page.props.auth.user.member.is_organizer === true;
+    },
+    logout() {
+      router.post(route("logout"));
+    },
+    loadLanguageAsync,
+  },
+  created() {
+    loadLanguageAsync(this.$page.props.lang);
+  },
   mounted() {
-    //loadLanguageAsync(this.$page.props.lang)
+    // Any mounted logic (if needed)
   },
 };
 </script>
-
 <template>
   <div>
     <Head :title="title" />
@@ -125,7 +120,11 @@ export default {
                         :alt="$page.props.auth.user.member.given_name"
                       />
                     </button>
-                    <a-avatar v-else>{{ $page.props.auth.user.member.given_name.charAt($page.props.auth.user.member.given_name.length-1) }}</a-avatar>
+                    <a-avatar v-else>
+                      <template #icon>
+                        {{ $page.props.auth.user.member.given_name.charAt($page.props.auth.user.member.given_name.length-1) }}
+                      </template>
+                    </a-avatar>
                     <div class="ml-8 inline-flex rounded-md mx-2">
                       <button
                         type="button"
@@ -206,9 +205,9 @@ export default {
       </header>
 
       <!-- Page Content -->
-      <main>
+      <div>
         <slot />
-      </main>
+      </div> 
     </div>
   </div>
 </template>

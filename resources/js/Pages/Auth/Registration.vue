@@ -46,7 +46,6 @@ export default {
 <template>
     <!-- <DefaultLayout title="Dashboard"> -->
         <div class="register-background flex flex-col h-screen sm:justify-center items-center pt-14 p-6 sm:pt-0">
-            
             <a-typography-title :level="2" class="text-xl">{{$t('account_registration')}}</a-typography-title>
             <div class="w-full max-w-lg mt-6 px-6 py-4 bg-gray-50 shadow-md overflow-hidden sm:rounded-lg"><!--v-if-->
                 <a-form :model="formState" name="basic" layout="vertical" autocomplete="off" @finish="onFinish"
@@ -65,6 +64,10 @@ export default {
                     <a-form-item :label="$t('family_name')" name="family_name"
                         :rules="[{ required: true, message: $t('please_input_family_name') }]">
                         <a-input type="input" v-model:value="formState.family_name" />
+                    </a-form-item>
+                    <a-form-item :label="$t('mobile')" name="mobile"
+                        :rules="[{ required: true, message: $t('please_input_mobile') }]">
+                        <a-input type="input" v-model:value="formState.mobile" />
                     </a-form-item>
                     <!-- <a-form-item :label="$t('affiliate')" name="organization_id"
                         :rules="[{ required: true, message: 'Please input your organization belongs to!' }]">

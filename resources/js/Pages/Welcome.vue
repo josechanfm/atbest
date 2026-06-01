@@ -2,9 +2,7 @@
 import DefaultLayout from '@/Layouts/DefaultLayout.vue';
 import ThumbList from "@/Components/ThumbList.vue";
 import IntroduceBox from "@/Components/IntroduceBox.vue";
-import {
-    gsap
-} from 'gsap';
+import { gsap } from 'gsap';
 
 export default {
     components: {
@@ -17,7 +15,6 @@ export default {
         canRegister: Boolean,
         laravelVersion: String,
         phpVersion: String,
-        isMember: Boolean,
         isOrganizer: Boolean,
         articles: Array,
         forms: Array,
@@ -46,7 +43,7 @@ export default {
 <template>
 <DefaultLayout title="Dashboard">
 
-    <div class="flex flex-col gap-24 pt-16">
+    <div class="flex flex-col gap-4">
         <div class="h-[45vh] md:h-[50vh] lg:h-[60vh]  bg-slate-800 bg-gradient-to-tr relative overflow-hidden rounded-md flex items-center shadow-xl">
             <img class="object-cover opacity-60 md:w-full" src="/storage/images/meeting.jpg" />
 
