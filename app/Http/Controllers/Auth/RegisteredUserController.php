@@ -132,5 +132,6 @@ class RegisteredUserController extends Controller
 				'response' => $resp 
 			));
 
-    }
+    	}
+	}
 }
