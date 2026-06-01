@@ -4,6 +4,7 @@
     "lang": "zh",
     "host":"區會",
     "headquater":"總會",
+    "welcome_back": "歡迎回來",
     "welcome_message": "歡迎詞",
     "readmore": "了解更多",
     "english": "英文",
@@ -26,7 +27,10 @@
     "profile": "會員資訊",
     "manager": "管理",
     "portfolios": "個人檔案",
+    "dashboard_instruction": "在這裡您可以管理您的社團和會員資料",
     "my_organizations": "我的社團",
+    "you_have_organizations": "您有 :count 個社團",
+    "view_all_organizations": "查看所有社團",
     "organization": "社團",
     "organization_name_zh": "中文名稱",
     "organization_name_en": "英文名稱",
@@ -341,5 +345,9 @@
     "import_athletes_description": "支援xml, xlsx 檔案上傳。上傳前請確認資料格式與範本一致。",
     "import_success":"匯入成功!",
     "import_some_error":"部分資訊未匯入!",
-    "download_member_list_template":"下載會員名單範本"
+    "download_member_list_template":"下載會員名單範本",
+    "selected":"選定",
+    "active":"啟用",
+    "switch":"切換"
+
 }

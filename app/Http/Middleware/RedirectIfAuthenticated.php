@@ -27,12 +27,7 @@ class RedirectIfAuthenticated
             // 只檢查 'web' guard
             if ($guard === 'web' && Auth::guard($guard)->check()) {
                 $user = Auth::guard($guard)->user();
-                //dd($user->member, $user->member->is_organizer);
-                // 根據角色跳轉到不同頁面
-                
-                if($user->roles->count()>0){
-                    return $this->redirectBasedOnRole($user);
-                }else if($user->member){
+                if($user->member){
                     return redirect()->route('member.dashboard');
                 }else{
                     return redirect(RouteServiceProvider::HOME);

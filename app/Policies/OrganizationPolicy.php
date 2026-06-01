@@ -60,7 +60,7 @@ class OrganizationPolicy
      */
     public function update(User $user, Organization $organization)
     {
-        if($user->hasRole('admin')){
+        if($user->hasRole('admin') || $user->isOrganizer()){
             return true;
         }
         return $organization->hasUser($user);
