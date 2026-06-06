@@ -1,151 +1,357 @@
 <template>
   <a-layout style="min-height: 100vh">
-    <a-layout-sider v-model:collapsed="collapsed" :trigger="null" collapsible theme="light" width="250px"
-      class="shadow-md">
-      <div class="m-4 text-center text-lg" v-if="collapsed">
-        <inertia-link href="/">{{ $page.props.auth.organization.abbr }}</inertia-link>
-      </div>
-      <div class="m-4 text-center text-lg" v-else>
-        <inertia-link :href="route('organizer.dashboard')" v-if="$page.props.auth.organization">
-          {{ $page.props.auth.organization.name_zh }}
-        </inertia-link>
-      </div>
-      <OrganizationMenu :menuKeys="menuKeys" />
-    </a-layout-sider>
-    <a-layout>
-      <a-layout-header class="shadow-md border-b-2 border-red-600 flex justify-between" style="background: #fff; padding: 0">
-        <menu-unfold-outlined v-if="collapsed" class="trigger" @click="() => (collapsed = !collapsed)" />
-        <menu-fold-outlined v-else class="trigger" @click="() => (collapsed = !collapsed)" />
-        <div class="flex items-center justify-center sm:ml-6">
-          <!-- Settings Dropdown -->
-          <language-switcher />
-          <div class="ml-3 relative">
-            <Dropdown align="right" width="48">
-              <template #trigger>
-                <button v-if="$page.props.auth.user.member.avatar"
-                  class="text-sm border-2 border-transparent rounded-full "
-                >
-                  <img
-                    class="h-8 w-8 rounded-full object-cover"
-                    :src="$page.props.auth.user.member.avatar"
-                    :alt="$page.props.auth.user.member.given_name"
-                  />
-                </button>
-                <a-avatar v-else>{{ $page.props.auth.user.member.given_name.charAt($page.props.auth.user.member.given_name.length-1) }}</a-avatar>
-                <span class="inline-flex rounded-md">
-                  <button
-                    type="button"
-                    class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition"
-                  >
-                    {{ $page.props.auth.user.member.given_name }}
-                    <svg
-                      class="ml-2 -mr-0.5 h-4 w-4"
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                        clip-rule="evenodd"
-                      />
-                    </svg>
-                  </button>
+    <!-- Mobile Drawer for Side Menu -->
+    <a-drawer
+      v-model:visible="drawerVisible"
+      placement="left"
+      :closable="false"
+      :body-style="{ padding: 0 }"
+      :width="280"
+      :z-index="1000"
+      class="mobile-drawer"
+      @close="drawerVisible = false"
+    >
+      <div class="drawer-content">
+        <!-- Logo Area in Drawer -->
+        <div class="py-6 px-4 border-b border-gray-200 bg-gradient-to-r from-white to-gray-50">
+          <div class="flex items-center justify-between">
+            <inertia-link :href="route('organizer.dashboard')" class="flex items-center space-x-3 flex-1">
+              <div class="w-10 h-10 bg-gradient-to-br from-red-500 to-red-600 rounded-lg flex items-center justify-center shadow-md">
+                <span class="text-white font-bold text-lg">
+                  {{ $page.props.auth.organization?.abbr?.charAt(0) || 'O' }}
                 </span>
-              </template>
-
-              <template #content>
-                <!-- Account Management -->
-                <div class="block px-4 py-2 text-xs text-gray-400">
-                  {{ $t("manage_account") }}
+              </div>
+              <div class="flex-1 min-w-0">
+                <div class="font-semibold text-gray-800 text-sm truncate">
+                  {{ $page.props.auth.organization?.name_zh || 'Organization' }}
                 </div>
-
-                <DropdownLink :href="route('member.profile.index')">
-                  {{ $t("account") }}
-                </DropdownLink>
-
-                <DropdownLink
-                  v-if="$page.props.hasApiFeatures"
-                  :href="route('api-tokens.index')"
-                >
-                  {{ $t("api_tokens") }}
-                </DropdownLink>
-
-                <div class="border-t border-gray-100" />
-
-                <!-- Authentication -->
-                <form @submit.prevent="logout">
-                  <DropdownLink as="button"> {{ $t("log_out") }} </DropdownLink>
-                </form>
+                <div class="text-xs text-gray-500">{{ $page.props.auth.organization?.abbr }}</div>
+              </div>
+            </inertia-link>
+            <a-button 
+              type="text" 
+              @click="drawerVisible = false"
+              class="!w-8 !h-8 !p-0"
+            >
+              <template #icon>
+                <close-outlined />
               </template>
-            </Dropdown>
+            </a-button>
           </div>
         </div>
-      </a-layout-header>
-      
-      <!-- {{ $page.props }} -->
-      <a-layout-content>
-        <header class="flex justify-between items-center bg-gray-200 m-4 py-4 px-6 mb-5 bg-white shadow sm:rounded-lg">
-          <div class="text-lg font-bold">
-            {{ title }}
-          </div>
-          <nav class="text-sm" v-if="breadcrumb">
-            <ol class="list-none flex">
-              <li class="breadcrumb-item hidden md:inline" v-for="(item, idx) in breadcrumb" :key="idx">
-                <inertia-link v-if="item.url" :href="item.url">{{ item.label }}</inertia-link>
-                <span v-else>{{ item.label }}</span>
-                <span class="pl-2 pr-2" v-if="idx < breadcrumb.length - 1">&gt;</span>
-              </li>
-              <li class="breadcrumb-item block md:hidden">
-                <span v-if="breadcrumb.length > 1">
-                  <inertia-link :href="breadcrumb[breadcrumb.length - 2].url">
-                    {{ breadcrumb[breadcrumb.length - 2].label }}
-                  </inertia-link>
-                </span>
-                <span v-else>
-                  <inertia-link :href="route('organizer.dashboard')">
-                    Home
-                  </inertia-link>
-                </span>
-              </li>
-              <li>
-                <span class="pl-2 pr-2">|</span>
-                <a href="javascript:history.back();" class="inline">{{ $t('back') }}</a>
-              </li>
-            </ol>
 
-          </nav>
-        </header>
+        <!-- Menu in Drawer -->
+        <div class="flex-1 overflow-y-auto custom-scrollbar" style="height: calc(100vh - 180px)">
+          <OrganizationMenu :menuKeys="menuKeys" @menu-click="drawerVisible = false" />
+        </div>
 
-          <main>
-            <div class="xs:p-2 p-4">
-              <slot />
+        <!-- User Info in Drawer -->
+        <div class="border-t border-gray-200 p-4 bg-gray-50">
+          <a-dropdown placement="topRight" :trigger="['click']">
+            <div class="flex items-center space-x-3 cursor-pointer hover:bg-white p-2 rounded-lg transition">
+              <a-avatar 
+                v-if="$page.props.auth.user.member?.avatar"
+                :src="$page.props.auth.user.member.avatar"
+                class="shadow-md"
+              />
+              <a-avatar v-else class="bg-gradient-to-br from-red-500 to-red-600">
+                {{ $page.props.auth.user.member?.given_name?.charAt($page.props.auth.user.member?.given_name?.length - 1) }}
+              </a-avatar>
+              <div class="flex-1 min-w-0">
+                <div class="text-sm font-medium text-gray-900 truncate">
+                  {{ $page.props.auth.user.member?.given_name }}
+                </div>
+                <div class="text-xs text-gray-500 truncate">
+                  {{ $page.props.auth.user.email }}
+                </div>
+              </div>
+              <down-outlined class="text-gray-400 text-xs" />
             </div>
-          </main>
+            <template #overlay>
+              <a-menu>
+                <a-menu-item>
+                  <inertia-link :href="route('member.profile.index')" class="block">
+                    {{ $t('account') }}
+                  </inertia-link>
+                </a-menu-item>
+                <a-menu-divider />
+                <a-menu-item @click="logout">
+                  {{ $t('log_out') }}
+                </a-menu-item>
+              </a-menu>
+            </template>
+          </a-dropdown>
+        </div>
+      </div>
+    </a-drawer>
 
+    <!-- Desktop Sidebar (hidden on mobile) -->
+    <a-layout-sider 
+      v-model:collapsed="collapsed" 
+      :trigger="null" 
+      collapsible 
+      theme="light" 
+      width="280px"
+      :class="['desktop-sidebar', isMobile ? 'hidden-on-mobile' : '']"
+      :style="{ 
+        background: 'linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%)',
+        borderRight: '1px solid #e9ecef',
+        boxShadow: '2px 0 8px rgba(0,0,0,0.05)'
+      }"
+    >
+      <!-- Logo Area -->
+      <div class="py-6 px-4 border-b border-gray-200" :class="{ 'text-center': collapsed }">
+        <div v-if="!collapsed" class="flex items-center justify-between">
+          <inertia-link :href="route('organizer.dashboard')" class="flex items-center space-x-3 flex-1">
+            <div class="w-10 h-10 bg-gradient-to-br from-red-500 to-red-600 rounded-lg flex items-center justify-center shadow-md">
+              <span class="text-white font-bold text-lg">
+                {{ $page.props.auth.organization?.abbr?.charAt(0) || 'O' }}
+              </span>
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="font-semibold text-gray-800 text-sm truncate max-w-[180px]">
+                {{ $page.props.auth.organization?.name_zh || 'Organization' }}
+              </div>
+              <div class="text-xs text-gray-500">{{ $page.props.auth.organization?.abbr }}</div>
+            </div>
+          </inertia-link>
+        </div>
+
+        <div v-else class="flex justify-center">
+          <inertia-link :href="route('organizer.dashboard')">
+            <div class="w-10 h-10 bg-gradient-to-br from-red-500 to-red-600 rounded-lg flex items-center justify-center shadow-md">
+              <span class="text-white font-bold text-lg">
+                {{ $page.props.auth.organization?.abbr?.charAt(0) || 'O' }}
+              </span>
+            </div>
+          </inertia-link>
+        </div>
+      </div>
+
+      <!-- Menu Area -->
+      <div class="flex-1 overflow-y-auto py-4 custom-scrollbar">
+        <OrganizationMenu :menuKeys="menuKeys" />
+      </div>
+
+      <!-- Footer User Info -->
+      <div class="border-t border-gray-200 p-4 mt-auto" :class="{ 'text-center': collapsed }">
+        <a-dropdown placement="topRight" :trigger="['click']" v-if="!collapsed">
+          <div class="flex items-center space-x-3 cursor-pointer hover:bg-gray-50 p-2 rounded-lg transition">
+            <a-avatar 
+              v-if="$page.props.auth.user.member?.avatar"
+              :src="$page.props.auth.user.member.avatar"
+              class="shadow-md"
+            />
+            <a-avatar v-else class="bg-gradient-to-br from-red-500 to-red-600">
+              {{ $page.props.auth.user.member?.given_name?.charAt($page.props.auth.user.member?.given_name?.length - 1) }}
+            </a-avatar>
+            <div class="flex-1 min-w-0">
+              <div class="text-sm font-medium text-gray-900 truncate">
+                {{ $page.props.auth.user.member?.given_name }}
+              </div>
+              <div class="text-xs text-gray-500 truncate">
+                {{ $page.props.auth.user.email }}
+              </div>
+            </div>
+            <down-outlined class="text-gray-400" />
+          </div>
+          <template #overlay>
+            <a-menu>
+              <a-menu-item>
+                <inertia-link :href="route('member.profile.index')" class="block">
+                  {{ $t('account') }}
+                </inertia-link>
+              </a-menu-item>
+              <a-menu-divider />
+              <a-menu-item @click="logout">
+                {{ $t('log_out') }}
+              </a-menu-item>
+            </a-menu>
+          </template>
+        </a-dropdown>
+
+        <div v-else class="flex justify-center">
+          <a-dropdown placement="topRight" :trigger="['click']">
+            <div class="cursor-pointer">
+              <a-avatar 
+                v-if="$page.props.auth.user.member?.avatar"
+                :src="$page.props.auth.user.member.avatar"
+                class="shadow-md"
+              />
+              <a-avatar v-else class="bg-gradient-to-br from-red-500 to-red-600">
+                {{ $page.props.auth.user.member?.given_name?.charAt($page.props.auth.user.member?.given_name?.length - 1) }}
+              </a-avatar>
+            </div>
+            <template #overlay>
+              <a-menu>
+                <a-menu-item>
+                  <inertia-link :href="route('member.profile.index')" class="block">
+                    {{ $t('account') }}
+                  </inertia-link>
+                </a-menu-item>
+                <a-menu-divider />
+                <a-menu-item @click="logout">
+                  {{ $t('log_out') }}
+                </a-menu-item>
+              </a-menu>
+            </template>
+          </a-dropdown>
+        </div>
+      </div>
+    </a-layout-sider>
+
+    <a-layout>
+      <a-layout-header class="shadow-md border-b-2 border-red-600 flex justify-between items-center" style="background: #fff; padding: 0 20px">
+        <div class="flex items-center">
+          <!-- Mobile Menu Button -->
+          <a-button 
+            v-if="isMobile" 
+            type="text"
+            @click="drawerVisible = true"
+            class="mobile-menu-btn"
+          >
+            <template #icon>
+              <menu-unfold-outlined class="text-xl" />
+            </template>
+          </a-button>
+          
+          <!-- Desktop trigger buttons -->
+          <template v-else>
+            <menu-unfold-outlined 
+              v-if="collapsed" 
+              class="trigger" 
+              @click="() => (collapsed = !collapsed)" 
+            />
+            <menu-fold-outlined 
+              v-if="!collapsed" 
+              class="trigger" 
+              @click="() => (collapsed = !collapsed)" 
+            />
+          </template>
+
+          <!-- Page Title -->
+          <div class="ml-4 hidden md:block">
+            <h1 class="text-lg font-semibold text-gray-800">{{ title }}</h1>
+          </div>
+        </div>
+
+        <div class="flex items-center space-x-4">
+          <language-switcher />
+          
+          <a-dropdown :trigger="['click']" placement="bottomRight">
+            <div class="flex items-center space-x-2 cursor-pointer group">
+              <a-avatar 
+                v-if="$page.props.auth.user.member?.avatar"
+                :src="$page.props.auth.user.member.avatar"
+                class="shadow-md"
+                :size="32"
+              />
+              <a-avatar v-else class="bg-gradient-to-br from-red-500 to-red-600" :size="32">
+                {{ $page.props.auth.user.member?.given_name?.charAt($page.props.auth.user.member?.given_name?.length - 1) }}
+              </a-avatar>
+              <span class="hidden sm:inline-block text-sm font-medium text-gray-700">
+                {{ $page.props.auth.user.member?.given_name }}
+              </span>
+              <down-outlined class="hidden sm:block text-gray-400 text-xs group-hover:text-gray-600 transition" />
+            </div>
+            <template #overlay>
+              <a-menu>
+                <a-menu-item-group :title="$t('manage_account')">
+                  <a-menu-item>
+                    <inertia-link :href="route('member.profile.index')" class="block">
+                      {{ $t('account') }}
+                    </inertia-link>
+                  </a-menu-item>
+                  <a-menu-item v-if="$page.props.hasApiFeatures">
+                    <inertia-link :href="route('api-tokens.index')" class="block">
+                      {{ $t('api_tokens') }}
+                    </inertia-link>
+                  </a-menu-item>
+                </a-menu-item-group>
+                <a-menu-divider />
+                <a-menu-item @click="logout" class="text-red-600">
+                  {{ $t('log_out') }}
+                </a-menu-item>
+              </a-menu>
+            </template>
+          </a-dropdown>
+        </div>
+      </a-layout-header>
+
+      <a-layout-content class="bg-gray-50">
+        <!-- Mobile Breadcrumb -->
+        <div class="bg-white shadow-sm border-b border-gray-200 md:hidden px-4 py-3">
+          <nav class="text-sm">
+            <a-breadcrumb>
+              <a-breadcrumb-item v-if="breadcrumb && breadcrumb.length > 0">
+                <inertia-link 
+                  v-if="breadcrumb[breadcrumb.length - 2]?.url" 
+                  :href="breadcrumb[breadcrumb.length - 2].url"
+                >
+                  {{ breadcrumb[breadcrumb.length - 2].label }}
+                </inertia-link>
+                <span v-else>{{ $t('home') }}</span>
+              </a-breadcrumb-item>
+              <a-breadcrumb-item>
+                <span class="text-gray-900">{{ title }}</span>
+              </a-breadcrumb-item>
+            </a-breadcrumb>
+          </nav>
+        </div>
+
+        <!-- Desktop Breadcrumb -->
+        <div class="hidden md:block bg-white shadow-sm border-b border-gray-200">
+          <div class="px-6 py-4">
+            <div class="flex justify-between items-center">
+              <a-breadcrumb>
+                <a-breadcrumb-item v-for="(item, idx) in breadcrumb" :key="idx">
+                  <inertia-link v-if="item.url" :href="item.url">
+                    {{ item.label }}
+                  </inertia-link>
+                  <span v-else>{{ item.label }}</span>
+                </a-breadcrumb-item>
+              </a-breadcrumb>
+              
+              <a-button type="link" @click="goBack" class="flex items-center gap-1">
+                <arrow-left-outlined />
+                <span>{{ $t('back') }}</span>
+              </a-button>
+            </div>
+          </div>
+        </div>
+
+        <main class="p-4 md:p-6">
+          <div class="fade-enter-active">
+            <slot />
+          </div>
+        </main>
       </a-layout-content>
     </a-layout>
   </a-layout>
 </template>
 
 <script>
-import { ref, reactive } from "vue";
+import { ref, reactive, onMounted, onUnmounted } from "vue";
 import { router } from "@inertiajs/vue3";
-import { usePage } from "@inertiajs/vue3";
-import Dropdown from "@/Components/Dropdown.vue";
-import DropdownLink from "@/Components/DropdownLink.vue";
-import { MenuUnfoldOutlined, MenuFoldOutlined } from "@ant-design/icons-vue";
+import { 
+  MenuUnfoldOutlined, 
+  MenuFoldOutlined,
+  CloseOutlined,
+  DownOutlined,
+  ArrowLeftOutlined
+} from "@ant-design/icons-vue";
 import OrganizationMenu from "@/Components/Organization/OrganizationMenu.vue";
 import LanguageSwitcher from "@/Components/LanguageSwitcher.vue";
 
 export default {
   components: {
-    Dropdown,
-    DropdownLink,
     OrganizationMenu,
+    LanguageSwitcher,
     MenuUnfoldOutlined,
     MenuFoldOutlined,
-    LanguageSwitcher,
+    CloseOutlined,
+    DownOutlined,
+    ArrowLeftOutlined,
   },
   props: ["title", "breadcrumb"],
   setup(props) {
@@ -154,46 +360,80 @@ export default {
       menuSelectKey: "",
     });
 
-    const showingNavigationDropdown = ref(false);
-    const selectedKeys = ref(["1"]);
     const collapsed = ref(false);
+    const drawerVisible = ref(false);
+    const isMobile = ref(false);
 
-    const switchToTeam = (team) => {
-      router.put(
-        route("current-team.update"),
-        {
-          team_id: team.id,
-        },
-        {
-          preserveState: false,
-        }
-      );
+    const checkMobile = () => {
+      isMobile.value = window.innerWidth < 768;
+      if (isMobile.value) {
+        collapsed.value = true;
+      }
     };
-    const page = usePage();
+
     const logout = () => {
       router.post(route("logout"));
     };
 
+    const goBack = () => {
+      window.history.back();
+    };
+
+    onMounted(() => {
+      checkMobile();
+      window.addEventListener('resize', checkMobile);
+    });
+
+    onUnmounted(() => {
+      window.removeEventListener('resize', checkMobile);
+    });
+
     return {
-      showingNavigationDropdown,
-      selectedKeys,
       menuKeys,
       collapsed,
-      switchToTeam,
+      drawerVisible,
+      isMobile,
       logout,
+      goBack,
     };
   },
-  mounted() {
-  },
-
 };
-// defineProps({
-//     title: String,
-// });
 </script>
 
 <style scoped>
-#app .trigger {
+/* Desktop Sidebar Styles */
+.desktop-sidebar {
+  position: relative;
+  z-index: 10;
+}
+
+.hidden-on-mobile {
+  display: none;
+}
+
+/* Mobile Drawer Styles */
+.mobile-drawer :deep(.ant-drawer-body) {
+  padding: 0;
+}
+
+.drawer-content {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%);
+}
+
+.mobile-menu-btn {
+  font-size: 18px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Trigger Button Styles */
+.trigger {
   font-size: 18px;
   line-height: 64px;
   padding: 0 24px;
@@ -201,17 +441,96 @@ export default {
   transition: color 0.3s;
 }
 
-#app .trigger:hover {
+.trigger:hover {
   color: #1890ff;
 }
 
-#app .logo {
-  height: 32px;
-  background: rgba(255, 255, 255, 0.3);
-  margin: 16px;
+/* Custom Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
 }
 
-.site-layout .site-layout-background {
-  background: #fff;
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Animation */
+.fade-enter-active {
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive Breakpoints */
+@media (min-width: 768px) {
+  .hidden-on-mobile {
+    display: block !important;
+  }
+}
+
+/* Menu Hover Effects */
+:deep(.ant-menu-item-selected) {
+  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%) !important;
+  color: #dc2626 !important;
+}
+
+:deep(.ant-menu-item:hover) {
+  background: #fef2f2 !important;
+  color: #dc2626 !important;
+}
+
+:deep(.ant-menu-item) {
+  transition: all 0.3s ease;
+}
+
+/* Dropdown menu styling */
+:deep(.ant-dropdown-menu) {
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 8px 0;
+}
+
+:deep(.ant-dropdown-menu-item) {
+  padding: 8px 16px;
+}
+
+/* Breadcrumb styling */
+:deep(.ant-breadcrumb) {
+  color: #6b7280;
+}
+
+:deep(.ant-breadcrumb a) {
+  color: #6b7280;
+  transition: color 0.2s;
+}
+
+:deep(.ant-breadcrumb a:hover) {
+  color: #dc2626;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  .ant-layout-header {
+    padding: 0 12px !important;
+  }
 }
 </style>

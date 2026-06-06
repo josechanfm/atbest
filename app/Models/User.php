@@ -111,11 +111,12 @@ class User extends Authenticatable
     }
     public function organizations()
     {
-        return Organization::whereIn('id', function ($query) {
-            $query->select('organization_id')
-                  ->from('members') // The members table
-                  ->where('user_id', $this->id);
-        })->get();
+        return $this->belongsToMany(Organization::class, 'members', 'user_id', 'organization_id');
+        // return Organization::whereIn('id', function ($query) {
+        //     $query->select('organization_id')
+        //           ->from('members') // The members table
+        //           ->where('user_id', $this->id);
+        // })->get();
     }
     public function issues(){
         return $this->hasMany(Issue::class);

@@ -9,7 +9,7 @@
           {{ $t("create_member") }}
         </a-button>
     </div>
-    <div class="container mx-auto">
+    <div class="mx-auto">
       <div class="flex flex-auto gap-2">
         <a-input
           type="input"
@@ -26,7 +26,7 @@
         <a-button type="primary" @click="searchData">{{ $t("search") }}</a-button>
       </div>
     </div>
-    <div class="container mx-auto py-5">
+    <div class="mx-auto py-5">
       <div class="bg-white relative shadow rounded-lg overflow-x-auto">
         <a-table :dataSource="members.data" :columns="columns" :pagination="false">
           <template #headerCell="{ column }">

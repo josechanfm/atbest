@@ -9,13 +9,13 @@
         {{ $t("create_event") }}
       </a-button>
     </div>
-    <div class="container mx-auto">
+    <div class="mx-auto">
       <div class="flex flex-col md:flex-row justify-between gap-6">
         <a-input type="input" v-model:value="search.title_en" :placeholder="$t('please_input_title')"></a-input>
         <a-button type="primary" @click="searchData">{{ $t("search") }}</a-button>
       </div>
     </div>
-    <div class="container mx-auto py-5">
+    <div class="mx-auto py-5">
       <div class="bg-white relative shadow rounded-lg overflow-x-auto">
         <a-table :dataSource="events.data" :columns="columns">
           <template #headerCell="{ column }">
