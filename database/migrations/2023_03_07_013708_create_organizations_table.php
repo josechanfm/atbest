@@ -15,12 +15,14 @@ return new class extends Migration
     {
         Schema::create('organizations', function (Blueprint $table) {
             $table->id();
-            $table->string('parish')->nullable();
-            $table->string('abbr');
-            $table->string('name_display')->nullable();
+            $table->year('year');
+            $table->string('abbr_zh');
+            $table->string('abbr_en')->nullable();
+            $table->string('abbr_pt')->nullable();
             $table->string('name_zh')->nullable();
             $table->string('name_en')->nullable();
             $table->string('name_pt')->nullable();
+            $table->string('name_display')->nullable();
             $table->string('email')->nullable();
             $table->string('phone')->nullable();
             $table->string('address')->nullable();
