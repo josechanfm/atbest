@@ -219,7 +219,7 @@ export default {
       },
     };
   },
-  created() {
+  mounted() {
     this.dataModel=this.fields
   },
   methods: {
@@ -284,6 +284,7 @@ export default {
           onSuccess: (page) => {
             data = {};
             console.log(page);
+
           },
           onError: (error) => {
             console.log(error);

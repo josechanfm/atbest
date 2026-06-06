@@ -31,12 +31,12 @@ class FormFieldController extends Controller
         $templates[]=[
             'value'=>'organizations',
             'label'=>'Organization',
-            'template'=>Organization::select('abbr as value','name_zh as label')->where('status',true)->get()->toArray()];
+            'template'=>Organization::select('abbr_en as value','name_zh as label')->where('status',true)->get()->toArray()];
         return Inertia::render('Organizer/FormFields', [
             'templateOptions'=>$templates,
             'fieldTypes'=>Config::item('field_types'),
             'form' => $form,
-            'fields' => $form->fields,
+            'fields' => $form->fields()->orderBy('sequence')->get(), // add orderBy
         ]);
     }
 
