@@ -119,6 +119,7 @@
                     <div class="mt-5 w-full flex flex-col items-center overflow-hidden text-sm">
                       <template v-for="orgMember in members" :key="orgMember.id">
                         <a
+                          v-if="orgMember.organization"
                           href="#"
                           class="w-full border-t border-gray-100 text-gray-600 py-4 pl-6 pr-3 block hover:bg-gray-100 transition duration-150"
                         >
@@ -127,7 +128,8 @@
                             alt=""
                             class="rounded-full h-6 shadow-md inline-block mr-2"
                           />
-                          {{ orgMember.organization.abbr }} -
+                         
+                          {{ orgMember.organization.abbr_en }}
                           {{ orgMember.organization["name_" + $t("lang")] }}
                           <span
                             v-if="members.length > 1"

@@ -152,45 +152,316 @@ class OrganizationSeeder extends Seeder
         */
   
 
-        $data=[
-            ["registration_code"=>"","parish"=>"M","name_zh"=>"預留1","abbr"=>"RSV1","name_en"=>"Reserve 1","address"=>"","phone"=>"","href"=>"atbest.net","email"=>"","president"=>"--","card_style"=>"card_01"],
-            ["registration_code"=>"","parish"=>"M","name_zh"=>"預留1","abbr"=>"RSV1","name_en"=>"Reserve 1","address"=>"","phone"=>"","href"=>"atbest.net","email"=>"","president"=>"--","card_style"=>"card_01"],
-            ["registration_code"=>"","parish"=>"M","name_zh"=>"預留1","abbr"=>"RSV1","name_en"=>"Reserve 1","address"=>"","phone"=>"","href"=>"atbest.net","email"=>"","president"=>"--","card_style"=>"card_01"],
-            ["registration_code"=>"","parish"=>"M","name_zh"=>"預留1","abbr"=>"RSV1","name_en"=>"Reserve 1","address"=>"","phone"=>"","href"=>"atbest.net","email"=>"","president"=>"--","card_style"=>"card_01"],
-            ["registration_code"=>"","parish"=>"M","name_zh"=>"預留1","abbr"=>"RSV1","name_en"=>"Reserve 1","address"=>"","phone"=>"","href"=>"atbest.net","email"=>"","president"=>"--","card_style"=>"card_01"],
-            ["registration_code"=>"","parish"=>"M","name_zh"=>"預留1","abbr"=>"RSV1","name_en"=>"Reserve 1","address"=>"","phone"=>"","href"=>"atbest.net","email"=>"","president"=>"--","card_style"=>"card_01"],
-            ["registration_code"=>"","parish"=>"M","name_zh"=>"預留1","abbr"=>"RSV1","name_en"=>"Reserve 1","address"=>"","phone"=>"","href"=>"atbest.net","email"=>"","president"=>"--","card_style"=>"card_01"],
-            ["registration_code"=>"","parish"=>"M","name_zh"=>"澳門教育發展研究學會","abbr"=>"MEDRA","name_en"=>"Macao Education Development and Research Association","address"=>"","phone"=>"","href"=>"atbest.net","email"=>"","president"=>"--","card_style"=>"card_01"],
-            ["registration_code"=>"","parish"=>"M","name_zh"=>"澳門科技教育協會","abbr"=>"STEAM","name_en"=>"Science and Technology Education Association of Macau","address"=>"","phone"=>"","href"=>"atbest.net","email"=>"","president"=>"--","card_style"=>"card_01"],
-            ["registration_code"=>"","parish"=>"S","name_zh"=>"澳門項目管理師協會","abbr"=>"MPMPA","name_en"=>"Macao Project Management Professional Association","address"=>"澳門羅理基博士大馬路600-E號, 第一國際商業中心P22-08","phone"=>"","href"=>"mpmpa.org.mo","email"=>"info@mpmpa.org.mo","president"=>"--","card_style"=>"card_01"],
-            ["registration_code"=>"112233","parish"=>"S","name_zh"=>"公務人員聯合總會","abbr"=>"MCSF","name_en"=>"Macau Civil Servants Federation","address"=>"澳門荷蘭園二馬路十一號荷蘭園大廈三樓A單位","phone"=>"","href"=>"atbest.net","email"=>"","president"=>"--","card_style"=>"card_01"],
-            ["registration_code"=>"","parish"=>"S","name_zh"=>"公務華員職工會","abbr"=>"MCCSA","name_en"=>"Macao Chinese Civil Servants Association","address"=>"澳門荷蘭園二馬路十一號荷蘭園大廈三樓A單位","phone"=>"","href"=>"atbest.net","email"=>"","president"=>"--","card_style"=>"card_01"],
-            ["registration_code"=>"","parish"=>"S","name_zh"=>"公務高級技術員協會","abbr"=>"ATSFPM","name_en"=>"Associação dos Técnicos Superiores da Função Pública de Macau",'address'=>"澳門荷蘭園二馬路十一號荷蘭園大廈三樓A單位","phone"=>"","href"=>"atbest.net","email"=>"","president"=>"--","card_style"=>"card_01"],
-            ["registration_code"=>"","parish"=>"S","name_zh"=>"公務文職人員協會","abbr"=>"CCSAM","name_en"=>"Clerical Civil Servants Association of Macau",'address'=>"澳門荷蘭園二馬路十一號荷蘭園大廈三樓A單位","phone"=>"","href"=>"atbest.net","email"=>"","president"=>"--","card_style"=>"card_01"],
-            ["registration_code"=>"","parish"=>"S","name_zh"=>"市政署員工協進會","abbr"=>"AWCMAI","name_en"=>"Association of Workers of Civil and Municipal Affairs Institute",'address'=>"澳門荷蘭園二馬路十一號荷蘭園大廈三樓A單位","phone"=>"","href"=>"atbest.net","email"=>"","president"=>"--","card_style"=>"card_01"],
-            ["registration_code"=>"","parish"=>"S","name_zh"=>"中國澳門電子競技運動大聯盟總會","abbr"=>"MESUF","name_en"=>"Macao eSport Channel",'address'=>"","phone"=>"","href"=>"atbest.net","email"=>"","president"=>"--","card_style"=>"card_01"]
-        ];
-        foreach($data as $org){
+$organizations = [
+    [
+        'abbr_en' => 'CCSA',
+        'abbr_zh' => '公務工會',
+        'name_zh' => '澳門公務華員職工會',
+        'name_pt' => 'Associação dos Trabalhadores da Função Pública de Origem Chinesa',
+        'name_en' => 'Macao Chinese Civil Servants Association',
+        "card_style"=>"card_01"
+    ],
+    [
+        'abbr_en' => 'ATFPM',
+        'abbr_zh' => '公職人員協會',
+        'name_zh' => '澳門公職人員協會',
+        'name_pt' => 'Associação dos Trabalhadores da Função Pública de Macau',
+        'name_en' => 'Macau Civil Servants Association',
+        "card_style"=>"card_01"
+    ],
+    [
+        'abbr_en' => 'ATEC',
+        'abbr_zh' => '公專會',
+        'name_zh' => '澳門公務專業人員協會',
+        'name_pt' => 'Associação dos Técnicos da Administração Pública de Macau',
+        'name_en' => 'The Professional Civil Servants Association of Macao',
+        "card_style"=>"card_01"
+    ],
+    [
+        'abbr_en' => 'AFPM',
+        'abbr_zh' => '女公務員協會',
+        'name_zh' => '澳門女公務員協會',
+        'name_pt' => 'Associação das Funcionárias Públicas de Macau',
+        'name_en' => 'Macao Women Civil Servants Association',
+        "card_style"=>"card_01"
+    ],
+    [
+        'abbr_en' => 'ACAPFPM',
+        'abbr_zh' => '退休公務員聯誼會',
+        'name_zh' => '澳門退休公務員聯誼會',
+        'name_pt' => 'Associação para a Confraternização de Aposentados e Pensionistas da Função Pública de Macau',
+        'name_en' => 'Macao Retired Civil Servants Association',
+        "card_style"=>"card_01" 
+    ],
+    [
+        'abbr_en' => 'ALAP',
+        'abbr_zh' => '公共行政管理學會',
+        'name_zh' => '澳門公共行政管理學會',
+        'name_pt' => 'Associação dos Licenciados em Administração Pública - A.L.A.P.',
+        'name_en' => 'Macao Public Administration Society',
+        "card_style"=>"card_01"
+    ],
+    [
+        'abbr_en' => 'AEFPM',
+        'abbr_zh' => '公職教育協會',
+        'name_zh' => '澳門公職教育協會',
+        'name_pt' => 'Associação Educativa da Função Pública de Macau',
+        'name_en' => 'Macao Public Service Educators Association',
+        "card_style"=>"card_01"
+    ],
+    [
+        'abbr_en' => 'ATSTFPM',
+        'abbr_zh' => '高級技術員協會',
+        'name_zh' => '澳門高級技術員協會',
+        'name_pt' => 'Associação dos Técnicos Superiores da Função Pública de Macau',
+        'name_en' => 'Macao Senior Technicians Association',
+        "card_style"=>"card_01"
+    ],
+    [
+        'abbr_en' => 'APCAMP',
+        'abbr_zh' => '澳門公務文員會',
+        'name_zh' => '澳門公務文職人員協會',
+        'name_pt' => 'Associação de Pessoal Civil da Administração Pública de Macau',
+        'name_en' => 'Clerical Civil Servants Association of Macau',
+        "card_style"=>"card_01"
+    ],
+    [
+        'abbr_en' => 'ATIAMM',
+        'abbr_zh' => '市政員工協進會',
+        'name_zh' => '澳門市政署員工協進會',
+        'name_pt' => 'Associação de Trabalhadores do Instituto para os Assuntos Municipais de Macau',
+        'name_en' => 'Association of Workers of Municipal Affairs Institute of Macao',
+        "card_style"=>"card_01"
+    ],
+    [
+        'abbr_en' => null,
+        'abbr_zh' => '中葡護士會',
+        'name_zh' => '澳門中葡護士會',
+        'name_pt' => 'Associação de Enfermeiros Luso-Descendentes e Chineses de Macau',
+        'name_en' => 'Association of Luso-Descendant and Chinese Nurses of Macau',
+        "card_style"=>"card_01"
+    ],
+    [
+        'abbr_en' => null,
+        'abbr_zh' => '醫務助理協進會',
+        'name_zh' => '澳門醫務助理人員協進會',
+        'name_pt' => 'Associação dos Assistentes Técnicos de Saúde de Macau',
+        'name_en' => 'Macao Health Technical Assistants Association',
+        "card_style"=>"card_01"
+    ],
+    [
+        'abbr_en' => null,
+        'abbr_zh' => '區域公管學會',
+        'name_zh' => '澳門區域公共管理研究學會',
+        'name_pt' => 'Instituto de Estudos de Administração Pública Regional de Macau',
+        'name_en' => 'Macao Regional Public Administration Research Institute',
+        "card_style"=>"card_01"
+    ],
+    [
+        'abbr_en' => null,
+        'abbr_zh' => '公職司機互助會',
+        'name_zh' => '澳門公職司機互助會',
+        'name_pt' => 'Clube de Condutores da Administração Pública de Macau',
+        'name_en' => 'Macao Civil Service Drivers Club',
+        "card_style"=>"card_01"
+    ],
+    [
+        'abbr_en' => null,
+        'abbr_zh' => '退休撫卹協會',
+        'name_zh' => '澳門退休及撫卹金人士協會',
+        'name_pt' => 'Associação dos Reformados e Pensionistas de Macau',
+        'name_en' => 'Macao Retirees and Pensioners Association',
+        "card_style"=>"card_01"
+    ],
+    [
+        'abbr_en' => null,
+        'abbr_zh' => '退休警務協會',
+        'name_zh' => '澳門退休警務人員協會',
+        'name_pt' => 'Associação dos Reformados do Corpo de Polícia de Macau',
+        'name_en' => 'Macao Retired Police Officers Association',
+        "card_style"=>"card_01"
+    ],
+    [
+        'abbr_en' => null,
+        'abbr_zh' => '海關退休協會',
+        'name_zh' => '澳門海關（水警）退休人員協會',
+        'name_pt' => 'Associação dos Reformados dos Serviços de Alfândega (Polícia Marítima) de Macau',
+        'name_en' => 'Macao Customs (Maritime Police) Retirees Association',
+        "card_style"=>"card_01"
+    ],
+    [
+        'abbr_en' => null,
+        'abbr_zh' => '公務衛生協會',
+        'name_zh' => '澳門公務衛生員工協會',
+        'name_pt' => 'Associação dos Trabalhadores da Saúde da Função Pública de Macau',
+        'name_en' => 'Macao Public Health Workers Association',
+        "card_style"=>"card_01"
+    ],
+    [
+        'abbr_en' => null,
+        'abbr_zh' => '公職工程師協會',
+        'name_zh' => '澳門公職工程師協會',
+        'name_pt' => null,
+        'name_en' => 'Macao Public Service Engineers Association',
+        "card_style"=>"card_01"
+    ],
+    [
+        'abbr_en' => null,
+        'abbr_zh' => '公職獸醫協會',
+        'name_zh' => '澳門公職獸醫協會',
+        'name_pt' => null,
+        'name_en' => 'Macao Public Service Veterinarians Association',
+        "card_style"=>"card_01"
+    ],
+    [
+        'abbr_en' => null,
+        'abbr_zh' => '登記公證協會',
+        'name_zh' => '公職登記暨公證人員協會',
+        'name_pt' => null,
+        'name_en' => 'Macao Public Service Registrars and Notaries Association',
+        "card_style"=>"card_01"
+    ],
+    [
+        'abbr_en' => null,
+        'abbr_zh' => '司法輔助協會',
+        'name_zh' => '澳門公職司法輔助人員協會',
+        'name_pt' => null,
+        'name_en' => 'Macao Public Service Judicial Assistants Association',
+        "card_style"=>"card_01"
+    ],
+    [
+        'abbr_en' => null,
+        'abbr_zh' => '公職翻譯協會',
+        'name_zh' => '澳門公職翻譯協會',
+        'name_pt' => null,
+        'name_en' => 'Macao Public Service Translators Association',
+        "card_style"=>"card_01"
+    ],
+    [
+        'abbr_en' => null,
+        'abbr_zh' => '公務社工協會',
+        'name_zh' => '澳門公職社會工作人員協會',
+        'name_pt' => null,
+        'name_en' => 'Macao Public Service Social Workers Association',
+        "card_style"=>"card_01"
+    ],
+    [
+        'abbr_en' => null,
+        'abbr_zh' => '公職電訊協會',
+        'name_zh' => '澳門公職電訊人員協會',
+        'name_pt' => null,
+        'name_en' => 'Macao Public Service Telecommunications Association',
+        "card_style"=>"card_01"
+    ],
+    [
+        'abbr_en' => null,
+        'abbr_zh' => '行政管理協會',
+        'name_zh' => '澳門公職行政管理人員協會',
+        'name_pt' => null,
+        'name_en' => 'Macao Public Service Administrative Managers Association',
+        "card_style"=>"card_01"
+    ],
+    [
+        'abbr_en' => null,
+        'abbr_zh' => '公務人員協會',
+        'name_zh' => '澳門公務人員協會',
+        'name_pt' => null,
+        'name_en' => 'Macao Civil Servants Association',
+        "card_style"=>"card_01"
+    ],
+    [
+        'abbr_en' => null,
+        'abbr_zh' => '公職基層協會',
+        'name_zh' => '澳門公職基層人員協會',
+        'name_pt' => null,
+        'name_en' => 'Macao Grassroots Civil Servants Association',
+        "card_style"=>"card_01"
+    ],
+    [
+        'abbr_en' => null,
+        'abbr_zh' => '青年公僕協會',
+        'name_zh' => '澳門青年公僕協會',
+        'name_pt' => null,
+        'name_en' => 'Macao Young Civil Servants Association',
+        "card_style"=>"card_01"
+    ],
+    [
+        'abbr_en' => null,
+        'abbr_zh' => '公務華人職工會',
+        'name_zh' => '澳門公務華人職工會',
+        'name_pt' => null,
+        'name_en' => 'Macao Chinese Civil Servants Trade Union',
+        "card_style"=>"card_01"
+    ],
+    [
+        'abbr_en' => 'MEDRA',
+        'abbr_zh' => 'MEDRA',
+        'name_zh' => '澳門教育發展研究學會',
+        'name_pt' => null,
+        'name_en' => 'Macao Education Development and Research Association',
+        "card_style"=>"card_01"
+    ],
+    [
+        'abbr_en' => 'STEAM',
+        'abbr_zh' => 'STEAM',
+        'name_zh' => '澳門科技教育協會',
+        'name_pt' => null,
+        'name_en' => 'Science and Technology Education Association of Macau',
+        "card_style"=>"card_01"
+    ],
+    [
+        'abbr_en' => 'MPMPA',
+        'abbr_zh' => 'MPMPA',
+        'name_zh' => '澳門項目管理師協會',
+        'name_pt' => null,
+        'name_en' => 'Macao Project Management Professional Association',
+        "card_style"=>"card_01"
+    ],
+];
+
+        // $data=[
+        //     ["registration_code"=>"","parish"=>"M","name_zh"=>"預留1","abbr"=>"RSV1","name_en"=>"Reserve 1","address"=>"","phone"=>"","href"=>"atbest.net","email"=>"","president"=>"--","card_style"=>"card_01"],
+        //     ["registration_code"=>"","parish"=>"M","name_zh"=>"預留1","abbr"=>"RSV1","name_en"=>"Reserve 1","address"=>"","phone"=>"","href"=>"atbest.net","email"=>"","president"=>"--","card_style"=>"card_01"],
+        //     ["registration_code"=>"","parish"=>"M","name_zh"=>"預留1","abbr"=>"RSV1","name_en"=>"Reserve 1","address"=>"","phone"=>"","href"=>"atbest.net","email"=>"","president"=>"--","card_style"=>"card_01"],
+        //     ["registration_code"=>"","parish"=>"M","name_zh"=>"預留1","abbr"=>"RSV1","name_en"=>"Reserve 1","address"=>"","phone"=>"","href"=>"atbest.net","email"=>"","president"=>"--","card_style"=>"card_01"],
+        //     ["registration_code"=>"","parish"=>"M","name_zh"=>"預留1","abbr"=>"RSV1","name_en"=>"Reserve 1","address"=>"","phone"=>"","href"=>"atbest.net","email"=>"","president"=>"--","card_style"=>"card_01"],
+        //     ["registration_code"=>"","parish"=>"M","name_zh"=>"預留1","abbr"=>"RSV1","name_en"=>"Reserve 1","address"=>"","phone"=>"","href"=>"atbest.net","email"=>"","president"=>"--","card_style"=>"card_01"],
+        //     ["registration_code"=>"","parish"=>"M","name_zh"=>"預留1","abbr"=>"RSV1","name_en"=>"Reserve 1","address"=>"","phone"=>"","href"=>"atbest.net","email"=>"","president"=>"--","card_style"=>"card_01"],
+        //     ["registration_code"=>"","parish"=>"M","name_zh"=>"澳門教育發展研究學會","abbr"=>"MEDRA","name_en"=>"Macao Education Development and Research Association","address"=>"","phone"=>"","href"=>"atbest.net","email"=>"","president"=>"--","card_style"=>"card_01"],
+        //     ["registration_code"=>"","parish"=>"M","name_zh"=>"澳門科技教育協會","abbr"=>"STEAM","name_en"=>"Science and Technology Education Association of Macau","address"=>"","phone"=>"","href"=>"atbest.net","email"=>"","president"=>"--","card_style"=>"card_01"],
+        //     ["registration_code"=>"","parish"=>"S","name_zh"=>"澳門項目管理師協會","abbr"=>"MPMPA","name_en"=>"Macao Project Management Professional Association","address"=>"澳門羅理基博士大馬路600-E號, 第一國際商業中心P22-08","phone"=>"","href"=>"mpmpa.org.mo","email"=>"info@mpmpa.org.mo","president"=>"--","card_style"=>"card_01"],
+        //     ["registration_code"=>"112233","parish"=>"S","name_zh"=>"公務人員聯合總會","abbr"=>"MCSF","name_en"=>"Macau Civil Servants Federation","address"=>"澳門荷蘭園二馬路十一號荷蘭園大廈三樓A單位","phone"=>"","href"=>"atbest.net","email"=>"","president"=>"--","card_style"=>"card_01"],
+        //     ["registration_code"=>"","parish"=>"S","name_zh"=>"公務華員職工會","abbr"=>"MCCSA","name_en"=>"Macao Chinese Civil Servants Association","address"=>"澳門荷蘭園二馬路十一號荷蘭園大廈三樓A單位","phone"=>"","href"=>"atbest.net","email"=>"","president"=>"--","card_style"=>"card_01"],
+        //     ["registration_code"=>"","parish"=>"S","name_zh"=>"公務高級技術員協會","abbr"=>"ATSFPM","name_en"=>"Associação dos Técnicos Superiores da Função Pública de Macau",'address'=>"澳門荷蘭園二馬路十一號荷蘭園大廈三樓A單位","phone"=>"","href"=>"atbest.net","email"=>"","president"=>"--","card_style"=>"card_01"],
+        //     ["registration_code"=>"","parish"=>"S","name_zh"=>"公務文職人員協會","abbr"=>"CCSAM","name_en"=>"Clerical Civil Servants Association of Macau",'address'=>"澳門荷蘭園二馬路十一號荷蘭園大廈三樓A單位","phone"=>"","href"=>"atbest.net","email"=>"","president"=>"--","card_style"=>"card_01"],
+        //     ["registration_code"=>"","parish"=>"S","name_zh"=>"市政署員工協進會","abbr"=>"AWCMAI","name_en"=>"Association of Workers of Civil and Municipal Affairs Institute",'address'=>"澳門荷蘭園二馬路十一號荷蘭園大廈三樓A單位","phone"=>"","href"=>"atbest.net","email"=>"","president"=>"--","card_style"=>"card_01"],
+        //     ["registration_code"=>"","parish"=>"S","name_zh"=>"中國澳門電子競技運動大聯盟總會","abbr"=>"MESUF","name_en"=>"Macao eSport Channel",'address'=>"","phone"=>"","href"=>"atbest.net","email"=>"","president"=>"--","card_style"=>"card_01"]
+        // ];
+        foreach($organizations as $org){
             Organization::create($org);
         }
-        $organization=Organization::where('abbr','MCSF')->first();
-        $member=Member::where('email','organizer@example.com')->first();
-        $member->organization_id=$organization->id;
-        $member->save();
+        // $member=Member::where('email','organizer@example.com')->first();
+        // $member->organization_id=$organization->id;
+        // $member->save();
         // $organization->users()->attach($member->user);
         
 
+        $organization=Organization::where('abbr_en','ATEC')->first();
         $member=Member::where('email','member1@example.com')->first();
         $member->organization_id=$organization->id;
+        $member->is_organizer=true;
         $member->save();
+        $organization=Organization::where('abbr_en','ATEC')->first();
         $member=Member::where('email','member2@example.com')->first();
         $member->organization_id=$organization->id;
+        $member->is_organizer=false;
         $member->save();
+        $organization=Organization::where('abbr_en','ATEC')->first();
         $member=Member::where('email','member3@example.com')->first();
         $member->organization_id=$organization->id;
+        $member->is_organizer=false;
         $member->save();
-
-        Member::whereBetween('id',[11,13])->update(['organization_id'=>$organization->id]);
+        //Member::whereBetween('id',[11,13])->update(['organization_id'=>$organization->id]);
         // $member=Member::find(1);
         // $organization->members()->attach($member);
         // $member=Member::find(2);

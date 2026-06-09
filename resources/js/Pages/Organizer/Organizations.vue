@@ -46,7 +46,7 @@ export default {
             columns:[
                 {
                     title: 'Abbr.',
-                    dataIndex: 'abbr',
+                    dataIndex: 'abbr_en',
                 },{
                     title: 'Full Name',
                     dataIndex: 'full_name',

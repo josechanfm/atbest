@@ -33,7 +33,7 @@ class Article extends Model implements HasMedia
         });
     }
     public function getOrganizationAbbrAttribute(){
-        return $this->organization?$this->organization->abbr:NULL;
+        return $this->organization?$this->organization->abbr_en:NULL;
     }
     public function getBannerUrlAttribute(){
         return $this->getFirstMediaUrl('banner');

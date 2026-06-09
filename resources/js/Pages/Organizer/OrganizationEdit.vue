@@ -17,7 +17,7 @@
                     <a-row :gutter="5">
                         <a-col :span="8">
                             <a-form-item label="Abbr" name="abbr" :labelCol="{ span: 9 }">
-                                <a-input type="input" v-model:value="organization.abbr" />
+                                <a-input type="input" v-model:value="organization.abbr_en" />
                             </a-form-item>
                         </a-col>
                         <a-col :span="16">

@@ -12,7 +12,7 @@
         </div>
         <div class="flex items-center space-x-3">
           <a-input-search
-            v-model:value="search.abbr"
+            v-model:value="search.abbr_en"
             :placeholder="$t('search_by_abbr')"
             style="width: 200px"
             @search="searchData"
@@ -39,7 +39,7 @@
             {{ $t('abbreviation') }}
           </label>
           <a-input
-            v-model:value="search.abbr"
+            v-model:value="search.abbr_en"
             :placeholder="$t('enter_abbreviation')"
             class="w-48"
             allow-clear
@@ -102,7 +102,7 @@
                 >
                   <img
                     :src="record.avatar"
-                    :alt="record.abbr"
+                    :alt="record.abbr_en"
                     class="h-full w-full object-cover"
                   />
                 </div>
@@ -232,7 +232,7 @@
               :rules="[{ required: true, message: $t('abbreviation_required') }]"
             >
               <a-input
-                v-model:value="modal.data.abbr"
+                v-model:value="modal.data.abbr_en"
                 :placeholder="$t('enter_abbreviation')"
                 allow-clear
               />

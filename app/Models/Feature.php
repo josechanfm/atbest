@@ -13,7 +13,7 @@ class Feature extends Model
     protected $casts=['tags_zh'=>'json','tags_en'=>'json','tags_pt'=>'json'];
 
     public function getOrganizationAbbrAttribute(){
-        return $this->organization?$this->organization->abbr:NULL;
+        return $this->organization?$this->organization->abbr_en:NULL;
 
     }
 

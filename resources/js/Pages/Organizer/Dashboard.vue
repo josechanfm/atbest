@@ -30,7 +30,7 @@
                                 {{ $t('welcome_back') }}, {{ $page.props.auth.user.name }}
                             </h3>
                             <p class="text-gray-600 text-lg leading-relaxed">
-                                {{ $page.props.auth.organization.abbr }}
+                                {{ $page.props.auth.organization.abbr_en }}
                                 {{ $page.props.auth.organization.name_zh }}
                             </p>
                             
@@ -87,7 +87,7 @@
                                                     <div class="flex-shrink-0">
                                                         <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-indigo-100 to-indigo-200 flex items-center justify-center">
                                                             <span class="text-indigo-700 font-semibold text-sm">
-                                                                {{ getInitials(member.organization.abbr) }}
+                                                                {{ getInitials(member.organization.abbr_en) }}
                                                             </span>
                                                         </div>
                                                     </div>
@@ -221,8 +221,8 @@ export default {
             return '...' + name.slice(-maxLength + 3);
         },
         
-        getInitials(abbr) {
-            return abbr?.substring(0, 2).toUpperCase() || 'ORG';
+        getInitials(abbr_en) {
+            return abbr_en?.substring(0, 2).toUpperCase() || 'ORG';
         }
     }
 }
