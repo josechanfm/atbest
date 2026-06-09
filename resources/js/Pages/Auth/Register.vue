@@ -1,212 +1,111 @@
-<script setup>
-import { Head, Link, useForm } from "@inertiajs/vue3";
-import AuthenticationCard from "@/Components/AuthenticationCard.vue";
-import AuthenticationCardLogo from "@/Components/AuthenticationCardLogo.vue";
-import Checkbox from "@/Components/Checkbox.vue";
-import InputError from "@/Components/InputError.vue";
-import InputLabel from "@/Components/InputLabel.vue";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
-import TextInput from "@/Components/TextInput.vue";
-import Icon, { QuestionCircleOutlined } from "@ant-design/icons-vue";
+<script>
+import DefaultLayout from '@/Layouts/DefaultLayout.vue';
+import { Modal } from 'ant-design-vue';
 
-defineProps({
-  organizations: Object,
-});
+export default {
+    components: {
+        DefaultLayout
+    },
+    props: ['organizations'],
+    data() {
+        return {
+            formState: {
+                username: '',
+                password: '',
+            },
+        }
+    },
+    methods: {
+        onFinish(values) {
+            // this.$inertia.post(route('registration.store'), this.formState, {
+            this.$inertia.post(route('register.store'), this.formState, {
+                onSuccess: (page) => {
+                    console.log(page);
+                    //this.modal.isOpen = false;
+                },
+                onError: (err) => {
+                    console.log(err);
 
-const form = useForm({
-  name: "",
-  given_name: "",
-  family_name: "",
-  mobile: "",
-  registration_code: "",
-  email: "",
-  password: "",
-  password_confirmation: "",
-  terms: false,
-});
+                    Modal.error({
+                        title: this.$t('registration_error'),
+                        content: err ? Object.values(err).join("\r\n") : '',
+                        okText:"確認"
+                    });
+                }
+            });
 
-const submit = () => {
-  form.post(route("register"), {
-    onFinish: () => form.reset("password", "password_confirmation"),
-  });
-};
+        },
+        onFinishFailed(errorInfo) {
+            console.log('Failed:', errorInfo);
+        }
+    }
+}
+
 </script>
 
 <template>
-  <Head title="Register" />
-
-  <AuthenticationCard>
-    <template #logo>
-      <AuthenticationCardLogo />
-    </template>
-
-    <form @submit.prevent="submit">
-      <div>
-        <InputLabel for="name" :value="$t('name')" />
-        <TextInput
-          id="name"
-          v-model="form.name"
-          type="text"
-          class="mt-1 block w-full"
-          required
-          autofocus
-          autocomplete="name"
-        />
-        <InputError class="mt-2" :message="form.errors.name" />
-      </div>
-      <div class="mt-4">
-        <InputLabel for="given_name" :value="$t('given_name')" />
-        <TextInput
-          id="given_name"
-          v-model="form.given_name"
-          type="text"
-          class="mt-1 block w-full"
-          required
-          autofocus
-          autocomplete="given_name"
-        />
-        <InputError class="mt-2" :message="form.errors.given_name" />
-      </div>
-      <div class="mt-4">
-        <InputLabel for="family_name" :value="$t('family_name')" />
-        <TextInput
-          id="family_name"
-          v-model="form.family_name"
-          type="text"
-          class="mt-1 block w-full"
-          required
-          autofocus
-          autocomplete="family_name"
-        />
-        <InputError class="mt-2" :message="form.errors.family_name" />
-      </div>
-      <div class="mt-4">
-        <InputLabel for="mobile" :value="$t('mobile')" />
-        <TextInput
-          id="mobile"
-          v-model="form.mobile"
-          type="text"
-          class="mt-1 block w-full"
-          required
-          autofocus
-          autocomplete="mobile"
-        />
-        <InputError class="mt-2" :message="form.errors.mobile" />
-      </div>
-      <div class="mt-4">
-        <InputLabel for="registration_code">
-          {{ $t("registration_code") }}
-          <a-tooltip placement="topRight">
-            <template #title>
-              <span>Acquired from your organization admin.</span>
-            </template>
-            <QuestionCircleOutlined />
-          </a-tooltip>
-        </InputLabel>
-
-        <TextInput
-          id="registration_code"
-          v-model="form.registration_code"
-          type="text"
-          class="mt-1 block w-full"
-          required
-          autofocus
-          autocomplete="registration_code"
-        />
-        <InputError class="mt-2" :message="form.errors.registration_code" />
-      </div>
-      <div class="mt-4">
-        <InputLabel for="email" :value="$t('email')" />
-        <TextInput
-          id="email"
-          v-model="form.email"
-          type="email"
-          class="mt-1 block w-full"
-          required
-        />
-        <InputError class="mt-2" :message="form.errors.email" />
-      </div>
-
-      <div class="mt-4">
-        <InputLabel for="password" :value="$t('password')" />
-        <TextInput
-          id="password"
-          v-model="form.password"
-          type="password"
-          class="mt-1 block w-full"
-          required
-          autocomplete="new-password"
-        />
-        <InputError class="mt-2" :message="form.errors.password" />
-      </div>
-
-      <div class="mt-4">
-        <InputLabel for="password_confirmation" :value="$t('confirm_password')" />
-        <TextInput
-          id="password_confirmation"
-          v-model="form.password_confirmation"
-          type="password"
-          class="mt-1 block w-full"
-          required
-          autocomplete="confirm-password"
-        />
-        <InputError class="mt-2" :message="form.errors.organization_id" />
-      </div>
-
-      <!-- <div class="mt-4">
-                <InputLabel for="organization" value="Organization" />
-                <TextInput
-                    id="organization"
-                    v-model="form.organization_id"
-                    type="password"
-                    class="mt-1 block w-full"
-                    required
-                    autocomplete="organization"
-                />
-                <InputError class="mt-2" :message="form.errors.password_confirmation" />
-            </div> -->
-
-      <div v-if="$page.props.hasTermsAndPrivacyPolicyFeature" class="mt-4">
-        <InputLabel for="terms">
-          <div class="flex items-center">
-            <Checkbox id="terms" v-model:checked="form.terms" name="terms" required />
-
-            <div class="ml-2">
-              {{ $t("I_agree_to_the") }}
-              <a
-                target="_blank"
-                :href="route('terms.show')"
-                class="underline text-sm text-gray-600 hover:text-gray-900"
-                >{{ $t("terms_of_service") }}</a
-              >
-              {{ $t("and") }}
-              <a
-                target="_blank"
-                :href="route('policy.show')"
-                class="underline text-sm text-gray-600 hover:text-gray-900"
-                >{{ $t("privacy_policy") }}</a
-              >
+    <!-- <DefaultLayout title="Dashboard"> -->
+        <div class="register-background flex flex-col h-screen sm:justify-center items-center pt-14 p-6 sm:pt-0">
+            <a-typography-title :level="2" class="text-xl">{{$t('account_registration')}}</a-typography-title>
+            <div class="w-full max-w-lg mt-6 px-6 py-4 bg-gray-50 shadow-md overflow-hidden sm:rounded-lg"><!--v-if-->
+                <a-form :model="formState" name="basic" layout="vertical" autocomplete="off" @finish="onFinish"
+                    @finishFailed="onFinishFailed">
+                    <a-form-item :label="$t('name')" name="name"
+                        :rules="[{ required: true, message: $t('please_input_name') }]">
+                        <a-input type="input" v-model:value="formState.name" />
+                    </a-form-item>
+                    <a-form-item :label="$t('given_name')" name="given_name"
+                        :rules="[{ required: true, message: $t('please_input_given_name') }]">
+                        <a-input type="input" v-model:value="formState.given_name" />
+                    </a-form-item>
+                    <!-- <a-form-item :label="$t('middle_name')" name="middle_name">
+                        <a-input type="input" v-model:value="formState.middle_name" />
+                    </a-form-item> -->
+                    <a-form-item :label="$t('family_name')" name="family_name"
+                        :rules="[{ required: true, message: $t('please_input_family_name') }]">
+                        <a-input type="input" v-model:value="formState.family_name" />
+                    </a-form-item>
+                    <a-form-item :label="$t('mobile')" name="mobile"
+                        :rules="[{ required: true, message: $t('please_input_mobile') }]">
+                        <a-input type="input" v-model:value="formState.mobile" />
+                    </a-form-item>
+                    <!-- <a-form-item :label="$t('affiliate')" name="organization_id"
+                        :rules="[{ required: true, message: 'Please input your organization belongs to!' }]">
+                        <a-select v-model:value="formState.organization_id" :options="organizations"
+                            :fieldNames="{ value: 'id', label: 'name_zh' }" />
+                    </a-form-item> -->
+                    <a-form-item :label="$t('registration_code')" name="registration_code"
+                        :rules="[{ required: true, message: $t('please_input_registration_code') }]">
+                        <a-input type="input" v-model:value="formState.registration_code" />
+                    </a-form-item>
+                    <a-form-item :label="$t('login_email')" name="email"
+                        :rules="[{ required: true, message: $t('please_input_email') }]">
+                        <a-input type="input" v-model:value="formState.email"/>
+                    </a-form-item>
+                    <a-form-item :label="$t('password')" name="password"
+                        :rules="[{ required: true, message: $t('please_input_password') }]">
+                        <a-input-password v-model:value="formState.password" />
+                    </a-form-item>
+                    <a-form-item :label="$t('confirm_password')" name="password_confirmation"
+                        :rules="[{ required: true, message: $t('please_input_confirm_password') }]">
+                        <a-input-password v-model:value="formState.password_confirmation" />
+                    </a-form-item>
+                    <div class="flex flex-row item-center justify-center">
+                        <a-button type="primary" html-type="submit">{{$t('submit')}}</a-button>
+                    </div>
+                </a-form>
             </div>
-          </div>
-          <InputError class="mt-2" :message="form.errors.terms" />
-        </InputLabel>
-      </div>
-
-      <div class="flex items-center justify-end mt-4">
-        <Link
-          :href="route('login')"
-          class="underline text-sm text-gray-600 hover:text-gray-900"
-        >
-          {{$t('already_registered')}}?
-        </Link>
-        <PrimaryButton
-          class="ml-4"
-          :class="{ 'opacity-25': form.processing }"
-          :disabled="form.processing"
-        >
-          {{$t('register')}}
-        </PrimaryButton>
-      </div>
-    </form>
-  </AuthenticationCard>
+        </div>
+    <!-- </DefaultLayout> -->
 </template>
+
+
+<style >
+.register-background {
+    background: rgb(210, 220, 230);
+    background: linear-gradient(135deg, rgba(160, 175, 200, 0.3) 0%, rgba(190, 205, 220, 0.583) 25%, rgba(200, 215, 225, 0.538) 60%, rgba(210, 220, 230, 0.8) 100%);
+}
+.ant-modal-confirm-content{
+    white-space: pre-line;
+}
+</style>

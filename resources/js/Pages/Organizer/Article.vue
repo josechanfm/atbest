@@ -177,7 +177,7 @@ export default {
   data() {
     return {
       breadcrumb: [
-        { label: "文章列表", url:route('organizer.events.index')},
+        { label: "文章列表", url:route('organizer.articles.index')},
         { label: this.article.id?'文章修改':'文章新增', url: null }
       ],
       medias: [],
