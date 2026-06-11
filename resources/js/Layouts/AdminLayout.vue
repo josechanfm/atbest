@@ -76,19 +76,6 @@
           </a>
           <template #overlay>
             <a-menu>
-              <!-- <a-menu-item>
-                <inertia-link
-                  :href="route('profile.show')"
-                  :active="route().current('dashboard')"
-                  >{{ $t("account") }}</inertia-link
-                >
-              </a-menu-item>
-              <a-menu-divider />
-              <a-menu-item>
-                <inertia-link :href="route('member.profile.index')">{{
-                  $t("profile")
-                }}</inertia-link>
-              </a-menu-item> -->
               <a-menu-item @click="logout">
                 <a>{{ $t("log_out") }}</a>
               </a-menu-item>
@@ -98,14 +85,6 @@
       </a-layout-header>
 
       <a-layout-content>
-        <!-- <PageHeader v-if="$slots.header" :menuKeys="menuKeys">
-          <template #header>
-            <div>
-              <slot name="header" />
-            </div>
-          </template>
-        </PageHeader> -->
-
         <div class="xs:p-2 p-4">
           <main>
             <slot />
@@ -127,7 +106,7 @@ import { MenuUnfoldOutlined, MenuFoldOutlined } from "@ant-design/icons-vue";
 
 import AdminMenu from "@/Components/Admin/AdminMenu.vue";
 
-export  {
+export default {  // 修正：export 改为 export default
   components: {
     PageHeader,
     Dropdown,
@@ -157,8 +136,10 @@ export  {
         }
       );
     };
+    
     const page = usePage();
-    console.log(page.url);
+    console.log(page.url);  // 修正：使用 page.url 而不是 page.url
+    
     const logout = () => {
       router.post(route("logout"));
     };

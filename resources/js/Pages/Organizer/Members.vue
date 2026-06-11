@@ -169,7 +169,7 @@
         >
       </template>
     </a-modal>
-    <a-modal :title="$t('import_athletes_list')" v-model:open="visible">
+    <a-modal :title="$t('import_members_list')" v-model:open="visible">
       <a-upload-dragger
         v-model:fileList="files"
         name="file"
@@ -180,9 +180,9 @@
         <p class="ant-upload-drag-icon">
           <file-excel-outlined />
         </p>
-        <p class="ant-upload-text">{{$t('import_athletes_information')}}</p>
+        <p class="ant-upload-text">{{$t('import_members_information')}}</p>
         <p class="ant-upload-hint">
-          {{$t('import_athletes_description')}}
+          {{$t('import_members_description')}}
         </p>
       </a-upload-dragger>
 
