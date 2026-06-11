@@ -371,5 +371,6 @@
     "field_deleted_failed": "欄位刪除失敗。",
     "sequence_updated": "排序更新成功。",
     "sequence_update_failed": "排序更新失敗。",
-    "drag_to_sort": "拖曳列以進行排序。"
+    "drag_to_sort": "拖曳列以進行排序。",
+    "article_can_not_be_delete_if_published":"發佈狀態的文章不能刪除。"
 }

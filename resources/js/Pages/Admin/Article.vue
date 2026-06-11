@@ -138,7 +138,7 @@
               <a :href="route('article.item',{t:article.uuid})" target="_blank" ref="articleUrl">{{ route('article.item',{t:article.uuid}) }}</a>
          <a-button @click="copyUrl">{{ $t('copy_to_clipboard') }}</a-button>
 
-      <p>Article CAN NOT be delete if published.</p>
+      <p>{{$t('article_can_not_be_delete_if_published')}}</p>
     </div>
     <a-drawer
       v-model:open="isDrawerVisible"

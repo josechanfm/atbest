@@ -63,7 +63,7 @@
         <Pagination :data="articles" :search="search" />
       </div>
     </div>
-    <p>Article CAN NOT be delete if published.</p>
+    <p>{{$t('article_can_not_be_delete_if_published')}}</p>
 
   </OrganizerLayout>
 </template>
