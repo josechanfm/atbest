@@ -81,7 +81,7 @@
                 :rules="rules"
                 :validate-messages="validateMessages"
               >
-                <!-- 基本信息折叠区 -->
+                <!-- 基本信息 -->
                 <div class="mb-8">
                   <div class="flex items-center gap-2 mb-4 pb-2 border-b border-gray-200">
                     <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -105,7 +105,7 @@
                   </div>
                 </div>
 
-                <!-- 个人资料折叠区 -->
+                <!-- 个人资料 -->
                 <div class="mb-8">
                   <div class="flex items-center gap-2 mb-4 pb-2 border-b border-gray-200">
                     <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -150,41 +150,64 @@
                   </div>
                 </div>
 
-                <!-- 修改密码区域 - 使用独立的 form 实例 -->
+                <!-- 修改密码区域 - 修正版 -->
                 <div class="mb-8">
-                  <div class="flex items-center gap-2 mb-4 pb-2 border-b border-gray-200">
-                    <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
-                    </svg>
-                    <h3 class="text-lg font-semibold text-gray-800">{{ $t('change_password') }}</h3>
+                  <!-- 可点击的标题栏 -->
+                  <div 
+                    @click="togglePasswordSection"
+                    class="flex items-center justify-between gap-2 mb-4 pb-2 border-b border-gray-200 cursor-pointer group hover:border-indigo-300 transition-colors duration-200"
+                  >
+                    <div class="flex items-center gap-2">
+                      <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                      </svg>
+                      <h3 class="text-lg font-semibold text-gray-800 group-hover:text-indigo-600 transition-colors duration-200">
+                        {{ $t('change_password') }}
+                      </h3>
+                    </div>
+                    <div class="text-gray-400 group-hover:text-indigo-500 transition-all duration-200">
+                      <svg 
+                        class="w-5 h-5 transition-transform duration-300"
+                        :class="{ 'rotate-180': isPasswordSectionOpen }"
+                        fill="none" 
+                        stroke="currentColor" 
+                        viewBox="0 0 24 24"
+                      >
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                      </svg>
+                    </div>
                   </div>
-                  <div class="bg-gray-50 rounded-xl p-6">
-                    <a-form
-                      ref="passwordFormRef"
-                      name="passwordForm"
-                      :model="password"
-                      layout="vertical"
-                      :rules="passwordRules"
-                    >
-                      <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
-                        <a-form-item :label="$t('old_password')" name="old">
-                          <a-input-password v-model:value="password.old" placeholder="請輸入當前密碼" class="rounded-lg" />
-                        </a-form-item>
-                        <div></div>
-                        <a-form-item :label="$t('new_password')" name="new">
-                          <a-input-password v-model:value="password.new" placeholder="請輸入新密碼" class="rounded-lg" />
-                        </a-form-item>
-                        <a-form-item :label="$t('confirm_password')" name="confirm">
-                          <a-input-password v-model:value="password.confirm" placeholder="請確認新密碼" class="rounded-lg" />
-                        </a-form-item>
-                      </div>
-                      <div class="flex justify-end mt-4">
-                        <a-button danger @click="onFinish" class="rounded-lg px-6">
-                          {{ $t('change_password') }}
-                        </a-button>
-                      </div>
-                    </a-form>
-                  </div>
+
+                  <!-- 使用 v-show + transition 实现平滑动画 -->
+                  <transition name="slide-fade">
+                    <div v-show="isPasswordSectionOpen" class="bg-gray-50 rounded-xl p-6">
+                      <a-form
+                        ref="passwordFormRef"
+                        name="passwordForm"
+                        :model="password"
+                        layout="vertical"
+                        :rules="passwordRules"
+                      >
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+                          <a-form-item :label="$t('old_password')" name="old">
+                            <a-input-password v-model:value="password.old" placeholder="請輸入當前密碼" class="rounded-lg" />
+                          </a-form-item>
+                          <div></div>
+                          <a-form-item :label="$t('new_password')" name="new">
+                            <a-input-password v-model:value="password.new" placeholder="請輸入新密碼" class="rounded-lg" />
+                          </a-form-item>
+                          <a-form-item :label="$t('confirm_password')" name="confirm">
+                            <a-input-password v-model:value="password.confirm" placeholder="請確認新密碼" class="rounded-lg" />
+                          </a-form-item>
+                        </div>
+                        <div class="flex justify-end mt-4">
+                          <a-button danger @click="onFinish" class="rounded-lg px-6">
+                            {{ $t('change_password') }}
+                          </a-button>
+                        </div>
+                      </a-form>
+                    </div>
+                  </transition>
                 </div>
 
                 <!-- 提交按钮 -->
@@ -238,6 +261,7 @@ export default {
       avatarPreview: null,
       avatarData: null,
       loading: false,
+      isPasswordSectionOpen: false,
       password: {
         old: '',
         new: '',
@@ -294,6 +318,10 @@ export default {
       });
     },
 
+    togglePasswordSection() {
+      this.isPasswordSectionOpen = !this.isPasswordSectionOpen;
+    },
+
     onSubmit() {
       this.loading = true;
       if (this.avatarData) {
@@ -316,22 +344,18 @@ export default {
     },
 
     onFinish() {
-      // 先進行表單驗證
       this.$refs.passwordFormRef.validate()
         .then(() => {
-          // 驗證通過，提交密碼更改
           this.password.id = this.member.id;
           this.$inertia.post(route('member.profile.changePassword'), this.password, {
             onSuccess: (page) => {
               message.success("密碼已更新");
               this.password = { old: '', new: '', confirm: '' };
-              // 清空表單驗證狀態
               this.$refs.passwordFormRef.resetFields();
             },
             onError: (err) => {
               const errorMsg = err.response?.data?.message || "密碼更新失敗";
               message.error(errorMsg);
-              // 如果當前密碼錯誤，清空當前密碼欄位
               if (errorMsg.includes('當前密碼') || errorMsg.includes('old')) {
                 this.password.old = '';
               }
@@ -339,7 +363,6 @@ export default {
           });
         })
         .catch(() => {
-          // 驗證失敗，不需要額外處理，Ant Design Vue 會自動顯示錯誤訊息
           message.warning("請檢查密碼欄位是否填寫正確");
         });
     },
@@ -353,6 +376,25 @@ export default {
 .rounded-xl,
 .rounded-2xl {
   transition: all 0.2s ease;
+}
+
+/* 滑入滑出动画 - 更流畅的效果 */
+.slide-fade-enter-active {
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.slide-fade-leave-active {
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.slide-fade-enter-from {
+  transform: translateY(-10px);
+  opacity: 0;
+}
+
+.slide-fade-leave-to {
+  transform: translateY(-10px);
+  opacity: 0;
 }
 
 /* 表单样式优化 */
@@ -405,6 +447,11 @@ export default {
 :deep(.ant-btn-primary:hover) {
   background-color: #4f46e5;
   border-color: #4f46e5;
+}
+
+/* 旋转动画 */
+.rotate-180 {
+  transform: rotate(180deg);
 }
 
 /* 响应式调整 */
