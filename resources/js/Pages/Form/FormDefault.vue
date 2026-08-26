@@ -332,10 +332,51 @@ export default {
   padding: 0px !important;
 }
 
-#pure-html {
+/* #pure-html {
   all: initial;
 }
 #pure-html * {
   all: revert;
 }
+ */
+/* Make the container scrollable if content overflows */
+#pure-html {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch; /* smooth scrolling on iOS */
+  word-wrap: break-word;
+}
+
+/* Scale images to fit */
+#pure-html img {
+  max-width: 100%;
+  height: auto;
+  display: block; /* avoid extra spacing */
+}
+
+/* Responsive tables: allow horizontal scroll on small screens */
+#pure-html table {
+  display: block;
+  overflow-x: auto;
+  white-space: nowrap; /* prevent wrapping; adjust if needed */
+  max-width: 100%;
+}
+
+/* If you want tables to wrap instead of scroll, remove white-space: nowrap */
+/* but scroll is often safer for complex tables */
+
+/* Ensure iframes/videos are responsive */
+#pure-html iframe,
+#pure-html video {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Prevent long text from breaking layout */
+#pure-html p,
+#pure-html div,
+#pure-html span {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
 </style>
