@@ -2,7 +2,7 @@
   <a-layout style="min-height: 100vh">
     <!-- Mobile Drawer for Side Menu -->
     <a-drawer
-      v-model:visible="drawerVisible"
+      v-model:open="drawerVisible"
       placement="left"
       :closable="false"
       :body-style="{ padding: 0 }"

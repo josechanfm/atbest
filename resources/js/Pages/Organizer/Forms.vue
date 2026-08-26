@@ -2,18 +2,14 @@
   <OrganizerLayout title="表格" :breadcrumb="breadcrumb">
     <!-- 顶部操作栏 -->
     <div class="flex-auto pb-3 text-right">
-      <a-button
-        :href="route('organizer.forms.create')"
-        as="link"
-        type="primary"
-      >
+      <a-button :href="route('organizer.forms.create')" as="link" type="primary">
         {{ $t("create_form") }}
       </a-button>
     </div>
 
     <!-- 搜索栏 -->
     <div class="mx-auto">
-      <div class="flex flex-auto gap-2">
+      <div class="flex flex-auto gap-2 flex-wrap">
         <a-input
           type="input"
           v-model:value="search.name"
@@ -32,13 +28,15 @@
       </div>
     </div>
 
-    <!-- 表格主体 -->
+    <!-- 表格主体 – horizontal scroll always available -->
     <div class="mx-auto py-5">
       <div class="bg-white relative shadow rounded-lg overflow-x-auto">
         <a-table
           :dataSource="forms.data"
           :columns="columns"
           :pagination="false"
+          :row-class-name="tableRowClassName"
+          :scroll="{ x: 'max-content' }"
         >
           <!-- 表头国际化 -->
           <template #headerCell="{ column }">
@@ -49,21 +47,22 @@
           <template #bodyCell="{ column, record }">
             <!-- 操作列 -->
             <template v-if="column.dataIndex === 'operation'">
-              <div class="flex flex-wrap gap-2">
-                <a-button :href="route('organizer.form.entries.index', { form: record.id })" as="link">
+              <!-- 桌面端：显示所有按钮 -->
+              <div class="desktop-actions hidden md:flex flex-wrap gap-2">
+                <a-button :href="route('organizer.form.entries.index', { form: record.id })" as="link" size="small">
                   {{ $t("applications") }}
                 </a-button>
-                <a-button :href="route('organizer.entry.export', { form: record.id })" as="link">
+                <a-button :href="route('organizer.entry.export', { form: record.id })" as="link" size="small">
                   {{ $t("export") }}
                 </a-button>
-                <a-button :href="route('organizer.form.fields.index', { form: record.id })" as="link">
+                <a-button :href="route('organizer.form.fields.index', { form: record.id })" as="link" size="small">
                   {{ $t("data_fields") }}
                 </a-button>
-                <a-button :href="route('organizer.forms.edit', record.id)" as="link">
+                <a-button :href="route('organizer.forms.edit', record.id)" as="link" size="small">
                   {{ $t("edit") }}
                 </a-button>
 
-                <!-- 删除按钮（带确认） -->
+                <!-- 删除 -->
                 <a-popconfirm
                   :title="$t('confirm_delete_record')"
                   :ok-text="$t('yes')"
@@ -71,20 +70,62 @@
                   @confirm="deleteConfirmed(record)"
                   :disabled="hasEntries(record)"
                 >
-                  <a-button :disabled="hasEntries(record)">
+                  <a-button :disabled="hasEntries(record)" size="small">
                     {{ $t("delete") }}
                   </a-button>
                 </a-popconfirm>
 
-                <!-- 备份按钮（仅当有数据时显示） -->
-                <a-button v-if="hasEntries(record)" @click="backupRecords(record)">
+                <!-- 备份 -->
+                <a-button v-if="hasEntries(record)" @click="backupRecords(record)" size="small">
                   {{ $t("backup") }}
                 </a-button>
 
-              <a-button @click="openQrCodeModal(record)">{{ $t('qrcode_show') }}</a-button>
-              <a-button @click="cloneForm(record)">{{ $t('clone') }}</a-button>
+                <a-button @click="openQrCodeModal(record)" size="small">{{ $t('qrcode_show') }}</a-button>
+                <a-button @click="cloneForm(record)" size="small">{{ $t('clone') }}</a-button>
+                <a-button :href="route('form.item', {t:record.uuid, preview:true})" target="_blank" size="small">
+                  {{ $t('preview') }}
+                </a-button>
+              </div>
 
-
+              <!-- 移动端：下拉菜单（节省空间，并允许水平滚动其他列） -->
+              <div class="mobile-actions md:hidden">
+                <a-dropdown>
+                  <a-button size="small">
+                    {{ $t('actions') }} <DownOutlined />
+                  </a-button>
+                  <template #overlay>
+                    <a-menu>
+                      <a-menu-item @click="goToRoute('organizer.form.entries.index', { form: record.id })">
+                        {{ $t("applications") }}
+                      </a-menu-item>
+                      <a-menu-item @click="goToRoute('organizer.entry.export', { form: record.id })">
+                        {{ $t("export") }}
+                      </a-menu-item>
+                      <a-menu-item @click="goToRoute('organizer.form.fields.index', { form: record.id })">
+                        {{ $t("data_fields") }}
+                      </a-menu-item>
+                      <a-menu-item @click="goToRoute('organizer.forms.edit', record.id)">
+                        {{ $t("edit") }}
+                      </a-menu-item>
+                      <!-- Delete, backup, QR, clone use existing methods -->
+                      <a-menu-item @click="deleteConfirmed(record)" :disabled="hasEntries(record)">
+                        {{ $t("delete") }}
+                      </a-menu-item>
+                      <a-menu-item v-if="hasEntries(record)" @click="backupRecords(record)">
+                        {{ $t("backup") }}
+                      </a-menu-item>
+                      <a-menu-item @click="openQrCodeModal(record)">
+                        {{ $t('qrcode_show') }}
+                      </a-menu-item>
+                      <a-menu-item @click="cloneForm(record)">
+                        {{ $t('clone') }}
+                      </a-menu-item>
+                      <a-menu-item @click="openPreview(record)">
+                        {{ $t('preview') }}
+                      </a-menu-item>
+                    </a-menu>
+                  </template>
+                </a-dropdown>
               </div>
             </template>
 
@@ -115,17 +156,14 @@
       {{ $t('from_can_not_be_delete_if_response_is_not_empty') }}
     </div>
 
-
-        <!-- QR Code Modal -->
-    <qr-code-modal 
-      :fullUrl="qrCodeModal.url" 
-      :title="qrCodeModal.title" 
-      :isModalOpen="qrCodeModal.isOpen" 
-      @update:isModalOpen="updateQrCodeModalOpen" 
+    <!-- QR Code Modal -->
+    <qr-code-modal
+      :fullUrl="qrCodeModal.url"
+      :title="qrCodeModal.title"
+      :isModalOpen="qrCodeModal.isOpen"
+      @update:isModalOpen="updateQrCodeModalOpen"
     />
   </OrganizerLayout>
-
-  
 </template>
 
 <script>
@@ -135,6 +173,7 @@ import {
   UploadOutlined,
   LoadingOutlined,
   PlusOutlined,
+  DownOutlined,
 } from "@ant-design/icons-vue";
 import { RestFilled } from "@ant-design/icons-vue";
 import { message } from "ant-design-vue";
@@ -149,8 +188,8 @@ export default {
     LoadingOutlined,
     PlusOutlined,
     RestFilled,
-    message,
-    QrCodeModal
+    DownOutlined,
+    QrCodeModal,
   },
   props: {
     forms: {
@@ -177,15 +216,14 @@ export default {
         { title: "Entries", i18n: "entries", dataIndex: "entries", key: "entries" },
         { title: "Operation", i18n: "operation", dataIndex: "operation", key: "operation" },
       ],
-      qrCodeModal:{
+      qrCodeModal: {
         isOpen: false,
-        title:'Qr Code',
+        title: 'Qr Code',
         url: 'https://venus.mpu.edu.mo'
       },
     };
   },
   mounted() {
-    // 初始化分页和搜索参数（从路由获取）
     this.pagination = {
       currentPage: this.route().params.currentPage ?? 1,
       pageSize: this.route().params.pageSize ?? 10,
@@ -193,20 +231,17 @@ export default {
     this.search = this.route().params.search ?? {};
   },
   methods: {
-    /**
-     * 判断表单是否有提交记录
-     */
+    tableRowClassName(record, index) {
+      return index % 2 === 0 ? 'bg-gray-50' : 'bg-white';
+    },
+
     hasEntries(record) {
       return record.entries_count > 0;
     },
 
-    /**
-     * 删除确认后的回调
-     */
     deleteConfirmed(record) {
       this.$inertia.delete(route("organizer.forms.destroy", { form: record.id }), {
         onSuccess: (page) => {
-          // 可在此添加成功提示
           console.log("删除成功", page);
         },
         onError: (error) => {
@@ -215,9 +250,6 @@ export default {
       });
     },
 
-    /**
-     * 备份表单数据
-     */
     backupRecords(record) {
       if (!confirm(this.$t("confirm_backup") || "确定要备份吗？")) return;
       this.$inertia.post(route("organizer.form.backup", record.id), {
@@ -231,23 +263,16 @@ export default {
       });
     },
 
-    /**
-     * 搜索数据
-     */
     searchData() {
       this.$inertia.get(
         route("organizer.forms.index"),
         { search: this.search, pagination: this.pagination },
-        {
-          preserveState: true,
-          onSuccess: (page) => {
-            console.log("搜索完成", page);
-          },
-        }
+        { preserveState: true }
       );
     },
-    cloneForm(form){
-      console.log(form)
+
+    cloneForm(form) {
+      console.log(form);
       this.$inertia.post(route("manage.form.clone", form), {
         onSuccess: (page) => {
           console.log(page);
@@ -257,14 +282,39 @@ export default {
         },
       });
     },
+
     openQrCodeModal(record) {
       this.qrCodeModal.title = record.title;
       this.qrCodeModal.url = `${window.location.origin}/form/?t=${record.uuid}`;
-      this.qrCodeModal.isOpen = true; 
+      this.qrCodeModal.isOpen = true;
     },
+
     updateQrCodeModalOpen(value) {
-      this.qrCodeModal.isOpen = value; // Update the modal open state
+      this.qrCodeModal.isOpen = value;
     },
+
+    goToRoute(routeName, params) {
+      this.$inertia.visit(route(routeName, params));
+    },
+    
   },
 };
 </script>
+
+<style scoped>
+/* Keep row hover effect */
+:deep(.ant-table-tbody > tr:hover > td) {
+  background-color: #f9fafb;
+}
+
+/* Ensure the table scrolls horizontally on small screens */
+:deep(.ant-table-content) {
+  overflow-x: auto;
+}
+
+/* (Optional) small screen adjustments */
+@media (max-width: 640px) {
+  /* The table itself already scrolls because of the wrapper overflow-x-auto */
+  /* You can keep the action dropdown, which is already hidden/shown with md:hidden / hidden md:flex */
+}
+</style>
