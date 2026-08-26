@@ -32,12 +32,23 @@ class FormFieldController extends Controller
         $templates[] = [
             'value' => 'organizations',
             'label' => 'Organization',
-            'template' => Organization::select('abbr_en as value', 'name_zh as label')
+            'label_zh' => '組織',
+            'label_en' => 'Organization',
+            'template' => Organization::select('abbr_en as value', 'name_zh as label_zh', 'name_en as label_en')
                 ->where('status', true)
                 ->get()
                 ->toArray()
         ];
-
+        $templates[] = [
+            'value' => 'gender',
+            'label' => '姓別',
+            'label_zh' => '姓別',
+            'label_en' => 'Gender',
+            'template' => [
+                ['value' => 'M', 'label' => '男', 'label_zh' => '男', 'label_en' => 'Male'],
+                ['value' => 'F', 'label' => '女', 'label_zh' => '女', 'label_en' => 'Female']
+            ]
+        ];
         return Inertia::render('Organizer/FormFields', [
             'templateOptions' => $templates,
             'fieldTypes' => Config::item('field_types') ?? [],
@@ -56,21 +67,34 @@ class FormFieldController extends Controller
             'form_id'     => 'required|exists:forms,id',
             'field_label' => 'required|string|max:255',
             'type'        => 'required|string',
+            'options'     => 'nullable|string', // allow null or string
         ]);
 
         // 防呆：取當前該表單內 sequence 的最大值 + 1，避免序號重複
         $maxSequence = FormField::where('form_id', $request->form_id)->max('sequence') ?? 0;
 
+        // Handle options: if valid JSON, store decoded; otherwise null
+        $options = $request->input('options');
+        if ($options !== null && trim($options) !== '') {
+            $decoded = json_decode($options, true);
+            if (json_last_error() === JSON_ERROR_NONE) {
+                $fieldOptions = $decoded;
+            } else {
+                $fieldOptions = null;
+            }
+        } else {
+            $fieldOptions = null;
+        }
+
         $field = new FormField();
         $field->form_id     = $request->form_id;
         $field->sequence    = $maxSequence + 1;
         $field->field_name  = $request->filled('field_name') 
-                        ? $request->field_name 
-                        : 'field_' . now()->timestamp; 
+                            ? $request->field_name 
+                            : 'field_' . now()->timestamp; 
         $field->field_label = $request->field_label;
         $field->type        = $request->type;
-        // Vue 前端若已轉為 JSON 字串，這裡直接寫入，否則可維持 array/string 自動轉換
-        $field->options     = json_decode($request->options);
+        $field->options     = $fieldOptions; // safe assignment
         $field->required    = $request->input('required', 0);
         $field->in_column   = $request->input('in_column', 0);
         $field->direction   = $request->input('direction', 'V');
@@ -81,7 +105,6 @@ class FormFieldController extends Controller
 
         return redirect()->back();
     }
-
     /**
      * Update the specified resource in storage.
      */
@@ -92,14 +115,28 @@ class FormFieldController extends Controller
             'form_id'     => 'required|exists:forms,id',
             'field_label' => 'required|string|max:255',
             'type'        => 'required|string',
+            'options'     => 'nullable|string', // allow null or string
         ]);
-
+        
         $field = FormField::findOrFail($request->id);
+        // Handle options: if valid JSON, store decoded; otherwise null
+        $options = $request->input('options');
+        if ($options !== null && trim($options) !== '') {
+            $decoded = json_decode($options, true);
+            if (json_last_error() === JSON_ERROR_NONE) {
+                $field->options = $decoded;
+            } else {
+                // Invalid JSON -> set null
+                $field->options = null;
+            }
+        } else {
+            $field->options = null;
+        }
+        
         $field->form_id     = $request->form_id;
         //$field->field_name  = $request->field_name;
         $field->field_label = $request->field_label;
         $field->type        = $request->type;
-        $field->options     = json_decode($request->options);
         $field->direction   = $request->input('direction', 'V');
         $field->required    = $request->input('required', 0);
         $field->in_column   = $request->input('in_column', 0);

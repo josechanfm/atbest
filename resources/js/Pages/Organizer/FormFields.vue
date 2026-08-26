@@ -153,7 +153,6 @@
               </a-button>
             </div>
           </a-form-item>
-
           <a-form-item :label="$t('template')" name="optionTemplate">
             <a-select
               v-model:value="selectedTemplate"
