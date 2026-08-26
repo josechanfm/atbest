@@ -41,15 +41,17 @@
                 :rules="[{ required: field.required }]"
               >
                 <a-input type="input" v-model:value="formData[field.id]" />
+                <div class="text-gray-500">{{ field.remark }}</div>
               </a-form-item>
             </div>
-            <div v-if="field.type == 'number'">
+            <div v-else-if="field.type == 'number'">
               <a-form-item
                 :label="field.field_label"
                 :name="field.id"
                 :rules="[{ required: field.required }]"
               >
                 <a-input-number type="input" v-model:value="formData[field.id]" />
+                <div class="text-gray-500">{{ field.remark }}</div>
               </a-form-item>
             </div>
             <div v-else-if="field.type == 'textarea'">
@@ -59,6 +61,7 @@
                 :rules="[{ required: field.required }]"
               >
                 <a-textarea v-model:value="formData[field.id]" :rows="field?parseInt(field.options):3"/>
+                <div class="text-gray-500">{{ field.remark }}</div>
               </a-form-item>
             </div>
             <div v-else-if="field.type == 'richtext'">
@@ -72,6 +75,7 @@
                   style="min-height: 200px"
                 /> -->
               </a-form-item>
+              <div class="text-gray-500">{{ field.remark }}</div>
             </div>
             <div v-else-if="field.type == 'radio'">
               <a-form-item
@@ -88,6 +92,7 @@
                     >{{ option.label }}</a-radio
                   >
                 </a-radio-group>
+                <div class="text-gray-500">{{ field.remark }}</div>
               </a-form-item>
             </div>
             <div v-else-if="field.type == 'checkbox'">
@@ -105,6 +110,7 @@
                     >{{ option.label }}</a-checkbox
                   >
                 </a-checkbox-group>
+                <div class="text-gray-500">{{ field.remark }}</div>
               </a-form-item>
             </div>
             <div v-else-if="field.type == 'dropdown'">
@@ -126,6 +132,7 @@
                 :rules="[{ required: field.required }]"
               >
                 <a-switch v-model:checked="formData[field.id]" />
+                <div class="text-gray-500">{{ field.remark }}</div>
               </a-form-item>
             </div>
             <div v-else-if="field.type == 'date'">
@@ -139,6 +146,7 @@
                   :format="dateFormat"
                   :valueFormat="dateFormat"
                 />
+                <div class="text-gray-500">{{ field.remark }}</div>
               </a-form-item>
             </div>
             <div v-else-if="field.type == 'datetime'">
@@ -153,6 +161,7 @@
                   :format="dateTimeFormat"
                   :valueFormat="dateTimeFormat"
                 />
+                <div class="text-gray-500">{{ field.remark }}</div>
               </a-form-item>
             </div>
             <div v-else-if="field.type == 'email'">
@@ -162,6 +171,7 @@
                 :rules="[{ required: field.required }, { type: 'email' }]"
               >
                 <a-input type="input" v-model:value="formData[field.id]" />
+                <div class="text-gray-500">{{ field.remark }}</div>
               </a-form-item>
             </div>
             <div v-else-if="field.type == 'photo'">
@@ -195,6 +205,7 @@
                 <p>Data type undefined</p>
               </a-form-item>
             </div>
+
           </template>
           <div class="text-center pb-10">
             <a-button @click="storeRecord" type="primary">{{ $t("submit") }}</a-button>
