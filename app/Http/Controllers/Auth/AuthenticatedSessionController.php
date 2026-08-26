@@ -40,13 +40,18 @@ class AuthenticatedSessionController extends Controller
         Session::put('applocale', $applocale);
 
         if(auth()->user()){
-            if(auth()->user()->hasRole('admin')){
-                return redirect()->intended('admin');
-            }elseif(auth()->user()->member){
+            if(auth()->user()->member){
                     return redirect()->intended('member');
             }else{
                 return redirect()->intended('guest');
             }
+            // if(auth()->user()->hasRole('admin')){
+            //     return redirect()->intended('admin');
+            // }elseif(auth()->user()->member){
+            //         return redirect()->intended('member');
+            // }else{
+            //     return redirect()->intended('guest');
+            // }
         }else{
             return redirect()->intended(RouteServiceProvider::HOME);
         }

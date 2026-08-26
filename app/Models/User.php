@@ -67,16 +67,19 @@ class User extends Authenticatable
      
     protected $appends = [
         'profile_photo_url',
-        'is_organizer',
-        'organizer',
+        // 'is_organizer',
+        // 'organizer',
     ];
 
-    public function getOrganizerAttribute(){
-        return $this->organizer()->get();
-    }
-    public function getisOrganizerAttribute(){
-        return $this->isOrganizer();
-    }
+    //public function getOrganizerAttribute(){
+        
+        //$member= $this->member()->first();
+        //dd($member);
+        //return $this->organizer()->get();
+    //}
+    // public function getIsOrganizerAttribute(){
+    //     return $this->is_organizer();
+    // }
 
     public function sendPasswordResetNotification($token)
     {
@@ -96,7 +99,8 @@ class User extends Authenticatable
         return $this->member?->isOrganizer();
     }
     public function organizer(){
-        return $this->belongsToMany(Organization::class, 'organization_user');
+        return $this->member()->where('is_organizer',true)->first();
+        //return $this->belongsToMany(Organization::class, 'organization_user');
     }
 
     public function member() {
