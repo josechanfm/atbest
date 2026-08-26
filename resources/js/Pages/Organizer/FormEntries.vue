@@ -13,6 +13,7 @@
           >
             <template #bodyCell="{ column, text, record, index }">
               <template v-if="column.dataIndex == 'operation'">
+
                 <a-button @click="editRecord(record)">{{ $t("edit") }}</a-button>
                 <a-button :href="route('form.receipt',  record)" target="_blank" as="link">
                   {{ $t("receipt") }}

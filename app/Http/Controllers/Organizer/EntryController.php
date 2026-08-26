@@ -31,6 +31,7 @@ class EntryController extends Controller
     {
         //$form=Form::with('fields')->find($form->id);
         $entries = $form->tableEntries();
+        
         return Inertia::render('Organizer/FormEntries', [
             'organization' => session('organization'),
             'form' => $form,

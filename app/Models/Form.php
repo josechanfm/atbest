@@ -99,11 +99,12 @@ class Form extends Model implements HasMedia
                     if ($field->type == 'radio') {
                         $fieldOptions = $field->options;
                         $value = array_filter($fieldOptions, function ($item) use ($f) {
-                            return $item['value'] == $f->field_value;
+                            return $item['value'] == $f['field_value'];
                         });
                         $valueItem = reset($value);
-                        $entry['extra_' . $field->id] = $valueItem->label ?? '';
-                        // dd($entry);
+                        // $entry['extra_' . $field->id] = $valueItem->label ?? '';
+                        $entry['extra_' . $field->id] = $valueItem['label'] ?? '';
+
                     } else if ($field->type == 'checkbox') {
                         $fieldOptions = $field->options;
                         $fieldValue = json_decode($f->field_value);

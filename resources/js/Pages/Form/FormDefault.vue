@@ -297,7 +297,7 @@ export default {
       //console.log(data);
     },
     onFormChange() {
-      console.log(this.formData);
+      // console.log(this.formData);
     },
     storeRecord() {
       this.$refs.formRef
