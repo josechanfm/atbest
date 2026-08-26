@@ -80,6 +80,11 @@
                 <a-button v-if="hasEntries(record)" @click="backupRecords(record)">
                   {{ $t("backup") }}
                 </a-button>
+
+              <a-button @click="openQrCodeModal(record)">Show QR Code</a-button>
+              <a-button @click="cloneForm(record)">Clone</a-button>
+
+
               </div>
             </template>
 
@@ -109,7 +114,18 @@
     <div class="text-gray-500 text-sm mt-2">
       {{ $t('from_can_not_be_delete_if_response_is_not_empty') }}
     </div>
+
+
+        <!-- QR Code Modal -->
+    <qr-code-modal 
+      :fullUrl="qrCodeModal.url" 
+      :title="qrCodeModal.title" 
+      :isModalOpen="qrCodeModal.isOpen" 
+      @update:isModalOpen="updateQrCodeModalOpen" 
+    />
   </OrganizerLayout>
+
+  
 </template>
 
 <script>
@@ -122,6 +138,7 @@ import {
 } from "@ant-design/icons-vue";
 import { RestFilled } from "@ant-design/icons-vue";
 import { message } from "ant-design-vue";
+import QrCodeModal from '@/Components/QrCodeModal.vue';
 
 export default {
   name: "FormIndex",
@@ -133,6 +150,7 @@ export default {
     PlusOutlined,
     RestFilled,
     message,
+    QrCodeModal
   },
   props: {
     forms: {
@@ -159,6 +177,11 @@ export default {
         { title: "Entries", i18n: "entries", dataIndex: "entries", key: "entries" },
         { title: "Operation", i18n: "operation", dataIndex: "operation", key: "operation" },
       ],
+      qrCodeModal:{
+        isOpen: false,
+        title:'Qr Code',
+        url: 'https://venus.mpu.edu.mo'
+      },
     };
   },
   mounted() {
@@ -222,6 +245,25 @@ export default {
           },
         }
       );
+    },
+    cloneForm(form){
+      console.log(form)
+      this.$inertia.post(route("manage.form.clone", form), {
+        onSuccess: (page) => {
+          console.log(page);
+        },
+        onError: (error) => {
+          alert(error.message);
+        },
+      });
+    },
+    openQrCodeModal(record) {
+      this.qrCodeModal.title = record.title;
+      this.qrCodeModal.url = `${window.location.origin}/form/?t=${record.uuid}`;
+      this.qrCodeModal.isOpen = true; 
+    },
+    updateQrCodeModalOpen(value) {
+      this.qrCodeModal.isOpen = value; // Update the modal open state
     },
   },
 };

@@ -161,7 +161,6 @@ class FormController extends Controller
     }
 
     public function item(Request $request){
-        
         if(empty($request->t)){ 
             return redirect('forms');
         };
@@ -169,7 +168,10 @@ class FormController extends Controller
         if(empty($form)){ //uuid not correct
             return redirect('forms');
         }elseif ($form->published==false) { //not yet publish
-            return redirect('forms');
+            return Inertia::render('Form/Unpublished',[
+
+            ]);
+            // return redirect('forms');
         }elseif ($form->require_login && empty(auth()->user()) ) {
             return redirect('forms');
         }elseif ($form->for_member) {

@@ -86,6 +86,10 @@
 
       <a-layout-content>
         <div class="xs:p-2 p-4">
+          <div class="page-header">
+            <!-- 👇 This is where the #header content will appear -->
+            <slot name="header"></slot>
+          </div>
           <main>
             <slot />
           </main>

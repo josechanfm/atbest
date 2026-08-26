@@ -390,8 +390,10 @@ export default {
       this.modal.data = this.getDefaultModalData();
       this.selectedTemplate = null;
       this.modal.isOpen = true;
+      this.modalLoading=false;
     },
     editRecord(record) {
+      this.modalLoading=false;
       this.modal.mode = "EDIT";
       const clonedRecord = JSON.parse(JSON.stringify(record));
       

@@ -404,4 +404,15 @@ class FormController extends Controller
             $form->clearMediaCollection('thumb');
         }
     }
+
+    public function clone(Form $form){
+        //$fields=$form->fields;
+        $formData=$form->toArray();
+        $formData['name']=$formData['name'].' (new)';
+        $formData['title']=$formData['title'].' (new)';
+        $formData['published']=false;
+        $newForm=Form::create($formData);
+        $newForm->fields()->createMany($form->fields->toArray());
+        return to_route('organizer.forms.index');
+    }
 }

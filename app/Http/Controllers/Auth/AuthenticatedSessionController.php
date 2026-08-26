@@ -36,7 +36,6 @@ class AuthenticatedSessionController extends Controller
         $request->session()->flush();
         $request->authenticate();
         $request->session()->regenerate();
-
         Session::put('applocale', $applocale);
 
         if(auth()->user()){

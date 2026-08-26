@@ -181,7 +181,6 @@ import UploadAdapter from "@/Components/ImageUploadAdapter.vue";
 export default {
   components: {
     AdminLayout,
-    ckeditor: CKEditor.component,
     UploadAdapter,
     //UploadAdapter
   },

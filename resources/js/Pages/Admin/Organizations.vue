@@ -1,6 +1,9 @@
 <template>
   <AdminLayout :title="$t('organization')">
-    <template #header>
+
+    <!-- Filters Section -->
+    <div class="mb-6 rounded-lg bg-white p-4 shadow-sm">
+      
       <div class="flex items-center justify-between">
         <div>
           <h2 class="text-2xl font-bold text-gray-900">
@@ -11,12 +14,6 @@
           </p>
         </div>
         <div class="flex items-center space-x-3">
-          <a-input-search
-            v-model:value="search.abbr_en"
-            :placeholder="$t('search_by_abbr')"
-            style="width: 200px"
-            @search="searchData"
-          />
           <a-button
             type="primary"
             @click="createRecord()"
@@ -29,17 +26,14 @@
           </a-button>
         </div>
       </div>
-    </template>
-
-    <!-- Filters Section -->
-    <div class="mb-6 rounded-lg bg-white p-4 shadow-sm">
+      
       <div class="flex flex-wrap items-end gap-4">
         <div>
           <label class="mb-1 block text-sm font-medium text-gray-700">
             {{ $t('abbreviation') }}
           </label>
           <a-input
-            v-model:value="search.abbr_en"
+            v-model:value="search.abbr"
             :placeholder="$t('enter_abbreviation')"
             class="w-48"
             allow-clear
@@ -107,7 +101,7 @@
                   />
                 </div>
                 <span class="font-medium text-gray-900">
-                  {{ record.abbr }}
+                  {{ record.abbr_en }}
                 </span>
               </div>
             </template>
@@ -203,289 +197,22 @@
       </div>
     </div>
 
-    <!-- Modal -->
-    <a-modal
-      v-model:open="modal.isOpen"
-      :title="modal.title"
-      class="md:!w-[70%] !w-full"
-      :footer="null"
-      centered
-      :styles="{ body: { padding: '24px' } }"
-      wrap-class-name="organization-modal"
-    >
-      <a-form
-        ref="modalRef"
-        :model="modal.data"
-        layout="horizontal"
-        @finish="onFormFinish"
-        class="organization-form"
-      >
-        <!-- Basic Information Section -->
-        <div class="mb-6">
-          <h3 class="mb-4 text-lg font-semibold text-gray-900">
-            {{ $t('basic_information') }}
-          </h3>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <a-form-item
-              :label="$t('abbreviation')"
-              name="abbr"
-              :rules="[{ required: true, message: $t('abbreviation_required') }]"
-            >
-              <a-input
-                v-model:value="modal.data.abbr_en"
-                :placeholder="$t('enter_abbreviation')"
-                allow-clear
-              />
-            </a-form-item>
-
-            <a-form-item
-              :label="$t('registration_code')"
-              name="registration_code"
-            >
-              <a-input
-                v-model:value="modal.data.registration_code"
-                :placeholder="$t('enter_registration_code')"
-                allow-clear
-              />
-            </a-form-item>
-          </div>
-
-          <div class="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <a-form-item
-              :label="$t('organization_name_zh')"
-              name="name_zh"
-              :rules="[{ required: true, message: $t('chinese_name_required') }]"
-            >
-              <a-input
-                v-model:value="modal.data.name_zh"
-                :placeholder="$t('enter_chinese_name')"
-                allow-clear
-              />
-            </a-form-item>
-
-            <a-form-item
-              :label="$t('organization_name_en')"
-              name="name_en"
-            >
-              <a-input
-                v-model:value="modal.data.name_en"
-                :placeholder="$t('enter_english_name')"
-                allow-clear
-              />
-            </a-form-item>
-
-            <a-form-item
-              :label="$t('organization_name_pt')"
-              name="name_pt"
-            >
-              <a-input
-                v-model:value="modal.data.name_pt"
-                :placeholder="$t('enter_portuguese_name')"
-                allow-clear
-              />
-            </a-form-item>
-          </div>
-        </div>
-
-        <!-- Contact Information Section -->
-        <div class="mb-6">
-          <h3 class="mb-4 text-lg font-semibold text-gray-900">
-            {{ $t('contact_information') }}
-          </h3>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <a-form-item
-              :label="$t('email')"
-              name="email"
-              :rules="[
-                { required: true, message: $t('email_required') },
-                { type: 'email', message: $t('invalid_email') }
-              ]"
-            >
-              <a-input
-                v-model:value="modal.data.email"
-                type="email"
-                :placeholder="$t('enter_email')"
-                allow-clear
-              >
-                <template #prefix>
-                  <MailOutlined class="text-gray-400" />
-                </template>
-              </a-input>
-            </a-form-item>
-
-            <a-form-item
-              :label="$t('phone')"
-              name="phone"
-            >
-              <a-input
-                v-model:value="modal.data.phone"
-                :placeholder="$t('enter_phone')"
-                allow-clear
-              >
-                <template #prefix>
-                  <PhoneOutlined class="text-gray-400" />
-                </template>
-              </a-input>
-            </a-form-item>
-          </div>
-
-          <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-            <a-form-item
-              :label="$t('address')"
-              name="address"
-            >
-              <a-input
-                v-model:value="modal.data.address"
-                :placeholder="$t('enter_address')"
-                allow-clear
-              />
-            </a-form-item>
-
-            <a-form-item
-              :label="$t('website')"
-              name="href"
-            >
-              <a-input
-                v-model:value="modal.data.href"
-                :placeholder="$t('enter_website')"
-                allow-clear
-              >
-                <template #prefix>
-                  <GlobalOutlined class="text-gray-400" />
-                </template>
-              </a-input>
-            </a-form-item>
-          </div>
-        </div>
-
-        <!-- Organization Settings -->
-        <div class="mb-6">
-          <h3 class="mb-4 text-lg font-semibold text-gray-900">
-            {{ $t('organization_settings') }}
-          </h3>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <a-form-item
-              :label="$t('avatar_url')"
-              name="avatar"
-            >
-              <a-input
-                v-model:value="modal.data.avatar"
-                :placeholder="$t('enter_avatar_url')"
-                allow-clear
-              />
-            </a-form-item>
-
-            <a-form-item
-              :label="$t('card_style')"
-              name="card_style"
-            >
-              <a-select
-                v-model:value="modal.data.card_style"
-                :placeholder="$t('select_card_style')"
-                allow-clear
-              >
-                <a-select-option
-                  v-for="style in cardStyles"
-                  :key="style.value"
-                  :value="style.value"
-                >
-                  {{ style.label }}
-                </a-select-option>
-              </a-select>
-            </a-form-item>
-          </div>
-
-          <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-            <a-form-item
-              :label="$t('president')"
-              name="president"
-            >
-              <a-input
-                v-model:value="modal.data.president"
-                :placeholder="$t('enter_president_name')"
-                allow-clear
-              />
-            </a-form-item>
-            <a-form-item
-              :label="$t('manager')"
-              name="manager"
-            >
-
-              <a-select
-                v-model:value="modal.data.organizer_member_ids"
-                mode="multiple"
-                :placeholder="$t('select_managers')"
-                allow-clear
-                :options="modal.data.members?.filter((m) => m.user_id != null)"
-                :fieldNames="{ value: 'id', label: 'given_name' }"
-                class="w-full"
-              />
-            </a-form-item>
-          </div>
-
-          <div class="mt-4">
-            <a-form-item
-              :label="$t('content')"
-              name="content"
-              :wrapper-col="{ span: 24 }"
-            >
-              <a-textarea
-                v-model:value="modal.data.content"
-                :placeholder="$t('enter_content')"
-                :rows="4"
-                show-count
-                :maxlength="500"
-              />
-            </a-form-item>
-          </div>
-
-          <div class="mt-4">
-            <a-form-item
-              :label="$t('status')"
-              name="status"
-            >
-              <div class="flex items-center space-x-4">
-                <a-switch
-                  v-model:checked="modal.data.status"
-                  :checked-value="1"
-                  :unchecked-value="0"
-                  :checked-children="$t('active')"
-                  :un-checked-children="$t('inactive')"
-                />
-              </div>
-            </a-form-item>
-          </div>
-        </div>
-
-        <!-- Form Actions -->
-        <div class="flex justify-end space-x-3 border-t border-gray-200 pt-6">
-          <a-button @click="modal.isOpen = false">
-            {{ $t('cancel') }}
-          </a-button>
-          <a-button
-            type="primary"
-            :loading="loading"
-            @click="$refs.modalRef.$emit('finish')"
-            class="!bg-indigo-600 hover:!bg-indigo-700"
-          >
-            <template #icon>
-              <SaveOutlined />
-            </template>
-            {{
-              modal.mode === 'CREATE'
-                ? $t('create_organization')
-                : $t('update_organization')
-            }}
-          </a-button>
-        </div>
-      </a-form>
-    </a-modal>
+    <!-- Modal Component -->
+    <OrganizationModal
+      :open="modal.isOpen"
+      :organization="modal.organization"
+      :users="users"
+      :card-styles="cardStyles"
+      @update:visible="modal.isOpen = $event"
+      @save="onModalSave"
+    />
   </AdminLayout>
 </template>
 
 <script>
 import AdminLayout from "@/Layouts/AdminLayout.vue";
 import Pagination from "@/Components/Pagination.vue";
+import OrganizationModal from "./OrganizationModal.vue"; // adjust path as needed
 import { ref, reactive } from "vue";
 import axios from 'axios';
 import {
@@ -508,6 +235,7 @@ export default {
   components: {
     AdminLayout,
     Pagination,
+    OrganizationModal,
     PlusOutlined,
     SearchOutlined,
     RedoOutlined,
@@ -529,9 +257,7 @@ export default {
     return {
       modal: {
         isOpen: false,
-        data: {},
-        title: "",
-        mode: "",
+        organization: null, // null means create mode
       },
       loading: false,
       search: {
@@ -606,82 +332,55 @@ export default {
     },
     
     createRecord() {
-      this.modal.data = {
-        members: [],
-        status: 1,
-        user_ids: []
-      };
-      this.modal.mode = "CREATE";
-      this.modal.title = this.$t('create_organization');
+      this.modal.organization = null;
       this.modal.isOpen = true;
     },
     
     editRecord(record) {
-      this.modal.data = { ...record };
-      this.modal.mode = "EDIT";
-      this.modal.title = this.$t('edit_organization');
+      this.modal.organization = { ...record };
       this.modal.isOpen = true;
     },
     
-    async onFormFinish() {
-      try {
-        this.loading = true;
-        await this.$refs.modalRef.validate();
-        
-        if (this.modal.mode === "CREATE") {
-          await this.storeRecord();
-        } else {
-          await this.updateRecord();
-        }
-        
-        this.modal.isOpen = false;
-        this.$message.success(
-          this.modal.mode === "CREATE"
-            ? this.$t('organization_created_successfully')
-            : this.$t('organization_updated_successfully')
-        );
-      } catch (error) {
-        console.error("Form validation failed:", error);
-        if (error.errorFields) {
-          this.$message.error(this.$t('please_fill_required_fields'));
-        }
-      } finally {
-        this.loading = false;
-      }
-    },
-    
-    storeRecord() {
-      return new Promise((resolve, reject) => {
-        this.$inertia.post(route("admin.organizations.store"), this.modal.data, {
-          onSuccess: () => {
-            this.modal.isOpen = false;
-            resolve();
-          },
-          onError: (error) => {
-            console.error("Store failed:", error);
-            reject(error);
-          },
-        });
-      });
-    },
-    
-    updateRecord() {
-      return new Promise((resolve, reject) => {
+    // Called when modal emits 'save'
+    onModalSave(formData) {
+      // Determine mode by presence of id
+      const isEdit = !!formData.id;
+      this.loading = true;
+      if (isEdit) {
         this.$inertia.patch(
-          route("admin.organizations.update", this.modal.data.id),
-          this.modal.data,
+          route("admin.organizations.update", formData.id),
+          formData,
           {
             onSuccess: () => {
+              this.loading = false;
               this.modal.isOpen = false;
-              resolve();
+              this.$message.success(this.$t('organization_updated_successfully'));
             },
             onError: (error) => {
+              this.loading = false;
               console.error("Update failed:", error);
-              reject(error);
+              this.$message.error(this.$t('update_failed'));
             },
           }
         );
-      });
+      } else {
+        this.$inertia.post(
+          route("admin.organizations.store"),
+          formData,
+          {
+            onSuccess: () => {
+              this.loading = false;
+              this.modal.isOpen = false;
+              this.$message.success(this.$t('organization_created_successfully'));
+            },
+            onError: (error) => {
+              this.loading = false;
+              console.error("Store failed:", error);
+              this.$message.error(this.$t('create_failed'));
+            },
+          }
+        );
+      }
     },
     
     deleteRecord(record) {

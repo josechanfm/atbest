@@ -28,7 +28,7 @@ class OrganizationController extends Controller
                     $query->where('parish', $request->search['parish']);
                 }
                 if (!empty($request->search['abbr'])) {
-                    $query->where('abbr', 'like', '%' . $request->search['abbr'] . '%');
+                    $query->where('abbr_en', 'like', '%' . $request->search['abbr'] . '%');
                 }
                 if (!empty($request->search['name_zh'])) {
                     $query->where('name_zh', 'like', '%' . $request->search['name_zh'] . '%');

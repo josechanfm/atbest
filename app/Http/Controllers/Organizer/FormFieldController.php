@@ -64,7 +64,9 @@ class FormFieldController extends Controller
         $field = new FormField();
         $field->form_id     = $request->form_id;
         $field->sequence    = $maxSequence + 1;
-        $field->field_name  = $request->field_name;
+        $field->field_name  = $request->filled('field_name') 
+                        ? $request->field_name 
+                        : 'field_' . now()->timestamp; 
         $field->field_label = $request->field_label;
         $field->type        = $request->type;
         // Vue 前端若已轉為 JSON 字串，這裡直接寫入，否則可維持 array/string 自動轉換
@@ -94,10 +96,10 @@ class FormFieldController extends Controller
 
         $field = FormField::findOrFail($request->id);
         $field->form_id     = $request->form_id;
-        $field->field_name  = $request->field_name;
+        //$field->field_name  = $request->field_name;
         $field->field_label = $request->field_label;
         $field->type        = $request->type;
-        $field->options     = $request->options;
+        $field->options     = json_decode($request->options);
         $field->direction   = $request->input('direction', 'V');
         $field->required    = $request->input('required', 0);
         $field->in_column   = $request->input('in_column', 0);

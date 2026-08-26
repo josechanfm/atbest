@@ -33,7 +33,7 @@ return new class extends Migration
             $table->text('content')->nullable();
             $table->string('registration_code')->nullable();
             $table->string('president')->nullable();
-            $table->string('card_style')->nullable();
+            $table->string('card_style')->default('card_01');
             $table->string('logo')->nullable();
             $table->string('subdomain')->nullable();
             $table->date('founted_at')->nullable();

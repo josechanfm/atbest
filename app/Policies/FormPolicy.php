@@ -45,7 +45,7 @@ class FormPolicy
      */
     public function create(User $user)
     {
-        if($user->hasRole(['admin','organizer'])){
+        if ($user->hasRole(['admin','organizer']) || $user->member->is_organizer) {
             return true;
         }
         return false;
@@ -76,7 +76,7 @@ class FormPolicy
      */
     public function delete(User $user, Form $form)
     {
-        if($user->hasRole('admin')){
+        if($user->hasRole(['admin','organizer']) || $user?->member->is_organizer){
             return true;
         }
         //determine if the form belongs to current user

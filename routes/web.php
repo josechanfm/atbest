@@ -116,6 +116,7 @@ Route::group([
     Route::post('member/create/login/{member}', [App\Http\Controllers\Organizer\MemberController::class, 'createLogin'])->name('organizer.member.createLogin');
     Route::post('member/{member}/reset_password', [\App\Http\Controllers\Organizer\MemberController::class, 'resetPassword'])->name('member.member.resetPassword');
     Route::resource('forms', App\Http\Controllers\Organizer\FormController::class)->names('organizer.forms');
+    Route::post('form/{form}/clone',[\App\Http\Controllers\Organizer\FormController::class,'clone'])->name('manage.form.clone');
     Route::delete('form/delete_image/{form}', [App\Http\Controllers\Organizer\FormController::class, 'deleteImage'])->name('organizer.form.deleteImage');
     Route::post('form/{form}/backup', [App\Http\Controllers\Organizer\FormController::class, 'backup'])->name('organizer.form.backup');
     Route::resource('form/{form}/fields', App\Http\Controllers\Organizer\FormFieldController::class)->names('organizer.form.fields');

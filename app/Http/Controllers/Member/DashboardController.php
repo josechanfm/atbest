@@ -14,7 +14,9 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        // dd(auth()->user());
+        if(auth()->user() && auth()->user()->hasRole('admin')){
+            return redirect()->intended('/admin');
+        }
         if (empty(auth()->user()->member)) {
             return Inertia::render('Error', [
                 'message' => "You are not a register member."
@@ -27,12 +29,13 @@ class DashboardController extends Controller
 
         // dd(auth()->user()->members);
         //dd(auth()->user()->members()->get());
-        //dd(session('member'));
+        //$feature= Feature::whereBelongsTo(session('member')->organization)->orderBy('sequence')?->limit(4)->get();
+        //dd(session('member'), session('member')->organization);
         return Inertia::render('Member/Dashboard', [
             //'member'=>session(['member']),
             'member'=> auth()->user()->member->load('organization'),
             'members' => auth()->user()->members()->get(),
-            'features' => Feature::whereBelongsTo(session('member')->organization)->orderBy('sequence')->limit(4)->get(),
+            'features' => Feature::whereBelongsTo(session('member')->organization)->orderBy('sequence')?->limit(4)->get(),
             'articles' => Article::whereBelongsTo(session('member')->organization)->where('category_code','NEWS')->where('published',true)->orderBy('sequence','DESC')->get(),
             'cardStyle' => Config::item('card_styles')[session('member')->organization->card_style],
         ]);

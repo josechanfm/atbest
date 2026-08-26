@@ -39,7 +39,7 @@
     </div>
     <!-- Modal Start-->
     <a-modal
-      v-model:visible="modal.isOpen"
+      v-model:open="modal.isOpen"
       :title="modal.mode == 'CREATE' ? 'Create' : 'Edit'"
       width="60%"
     >

@@ -23,6 +23,7 @@
           :validate-messages="validateMessages"
         >
           <template v-for="field in form.fields" :key="field.id">
+
             <div v-if="form.require_member">
               <a-form-item
                 label="Member Id"
@@ -40,6 +41,15 @@
                 :rules="[{ required: field.required }]"
               >
                 <a-input type="input" v-model:value="formData[field.id]" />
+              </a-form-item>
+            </div>
+            <div v-if="field.type == 'number'">
+              <a-form-item
+                :label="field.field_label"
+                :name="field.id"
+                :rules="[{ required: field.required }]"
+              >
+                <a-input-number type="input" v-model:value="formData[field.id]" />
               </a-form-item>
             </div>
             <div v-else-if="field.type == 'textarea'">
