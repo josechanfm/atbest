@@ -14,32 +14,56 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        if(auth()->user() && auth()->user()->hasRole('admin')){
+        $user = auth()->user();
+
+        // 1. Admin redirect
+        if ($user && $user->hasRole('admin')) {
             return redirect()->intended('/admin');
         }
-        if (empty(auth()->user()->member)) {
+
+        // 2. Check if user has a member record
+        if (empty($user->member)) {
             return Inertia::render('Error', [
-                'message' => "You are not a register member."
+                'message' => 'You are not a registered member.'
             ]);
         }
-        if(empty(session('member'))){
-            session(['member'=>auth()->user()->member]);
-            session(['organization'=>auth()->user()->member->organiation]);
+
+        // 3. Store member & organization in session if not already set
+        if (!session()->has('member')) {
+            session()->put([
+                'member' => $user->member,
+                'organization' => $user->member->organization,
+            ]);
         }
 
-        // dd(auth()->user()->members);
-        //dd(auth()->user()->members()->get());
-        //$feature= Feature::whereBelongsTo(session('member')->organization)->orderBy('sequence')?->limit(4)->get();
-        //dd(session('member'), session('member')->organization);
+        // 4. Load necessary relations
+        $member = $user->member->load('organization');
+        $org = session('member')->organization;
+
+        // 5. Fetch data
+        $features = Feature::whereBelongsTo($org)
+            ->orderBy('sequence')
+            ->limit(4)
+            ->get();
+
+        $articles = Article::whereBelongsTo($org)
+            ->where('category_code', 'NEWS')
+            ->where('published', true)
+            ->orderBy('sequence', 'DESC')
+            ->get();
+
+        $cardStyle = Config::item('card_styles')[$org->card_style] ?? 'card_01';
+
+        // 6. Render dashboard
         return Inertia::render('Member/Dashboard', [
-            //'member'=>session(['member']),
-            'member'=> auth()->user()->member->load('organization'),
-            'members' => auth()->user()->members()->get(),
-            'features' => Feature::whereBelongsTo(session('member')->organization)->orderBy('sequence')?->limit(4)->get(),
-            'articles' => Article::whereBelongsTo(session('member')->organization)->where('category_code','NEWS')->where('published',true)->orderBy('sequence','DESC')->get(),
-            'cardStyle' => Config::item('card_styles')[session('member')->organization->card_style],
+            'member'    => $member,
+            'members'   => $user->members()->get(),
+            'features'  => $features,
+            'articles'  => $articles,
+            'cardStyle' => $cardStyle,
         ]);
     }
+
     public function getQrcode()
     {
         $userId = auth()->user()->id;

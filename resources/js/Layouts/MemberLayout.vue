@@ -98,7 +98,7 @@ export default {
                 <a class="inline-flex items-center px-1 pt-1" :href="route('member.guardian.back')" v-if="$page.props.by_guardian">
                   {{ $t("guardian") }}
                 </a>
-                <a class="inline-flex items-center px-1 pt-1" v-if="isOrganizer()" :href="route('organizer.dashboard')">
+                <a v-if="isOrganizer()" class="inline-flex items-center px-1 pt-1" :href="route('organizer.dashboard')">
                   {{ $t("manager") }} 
                 </a>
               </div>
@@ -122,7 +122,7 @@ export default {
                     </button>
                     <a-avatar v-else>
                       <template #icon>
-                        {{ $page.props.auth.user.member.given_name.charAt($page.props.auth.user.member.given_name.length-1) }}
+                        {{ $page.props.auth.user.member.family_name.charAt($page.props.auth.user.member.family_name.length-1) }}
                       </template>
                     </a-avatar>
                     <div class="ml-8 inline-flex rounded-md mx-2">
@@ -162,6 +162,12 @@ export default {
                       </DropdownLink>
                       <DropdownLink :href="route('member.blogs.index')??null">
                         {{ $t("blogs") }}
+                      </DropdownLink>
+                      <DropdownLink
+                        v-if="isOrganizer()"
+                        :href="route('organizer.dashboard')??null"
+                      >
+                        {{ $t("manager") }} 
                       </DropdownLink>
                       <DropdownLink
                         v-if="$page.props.hasApiFeatures"

@@ -75,7 +75,7 @@ class Form extends Model implements HasMedia
             $columns[] = (object)['title' => 'Username', 'dataIndex' => 'username'];
         }
         foreach ($this->inColumnFields as $column) {
-            $columns[] = (object)['title' => $column->field_name, 'dataIndex' => 'extra_' . $column->id];
+            $columns[] = (object)['title' => $column->field_label, 'dataIndex' => 'extra_' . $column->id];
         }
         $columns[] = (object)['title' => 'Submit at', 'dataIndex' => 'submitted_at'];
         $columns[] = (object)['title' => 'Action', 'dataIndex' => 'operation'];

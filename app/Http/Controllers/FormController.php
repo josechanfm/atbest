@@ -160,29 +160,45 @@ class FormController extends Controller
         echo ('comming soon.');
     }
 
-    public function item(Request $request){
-        if(empty($request->t)){ 
+    public function item(Request $request)
+    {
+        $uuid = $request->input('t');
+        if (empty($uuid)) {
             return redirect('forms');
-        };
-        $form=Form::where('uuid',$request->t)->first();
-        if(empty($form)){ //uuid not correct
-            return redirect('forms');
-        }elseif ($form->published==false) { //not yet publish
-            return Inertia::render('Form/Unpublished',[
+        }
 
-            ]);
-            // return redirect('forms');
-        }elseif ($form->require_login && empty(auth()->user()) ) {
+        $form = Form::where('uuid', $uuid)->first();
+        if (empty($form)) {
             return redirect('forms');
-        }elseif ($form->for_member) {
-            if (session('member')->organization->id != $form->organization_id) {
-                return redirect('forms');
+        }
+
+        // Preview mode – bypass checks
+        if ($request->has('preview')) {
+            return $this->renderForm($form);
+        }
+
+        // Check each condition and pass the reason
+        if (!$form->published) {
+            return Inertia::render('Form/Unpublished', ['reason' => 'unpublished']);
+        }
+
+        if ($form->require_login && !auth()->check()) {
+            return Inertia::render('Form/Unpublished', ['reason' => 'login_required']);
+        }
+
+        if ($form->for_member) {
+            $member = session('member');
+            if (!$member || $member->organization->id != $form->organization_id) {
+                return Inertia::render('Form/Unpublished', ['reason' => 'member_only']);
             }
-        };
-        $form->fields;
-        return Inertia::render('Form/FormDefault', [
-            'form' => $form,
-        ]);
+        }
 
+        return $this->renderForm($form);
+    }
+
+    private function renderForm($form)
+    {
+        $form->load('fields');
+        return Inertia::render('Form/FormDefault', ['form' => $form]);
     }
 }

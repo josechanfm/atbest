@@ -81,8 +81,8 @@
                   {{ $t("backup") }}
                 </a-button>
 
-              <a-button @click="openQrCodeModal(record)">Show QR Code</a-button>
-              <a-button @click="cloneForm(record)">Clone</a-button>
+              <a-button @click="openQrCodeModal(record)">{{ $t('qrcode_show') }}</a-button>
+              <a-button @click="cloneForm(record)">{{ $t('clone') }}</a-button>
 
 
               </div>
