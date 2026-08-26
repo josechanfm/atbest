@@ -274,7 +274,7 @@ export default {
       },
       validateMessages: { required: "${label} is required!" },
       textAreaTypes: ["textarea", "longtext", "richtext"],
-      optionTypes: ["radio", "checkbox", "dropdown"],
+      optionTypes: ["radio", "checkbox", "dropdown","gender"],
       radioCheckboxTypes: ["radio", "checkbox"],
     };
   },
