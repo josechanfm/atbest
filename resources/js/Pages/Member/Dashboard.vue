@@ -73,7 +73,7 @@
         </div>
 
         <!-- Right column: Member Card + Profile Sidebar -->
-        <div class="flex-none mx-auto">
+        <div class="flex-none mx-auto pt-4">
           <!-- Member Card Component -->
           <MemberCard
             :member="member"

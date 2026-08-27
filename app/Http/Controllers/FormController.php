@@ -21,7 +21,17 @@ class FormController extends Controller
     {
         // dd(session('organization'));
         //dd(auth()->user()->members->count()>0);
-        $forms = Form::where('published', true)->where('for_member', false)->with('organization')->orderBy('created_at','DESC')->get();
+        //$forms = Form::where('published', true)->where('for_member', false)->with('organization')->orderBy('created_at','DESC')->get();
+        $forms = Form::where('published', true)
+            ->where('for_member', false)
+            ->with('organization')
+            ->orderBy('created_at','DESC')
+            ->with('media')->get()->map(function ($form) {
+                $form->thumbnail_url = $form->media->firstWhere('collection_name', 'thumb')?->getUrl();
+                unset($form->media); // optional: keep response clean
+                return $form;
+            });
+
         if (session()->has('member')) {
                 //for own memberslogin
                 $memberForms=Form::where('published',true)->where('for_member',true)->where('organization_id',session('member')->organization->id)->orderBy('created_at','DESC')->get();
@@ -167,11 +177,22 @@ class FormController extends Controller
             return redirect('forms');
         }
 
-        $form = Form::where('uuid', $uuid)->first();
+        //$form = Form::where('uuid', $uuid)->first();
+        $form = Form::with(['media' => function ($query) {
+            $query->whereIn('collection_name', ['banner', 'thumb']);
+        }])->where('uuid', $uuid)->first();
+
+
         if (empty($form)) {
             return redirect('forms');
         }
-
+        
+        if ($form) {
+            $form->banner_url = $form->media->firstWhere('collection_name', 'banner')?->getUrl();
+            $form->thumbnail_url = $form->media->firstWhere('collection_name', 'thumb')?->getUrl();
+            unset($form->media); // optional: remove the media relation from the response
+        }
+        
         // Preview mode – bypass checks
         if ($request->has('preview')) {
             return $this->renderForm($form);

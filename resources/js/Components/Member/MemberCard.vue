@@ -1,176 +1,323 @@
 <template>
-  <div class="container mx-auto pt-12 flip-card-container" @click="flipCardAnimation">
-    <div class="bg-white relative shadow rounded-lg flip-card hover:scale-105 transform transition-transform" ref="flipCard">
-      <!-- Front side -->
-      <div class="flip-card-front absolute inset-0">
-        <div class="absolute inset-0 rounded-lg overflow-hidden">
-          <img :src="'/storage/images/' + cardStyle.background" class="object-cover w-full h-full" />
-          <div class="absolute inset-0 bg-black/30 backdrop-brightness-95"></div>
-        </div>
-
-        <div :style="cardStyle.font_style" class="relative z-10 flex flex-col h-full p-5 text-white">
-          <div class="text-center text-lg font-bold">
-            {{ member.organization["name_" + $t("lang")] }}
-          </div>
-
-          <div class="flex justify-between items-center mt-4 gap-4">
-            <div class="flex-1 space-y-2">
-              <div>
-                <div class="text-xs opacity-80">姓名</div>
-                <div class="font-bold text-base">{{ member.family_name }}{{ member.given_name }}</div>
-              </div>
-              <div>
-                <div class="text-xs opacity-80">會員編號</div>
-                <div class="font-mono font-bold tracking-wider">{{ member.member_number }}</div>
-              </div>
-            </div>
-
-            <div class="flex-shrink-0">
-              <img v-if="member.avatar" class="w-16 h-16 rounded-full object-cover border-2 border-white shadow-md" :src="member.avatar" />
-              <img v-else class="w-16 h-16 rounded-full object-cover border-2 border-white shadow-md" src="/avatars/dummy-avatar.jpg" />
-            </div>
-          </div>
-
-          <div class="flex justify-start gap-8 pt-2 text-xs">
-            <div>
-              <div class="opacity-80">發出日期</div>
-              <div class="font-semibold">{{ member.valid_at }}</div>
-            </div>
-            <div>
-              <div class="opacity-80">有效日期</div>
-              <div class="font-semibold">{{ member.expired_at }}</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Back side -->
-      <div class="flex flip-card-back z-10" ref="back">
-        <div class="flex">
-          <QRCodeVue3
-            :key="qrcode"
-            :value="qrcode"
-            :image="logoUrl"
-            :dotsOptions="{
-              type: 'dots',
-              color: '#26249a',
-              gradient: {
-                type: 'linear',
-                rotation: 0,
-                colorStops: [
-                  { offset: 0, color: '#26249a' },
-                  { offset: 1, color: '#26249a' },
-                ],
-              },
-            }"
-            :width="150"
-            :height="150"
-            :cornersSquareOptions="{ type: 'square', color: '#e00404' }"
-            :cornersDotOptions="{ color: '#e00404' }"
-          />
-        </div>
-        <div class="flex flex-col px-4">
-          <div class="w-full">
-            <h3 class="text-xl font-bold mb-4 text-center text-orange-700">會員卡</h3>
-            <div class="space-y-3 text-sm">
-              <div class="flex items-start">
-                <svg class="w-5 h-5 mr-2 text-blue-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                </svg>
-                <span>專屬會員活動優先報名</span>
-              </div>
-              <div class="flex items-start">
-                <svg class="w-5 h-5 mr-2 text-blue-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                </svg>
-                <span>使用二維碼累計積分</span>
-              </div>
-            </div>
-            <div class="mt-6 text-xs text-center text-gray-600">
-              <p>客服專線: 0000-0000</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Background image (duplicate? can be removed if not needed) -->
-      <img class="relative object-cover w-full h-full rounded-lg z-0 shadow-lg" :src="'/storage/images/' + cardStyle.background" />
+  <div class="flip-card-container" @click="flipCardAnimation">
+    <div class="flip-card" ref="flipCard">
+      <!-- Front canvas -->
+      <canvas ref="frontCanvas" class="flip-card-front"></canvas>
+      <!-- Back canvas -->
+      <canvas ref="backCanvas" class="flip-card-back"></canvas>
     </div>
   </div>
 </template>
 
 <script>
-import axios from "axios";
-import QRCodeVue3 from "qrcode-vue3";
 import { gsap } from "gsap";
-import { ref, onMounted, onBeforeUnmount } from "vue";
+import QRCode from "qrcode";
+import axios from "axios";
 
 export default {
   name: "MemberCard",
-  components: { QRCodeVue3 },
   props: {
     member: { type: Object, required: true },
     cardStyle: { type: Object, required: true },
     logoUrl: { type: String, default: "/storage/images/site_logo.png" },
   },
-  setup(props) {
-    const flipCard = ref(null);
-    const front = ref(null);
-    const back = ref(null);
-    const isFlipped = ref(false);
-    const qrcode = ref("");
-    const interval = ref(null);
-
-    const getQrcode = () => {
-      axios.get(route("member.getQrcode")).then((response) => {
-        qrcode.value = response.data;
+  data() {
+    return {
+      qrcodeData: "",
+      intervalId: null,
+      isFlipped: false,
+      // Fixed canvas dimensions (pixels)
+      canvasWidth: 400,
+      canvasHeight: 250,
+      titlePen: { color: "#555", font: "bold 20px sans-serif" },
+      captionPen: { color: "rgba(0,0,0,0.7)", font: "13px sans-serif" }  };
+  },
+  computed: {
+    // Precompute often used values
+    orgName() {
+      return this.member.organization?.["name_" + this.$t("lang")] || "";
+    },
+    fullName() {
+      return (this.member.family_name || "") + (this.member.given_name || "");
+    },
+    avatarUrl() {
+      return this.member.avatar || "/avatars/dummy-avatar.jpg";
+    },
+    bgImageUrl() {
+      return this.cardStyle?.background
+        ? "/storage/images/" + this.cardStyle.background
+        : null;
+    },
+    fontStyle() {
+      return this.cardStyle?.font_style || {};
+    },
+  },
+  mounted() {
+    this.drawFront();
+    // Initially hide back canvas (GSAP will manage visibility)
+    gsap.set(this.$refs.backCanvas, { rotationY: -180, opacity: 0 });
+    gsap.set(this.$refs.frontCanvas, { opacity: 1 });
+  },
+  beforeUnmount() {
+    if (this.intervalId) clearInterval(this.intervalId);
+  },
+  methods: {
+    // ---- Drawing helpers ----
+    loadImage(src) {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.crossOrigin = "Anonymous";
+        img.onload = () => resolve(img);
+        img.onerror = reject;
+        img.src = src;
       });
-    };
+    },
 
-    const onShowQrcode = () => {
-      getQrcode();
-      interval.value = setInterval(() => {
-        getQrcode();
+    async drawFront() {
+      const canvas = this.$refs.frontCanvas;
+      const ctx = canvas.getContext("2d");
+      const w = this.canvasWidth;
+      const h = this.canvasHeight;
+      canvas.width = w;
+      canvas.height = h;
+
+      // 1. Background image (if provided) with overlay
+      let bgImg = null;
+      if (this.bgImageUrl) {
+        try {
+          bgImg = await this.loadImage(this.bgImageUrl);
+        } catch (e) {
+          console.warn("Background image failed to load", e);
+        }
+      }
+      if (bgImg) {
+        ctx.drawImage(bgImg, 0, 0, w, h);
+      } else {
+        // Fallback gradient
+        const grad = ctx.createLinearGradient(0, 0, w, 0);
+        grad.addColorStop(0, "#1a1a2e");
+        grad.addColorStop(1, "#16213e");
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, w, h);
+      }
+
+      // Overlay (darken)
+      // ctx.fillStyle = "rgba(0,0,0,0.3)";
+      // ctx.fillRect(0, 0, w, h);
+
+      // 2. Text content
+      const textColor = this.fontStyle?.color || this.titlePen.color;
+      const fontFamily = this.fontStyle?.fontFamily || "sans-serif";
+      ctx.textAlign = "left";
+      ctx.textBaseline = "top";
+
+      // Organization name (top center)
+      ctx.textAlign = "center";
+      ctx.font = `bold 16px ${fontFamily}`;
+      ctx.fillStyle = textColor;
+      ctx.fillText(this.orgName, w / 2, 16);
+
+      // Left column: name, member number
+      ctx.textAlign = "left";
+      ctx.font = `12px ${fontFamily}`;
+      ctx.fillStyle = this.captionPen.color;
+      ctx.fillText("姓名", 20, 50);
+      ctx.font = `bold 18px ${fontFamily}`;
+      ctx.fillStyle = textColor;
+      ctx.fillText(this.fullName, 20, 68);
+
+      ctx.font = `12px ${fontFamily}`;
+      ctx.fillStyle = this.captionPen.color;
+      ctx.fillText("會員編號", 20, 100);
+      ctx.font = `bold 14px monospace`;
+      ctx.fillStyle = textColor;
+      ctx.fillText(this.member.member_number || "", 20, 118);
+
+      // Right: avatar
+      let avatarImg = null;
+      try {
+        avatarImg = await this.loadImage(this.avatarUrl);
+      } catch (e) {
+        console.warn("Avatar failed to load", e);
+      }
+      const avatarSize = 64;
+      const avatarX = w - avatarSize - 20;
+      const avatarY = 44;
+      if (avatarImg) {
+        // Clip to circle
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(avatarX + avatarSize / 2, avatarY + avatarSize / 2, avatarSize / 2, 0, Math.PI * 2);
+        ctx.closePath();
+        ctx.clip();
+        ctx.drawImage(avatarImg, avatarX, avatarY, avatarSize, avatarSize);
+        ctx.restore();
+      } else {
+        // Placeholder
+        ctx.fillStyle = "#ccc";
+        ctx.beginPath();
+        ctx.arc(avatarX + avatarSize / 2, avatarY + avatarSize / 2, avatarSize / 2, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = "#666";
+        ctx.font = `24px sans-serif`;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText("👤", avatarX + avatarSize / 2, avatarY + avatarSize / 2);
+      }
+
+      // Border around avatar
+      ctx.strokeStyle = "white";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.arc(avatarX + avatarSize / 2, avatarY + avatarSize / 2, avatarSize / 2, 0, Math.PI * 2);
+      ctx.stroke();
+
+      // Bottom: dates
+      const dateY = h - 32;
+      ctx.textAlign = "left";
+      ctx.font = `11px ${fontFamily}`;
+      ctx.fillStyle = this.captionPen.color;
+      ctx.fillText("發出日期", 20, dateY);
+      ctx.font = `bold 12px ${fontFamily}`;
+      ctx.fillStyle = textColor;
+      ctx.fillText(this.member.valid_at || "", 20, dateY + 18);
+
+      ctx.textAlign = "left";
+      ctx.font = `11px ${fontFamily}`;
+      ctx.fillStyle = this.captionPen.color;
+      ctx.fillText("有效日期", 130, dateY);
+      ctx.font = `bold 12px ${fontFamily}`;
+      ctx.fillStyle = textColor;
+      ctx.fillText(this.member.expired_at || "", 130, dateY + 18);
+    },
+
+    async drawBack() {
+      const canvas = this.$refs.backCanvas;
+      const ctx = canvas.getContext("2d");
+      const w = this.canvasWidth;
+      const h = this.canvasHeight;
+      canvas.width = w;
+      canvas.height = h;
+
+      // White background with subtle pattern or solid
+      // ctx.fillStyle = "#f8f9fa";
+      // ctx.fillRect(0, 0, w, h);
+
+      // Border / card frame
+      ctx.strokeStyle = "#e0e0e0";
+      ctx.lineWidth = 1;
+      ctx.strokeRect(5, 5, w - 10, h - 10);
+
+      // Title
+      ctx.textAlign = "center";
+      ctx.textBaseline = "top";
+      ctx.font = "bold 20px sans-serif";
+      ctx.fillStyle = "#d35400";
+      ctx.fillText("會員卡", w / 2, 12);
+
+      // QR code
+      let qrCanvas = document.createElement("canvas");
+      if (this.qrcodeData) {
+        try {
+          await QRCode.toCanvas(qrCanvas, this.qrcodeData, {
+            width: 120,
+            margin: 2,
+            color: {
+              dark: "#26249a",
+              light: "#ffffff",
+            },
+          });
+        } catch (e) {
+          console.warn("QR generation failed", e);
+        }
+      }
+      // Draw QR on back canvas
+      const qrSize = 120;
+      const qrX = 30;
+      const qrY = 50;
+      if (qrCanvas.width > 0) {
+        ctx.drawImage(qrCanvas, qrX, qrY, qrSize, qrSize);
+      } else {
+        // Placeholder
+        ctx.fillStyle = "#ddd";
+        ctx.fillRect(qrX, qrY, qrSize, qrSize);
+        ctx.fillStyle = "#999";
+        ctx.font = "14px sans-serif";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText("QR", qrX + qrSize / 2, qrY + qrSize / 2);
+      }
+
+      // Right side: benefits and contact
+      const textX = qrX + qrSize + 20;
+      ctx.textAlign = "left";
+      ctx.textBaseline = "top";
+      ctx.font = "13px sans-serif";
+      ctx.fillStyle = "#333";
+      const benefits = [
+        "✓ 專屬會員活動優先報名",
+        "✓ 使用二維碼累計積分",
+      ];
+      benefits.forEach((text, i) => {
+        ctx.fillText(text, textX, 60 + i * 30);
+      });
+
+      ctx.font = "11px sans-serif";
+      ctx.fillStyle = "#555";
+      ctx.textAlign = "center";
+      ctx.fillText("客服專線: +853 6381-6386", w / 2, h - 25);
+
+      // Optionally, add a small logo from props.logoUrl
+      if (this.logoUrl) {
+        try {
+          const logo = await this.loadImage(this.logoUrl);
+          const logoSize = 30;
+          ctx.drawImage(logo, w - logoSize - 15, h - logoSize - 15, logoSize, logoSize);
+        } catch (e) {}
+      }
+    },
+
+    // ---- QR code fetching ----
+    getQrcode() {
+      axios.get(route("member.getQrcode")).then((response) => {
+        this.qrcodeData = response.data;
+        this.drawBack();
+      });
+    },
+    startQrRefresh() {
+      this.getQrcode();
+      this.intervalId = setInterval(() => {
+        this.getQrcode();
       }, 5000);
-    };
+    },
 
-    const flipCardAnimation = () => {
+    // ---- Flip animation ----
+    flipCardAnimation() {
       const duration = 0.6;
       const ease = "back.out(1)";
+      const front = this.$refs.frontCanvas;
+      const back = this.$refs.backCanvas;
 
-      if (!isFlipped.value) {
-        onShowQrcode();
-        gsap
-          .timeline()
-          .to(flipCard.value, { rotationY: 180, duration, ease })
-          .to(front.value, { opacity: 0, duration: duration / 2, ease: "power1.in" }, 0)
-          .to(back.value, { opacity: 1, duration: duration / 2, ease: "power1.out" }, duration / 2);
+      if (!this.isFlipped) {
+        // Flip to back
+        this.startQrRefresh();
+        gsap.timeline()
+          .to(this.$refs.flipCard, { rotationY: 180, duration, ease })
+          .to(front, { opacity: 0, duration: duration / 2, ease: "power1.in" }, 0)
+          .to(back, { opacity: 1, duration: duration / 2, ease: "power1.out" }, duration / 2);
       } else {
-        clearInterval(interval.value);
-        gsap
-          .timeline()
-          .to(flipCard.value, { rotationY: 0, duration, ease })
-          .to(back.value, { opacity: 0, duration: duration / 2, ease: "power1.in" }, 0)
-          .to(front.value, { opacity: 1, duration: duration / 2, ease: "power1.out" }, duration / 2);
+        // Flip to front
+        if (this.intervalId) {
+          clearInterval(this.intervalId);
+          this.intervalId = null;
+        }
+        gsap.timeline()
+          .to(this.$refs.flipCard, { rotationY: 0, duration, ease })
+          .to(back, { opacity: 0, duration: duration / 2, ease: "power1.in" }, 0)
+          .to(front, { opacity: 1, duration: duration / 2, ease: "power1.out" }, duration / 2);
       }
-      isFlipped.value = !isFlipped.value;
-    };
-
-    onMounted(() => {
-      gsap.set(back.value, { rotationY: -180 });
-    });
-
-    onBeforeUnmount(() => {
-      if (interval.value) clearInterval(interval.value);
-    });
-
-    return {
-      flipCard,
-      front,
-      back,
-      qrcode,
-      flipCardAnimation,
-    };
+      this.isFlipped = !this.isFlipped;
+    },
   },
 };
 </script>
@@ -180,13 +327,15 @@ export default {
   perspective: 1000px;
   height: 250px;
   cursor: pointer;
+  width: 100%;
+  max-width: 400px;  /* adjust to your design */
+  margin: 0 auto;
 }
 .flip-card {
   position: relative;
   width: 100%;
   height: 100%;
   transform-style: preserve-3d;
-  transition: transform 0.6s;
 }
 .flip-card-front,
 .flip-card-back {
@@ -194,14 +343,22 @@ export default {
   width: 100%;
   height: 100%;
   backface-visibility: hidden;
-  align-items: center;
-  justify-content: center;
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: #bacdff;
+
 }
 .flip-card-front {
-  color: white;
+  /* GSAP will control opacity */
 }
 .flip-card-back {
-  opacity: 0;
   transform: rotateY(-180deg);
+  opacity: 0;
+}
+canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
 }
 </style>

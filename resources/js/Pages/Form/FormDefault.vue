@@ -6,11 +6,12 @@
       </h2>
     </template>
     <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
-      <div
-        class="mt-8 p-4 bg-white overflow-hidden shadow sm:rounded-lg"
-      >
+      <div class="mt-8 p-4 bg-white overflow-hidden shadow sm:rounded-lg">
         <div class="text-center">
           <a-typography-title :level="3">{{ form.title }}</a-typography-title>
+        </div>
+        <div v-if="form.banner_url" class="w-full">
+          <img :src="form.banner_url" class="w-full h-auto" alt="Banner" />
         </div>
         <div id="pure-html">
           <div v-html="form.content" />
@@ -220,6 +221,7 @@
 import MemberLayout from "@/Layouts/MemberLayout.vue";
 import DefaultLayout from "@/Layouts/DefaultLayout.vue";
 import CropperModal from "@/Components/Member/CropperModal.vue";
+import { formatStrategyValues } from "ant-design-vue/es/vc-tree-select/utils/strategyUtil";
 // import { quillEditor } from "vue3-quill";
 
 export default {

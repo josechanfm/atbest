@@ -4,7 +4,7 @@ import { router } from "@inertiajs/vue3";
 import { Head } from "@inertiajs/vue3";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink.vue";
 import menuDashboard from "@/Components/menuDashboard.vue";
-import LayoutBackground from "@/Components/LayoutBackground.vue";
+// import LayoutBackground from "@/Components/LayoutBackground.vue";
 import RSSNews from "@/Components/RSSNews.vue";
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -15,7 +15,7 @@ export default {
         Head,
         ResponsiveNavLink,
         menuDashboard,
-        LayoutBackground,
+        // LayoutBackground,
         RSSNews,
     },
     props: {
@@ -163,7 +163,7 @@ export default {
 
 <main class="">
 
-    <LayoutBackground />
+    <!-- <LayoutBackground /> -->
 
     <!-- Page Heading -->
     <div v-if="$slots.header" >
@@ -173,8 +173,7 @@ export default {
     </div>
     <section class=""  >
         
-        <div 
-            class="bg-slate-200 relative min-h-screen p-0 lg:p-4 pt-2">
+        <div class="bg-slate-200 relative min-h-screen p-0 lg:p-4 pt-2">
             
             <!-- 主內容區 -->
             <div ref="mainBody" class="main-body relative z-10 grid grid-cols-1 lg:grid-cols-5 md:gap-6">
