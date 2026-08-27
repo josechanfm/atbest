@@ -174,6 +174,7 @@ Route::group([
     Route::get('form/{form}/entry/{entry}/success', [App\Http\Controllers\Admin\EntryController::class, 'success'])->name('admin.form.entry.success');
     Route::post('form/delete_media/{form}', [App\Http\Controllers\Admin\FormController::class, 'deleteMedia'])->name('admin.form.deleteMedia');
 
+    Route::resource('sms_messages', App\Http\Controllers\Admin\SmsMessageController::class)->names('admin.smsMessages');
 });
 
 

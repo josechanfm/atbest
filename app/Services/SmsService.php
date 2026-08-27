@@ -7,81 +7,78 @@ use Illuminate\Support\Facades\Log;
 
 class SmsService
 {
-    protected string $url;
-    protected string $username;
-    protected string $password;
-    protected string $from;
-    protected int $timeout;
-    protected int $retry;
+    protected string $baseUrl;
+    protected int $clientId;
 
     public function __construct()
     {
-        $this->url      = config('sms.gateway.url');
-        $this->username = config('sms.gateway.username');
-        $this->password = config('sms.gateway.password');
-        $this->from     = config('sms.gateway.from');
-        $this->timeout  = config('sms.timeout', 5);
-        $this->retry    = config('sms.retry', 1);
+        // Read directly from .env
+        $this->baseUrl = env('SMS_BASE_URL', 'https://genie.hubis.ltd/api/sms/emitter');
+        $this->clientId = (int) env('SMS_CLIENT_ID', 2);
     }
 
     /**
-     * Send an SMS
+     * Send an SMS message.
      *
-     * @param string $to      Recipient phone number
-     * @param string $message Message text
-     * @param string|null $from Optional sender override
-     * @return bool
-     * @throws \Exception
+     * @param string $mobile   Recipient phone number (without country code? adjust as needed)
+     * @param string $content  Message content (URL-encoded)
+     * @param int|null $clientId Optional override of the default client ID
+     * @return array ['success' => bool, 'response' => mixed, 'error' => string|null]
      */
-    public function send(string $to, string $message, ?string $from = null): bool
+    public function send(string $mobile, string $content, ?int $clientId = null): array
     {
-        $from = $from ?? $this->from;
+        $clientId = $clientId ?? $this->clientId;
 
-        // Build query parameters (URL-encode the message)
-        $params = [
-            'username' => $this->username,
-            'password' => $this->password,
-            'from'     => $from,
-            'to'       => $to,
-            'text'     => $message, // Will be encoded automatically by Laravel HTTP client
-        ];
+        // Build the full URL with query parameters
+        $url = $this->baseUrl . '?' . http_build_query([
+            'client_id' => $clientId,
+            'mobile'    => $mobile,
+            'content'   => $content,
+        ]);
+        dd($url);
+        
+        try {
+            $response = Http::timeout(30)->get($url);
 
-        // Send with retry logic
-        $attempts = 0;
-        while ($attempts < $this->retry) {
-            try {
-                $response = Http::timeout($this->timeout)
-                    ->get($this->url, $params);
+            if ($response->successful()) {
+                // Log success
+                Log::info('SMS sent successfully', [
+                    'mobile'    => $mobile,
+                    'client_id' => $clientId,
+                    'response'  => $response->body(),
+                ]);
 
-                // Check response status and content (adjust to your gateway's response)
-                if ($response->successful()) {
-                    // Your gateway may return a specific success code, e.g., "0" or "OK"
-                    $body = $response->body();
-                    if ($this->isSuccessfulResponse($body)) {
-                        return true;
-                    }
-                    Log::warning('SMS gateway returned error', ['response' => $body]);
-                } else {
-                    Log::warning('SMS HTTP error', ['status' => $response->status()]);
-                }
-            } catch (\Exception $e) {
-                Log::error('SMS sending exception', ['message' => $e->getMessage()]);
+                return [
+                    'success'  => true,
+                    'response' => $response->json() ?? $response->body(),
+                    'error'    => null,
+                ];
             }
-            $attempts++;
+
+            // Log failure
+            Log::error('SMS sending failed', [
+                'mobile'    => $mobile,
+                'client_id' => $clientId,
+                'status'    => $response->status(),
+                'body'      => $response->body(),
+            ]);
+
+            return [
+                'success'  => false,
+                'response' => $response->body(),
+                'error'    => "HTTP status {$response->status()}",
+            ];
+        } catch (\Exception $e) {
+            Log::error('SMS exception', [
+                'mobile' => $mobile,
+                'error'  => $e->getMessage(),
+            ]);
+
+            return [
+                'success'  => false,
+                'response' => null,
+                'error'    => $e->getMessage(),
+            ];
         }
-
-        throw new \Exception('Failed to send SMS after ' . $this->retry . ' attempts.');
-    }
-
-    /**
-     * Determine if the gateway response indicates success.
-     * Adjust this based on your provider's documentation.
-     */
-    protected function isSuccessfulResponse(string $response): bool
-    {
-        // Example: if the gateway returns "0" or "OK" or "Success"
-        // You need to inspect the actual response from your gateway.
-        // For now, assume a 200 OK with any content is success.
-        return true;
     }
 }
