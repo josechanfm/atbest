@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('polls', function (Blueprint $table) {
             $table->id();
             $table->uuid('uuid');
+            $table->string('type')->default('radio')->after('id'); 
             $table->string('question');
             $table->string('image')->nullable();
             $table->string('option_a');
@@ -23,7 +24,7 @@ return new class extends Migration
             $table->string('option_c')->nullable();
             $table->string('option_d')->nullable();
             $table->string('option_e')->nullable();
-            $table->string('answer');
+            $table->json('answer')->nullable()->change();
             $table->string('reference')->nullable();
             $table->foreignId('user_id');
             $table->boolean('status');

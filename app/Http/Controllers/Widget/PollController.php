@@ -19,18 +19,28 @@ class PollController extends Controller
            'poll'=>Poll::where('uuid',$request->uuid)->first()
         ]);
     }
-    public function vote(Request $request){
-        $this->validate($request,[
-            'poll_id'=>'required',
-            'username'=>'required',
-            'answer'=>'required',
+
+    public function vote(Request $request)
+    {
+        $request->validate([
+            'poll_id'  => 'required|exists:polls,id',
+            'username' => 'required|string|max:255',
+            'answer'   => 'required|string|in:A,B,C,D',
         ]);
+
         PollResponse::updateOrCreate(
-            ['poll_id'=>$request->poll_id,'ip_address'=>$request->ip(),'username'=>$request->username],
-            ['answer'=>$request->answer]
+            [
+                'poll_id'    => $request->poll_id,
+                'ip_address' => $request->ip(),
+                'username'   => $request->username,
+            ],
+            [
+                'answer'     => $request->answer,
+            ]
         );
-        //PollResponse::create($data);
-        return response()->json($request->all());
+
+        // Redirect back to reload Inertia props (or flash success data)
+        return redirect()->back()->with('success', 'Vote recorded successfully!');
     }
 
 

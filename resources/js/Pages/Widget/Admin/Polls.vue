@@ -1,210 +1,105 @@
 <template>
-    <WidgetLayout title="Widgets">
-    <div class="py-5 font-sans text-gray-900 antialiased">
-        <div class="container mx-auto">
-            <div class="flex justify-between gap-6">
-                <a-button type="primary" @click="createRecord()">Create</a-button>
-            </div>
-        </div>
-        <div class="container mx-auto pt-5">
-            <div class="bg-white relative shadow rounded-lg overflow-x-auto">
-                <a-table :dataSource="polls" :columns="columns">
-                    <template #headerCell="{ column }">
-                        {{ column.i18n ? $t(column.i18n) : column.title }}
-                    </template>
-                    <template #bodyCell="{ column, text, record, index }">
-                        <template v-if="column.dataIndex == 'operation'">
-                            <a-button @click="editRecord(record)">Edit</a-button>
-                            <a-button as="link" :href="route('widget.admin.polls.show',record)" target="PollDisplay">Show</a-button>
-                            <a-popconfirm
-                                title="Are you sure to delete all responses records?"
-                                ok-text="Yes"
-                                cancel="No" 
-                                @confirm="clearResponses(record)"
-                            >
-                                <a-button>Clear Responses</a-button>
-                            </a-popconfirm>
-                            
-                        </template>
-                        <template v-if="column.dataIndex == 'question'">
-                            <div> {{plaiText(text)}}</div>
-                        </template>
-                        <template v-else>
-                            {{ record[column.dataIndex] }}
-                        </template>
-                    </template>
-                </a-table>
-            </div>
-        </div>
-    </div>
-</WidgetLayout>
-        <!-- Modal Start-->
-        <a-modal v-model:open="modal.isOpen" :title="modal.title" width="60%">
-            <a-form ref="modalRef" :model="modal.data" name="poll" :label-col="{ span: 4}"
-                :wrapper-col="{ span: 18 }" autocomplete="off" :rules="rules" :validate-messages="validateMessages">
-                <a-form-item label="Question" name="question">
-                    <RichTextEditor v-model="modal.data.question"/>
-                </a-form-item>
-                <a-form-item label="Option A" name="option_a">
-                    <a-textarea v-model:value="modal.data.option_a" />
-                </a-form-item>
-                <a-form-item label="Option B" name="option_b">
-                    <a-textarea v-model:value="modal.data.option_b" />
-                </a-form-item>
-                <a-form-item label="Option C" name="option_c">
-                    <a-textarea v-model:value="modal.data.option_c" />
-                </a-form-item>
-                <a-form-item label="Option D" name="option_d">
-                    <a-textarea v-model:value="modal.data.option_d" />
-                </a-form-item>
-                <a-form-item label="Answer" name="answer">
-                    <a-select v-model:value="modal.data.answer" :options="answerOptions"/>
-                </a-form-item>
-            </a-form>
-            <template #footer>
-                <a-button v-if="modal.mode == 'EDIT'" key="Update" type="primary"
-                    @click="updateRecord()">{{ $t('update') }}</a-button>
-                <a-button v-if="modal.mode == 'CREATE'" key="Store" type="primary"
-                    @click="storeRecord()">{{ $t('add') }}</a-button>
-            </template>
-        </a-modal>
-        <!-- Modal End-->
-</template>
+    <WidgetLayout title="Manage Polls">
+        <div class="font-sans text-gray-900 antialiased p-5">
+            <div class="container mx-auto">
+                <div class="flex justify-between items-center mb-6">
+                    <h1 class="text-2xl font-bold text-gray-800">Polling Management</h1>
+                    <a-button type="primary" size="large" @click="openCreateModal">
+                        Create New Poll
+                    </a-button>
+                </div>
 
+                <!-- POLLS TABLE -->
+                <div class="bg-white shadow rounded-lg overflow-hidden">
+                    <a-table :data-source="polls" :columns="columns" row-key="id">
+                        <!-- Poll Type Column -->
+                        <template #bodyCell="{ column, record }">
+                            <template v-if="column.key === 'type'">
+                                <a-tag :color="record.type === 'checkbox' ? 'purple' : 'blue'">
+                                    {{ record.type === 'checkbox' ? 'Multiple Choice' : 'Single Choice' }}
+                                </a-tag>
+                            </template>
+
+                            <!-- Question Preview Column -->
+                            <template v-if="column.key === 'question'">
+                                <div class="line-clamp-2" v-html="record.question" />
+                            </template>
+
+                            <!-- Status Column -->
+                            <template v-if="column.key === 'status'">
+                                <a-badge :status="record.status ? 'success' : 'default'" 
+                                         :text="record.status ? 'Active' : 'Inactive'" />
+                            </template>
+
+                            <!-- Actions Column -->
+                            <template v-if="column.key === 'action'">
+                                <div class="space-x-2">
+                                    <a-button type="link" @click="viewPoll(record)">View Results</a-button>
+                                    <a-button type="link" @click="openEditModal(record)">Edit</a-button>
+                                    <a-popconfirm title="Are you sure you want to delete this poll?" 
+                                                  ok-text="Yes" cancel-text="No" 
+                                                  @confirm="deletePoll(record.id)">
+                                        <a-button type="link" danger>Delete</a-button>
+                                    </a-popconfirm>
+                                </div>
+                            </template>
+                        </template>
+                    </a-table>
+                </div>
+            </div>
+        </div>
+
+        <!-- EXTRACTED POLL FORM MODAL -->
+        <PollForm 
+            v-model:open="isModalOpen" 
+            :poll="selectedPoll" 
+        />
+    </WidgetLayout>
+</template>
 
 <script>
 import WidgetLayout from '@/Layouts/WidgetLayout.vue';
+import PollForm from './PollForm.vue';
 import { message } from 'ant-design-vue';
-import RichTextEditor from '@/Components/RichTextEditor.vue'; 
 
 export default {
     components: {
         WidgetLayout,
-        message,
-        RichTextEditor
+        PollForm
     },
-    props: ['polls', 'configs'],
+    props: {
+        polls: Array
+    },
     data() {
         return {
-            modal: {
-                isOpen: false,
-                data: {},
-                title: "Modal",
-                mode: ""
-            },
+            isModalOpen: false,
+            selectedPoll: null,
             columns: [
-                {
-                    title: "Question",
-                    dataIndex: "question",
-                }, {
-                    title: "Status",
-                    dataIndex: "status",
-                }, {
-                    title: "Count",
-                    dataIndex: "responses_count",
-                }, {
-                    title: "Operation",
-                    dataIndex: "operation",
-                },
-            ],
-            rules: {
-                question: { required: true },
-                option_a: { required: true },
-                option_b: { required: true },
-                answer: { required: true },
-            },
-            validateMessages: {
-                required: "${label} is required!",
-                types: {
-                    email: "${label} is not a valid email!",
-                    number: "${label} is not a valid number!",
-                },
-                number: {
-                range: "${label} must be between ${min} and ${max}",
-                },
-            },
-            answerOptions:[
-                {value:'A'},
-                {value:'B'},
-                {value:'C'},
-                {value:'D'},
+                { title: 'Question', dataIndex: 'question', key: 'question' },
+                { title: 'Type', dataIndex: 'type', key: 'type', width: 150 },
+                { title: 'Responses', dataIndex: 'responses_count', key: 'responses_count', width: 120 },
+                { title: 'Status', dataIndex: 'status', key: 'status', width: 120 },
+                { title: 'Actions', key: 'action', width: 250 }
             ]
-
-        }
-    },
-    created() {
+        };
     },
     methods: {
-        createRecord() {
-            this.modal.data = {};
-            this.modal.mode = "CREATE";
-            this.modal.title = "Create";
-            this.modal.isOpen = true;
+        openCreateModal() {
+            this.selectedPoll = null;
+            this.isModalOpen = true;
         },
-        editRecord(record) {
-            this.modal.data = { ...record };
-            this.modal.mode = "EDIT";
-            this.modal.title = "Edit";
-            this.modal.isOpen = true;
+        openEditModal(record) {
+            this.selectedPoll = record;
+            this.isModalOpen = true;
         },
-        storeRecord(){
-            console.log(this.modal.data)
-            this.$refs.modalRef
-                .validateFields()
-                .then(() => {
-                this.$inertia.post(route("widget.admin.polls.store"), this.modal.data, {
-                    onSuccess: (page) => {
-                        this.modal.data = {};
-                        this.modal.isOpen = false;
-                    },
-                    onError: (err) => {
-                        console.log(err);
-                    },
-                });
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-
+        viewPoll(record) {
+            this.$inertia.get(route('widget.admin.polls.show', record.id));
         },
-        updateRecord(){
-            console.log(this.modal.data);
-            this.$refs.modalRef
-                .validateFields()
-                .then(() => {
-                this.$inertia.put(
-                    route("widget.admin.polls.update", this.modal.data.id),
-                    this.modal.data,
-                    {
-                    onSuccess: (page) => {
-                        this.modal.data = {};
-                        this.modal.isOpen = false;
-                        console.log(page);
-                    },
-                    onError: (error) => {
-                        console.log(error);
-                    },
-                    }
-                );
-            })
-            .catch((err) => {
-                console.log("error", err);
-            });
-
-        },
-        plaiText(html){
-            const reg = /<[^<>]+>/g
-            return html.replace(reg, '').substr(0,200)
-        },
-        clearResponses(poll){
-            axios.post(route("widget.poll.responseClear", poll))
-            .then((resp) => {
-                poll.responses_count=0
-                message.success(resp.data.message)
+        deletePoll(id) {
+            this.$inertia.delete(route('widget.admin.polls.destroy', id), {
+                onSuccess: () => message.success('Poll deleted successfully')
             });
         }
-
     }
 }
-
 </script>
