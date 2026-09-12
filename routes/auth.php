@@ -9,6 +9,7 @@ use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
+use App\Http\Controllers\Auth\MobilePasswordController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -23,6 +24,19 @@ Route::middleware('guest')->group(function () {
         ->name('login');
 
     Route::post('login', [AuthenticatedSessionController::class, 'store']);
+    
+    Route::get('mobile-forgot-password', [MobilePasswordController::class, 'forgotPassword'])->name('mobileForgotPassword');
+    Route::post('mobile-forgot-password', [MobilePasswordController::class, 'sendValidation'])->name('mobileSendValidation');
+    Route::post('mobile-validate-code', [MobilePasswordController::class, 'validateCode'])->name('mobileValidateCode');
+
+    Route::get('password/mobile', [MobilePasswordController::class, 'showResetForm'])
+        ->name('password.mobile.form');
+    Route::post('password/mobile/send', [MobilePasswordController::class, 'sendResetCode'])
+        ->name('password.mobile.send');
+    Route::post('password/mobile/verify', [MobilePasswordController::class, 'verifyCode'])
+        ->name('password.mobile.verify');
+    Route::post('password/mobile/reset', [MobilePasswordController::class, 'resetPassword'])
+        ->name('password.mobile.reset');
 
     // Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])
     //     ->name('password.request');

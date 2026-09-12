@@ -32,14 +32,15 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        $request->validate([
+		$validated = $request->validate([
             'name' => 'required|string|max:255',
-			'mobile' => 'required|string|max:255',
+			'mobile' => 'required|string|max:255|unique:users',
             'email' => 'required|string|lowercase|email|max:255|unique:users',
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'registration_code' => 'required|exists:organizations,registration_code',
         ]);
-        
+		dd($request->all(), $validated);
+
         $user = User::create([
             'name' => $request->name,
             'mobile' => $request->mobile,
@@ -63,6 +64,11 @@ class RegisteredUserController extends Controller
 
         return redirect(RouteServiceProvider::HOME);
     }
+
+	public function mobileForgotPassword()
+	{
+		dd('mobileForgotPassword');
+	}
 
     public function sendSMSVarificationCode(Request $request): RedirectResponse
     {

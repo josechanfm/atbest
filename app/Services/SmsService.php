@@ -35,7 +35,7 @@ class SmsService
             'mobile'    => $mobile,
             'content'   => $content,
         ]);
-        dd($url);
+        dd($url, $content, $mobile, $clientId);
         
         try {
             $response = Http::timeout(30)->get($url);
