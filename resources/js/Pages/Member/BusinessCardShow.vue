@@ -9,12 +9,6 @@
                 <!-- Header -->
                 <div class="p-8 text-center flex flex-col items-center">
 
-                    <span
-                        v-if="businessCard.user?.member?.organization?.name_zh || businessCard.user?.member?.organization?.name_en"
-                        class="text-xl font-bold uppercase tracking-widest text-cyan-200 bg-indigo-600 px-4 py-1.5 rounded-full mb-6"
-                    >
-                        {{ businessCard.user.member.organization.name_zh || businessCard.user.member.organization.name_en }}
-                    </span>
 
                     <img v-if="businessCard.user?.member?.avatar" :src="businessCard.user.member.avatar" alt="Avatar" class="w-28 h-28 rounded-full object-cover border-2 border-indigo-400/50 mb-5" />
                     <div v-else class="w-28 h-28 rounded-full bg-indigo-950 border-2 border-indigo-400/50 flex items-center justify-center text-indigo-300 mb-5">
