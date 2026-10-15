@@ -40,7 +40,7 @@
                         :href="getFieldLink(field)"
                         :target="isExternal(field) ? '_blank' : undefined"
                         :rel="isExternal(field) ? 'noopener noreferrer' : undefined"
-                        class="flex items-center justify-between gap-4 px-5 py-3.5 rounded-2xl bg-slate-100 text-slate-900"
+                        class="flex items-center justify-between gap-4 px-5 rounded-2xl bg-slate-100 text-slate-900"
                     >
                         <span class="text-xs font-bold uppercase text-indigo-700">{{ field.label }}</span>
                         <span class="text-sm font-semibold truncate">{{ field.value }}</span>
