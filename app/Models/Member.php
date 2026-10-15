@@ -44,7 +44,8 @@ class Member extends Model
     }
     
     public function getMemberNumberAttribute(){
-        return substr('000000'.$this->id,-5);
+
+        return substr('000'.$this->organization_id,-4).substr('000000'.$this->id,-5);
     }
     public function createUser(): User
     {
@@ -93,4 +94,19 @@ class Member extends Model
             'id','display_name','number','number_display','issue_date','valid_from','valid_until','authorized_by','rank','avatar');
     }
 
+    public function nameCardLink(){
+        $hash=hash('crc32b', $this->id . $this->user_id . $this->organization_id);
+        $num=$hash.'-'.substr('000000'.$this->id,-6);
+        return env('APP_URL', 'http://localhost/').'/namecard/'.$num;
+    }
+    public function valifyNameCardLink($link){
+        return $this->nameCardLink()==$link;
+    }
+
+    public function nameCard()
+    {
+        return $this->hasOne(NameCard::class);
+    }
+
 }
+

@@ -71,14 +71,11 @@
             <ThumbList :records="articles" routePath="article.item" />
           </div>
         </div>
-
         <!-- Right column: Member Card + Profile Sidebar -->
         <div class="flex-none mx-auto pt-4">
           <!-- Member Card Component -->
           <MemberCard
-            :member="member"
-            :card-style="cardStyle"
-            :logo-url="qrcodeLogo"
+            :data="memberCardData"
           />
 
           <!-- Profile Information Sidebar -->
@@ -188,23 +185,44 @@ export default {
     MemberCard,
   },
   props: ["member", "members", "features", "forms", "articles", "cardStyle"],
+
   data() {
     return {
-      qrcodeLogo: "/storage/images/site_logo.png",
-      defaultFeatures: [
-        // Keep your default features data if needed for fallback
-      ],
+      defaultFeatures: [],
     };
   },
-  created() {
-    if (this.cardStyle.logo) {
-      this.qrcodeLogo = "/storage/images/" + this.cardStyle.logo;
-    } else if (this.$page.props.member?.organization?.logo) {
-      this.qrcodeLogo = this.$page.props.member.organization.logo;
-    }
+
+  computed: {
+    /**
+     * Shape the member + organization data into the object
+     * that <MemberCard :data="memberCardData" /> expects.
+     */
+    memberCardData() {
+      return {
+        org:{
+          logo: this.member.organization.logo ?? '/storage/images/site_logo.png',
+          name_zh: this.member.organization.name_zh??'',
+          name_pt: this.member.organization.name_pt??'',
+        },
+        member: {
+          number: this.member.number??'0000000',
+          name_zh: this.member.name_zh,
+          name_en: this.member.name_en??'',
+          issueAt: this.formatCardDate(this.member.issue_at??'---'),
+          validTo: this.formatCardDate(this.member.valid_to??'---'),
+          memberType: this.member.member_type??'會員',
+          avatarSrc: this.member.avatar??'',
+          nameCardLink: this.member.name_card_link??'',
+        },
+      };
+    },
   },
+
+  created() {
+
+  },
+
   mounted() {
-    // GSAP entrance animation for feature cards
     const featureBox = gsap.utils.toArray(".feature");
     featureBox.forEach((feature, index) => {
       gsap.fromTo(
@@ -220,11 +238,26 @@ export default {
       );
     });
   },
+
   methods: {
     switchOrganization(member) {
       this.$inertia.post(
         route("member.membership.switch", { member: member.id })
       );
+    },
+
+    /**
+     * Format a date as "YYYY · MM · DD" for the card's monospace rows.
+     * Returns "—" if the value is missing or invalid.
+     */
+    formatCardDate(value) {
+      if (!value) return "—";
+      const d = new Date(value);
+      if (Number.isNaN(d.getTime())) return "—";
+      const yyyy = d.getFullYear();
+      const mm = String(d.getMonth() + 1).padStart(2, "0");
+      const dd = String(d.getDate()).padStart(2, "0");
+      return `${yyyy} · ${mm} · ${dd}`;
     },
   },
 };

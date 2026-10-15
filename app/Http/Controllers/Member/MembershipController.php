@@ -17,11 +17,10 @@ class MembershipController extends Controller
         ]);
     }
     public function cards(){
-        $member=auth()->user()->member;
-        $member->organizations;
+        $members=auth()->user()->members;
         //dd($member);
-        return Inertia::render('Member/Cards',[
-            'member'=>$member
+        return Inertia::render('Member/MembershipCards',[
+            'members'=>$members
         ]);
     }
     public function switch(Member $member){
@@ -35,4 +34,6 @@ class MembershipController extends Controller
         
         return to_route('member.dashboard');
     }
+    
+
 }

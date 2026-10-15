@@ -1,364 +1,548 @@
 <template>
-  <div class="flip-card-container" @click="flipCardAnimation">
-    <div class="flip-card" ref="flipCard">
-      <!-- Front canvas -->
-      <canvas ref="frontCanvas" class="flip-card-front"></canvas>
-      <!-- Back canvas -->
-      <canvas ref="backCanvas" class="flip-card-back"></canvas>
+  <div class="flex items-center justify-center">
+    <div class="w-full [container-type:inline-size]" :style="{ maxWidth: card.maxWidth }">
+      <!-- Flip wrapper -->
+      <div
+        class="relative w-full aspect-[1.586/1] cursor-pointer select-none [perspective:1400px]"
+        style="container-type: inline-size;"
+        role="button"
+        tabindex="0"
+        :aria-label="isFlipped ? '顯示會員卡正面' : '顯示會員卡背面'"
+        :aria-pressed="isFlipped"
+        @click="toggleFlip"
+        @keydown.enter.prevent="toggleFlip"
+        @keydown.space.prevent="toggleFlip"
+      >
+        <!-- Inner (rotates) -->
+        <div
+          class="relative w-full h-full transition-transform duration-700 ease-[cubic-bezier(.22,.9,.3,1)]"
+          style="transform-style: preserve-3d;"
+          :style="{ transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)' }"
+        >
+          <!-- ==================== FRONT ==================== -->
+          <div
+            class="absolute inset-0 rounded-[3.2cqw] overflow-hidden shadow-[0_6cqw_12cqw_-4cqw_rgba(20,40,90,0.55)]"
+            style="backface-visibility: hidden; -webkit-backface-visibility: hidden;"
+          >
+            <!-- Base gradient -->
+            <div class="absolute inset-0 bg-gradient-to-br from-[#0e2a63] via-[#153a8a] to-[#0a1f4d]"></div>
+
+            <!-- Radial gold glow top-right -->
+            <div
+              class="absolute -top-[9.6cqw] -right-[9.6cqw] w-[56cqw] h-[56cqw] rounded-full opacity-40 blur-[12.8cqw]"
+              style="background: radial-gradient(circle, #e0c98a, transparent 65%)"
+            ></div>
+
+            <!-- Radial sky glow bottom-left -->
+            <div
+              class="absolute -bottom-[9.6cqw] -left-[8cqw] w-[52cqw] h-[52cqw] rounded-full opacity-30 blur-[12.8cqw]"
+              style="background: radial-gradient(circle, #7dd3fc, transparent 65%)"
+            ></div>
+
+            <!-- Pinstripe -->
+            <svg class="absolute inset-0 w-full h-full opacity-[0.08]" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <pattern
+                  id="atecCardLinesFront"
+                  width="2.8cqw"
+                  height="2.8cqw"
+                  patternUnits="userSpaceOnUse"
+                  patternTransform="rotate(45)"
+                >
+                  <line x1="0" y1="0" x2="0" y2="2.8cqw" stroke="#e0c98a" stroke-width="0.2cqw" />
+                </pattern>
+              </defs>
+              <rect width="100%" height="100%" fill="url(#atecCardLinesFront)" />
+            </svg>
+
+            <!-- Holographic shine -->
+            <div
+              class="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700"
+              style="
+                background: linear-gradient(
+                  115deg,
+                  transparent 30%,
+                  rgba(255, 255, 255, 0.18) 45%,
+                  rgba(224, 201, 138, 0.32) 50%,
+                  rgba(255, 255, 255, 0.18) 55%,
+                  transparent 70%
+                );
+                background-size: 300% 300%;
+                animation: cardShine 3.5s ease-in-out infinite;
+              "
+            ></div>
+
+            <!-- Gold border -->
+            <div class="absolute inset-0 rounded-[3.2cqw] ring-[0.2cqw] ring-inset ring-[#c9a961]/45"></div>
+
+            <!-- Content -->
+            <div class="relative z-10 h-full w-full p-[4cqw] flex flex-col justify-between text-[#f5f1e8]">
+              <!-- TOP: logo + bilingual name -->
+              <div class="flex items-center gap-[2.4cqw] min-w-0">
+                <img
+                  :src="card.logoSrc"
+                  :alt="card.organization.nameChinese"
+                  class="shrink-0 h-[9.5cqw] w-auto max-w-[14cqw] object-contain drop-shadow-[0_0.4cqw_1cqw_rgba(0,0,0,0.35)]"
+                />
+                <div class="min-w-0 flex-1">
+                  <div class="text-[3.8cqw] font-bold tracking-[0.02em] text-[#f5f1e8] leading-tight truncate">
+                    {{ card.organization.nameChinese }}
+                  </div>
+                  <div class="text-[2.4cqw] italic tracking-[0.01em] text-[#e0c98a]/95 leading-snug mt-[0.4cqw] truncate">
+                    {{ card.organization.namePortuguese }}
+                  </div>
+                </div>
+              </div>
+
+              <!-- MIDDLE: member type + number · avatar -->
+              <div class="flex items-center justify-between gap-[3.2cqw]">
+                <div class="min-w-0">
+                  <div class="text-[1.6cqw] tracking-[0.28em] uppercase text-[#f5f1e8]/50 mb-[0.2cqw]">
+                    {{ card.labels.memberType }}
+                  </div>
+                  <div class="font-serif italic text-[3.8cqw] text-[#e0c98a] leading-none mb-[2.4cqw]">
+                    {{ card.memberType.value }}
+                  </div>
+
+                  <div class="font-mono text-[3.8cqw] tracking-[0.34em] text-[#f5f1e8]/95">
+                    <span>{{ card.memberNumber.part1 }}</span>
+                    <span class="text-[#c9a961] mx-[0.4cqw]">·</span>
+                    <span>{{ card.memberNumber.part2 }}</span>
+                  </div>
+                </div>
+
+                <!-- Avatar -->
+                <div class="relative shrink-0">
+                  <div
+                    class="w-[22.5cqw] h-[25cqw] rounded-[2.4cqw] overflow-hidden ring-[0.4cqw] ring-[#c9a961]/80 shadow-[0_2cqw_4.8cqw_-1.6cqw_rgba(0,0,0,0.7)]"
+                    :class="card.avatarSrc
+                      ? 'bg-transparent'
+                      : 'bg-gradient-to-br from-[#e8eefb] to-[#c9d6ee]'"
+                  >
+                    <img
+                      v-if="card.avatarSrc"
+                      :src="card.avatarSrc"
+                      :alt="card.member.nameChinese"
+                      class="w-full h-full object-cover object-top"
+                    />
+                    <svg
+                      v-else
+                      viewBox="0 0 24 24"
+                      preserveAspectRatio="xMidYMid meet"
+                      class="w-full h-full text-[#7a90b8]"
+                      fill="currentColor"
+                      aria-hidden="true"
+                    >
+                      <circle cx="12" cy="8" r="4" />
+                      <path d="M12 14c-3.6 0-7 1.9-7 4.4V21h14v-2.6c0-2.5-3.4-4.4-7-4.4z" />
+                    </svg>
+                  </div>
+
+                  <span
+                    v-if="card.showVerifiedBadge"
+                    class="absolute -bottom-[0.2cqw] -left-[0.2cqw] w-[4cqw] h-[4cqw] rounded-full bg-[#c9a961] ring-[0.4cqw] ring-[#0e2a63] flex items-center justify-center"
+                  >
+                    <svg
+                      class="w-[2.4cqw] h-[2.4cqw] text-[#0e2a63]"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="3"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path d="M5 13l4 4L19 7" />
+                    </svg>
+                  </span>
+                </div>
+              </div>
+
+              <!-- BOTTOM: name + issue/valid -->
+              <div>
+                <div class="mb-[2.4cqw]">
+                  <div class="text-[1.6cqw] tracking-[0.28em] uppercase text-[#f5f1e8]/50 mb-[0.2cqw]">
+                    {{ card.labels.member }}
+                  </div>
+                  <div class="text-[3cqw] tracking-[0.16em] uppercase text-[#f5f1e8] w-full">
+                    {{ card.member.nameChinese }}
+                    <span class="text-[#f5f1e8]/55 font-light">
+                      · {{ card.member.nameEnglish }}
+                    </span>
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-[3.2cqw] pt-[2.4cqw] border-t border-[#f5f1e8]/15">
+                  <div>
+                    <div class="text-[1.6cqw] tracking-[0.28em] uppercase text-[#f5f1e8]/50 mb-[0.2cqw]">
+                      {{ card.labels.issueAt }}
+                    </div>
+                    <div class="font-mono text-[2.4cqw] tracking-[0.18em] text-[#f5f1e8]/85">
+                      {{ card.validity.issueAt }}
+                    </div>
+                  </div>
+                  <div class="text-right">
+                    <div class="text-[1.6cqw] tracking-[0.28em] uppercase text-[#f5f1e8]/50 mb-[0.2cqw]">
+                      {{ card.labels.validTo }}
+                    </div>
+                    <div class="font-mono text-[2.4cqw] tracking-[0.18em] text-[#e0c98a] font-semibold">
+                      {{ card.validity.validTo }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Bottom gold hairline -->
+            <div class="absolute bottom-0 left-0 right-0 h-[0.4cqw] bg-gradient-to-r from-transparent via-[#c9a961]/70 to-transparent"></div>
+
+            <!-- Flip hint (front) -->
+            <div class="absolute top-[3cqw] right-[3cqw] z-20 text-[#f5f1e8]/45 text-[1.6cqw] tracking-[0.24em] uppercase flex items-center gap-[0.8cqw]">
+              <svg
+                class="w-[2.4cqw] h-[2.4cqw]"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M21 12a9 9 0 11-3-6.7L21 8" />
+                <path d="M21 3v5h-5" />
+              </svg>
+              <span>Flip</span>
+            </div>
+          </div>
+
+          <!-- ==================== BACK ==================== -->
+          <div
+            class="absolute inset-0 rounded-[3.2cqw] overflow-hidden shadow-[0_6cqw_12cqw_-4cqw_rgba(20,40,90,0.55)]"
+            style="
+              backface-visibility: hidden;
+              -webkit-backface-visibility: hidden;
+              transform: rotateY(180deg);
+            "
+          >
+            <!-- Base gradient -->
+            <div class="absolute inset-0 bg-gradient-to-br from-[#0a1f4d] via-[#0e2a63] to-[#081736]"></div>
+
+            <!-- Radial gold glow top-left -->
+            <div
+              class="absolute -top-[9.6cqw] -left-[9.6cqw] w-[56cqw] h-[56cqw] rounded-full opacity-35 blur-[12.8cqw]"
+              style="background: radial-gradient(circle, #e0c98a, transparent 65%)"
+            ></div>
+
+            <!-- Radial sky glow bottom-right -->
+            <div
+              class="absolute -bottom-[9.6cqw] -right-[8cqw] w-[52cqw] h-[52cqw] rounded-full opacity-30 blur-[12.8cqw]"
+              style="background: radial-gradient(circle, #7dd3fc, transparent 65%)"
+            ></div>
+
+            <!-- Pinstripe -->
+            <svg class="absolute inset-0 w-full h-full opacity-[0.08]" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <pattern
+                  id="atecCardLinesBack"
+                  width="2.8cqw"
+                  height="2.8cqw"
+                  patternUnits="userSpaceOnUse"
+                  patternTransform="rotate(-45)"
+                >
+                  <line x1="0" y1="0" x2="0" y2="2.8cqw" stroke="#e0c98a" stroke-width="0.2cqw" />
+                </pattern>
+              </defs>
+              <rect width="100%" height="100%" fill="url(#atecCardLinesBack)" />
+            </svg>
+
+            <!-- Gold border -->
+            <div class="absolute inset-0 rounded-[3.2cqw] ring-[0.2cqw] ring-inset ring-[#c9a961]/45"></div>
+
+            <!-- Content -->
+            <div class="relative z-10 h-full w-full p-[4cqw] flex flex-col text-[#f5f1e8]">
+              <!-- FULL-WIDTH HEADER: logo + bilingual organization name (identical to front) -->
+              <div class="flex items-center gap-[2.4cqw] min-w-0">
+                <img
+                  :src="card.logoSrc"
+                  :alt="card.organization.nameChinese"
+                  class="shrink-0 h-[9.5cqw] w-auto max-w-[14cqw] object-contain drop-shadow-[0_0.4cqw_1cqw_rgba(0,0,0,0.35)]"
+                />
+                <div class="min-w-0 flex-1">
+                  <div class="text-[3.8cqw] font-bold tracking-[0.02em] text-[#f5f1e8] leading-tight truncate">
+                    {{ card.organization.nameChinese }}
+                  </div>
+                  <div class="text-[2.4cqw] italic tracking-[0.01em] text-[#e0c98a]/95 leading-snug mt-[0.4cqw] truncate">
+                    {{ card.organization.namePortuguese }}
+                  </div>
+                </div>
+              </div>
+
+              <!-- MAIN: QR (left) + holder info (right) -->
+              <div class="flex-1 flex items-center gap-[4cqw] pt-[3cqw]">
+                <!-- LEFT: QR code -->
+                <div class="shrink-0 flex flex-col items-center gap-[1.4cqw]">
+                  <div
+                    class="bg-white p-[1.4cqw] rounded-[1.8cqw] ring-[0.2cqw] ring-[#c9a961]/60 shadow-[0_2cqw_5cqw_-2cqw_rgba(0,0,0,0.6)]"
+                  >
+                    <QRCodeVue3
+                      :value="qrValue"
+                      :width="100"
+                      :height="100"
+                    />
+                  </div>
+                  <div class="text-[1.3cqw] tracking-[0.26em] uppercase text-[#e0c98a]/85 text-center">
+                    {{ card.labels.scanHint }}
+                  </div>
+                </div>
+
+                <!-- RIGHT: holder info -->
+                <div class="flex-1 min-w-0 flex flex-col justify-between h-full py-[0.6cqw]">
+                  <div>
+                    <div class="text-[1.4cqw] tracking-[0.28em] uppercase text-[#f5f1e8]/45 mb-[0.3cqw]">
+                      {{ card.labels.member }}
+                    </div>
+                    <div class="text-[2.8cqw] font-semibold tracking-[0.08em] text-[#f5f1e8]">
+                      {{ card.member.nameChinese }}
+                    </div>
+                    <div class="text-[1.8cqw] tracking-[0.14em] uppercase text-[#f5f1e8]/60 mt-[0.2cqw]">
+                      {{ card.member.nameEnglish }}
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-[2.4cqw] mt-[2.2cqw]">
+                      <div>
+                        <div class="text-[1.4cqw] tracking-[0.28em] uppercase text-[#f5f1e8]/45 mb-[0.3cqw]">
+                          Member No.
+                        </div>
+                        <div class="font-mono text-[2.4cqw] tracking-[0.22em] text-[#e0c98a]">
+                          {{ card.memberNumber.part1 }}·{{ card.memberNumber.part2 }}
+                        </div>
+                      </div>
+                      <div>
+                        <div class="text-[1.4cqw] tracking-[0.28em] uppercase text-[#f5f1e8]/45 mb-[0.3cqw]">
+                          {{ card.labels.memberType }}
+                        </div>
+                        <div class="font-serif italic text-[2.4cqw] text-[#e0c98a]">
+                          {{ card.memberType.value }}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Validity row -->
+                  <div class="grid grid-cols-2 gap-[2.4cqw] pt-[2cqw] border-t border-[#f5f1e8]/15">
+                    <div>
+                      <div class="text-[1.4cqw] tracking-[0.28em] uppercase text-[#f5f1e8]/45 mb-[0.3cqw]">
+                        {{ card.labels.issueAt }}
+                      </div>
+                      <div class="font-mono text-[2cqw] tracking-[0.18em] text-[#f5f1e8]/85">
+                        {{ card.validity.issueAt }}
+                      </div>
+                    </div>
+                    <div class="text-right">
+                      <div class="text-[1.4cqw] tracking-[0.28em] uppercase text-[#f5f1e8]/45 mb-[0.3cqw]">
+                        {{ card.labels.validTo }}
+                      </div>
+                      <div class="font-mono text-[2cqw] tracking-[0.18em] text-[#e0c98a] font-semibold">
+                        {{ card.validity.validTo }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Bottom gold hairline -->
+            <div class="absolute bottom-0 left-0 right-0 h-[0.4cqw] bg-gradient-to-r from-transparent via-[#c9a961]/70 to-transparent"></div>
+
+            <!-- Flip hint (back) -->
+            <div class="absolute top-[3cqw] right-[3cqw] z-20 text-[#f5f1e8]/45 text-[1.6cqw] tracking-[0.24em] uppercase flex items-center gap-[0.8cqw]">
+              <svg
+                class="w-[2.4cqw] h-[2.4cqw]"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M21 12a9 9 0 11-3-6.7L21 8" />
+                <path d="M21 3v5h-5" />
+              </svg>
+              <span>Back</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Floor reflection -->
+      <div
+        class="absolute left-[4.8cqw] right-[4.8cqw] -bottom-[4.8cqw] h-[8cqw] rounded-full opacity-50 blur-[3.2cqw] pointer-events-none"
+        style="
+          background: radial-gradient(
+            ellipse,
+            rgba(201, 169, 97, 0.4),
+            transparent 70%
+          );
+        "
+      ></div>
     </div>
   </div>
 </template>
 
-<script>
-import { gsap } from "gsap";
-import QRCode from "qrcode";
-import axios from "axios";
+<script setup>
+import { computed, ref } from 'vue'
+import QRCodeVue3 from "qrcode-vue3";
 
-export default {
-  name: "MemberCard",
-  props: {
-    member: { type: Object, required: true },
-    cardStyle: { type: Object, required: true },
-    logoUrl: { type: String, default: "/storage/images/site_logo.png" },
+
+defineOptions({ name: 'MemberCard' })
+
+const props = defineProps({
+  /**
+   * Card data from the parent.
+   * Expected shape:
+   * {
+   *   org:    { logo, name_zh, name_pt },
+   *   member: {
+   *     number, name_zh, name_en,
+   *     issueAt, validTo,
+   *     memberType, avatarSrc, nameCardLink
+   *   }
+   * }
+   * All fields optional — missing values fall back to `defaults`.
+   */
+  data: { type: Object, default: () => ({}) },
+})
+
+const isFlipped = ref(false)
+
+const toggleFlip = () => {
+  isFlipped.value = !isFlipped.value
+}
+
+/* ------------------------------------------------------------------
+ * Defaults — used when a field is not provided by the parent.
+ * ------------------------------------------------------------------ */
+const defaults = {
+  logoSrc: '/storage/images/site_logo.png',
+  avatarSrc: '',
+
+  organization: {
+    nameChinese: '澳門公務專業人員協會',
+    namePortuguese: 'Associação dos Técnicos da Administração Pública de Macau',
   },
-  data() {
-    return {
-      qrcodeData: "",
-      intervalId: null,
-      isFlipped: false,
-      // Fixed canvas dimensions (pixels)
-      canvasWidth: 400,
-      canvasHeight: 250,
-      titlePen: { color: "#555", font: "bold 20px sans-serif" },
-      captionPen: { color: "rgba(0,0,0,0.7)", font: "13px sans-serif" }  };
+
+  labels: {
+    memberType: 'Member Type',
+    member: 'Member',
+    issueAt: 'Issue at',
+    validTo: 'Valid to',
+    scanHint: 'Scan · 會員檔案',
   },
-  computed: {
-    // Precompute often used values
-    orgName() {
-      return this.member.organization?.["name_" + this.$t("lang")] || "";
-    },
-    fullName() {
-      return (this.member.family_name || "") + (this.member.given_name || "");
-    },
-    avatarUrl() {
-      return this.member.avatar || "/avatars/dummy-avatar.jpg";
-    },
-    bgImageUrl() {
-      return this.cardStyle?.background
-        ? "/storage/images/" + this.cardStyle.background
-        : null;
-    },
-    fontStyle() {
-      return this.cardStyle?.font_style || {};
-    },
+
+  memberType: {
+    value: '資深會員',
   },
-  mounted() {
-    this.drawFront();
-    // Initially hide back canvas (GSAP will manage visibility)
-    gsap.set(this.$refs.backCanvas, { rotationY: -180, opacity: 0 });
-    gsap.set(this.$refs.frontCanvas, { opacity: 1 });
+
+  memberNumber: {
+    part1: '0000',
+    part2: '0000',
   },
-  beforeUnmount() {
-    if (this.intervalId) clearInterval(this.intervalId);
+
+  member: {
+    nameChinese: '陳大文',
+    nameEnglish: 'CHAN TAI MAN',
   },
-  methods: {
-    // ---- Drawing helpers ----
-    loadImage(src) {
-      return new Promise((resolve, reject) => {
-        const img = new Image();
-        img.crossOrigin = "Anonymous";
-        img.onload = () => resolve(img);
-        img.onerror = reject;
-        img.src = src;
-      });
-    },
 
-    async drawFront() {
-      const canvas = this.$refs.frontCanvas;
-      const ctx = canvas.getContext("2d");
-      const w = this.canvasWidth;
-      const h = this.canvasHeight;
-      canvas.width = w;
-      canvas.height = h;
-
-      // 1. Background image (if provided) with overlay
-      let bgImg = null;
-      if (this.bgImageUrl) {
-        try {
-          bgImg = await this.loadImage(this.bgImageUrl);
-        } catch (e) {
-          console.warn("Background image failed to load", e);
-        }
-      }
-      if (bgImg) {
-        ctx.drawImage(bgImg, 0, 0, w, h);
-      } else {
-        // Fallback gradient
-        const grad = ctx.createLinearGradient(0, 0, w, 0);
-        grad.addColorStop(0, "#1a1a2e");
-        grad.addColorStop(1, "#16213e");
-        ctx.fillStyle = grad;
-        ctx.fillRect(0, 0, w, h);
-      }
-
-      // Overlay (darken)
-      // ctx.fillStyle = "rgba(0,0,0,0.3)";
-      // ctx.fillRect(0, 0, w, h);
-
-      // 2. Text content
-      const textColor = this.fontStyle?.color || this.titlePen.color;
-      const fontFamily = this.fontStyle?.fontFamily || "sans-serif";
-      ctx.textAlign = "left";
-      ctx.textBaseline = "top";
-
-      // Organization name (top center)
-      ctx.textAlign = "center";
-      ctx.font = `bold 16px ${fontFamily}`;
-      ctx.fillStyle = textColor;
-      ctx.fillText(this.orgName, w / 2, 16);
-
-      // Left column: name, member number
-      ctx.textAlign = "left";
-      ctx.font = `12px ${fontFamily}`;
-      ctx.fillStyle = this.captionPen.color;
-      ctx.fillText("姓名", 20, 50);
-      ctx.font = `bold 18px ${fontFamily}`;
-      ctx.fillStyle = textColor;
-      ctx.fillText(this.fullName, 20, 68);
-
-      ctx.font = `12px ${fontFamily}`;
-      ctx.fillStyle = this.captionPen.color;
-      ctx.fillText("會員編號", 20, 100);
-      ctx.font = `bold 14px monospace`;
-      ctx.fillStyle = textColor;
-      ctx.fillText(this.member.member_number || "", 20, 118);
-
-      // Right: avatar
-      let avatarImg = null;
-      try {
-        avatarImg = await this.loadImage(this.avatarUrl);
-      } catch (e) {
-        console.warn("Avatar failed to load", e);
-      }
-      const avatarSize = 64;
-      const avatarX = w - avatarSize - 20;
-      const avatarY = 44;
-      if (avatarImg) {
-        // Clip to circle
-        ctx.save();
-        ctx.beginPath();
-        ctx.arc(avatarX + avatarSize / 2, avatarY + avatarSize / 2, avatarSize / 2, 0, Math.PI * 2);
-        ctx.closePath();
-        ctx.clip();
-        ctx.drawImage(avatarImg, avatarX, avatarY, avatarSize, avatarSize);
-        ctx.restore();
-      } else {
-        // Placeholder
-        ctx.fillStyle = "#ccc";
-        ctx.beginPath();
-        ctx.arc(avatarX + avatarSize / 2, avatarY + avatarSize / 2, avatarSize / 2, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.fillStyle = "#666";
-        ctx.font = `24px sans-serif`;
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.fillText("👤", avatarX + avatarSize / 2, avatarY + avatarSize / 2);
-      }
-
-      // Border around avatar
-      ctx.strokeStyle = "white";
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      ctx.arc(avatarX + avatarSize / 2, avatarY + avatarSize / 2, avatarSize / 2, 0, Math.PI * 2);
-      ctx.stroke();
-
-      // Bottom: dates
-      const dateY = h - 32;
-      ctx.textAlign = "left";
-      ctx.font = `11px ${fontFamily}`;
-      ctx.fillStyle = this.captionPen.color;
-      ctx.fillText("發出日期", 20, dateY);
-      ctx.font = `bold 12px ${fontFamily}`;
-      ctx.fillStyle = textColor;
-      ctx.fillText(this.member.valid_at || "", 20, dateY + 18);
-
-      ctx.textAlign = "left";
-      ctx.font = `11px ${fontFamily}`;
-      ctx.fillStyle = this.captionPen.color;
-      ctx.fillText("有效日期", 130, dateY);
-      ctx.font = `bold 12px ${fontFamily}`;
-      ctx.fillStyle = textColor;
-      ctx.fillText(this.member.expired_at || "", 130, dateY + 18);
-    },
-
-    async drawBack() {
-      const canvas = this.$refs.backCanvas;
-      const ctx = canvas.getContext("2d");
-      const w = this.canvasWidth;
-      const h = this.canvasHeight;
-      canvas.width = w;
-      canvas.height = h;
-
-      // White background with subtle pattern or solid
-      // ctx.fillStyle = "#f8f9fa";
-      // ctx.fillRect(0, 0, w, h);
-
-      // Border / card frame
-      ctx.strokeStyle = "#e0e0e0";
-      ctx.lineWidth = 1;
-      ctx.strokeRect(5, 5, w - 10, h - 10);
-
-      // Title
-      ctx.textAlign = "center";
-      ctx.textBaseline = "top";
-      ctx.font = "bold 20px sans-serif";
-      ctx.fillStyle = "#d35400";
-      ctx.fillText("會員卡", w / 2, 12);
-
-      // QR code
-      let qrCanvas = document.createElement("canvas");
-      if (this.qrcodeData) {
-        try {
-          await QRCode.toCanvas(qrCanvas, this.qrcodeData, {
-            width: 120,
-            margin: 2,
-            color: {
-              dark: "#26249a",
-              light: "#ffffff",
-            },
-          });
-        } catch (e) {
-          console.warn("QR generation failed", e);
-        }
-      }
-      // Draw QR on back canvas
-      const qrSize = 120;
-      const qrX = 30;
-      const qrY = 50;
-      if (qrCanvas.width > 0) {
-        ctx.drawImage(qrCanvas, qrX, qrY, qrSize, qrSize);
-      } else {
-        // Placeholder
-        ctx.fillStyle = "#ddd";
-        ctx.fillRect(qrX, qrY, qrSize, qrSize);
-        ctx.fillStyle = "#999";
-        ctx.font = "14px sans-serif";
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.fillText("QR", qrX + qrSize / 2, qrY + qrSize / 2);
-      }
-
-      // Right side: benefits and contact
-      const textX = qrX + qrSize + 20;
-      ctx.textAlign = "left";
-      ctx.textBaseline = "top";
-      ctx.font = "13px sans-serif";
-      ctx.fillStyle = "#333";
-      const benefits = [
-        "✓ 專屬會員活動優先報名",
-        "✓ 使用二維碼累計積分",
-      ];
-      benefits.forEach((text, i) => {
-        ctx.fillText(text, textX, 60 + i * 30);
-      });
-
-      ctx.font = "11px sans-serif";
-      ctx.fillStyle = "#555";
-      ctx.textAlign = "center";
-      ctx.fillText("客服專線: +853 6381-6386", w / 2, h - 25);
-
-      // Optionally, add a small logo from props.logoUrl
-      if (this.logoUrl) {
-        try {
-          const logo = await this.loadImage(this.logoUrl);
-          const logoSize = 30;
-          ctx.drawImage(logo, w - logoSize - 15, h - logoSize - 15, logoSize, logoSize);
-        } catch (e) {}
-      }
-    },
-
-    // ---- QR code fetching ----
-    getQrcode() {
-      axios.get(route("member.getQrcode")).then((response) => {
-        this.qrcodeData = response.data;
-        this.drawBack();
-      });
-    },
-    startQrRefresh() {
-      this.getQrcode();
-      this.intervalId = setInterval(() => {
-        this.getQrcode();
-      }, 5000);
-    },
-
-    // ---- Flip animation ----
-    flipCardAnimation() {
-      const duration = 0.6;
-      const ease = "back.out(1)";
-      const front = this.$refs.frontCanvas;
-      const back = this.$refs.backCanvas;
-
-      if (!this.isFlipped) {
-        // Flip to back
-        this.startQrRefresh();
-        gsap.timeline()
-          .to(this.$refs.flipCard, { rotationY: 180, duration, ease })
-          .to(front, { opacity: 0, duration: duration / 2, ease: "power1.in" }, 0)
-          .to(back, { opacity: 1, duration: duration / 2, ease: "power1.out" }, duration / 2);
-      } else {
-        // Flip to front
-        if (this.intervalId) {
-          clearInterval(this.intervalId);
-          this.intervalId = null;
-        }
-        gsap.timeline()
-          .to(this.$refs.flipCard, { rotationY: 0, duration, ease })
-          .to(back, { opacity: 0, duration: duration / 2, ease: "power1.in" }, 0)
-          .to(front, { opacity: 1, duration: duration / 2, ease: "power1.out" }, duration / 2);
-      }
-      this.isFlipped = !this.isFlipped;
-    },
+  validity: {
+    issueAt: '2024 · 01 · 15',
+    validTo: '2029 · 01 · 14',
   },
-};
+
+  nameCardLink: '',
+  showVerifiedBadge: true,
+  maxWidth: '500px',
+}
+
+/* ------------------------------------------------------------------
+ * Merged card — maps the incoming { org, member } shape onto
+ * the internal shape the template expects.
+ * ------------------------------------------------------------------ */
+const card = computed(() => {
+  const d = defaults
+  const u = props.data || {}
+  const org = u.org || {}
+  const mem = u.member || {}
+
+  const rawNumber = String(mem.number ?? '')
+    .replace(/\D/g, '')
+    .padStart(8, '0')
+    .slice(0, 8)
+
+  return {
+    logoSrc: org.logo || d.logoSrc,
+
+    avatarSrc:
+      typeof mem.avatarSrc === 'string' && mem.avatarSrc.trim() !== ''
+        ? mem.avatarSrc
+        : '',
+
+    organization: {
+      nameChinese: org.name_zh || d.organization.nameChinese,
+      namePortuguese: org.name_pt || d.organization.namePortuguese,
+    },
+
+    labels: { ...d.labels, ...(u.labels || {}) },
+
+    memberType: {
+      value: mem.memberType || d.memberType.value,
+    },
+
+    memberNumber: {
+      part1: rawNumber.slice(0, 4),
+      part2: rawNumber.slice(4, 8),
+    },
+
+    member: {
+      nameChinese: mem.name_zh || d.member.nameChinese,
+      nameEnglish: mem.name_en || d.member.nameEnglish,
+    },
+
+    validity: {
+      issueAt: mem.issueAt || d.validity.issueAt,
+      validTo: mem.validTo || d.validity.validTo,
+    },
+
+    nameCardLink: mem.nameCardLink || d.nameCardLink,
+
+    showVerifiedBadge: u.showVerifiedBadge ?? d.showVerifiedBadge,
+    maxWidth: u.maxWidth ?? d.maxWidth,
+  }
+})
+
+/* ------------------------------------------------------------------
+ * QR value — the string encoded into the QR code.
+ * Prefers nameCardLink, falls back to a members route.
+ * ------------------------------------------------------------------ */
+const qrValue = computed(() => {
+  if (card.value.nameCardLink) {
+    return card.value.nameCardLink
+  }
+
+  const origin =
+    typeof window !== 'undefined' ? window.location.origin : ''
+
+  return `${origin}/members/${card.value.memberNumber.part1}${card.value.memberNumber.part2}`
+})
 </script>
 
 <style scoped>
-.flip-card-container {
-  perspective: 1000px;
-  height: 250px;
-  cursor: pointer;
-  width: 100%;
-  max-width: 400px;  /* adjust to your design */
-  margin: 0 auto;
-}
-.flip-card {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  transform-style: preserve-3d;
-}
-.flip-card-front,
-.flip-card-back {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  backface-visibility: hidden;
-  border-radius: 12px;
-  overflow: hidden;
-  background-color: #bacdff;
-
-}
-.flip-card-front {
-  /* GSAP will control opacity */
-}
-.flip-card-back {
-  transform: rotateY(-180deg);
-  opacity: 0;
-}
-canvas {
-  display: block;
-  width: 100%;
-  height: 100%;
-  border-radius: 12px;
+@keyframes cardShine {
+  0% {
+    background-position: 0% 0%;
+  }
+  50% {
+    background-position: 100% 100%;
+  }
+  100% {
+    background-position: 0% 0%;
+  }
 }
 </style>

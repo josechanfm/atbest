@@ -95,9 +95,13 @@ Route::group([
     Route::resource('professionals', App\Http\Controllers\Member\ProfessionalController::class)->names('member.professionals');
     Route::get('membership', [App\Http\Controllers\Member\MembershipController::class, 'index'])->name('member.membership');
     Route::post('membership/switch/{member}', [App\Http\Controllers\Member\MembershipController::class, 'switch'])->name('member.membership.switch');
+    Route::get('membership/cards/', [App\Http\Controllers\Member\MembershipController::class, 'cards'])->name('member.membership.cards');
     Route::resource('events', App\Http\Controllers\Member\EventController::class)->names('member.events');
     Route::resource('entries', App\Http\Controllers\Member\EntryController::class)->names('member.entries');
+    Route::get('business_card', [App\Http\Controllers\Member\BusinessCardController::class,'edit'])->name('member.businessCard.edit');
+    Route::put('/business_card', [App\Http\Controllers\Member\BusinessCardController::class, 'update'])->name('member.businessCard.update');
 });
+Route::get('/card/{uuid}', [App\Http\Controllers\Member\BusinessCardController::class, 'show'])->name('member.businessCard.show');
 
 //Manage
 Route::group([
@@ -213,4 +217,7 @@ Route::group([
 
 
 });
+
+Route::get('/namecard/{key}', [App\Http\Controllers\NamecardController::class, 'show'])->name('member.namecard');
+
 require __DIR__ . '/auth.php';

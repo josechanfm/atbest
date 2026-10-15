@@ -35,11 +35,11 @@ class DashboardController extends Controller
                 'organization' => $user->member->organization,
             ]);
         }
-
         // 4. Load necessary relations
         $member = $user->member->load('organization');
+        $member->name_card_link=$member->nameCardLink(); // Ensure name card link is generated
         $org = session('member')->organization;
-
+        
         // 5. Fetch data
         $features = Feature::whereBelongsTo($org)
             ->orderBy('sequence')

@@ -157,9 +157,16 @@ export default {
                       <DropdownLink :href="route('member.profile.index')??null">
                         {{ $t("account") }}
                       </DropdownLink>
+                      <DropdownLink :href="route('member.membership.cards')??null">
+                        {{ $t('member').wallet }}
+                      </DropdownLink>
+                      <DropdownLink :href="route('member.businessCard.edit')??null">
+                        {{ $t('member').business_card }}
+                      </DropdownLink>
                       <DropdownLink :href="route('member.entries.index')??null">
                         {{ $t("form_filled") }}
                       </DropdownLink>
+                      
                       <DropdownLink :href="route('member.blogs.index')??null">
                         {{ $t("blogs") }}
                       </DropdownLink>

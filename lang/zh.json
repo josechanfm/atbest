@@ -50,8 +50,6 @@
     "email.subject": "主旨",
     "email.message": "電郵內容",
     "affiliate": "所屬社團",
-    "member": "會員",
-    "members": "會員",
     "member.reset_password": "重設密碼",
     "certificates": "證書",
     "bulletin": "公告",
@@ -397,6 +395,19 @@
     "password_mismatch": "兩次輸入的密碼不一致",
     "field_required": "此欄位為必填",
     "email_invalid": "請輸入有效的電子郵件地址",
+    "member":{
+        "title":"會員",
+        "wallet":"卡包",
+        "business_card":"名片管理",
+        "cards": "會員卡",  
+        "mobile_number": "手機號碼",
+        "number": "會員編號",
+        "name": "姓名",
+        "name_zh": "姓名(中文)",
+        "name_fn": "姓名(外文)",
+        "gender": "性別",
+        "dob": "出生日期"
+    },
     "sms":{
         "sms_messages": "簡訊訊息",
         "search_by_mobile_or_content": "搜尋手機號碼或內容",
@@ -421,7 +432,6 @@
         "deleted_successfully": "刪除成功"
     },
     "reset_password": "重設密碼",
-    "mobile_number": "手機號碼",
     "enter_8_digits_starting_with_6": "請輸入8位數字（開頭為6）",
     "format_hint": "格式：+853 6XXXXXXX",
     "send_verification_code": "發送驗證碼",

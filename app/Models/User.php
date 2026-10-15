@@ -107,7 +107,7 @@ class User extends Authenticatable
         return $this->hasOne(Member::class)->where('is_default',true);
     }
     public function members() {
-        return $this->hasMany(Member::class);
+        return $this->hasMany(Member::class)->with('organization');
     }
 
     public function membership() : Attribute {
@@ -124,5 +124,10 @@ class User extends Authenticatable
     }
     public function issues(){
         return $this->hasMany(Issue::class);
+    }
+
+    public function businessCard()
+    {
+        return $this->hasOne(BusinessCard::class);
     }
 }
