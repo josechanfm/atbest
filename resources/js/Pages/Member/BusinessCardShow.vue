@@ -23,8 +23,11 @@
                     <p v-if="businessCard.content?.name_zh && businessCard.content?.name_en" class="text-sm font-semibold text-indigo-500 mt-1">
                         {{ businessCard.content.name_en }}
                     </p>
-                    <p v-if="businessCard.content?.title_zh || businessCard.content?.title_en" class="text-base font-semibold text-indigo-500 mt-3">
-                        {{ businessCard.content.title_zh || businessCard.content.title_en }}
+                    <p v-if="businessCard.content?.title_zh " class="text-base font-semibold text-indigo-500 mt-3">
+                        {{ businessCard.content.title_zh }}
+                    </p>
+                    <p v-if="businessCard.content?.title_en" class="text-base font-semibold text-indigo-500 mt-3">
+                        {{ businessCard.content.title_en }}
                     </p>
                 </div>
 
