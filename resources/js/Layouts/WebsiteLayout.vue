@@ -94,7 +94,7 @@ const showingNavigationDropdown = ref(false);
         class="sm:hidden bg-white"
       >
         <div class="pt-2 pb-3 space-y-1">
-          <ResponsiveNavLink :href="route('host')" :active="route().current('dashboard')">
+          <ResponsiveNavLink :href="route('home')" :active="route().current('dashboard')">
             {{ $t('dashboard') }}
           </ResponsiveNavLink>
         </div>
@@ -135,7 +135,7 @@ const showingNavigationDropdown = ref(false);
   </main>
 </template>
 
-<style>
+<style scoped>
 .bg-primary {
   --bg-opacity: 1;
   background-color: #ff69b4;

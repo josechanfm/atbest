@@ -70,7 +70,7 @@ export default {
             <div class="flex">
               <!-- Logo -->
               <div class="shrink-0 flex items-center">
-                <Link :href="route('host')??null" v-if="$page.props.auth.user.member">
+                <Link :href="route('home')??null" v-if="$page.props.auth.user.member">
                   <img v-if="$page.props.auth.user.member.organization.logo" :src="$page.props.auth.user.member.organization.logo" class="block h-14 w-auto" />
                   <img v-else src="/storage/images/site_logo.png" class="block h-14 w-auto" />
                 </Link>

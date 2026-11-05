@@ -67,6 +67,16 @@
                     <span class="ml-auto text-gray-800">{{ formatDate(member.created_at, 'YYYY/MM') }}</span>
                   </div>
                 </div>
+
+                <a
+                  :href="route('member.invitations.create')"
+                  class="mt-6 flex items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-indigo-700"
+                >
+                  <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2m16-10v6m3-3h-6M10 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+                  </svg>
+                  <span>邀請註冊 (Invitations)</span>
+                </a>
               </div>
             </div>
 

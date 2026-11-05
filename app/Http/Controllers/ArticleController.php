@@ -10,7 +10,7 @@ class ArticleController extends Controller
 {
     public function item(Request $request)
     {
-        //dd(Article::where('uuid',$request->t)->where('published',true)->first());
+        // dd(Article::where('uuid',$request->t)->where('published',true)->first());
         if(empty($request->t)){
             // return to_route('/');
             return response()->redirectTo("/");

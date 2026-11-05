@@ -51,7 +51,7 @@ export default {
 </DefaultLayout>
 </template>
 
-<style>
+<style scoped>
 .ql-align-right {
     text-align: right;
 }

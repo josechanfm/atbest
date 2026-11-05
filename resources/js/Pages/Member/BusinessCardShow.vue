@@ -1,14 +1,20 @@
 <template>
-    <div class="min-h-screen bg-slate-150 flex items-center justify-center p-2">
+    <div class="min-h-screen bg-slate-150 flex items-center justify-center p-6">
 
         <div class="w-full max-w-lg space-y-4">
 
             <!-- Card -->
-            <div class="bg-slate-100 rounded-3xl border border-indigo-500/30 overflow-hidden">
+            <div class="bg-slate-200 rounded-3xl border border-indigo-500/30 overflow-hidden">
 
                 <!-- Header -->
                 <div class="p-8 text-center flex flex-col items-center">
 
+                    <span
+                        v-if="businessCard.user?.member?.organization?.name_zh || businessCard.user?.member?.organization?.name_en"
+                        class="text-xl font-bold uppercase tracking-widest text-cyan-200 bg-indigo-600 px-4 py-1.5 rounded-full mb-6"
+                    >
+                        {{ businessCard.user.member.organization.name_zh || businessCard.user.member.organization.name_en }}
+                    </span>
 
                     <img v-if="businessCard.user?.member?.avatar" :src="businessCard.user.member.avatar" alt="Avatar" class="w-28 h-28 rounded-full object-cover border-2 border-indigo-400/50 mb-5" />
                     <div v-else class="w-28 h-28 rounded-full bg-indigo-950 border-2 border-indigo-400/50 flex items-center justify-center text-indigo-300 mb-5">
@@ -23,16 +29,13 @@
                     <p v-if="businessCard.content?.name_zh && businessCard.content?.name_en" class="text-sm font-semibold text-indigo-500 mt-1">
                         {{ businessCard.content.name_en }}
                     </p>
-                    <p v-if="businessCard.content?.title_zh " class="text-base font-semibold text-indigo-500 mt-3">
-                        {{ businessCard.content.title_zh }}
-                    </p>
-                    <p v-if="businessCard.content?.title_en" class="text-base font-semibold text-indigo-500 mt-3">
-                        {{ businessCard.content.title_en }}
+                    <p v-if="businessCard.content?.title_zh || businessCard.content?.title_en" class="text-base font-semibold text-indigo-500 mt-3">
+                        {{ businessCard.content.title_zh || businessCard.content.title_en }}
                     </p>
                 </div>
 
                 <!-- Contact List -->
-                <div v-if="contactFields.length > 0" class="px-2 pb-6 space-y-3">
+                <div v-if="contactFields.length > 0" class="px-6 pb-6 space-y-3">
                     <component
                         v-for="(field, index) in contactFields"
                         :key="index"
@@ -40,7 +43,7 @@
                         :href="getFieldLink(field)"
                         :target="isExternal(field) ? '_blank' : undefined"
                         :rel="isExternal(field) ? 'noopener noreferrer' : undefined"
-                        class="flex items-center justify-between gap-4 px-5 rounded-2xl bg-slate-100 text-slate-900"
+                        class="flex items-center justify-between gap-4 px-5 py-3.5 rounded-2xl bg-slate-100 text-slate-900"
                     >
                         <span class="text-xs font-bold uppercase text-indigo-700">{{ field.label }}</span>
                         <span class="text-sm font-semibold truncate">{{ field.value }}</span>
@@ -50,7 +53,7 @@
                 <!-- Bio -->
                 <div
                     v-if="businessCard.bio?.details"
-                    class="p-2 bg-slate-200 border-t border-indigo-500/20"
+                    class="p-8 bg-slate-300 border-t border-indigo-500/20"
                 >
                     <div
                         class="prose prose-sm max-w-none
@@ -73,7 +76,7 @@
                 </div>
 
                 <!-- QR Code + Share Section -->
-                <div class="px-2 py-8 bg-slate-100 border-t border-indigo-500/20 flex flex-col items-center">
+                <div class="p-8 bg-slate-100 border-t border-indigo-500/20 flex flex-col items-center">
                     <p class="text-xs font-bold uppercase tracking-widest text-indigo-700 mb-4">
                         掃描分享名片 (Scan to Share)
                     </p>
@@ -84,9 +87,9 @@
                             ref="qrImage"
                             :src="qrDataUrl"
                             alt="QR Code"
-                            class="w-40 h-40"
+                            class="w-44 h-auto"
                         />
-                        <div v-else class="w-40 h-40 flex items-center justify-center text-slate-300">
+                        <div v-else class="w-44 h-44 flex items-center justify-center text-slate-300">
                             <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
                             </svg>
@@ -207,7 +210,7 @@ export default {
         },
         shareTitle() {
             const c = this.businessCard.content || {};
-            return c.name_zh || c.name_en || '數位名片';
+            return c.name_zh || c.name_en || '';
         },
         shareText() {
             const c = this.businessCard.content || {};
@@ -216,7 +219,6 @@ export default {
             const org = this.businessCard.user?.member?.organization?.name_zh
                      || this.businessCard.user?.member?.organization?.name_en
                      || '';
-            // Compose a description-like message
             return [name, title, org].filter(Boolean).join(' · ');
         },
         contactFields() {
@@ -234,15 +236,7 @@ export default {
         }
     },
     async mounted() {
-        try {
-            this.qrDataUrl = await QRCode.toDataURL(this.shareUrl, {
-                width: 400,
-                margin: 1,
-                color: { dark: '#0f172a', light: '#ffffff' },
-            });
-        } catch (e) {
-            console.error('QR generation failed', e);
-        }
+        await this.generateQrWithLabel();
     },
     beforeUnmount() {
         clearTimeout(this._linkTimer);
@@ -300,6 +294,56 @@ export default {
             return EXTERNAL_KEYS.includes(field.key);
         },
 
+        /**
+         * Render QR + name label onto a canvas, then export as data URL.
+         * The label (name_zh) becomes part of the image, so copying the
+         * image also copies the name.
+         */
+        async generateQrWithLabel() {
+            try {
+                const qrSize = 400;
+                const padding = 24;
+                const label = this.shareTitle; // name_zh || name_en || fallback
+                const labelAreaHeight = label ? 60 : 0;
+
+                // 1. Render QR onto an offscreen canvas
+                const qrCanvas = document.createElement('canvas');
+                await QRCode.toCanvas(qrCanvas, this.shareUrl, {
+                    width: qrSize,
+                    margin: 1,
+                    color: { dark: '#0f172a', light: '#ffffff' },
+                });
+
+                // 2. Compose onto the final canvas with room for the label
+                const canvas = document.createElement('canvas');
+                const totalWidth = qrSize + padding * 2;
+                const totalHeight = qrSize + padding * 2 + labelAreaHeight;
+                canvas.width = totalWidth;
+                canvas.height = totalHeight;
+
+                const ctx = canvas.getContext('2d');
+
+                // White background
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, totalWidth, totalHeight);
+
+                // Draw QR
+                ctx.drawImage(qrCanvas, padding, padding, qrSize, qrSize);
+
+                // Draw name label centered below the QR
+                ctx.fillStyle = '#0f172a';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.font = 'bold 50px "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", system-ui, sans-serif';
+                ctx.fillText(label, totalWidth / 2, qrSize + padding + labelAreaHeight / 2);
+
+                // 3. Export
+                this.qrDataUrl = canvas.toDataURL('image/png');
+            } catch (e) {
+                console.error('QR generation failed', e);
+            }
+        },
+
         async shareCard() {
             const text = `${this.shareText}\n${this.shareUrl}`;
 
@@ -312,7 +356,6 @@ export default {
                     return;
                 } catch (err) {
                     if (err.name === 'AbortError') return;
-                    // Other errors fall through to the manual fallback
                 }
             }
 

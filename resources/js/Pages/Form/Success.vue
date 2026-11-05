@@ -53,7 +53,7 @@
             </div>
             <div class="flex justify-between py-10">
                 <div>
-                    <a :href="route('host')">返回主頁</a>
+                    <a :href="route('home')">返回主頁</a>
                 </div>
                 <!-- <div>
             <inertia-link :href="route('form.receipt',entry)">打印表格</inertia-link>

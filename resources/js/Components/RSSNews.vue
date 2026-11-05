@@ -38,7 +38,7 @@ export default {
 
             try {
                 // 注意這裡使用的是你的 Laravel 後端 API 地址
-                const response = await fetch(route('host.getRss'));
+                const response = await fetch(route('home.getRss'));
                 console.log(response)
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);

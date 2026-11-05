@@ -23,13 +23,14 @@ class DashboardController extends Controller
 
         // 2. Check if user has a member record
         if (empty($user->member)) {
-            return Inertia::render('Error', [
-                'message' => 'You are not a registered member.'
-            ]);
+            return redirect()->route('guest.dashboard');
+            // return Inertia::render('Error', [
+            //     'message' => 'You are not a registered member.'
+            // ]);
         }
-
         // 3. Store member & organization in session if not already set
         if (!session()->has('member')) {
+            
             session()->put([
                 'member' => $user->member,
                 'organization' => $user->member->organization,
