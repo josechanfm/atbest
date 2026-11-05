@@ -5,6 +5,7 @@
             
             <!-- Block Format Dropdown (H1, H2, H3, Paragraph) -->
             <select 
+                @mousedown="saveSelection"
                 @change="formatBlock($event)" 
                 class="text-xs bg-white border border-gray-300 rounded-lg px-2.5 py-1 text-gray-700 shadow-sm outline-none focus:ring-1 focus:ring-indigo-500"
                 title="段落樣式"
@@ -73,6 +74,11 @@ export default {
         }
     },
     emits: ['update:modelValue'],
+    data() {
+        return {
+            savedSelection: null
+        };
+    },
     mounted() {
         if (this.$refs.editableDiv) {
             this.$refs.editableDiv.innerHTML = this.modelValue || '<p></p>';
@@ -86,13 +92,32 @@ export default {
         }
     },
     methods: {
+        saveSelection() {
+            const selection = window.getSelection();
+            const editor = this.$refs.editableDiv;
+
+            if (selection?.rangeCount && editor?.contains(selection.anchorNode)) {
+                this.savedSelection = selection.getRangeAt(0).cloneRange();
+            }
+        },
+        restoreSelection() {
+            const editor = this.$refs.editableDiv;
+            if (!editor || !this.savedSelection) return;
+
+            editor.focus();
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(this.savedSelection);
+        },
         formatText(command) {
             document.execCommand(command, false, null);
             this.onInput();
         },
         formatBlock(event) {
             const tag = event.target.value;
-            document.execCommand('formatBlock', false, `<${tag}>`);
+            this.restoreSelection();
+            document.execCommand('formatBlock', false, tag);
+            this.savedSelection = null;
             this.onInput();
         },
         onInput() {
