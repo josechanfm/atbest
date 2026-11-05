@@ -150,7 +150,7 @@
 
             </div>
 
-            <p class="text-center text-xs text-slate-400">Digital Business Card System</p>
+            <p class="text-center text-xs text-slate-400">Atbest Digital Business Card System</p>
 
         </div>
     </div>
