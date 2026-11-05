@@ -1,5 +1,5 @@
 <template>
-    <div class="min-h-screen bg-slate-150 flex items-center justify-center p-6">
+    <div class="min-h-screen bg-slate-150 flex items-center justify-center p-1">
 
         <div class="w-full max-w-lg space-y-4">
 
@@ -7,7 +7,7 @@
             <div class="bg-slate-200 rounded-3xl border border-indigo-500/30 overflow-hidden">
 
                 <!-- Header -->
-                <div class="p-8 text-center flex flex-col items-center">
+                <div class="p-4 text-center flex flex-col items-center">
 
                     <span
                         v-if="businessCard.user?.member?.organization?.name_zh || businessCard.user?.member?.organization?.name_en"
@@ -35,7 +35,7 @@
                 </div>
 
                 <!-- Contact List -->
-                <div v-if="contactFields.length > 0" class="px-6 pb-6 space-y-3">
+                <div v-if="contactFields.length > 0" class="px-4 pb-4 space-y-3">
                     <component
                         v-for="(field, index) in contactFields"
                         :key="index"
@@ -53,7 +53,7 @@
                 <!-- Bio -->
                 <div
                     v-if="businessCard.bio?.details"
-                    class="p-8 bg-slate-300 border-t border-indigo-500/20"
+                    class="p-4 bg-slate-300 border-t border-indigo-500/20"
                 >
                     <div
                         class="prose prose-sm max-w-none
@@ -76,7 +76,7 @@
                 </div>
 
                 <!-- QR Code + Share Section -->
-                <div class="p-8 bg-slate-100 border-t border-indigo-500/20 flex flex-col items-center">
+                <div class="p-4 bg-slate-100 border-t border-indigo-500/20 flex flex-col items-center">
                     <p class="text-xs font-bold uppercase tracking-widest text-indigo-700 mb-4">
                         掃描分享名片 (Scan to Share)
                     </p>
