@@ -15,6 +15,8 @@ class Invitation extends Model
         'expires_at',
         'used_at',
         'used_by',
+        'sent_at',
+        'sent_by',
     ];
 
     protected $casts = [
