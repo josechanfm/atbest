@@ -56,7 +56,6 @@
               </div>
             </div>
           </div>
-
           <!-- Forms list -->
           <ol class="list-disc">
             <li v-for="form in forms" :key="form.id">
@@ -200,6 +199,7 @@ export default {
           logo: this.member.organization.logo ?? '/storage/images/site_logo.png',
           name_zh: this.member.organization.name_zh??'',
           name_pt: this.member.organization.name_pt??'',
+          card_style: this.member.organization.card_style ?? '',
         },
         member: {
           number: this.member.number ?? '000000000',

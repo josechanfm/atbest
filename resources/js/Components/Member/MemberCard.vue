@@ -1,6 +1,7 @@
 <template>
   <div class="flex items-center justify-center">
     <div class="w-full [container-type:inline-size]" :style="{ maxWidth: card.maxWidth }">
+      {{ props.data.org?.card_style?.logo }}
       <!-- Flip wrapper -->
       <div
         class="relative w-full aspect-[1.586/1] cursor-pointer select-none [perspective:1400px]"
@@ -23,9 +24,11 @@
           <div
             class="absolute inset-0 rounded-[3.2cqw] overflow-hidden shadow-[0_6cqw_12cqw_-4cqw_rgba(20,40,90,0.55)]"
             style="backface-visibility: hidden; -webkit-backface-visibility: hidden;"
+            :class="{ 'card-custom-font': card.fontColor }"
+            :style="{ '--card-font-color': card.fontColor }"
           >
             <!-- Base gradient -->
-            <div class="absolute inset-0 bg-gradient-to-br from-[#0e2a63] via-[#153a8a] to-[#0a1f4d]"></div>
+            <div class="absolute inset-0 bg-gradient-to-br from-[#0e2a63] via-[#153a8a] to-[#0a1f4d]" :style="card.backgroundStyle"></div>
 
             <!-- Radial gold glow top-right -->
             <div
@@ -76,7 +79,7 @@
             <div class="absolute inset-0 rounded-[3.2cqw] ring-[0.2cqw] ring-inset ring-[#c9a961]/45"></div>
 
             <!-- Content -->
-            <div class="relative z-10 h-full w-full p-[4cqw] flex flex-col justify-between text-[#f5f1e8]">
+            <div class="relative z-10 h-full w-full p-[4cqw] flex flex-col justify-between text-[#f5f1e8]" :style="card.fontStyle">
               <!-- TOP: logo + bilingual name -->
               <div class="flex items-center gap-[2.4cqw] min-w-0">
                 <img
@@ -213,6 +216,8 @@
           <!-- ==================== BACK ==================== -->
           <div
             class="absolute inset-0 rounded-[3.2cqw] overflow-hidden shadow-[0_6cqw_12cqw_-4cqw_rgba(20,40,90,0.55)]"
+            :class="{ 'card-custom-font': card.fontColor }"
+            :style="{ '--card-font-color': card.fontColor }"
             style="
               backface-visibility: hidden;
               -webkit-backface-visibility: hidden;
@@ -220,7 +225,7 @@
             "
           >
             <!-- Base gradient -->
-            <div class="absolute inset-0 bg-gradient-to-br from-[#0a1f4d] via-[#0e2a63] to-[#081736]"></div>
+            <div class="absolute inset-0 bg-gradient-to-br from-[#0a1f4d] via-[#0e2a63] to-[#081736]" :style="card.backgroundStyle"></div>
 
             <!-- Radial gold glow top-left -->
             <div
@@ -254,7 +259,7 @@
             <div class="absolute inset-0 rounded-[3.2cqw] ring-[0.2cqw] ring-inset ring-[#c9a961]/45"></div>
 
             <!-- Content -->
-            <div class="relative z-10 h-full w-full p-[4cqw] flex flex-col text-[#f5f1e8]">
+            <div class="relative z-10 h-full w-full p-[4cqw] flex flex-col text-[#f5f1e8]" :style="card.fontStyle">
               <!-- FULL-WIDTH HEADER: logo + bilingual organization name (identical to front) -->
               <div class="flex items-center gap-[2.4cqw] min-w-0">
                 <img
@@ -393,7 +398,7 @@ const props = defineProps({
    * Card data from the parent.
    * Expected shape:
    * {
-   *   org:    { logo, name_zh, name_pt },
+   *   org:    { logo, name_zh, name_pt, card_style: { logo, color, bg_image, bg_color, font_color, font_style } },
    *   member: {
    *     number, display_name,
    *     issueAt, validTo,
@@ -463,13 +468,31 @@ const card = computed(() => {
   const u = props.data || {}
   const org = u.org || {}
   const mem = u.member || {}
+  const style = org.card_style && typeof org.card_style === 'object' ? org.card_style : {}
+  const bgColor = typeof style.bg_color === 'string' ? style.bg_color.trim() : ''
+  const color = bgColor || (typeof style.color === 'string' ? style.color.trim() : '')
+  const fontStyle = typeof style.font_style === 'string' ? style.font_style.trim() : ''
+  const styleColor = fontStyle.match(/(?:^|;)\s*color\s*:\s*([^;]+)/i)?.[1].trim() || ''
+  const fontColor = (typeof style.font_color === 'string' ? style.font_color.trim() : '') || styleColor || 'white'
+  const image = typeof style.bg_image === 'string' ? style.bg_image.trim() : ''
+  const imageUrl = image && !image.includes('/') && !image.includes(':')
+    ? `/storage/images/${image}`
+    : image
+  const gradient = 'linear-gradient(to bottom right, rgba(255, 255, 255, 0.12), transparent 50%, rgba(0, 0, 0, 0.35))'
 
   const rawNumber = String(mem.number ?? '')
     .replace(/\D/g, '')
     .padStart(9, '0')
 
   return {
-    logoSrc: org.logo || d.logoSrc,
+    logoSrc: style.logo || d.logoSrc,
+    fontColor,
+    fontStyle,
+    backgroundStyle: color || imageUrl ? {
+      ...(color ? { backgroundColor: color } : {}),
+      backgroundImage: imageUrl ? `${gradient}, url(${JSON.stringify(imageUrl)})` : gradient,
+      ...(imageUrl ? { backgroundSize: 'cover', backgroundPosition: 'center' } : {}),
+    } : {},
 
     avatarSrc:
       typeof mem.avatarSrc === 'string' && mem.avatarSrc.trim() !== ''
@@ -525,6 +548,10 @@ const qrValue = computed(() => {
 </script>
 
 <style scoped>
+.card-custom-font :where(div, span) {
+  color: var(--card-font-color);
+}
+
 @keyframes cardShine {
   0% {
     background-position: 0% 0%;

@@ -66,6 +66,18 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
 # judokan
 
+## Organization card images
+
+Organization logos, card logos and card background images accept JPG or PNG
+files up to 3 MB each. New uploads are stored on the public disk as
+`organizations/<organization ID>/<random filename>`. Existing image URLs remain valid.
+PHP and the web server must also permit these uploads: set PHP's
+`upload_max_filesize` to at least `3M` and `post_max_size` high enough for all
+three images and the other form fields (for example, `12M` or more). Restart the PHP
+service after changing its configuration. For the local development server,
+run `php -d upload_max_filesize=3M -d post_max_size=12M artisan serve`.
+Web-server request size limits, if configured, must also allow the full request.
+
 ## Invitation email gateway
 
 Set `EMAIL_GATEWAY_URL`, `EMAIL_GATEWAY_ABBR`, and `EMAIL_GATEWAY_FROM` in the

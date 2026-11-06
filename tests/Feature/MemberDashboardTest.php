@@ -152,4 +152,15 @@ class MemberDashboardTest extends TestCase
         $this->login(null);
         $this->get(route('member.dashboard'))->assertRedirect(route('guest.dashboard'));
     }
+
+    public function test_dashboard_accepts_custom_card_style_objects(): void
+    {
+        $style = ['logo' => '/custom.png', 'bg_color' => '#123456', 'font_color' => '#fff'];
+        DB::table('organizations')->where('id', 1)->update(['card_style' => json_encode($style)]);
+        $this->login(Member::findOrFail(1));
+
+        $this->get(route('member.dashboard'))->assertOk()->assertInertia(fn (Assert $page) => $page
+            ->where('member.organization.card_style', $style)
+            ->where('cardStyle', $style));
+    }
 }

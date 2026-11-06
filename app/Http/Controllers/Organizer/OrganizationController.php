@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\AdminUser;
 use App\Models\User;
 use App\Models\Organization;
+use App\Support\CardStyles;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Storage;
 
@@ -73,7 +74,8 @@ class OrganizationController extends Controller
     {
         // \App::setLocale('en');
         return Inertia::render('Organizer/OrganizationEdit',[
-            'organization'=>$organization
+            'organization'=>$organization,
+            'cardStyles'=>CardStyles::presets(),
         ]);
     }
 
@@ -91,6 +93,7 @@ class OrganizationController extends Controller
         // auth()->user()->member;
         return Inertia::render('Organizer/OrganizationEdit',[
             'organization'=>$organization,
+            'cardStyles'=>CardStyles::presets(),
         ]);
         
     }

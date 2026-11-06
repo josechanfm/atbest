@@ -80,21 +80,7 @@ class ConfigSeeder extends Seeder
             ],
             [
                 'organization_id' => 0, 'key' => 'card_styles', 'value' =>
-                '{"card_01": {"name":"Card 01","background": "card_01.png","logo": "site_logo.png","font_style": "font-family:sans-serif;color:#c24641"},
-                  "card_02": {"name":"Card 02","background": "card_02.png","logo": "site_logo.png","font_style": "font-family:sans-serif;color:white"},
-                  "card_03": {"name":"Card 03","background": "card_03.png","logo": "site_logo.png","font_style": "font-family:sans-serif;color:white"},
-                  "card_04": {"name":"Card 04","background": "card_03.png","logo": "site_logo.png","font_style": "font-family:sans-serif;color:white"},
-                  "card_05": {"name":"Card 05","background": "card_03.png","logo": "site_logo.png","font_style": "font-family:sans-serif;color:white"},
-                  "card_06": {"name":"Card 06","background": "card_03.png","logo": "site_logo.png","font_style": "font-family:sans-serif;color:white"},
-                  "card_07": {"name":"Card 07","background": "card_03.png","logo": "site_logo.png","font_style": "font-family:sans-serif;color:white"},
-                  "card_08": {"name":"Card 08","background": "card_03.png","logo": "site_logo.png","font_style": "font-family:sans-serif;color:white"},
-                  "card_09": {"name":"Card 09","background": "card_03.png","logo": "site_logo.png","font_style": "font-family:sans-serif;color:white"},
-                  "card_10": {"name":"Card 10","background": "card_03.png","logo": "site_logo.png","font_style": "font-family:sans-serif;color:white"},
-                  "card_11": {"name":"Card 11","background": "card_03.png","logo": "site_logo.png","font_style": "font-family:sans-serif;color:white"},
-                  "card_12": {"name":"Card 12","background": "card_03.png","logo": "site_logo.png","font_style": "font-family:sans-serif;color:white"},
-                  "card_13": {"name":"Card 13","background": "card_03.png","logo": "site_logo.png","font_style": "font-family:sans-serif;color:white"},
-                  "card_14": {"name":"Card 14","background": "card_03.png","logo": "site_logo.png","font_style": "font-family:sans-serif;color:white"}
-                }'
+                json_encode(config('card_styles'))
             ],
             [
                 'organization_id' => 0, 'key' => 'parishes', 'value' =>

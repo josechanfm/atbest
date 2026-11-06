@@ -45,7 +45,8 @@ class DashboardController extends Controller
             ->orderBy('sequence', 'DESC')
             ->get();
 
-        $cardStyle = Config::item('card_styles')[$org->card_style] ?? 'card_01';
+        $style = $org->card_style;
+        $cardStyle = is_array($style) ? $style : (Config::item('card_styles')[$style ?? 'card_01'] ?? 'card_01');
 
         return Inertia::render('Member/Dashboard', [
             'member'    => $member,

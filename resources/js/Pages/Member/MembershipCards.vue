@@ -206,6 +206,7 @@ export default {
                     logo: member.organization?.logo ?? '/storage/images/site_logo.png',
                     name_zh: member.organization?.name_zh ?? '',
                     name_pt: member.organization?.name_pt ?? '',
+                    card_style: member.organization?.card_style,
                 },
                 member: {
                     number: member.member_number ?? '000000000',

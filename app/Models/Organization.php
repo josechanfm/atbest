@@ -15,8 +15,19 @@ class Organization extends Model implements HasMedia
     use HasFactory, InteractsWithMedia;
 
     protected $fillable=['abbr_en','abbr_zh','name_zh','name_en','name_pt','email','phone','address','country','href','title','avatar','description','content','president','registration_code','card_style','logo','website','founded_at','status'];
-    protected $casts=['status'=>'boolean'];
+    protected $casts=['status'=>'boolean', 'card_style'=>'json'];
     protected $appends = ['organizer_member_ids'];
+
+    public function getCardStyleAttribute($value)
+    {
+        if ($value === null) {
+            return null;
+        }
+
+        $decoded = json_decode($value, true);
+
+        return json_last_error() === JSON_ERROR_NONE ? $decoded : $value;
+    }
     
     public function registerMediaConversions(Media $media = null): void
     {

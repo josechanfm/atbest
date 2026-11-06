@@ -197,24 +197,12 @@
       </div>
     </div>
 
-    <!-- Modal Component -->
-    <OrganizationModal
-      :visible="modal.isOpen"
-      :organization="modal.organization"
-      :card-styles="cardStyles"
-      :submitting="loading"
-      @update:open="modal.isOpen = $event"
-      @save="onModalSave"
-    />
   </AdminLayout>
 </template>
 
 <script>
 import AdminLayout from "@/Layouts/AdminLayout.vue";
 import Pagination from "@/Components/Pagination.vue";
-import OrganizationModal from "./OrganizationModal.vue"; // adjust path as needed
-import { ref, reactive } from "vue";
-import axios from 'axios';
 import {
   PlusOutlined,
   SearchOutlined,
@@ -225,17 +213,13 @@ import {
   TeamOutlined,
   MailOutlined,
   PhoneOutlined,
-  GlobalOutlined,
-  SaveOutlined,
-  CheckCircleOutlined,
-  CloseCircleOutlined
+  GlobalOutlined
 } from '@ant-design/icons-vue';
 
 export default {
   components: {
     AdminLayout,
     Pagination,
-    OrganizationModal,
     PlusOutlined,
     SearchOutlined,
     RedoOutlined,
@@ -245,26 +229,17 @@ export default {
     TeamOutlined,
     MailOutlined,
     PhoneOutlined,
-    GlobalOutlined,
-    SaveOutlined,
-    CheckCircleOutlined,
-    CloseCircleOutlined
+    GlobalOutlined
   },
   
   props: ["organizations"],
   
   data() {
     return {
-      modal: {
-        isOpen: false,
-        organization: null, // null means create mode
-      },
-      loading: false,
       search: {
         abbr: "",
         name_zh: ""
       },
-      cardStyles: [],
       columns: [
         {
           title: "Abbreviation",
@@ -307,10 +282,6 @@ export default {
     };
   },
   
-  created() {
-    this.fetchCardStyles();
-  },
-  
   mounted() {
     // 從路由參數初始化搜索條件
     const params = this.route().params;
@@ -319,70 +290,12 @@ export default {
   },
   
   methods: {
-    async fetchCardStyles() {
-      try {
-        const response = await axios.get(route("api.config.item", { key: "card_styles" }));
-        this.cardStyles = Object.entries(response.data).map(([key, card]) => ({
-          value: key,
-          label: card.name
-        }));
-      } catch (error) {
-        console.error("Failed to fetch card styles:", error);
-      }
-    },
-    
     createRecord() {
-      this.modal.organization = null;
-      this.modal.isOpen = true;
+      this.$inertia.get(route('admin.organizations.create'));
     },
     
     editRecord(record) {
-      this.modal.organization = { ...record };
-      this.modal.isOpen = true;
-    },
-    
-    // Called when modal emits 'save'
-    onModalSave(formData) {
-      // Determine mode by presence of id
-      const isEdit = !!formData.id;
-      this.loading = true;
-      if (isEdit) {
-        this.$inertia.patch(
-          route("admin.organizations.update", formData.id),
-          formData,
-          {
-            onSuccess: () => {
-              this.loading = false;
-              this.modal.isOpen = false;
-              this.$message.success(this.$t('organization_updated_successfully'));
-            },
-            onError: (error) => {
-              this.loading = false;
-              console.error("Update failed:", error);
-              this.$message.error(Object.values(error)[0] || this.$t('update_failed'));
-            },
-            onFinish: () => { this.loading = false; },
-          }
-        );
-      } else {
-        this.$inertia.post(
-          route("admin.organizations.store"),
-          formData,
-          {
-            onSuccess: () => {
-              this.loading = false;
-              this.modal.isOpen = false;
-              this.$message.success(this.$t('organization_created_successfully'));
-            },
-            onError: (error) => {
-              this.loading = false;
-              console.error("Store failed:", error);
-              this.$message.error(Object.values(error)[0] || this.$t('create_failed'));
-            },
-            onFinish: () => { this.loading = false; },
-          }
-        );
-      }
+      this.$inertia.get(route('admin.organizations.edit', record.id));
     },
     
     deleteRecord(record) {

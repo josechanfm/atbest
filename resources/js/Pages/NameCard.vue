@@ -234,6 +234,7 @@ const cardData = computed(() => ({
     logo: props.member.organization?.logo ?? '/storage/images/site_logo.png',
     name_zh: props.member.organization?.name_zh ?? '',
     name_pt: props.member.organization?.name_pt ?? '',
+    card_style: props.member.organization?.card_style,
   },
   member: {
     number: props.nameCard?.number ?? '00000000',
