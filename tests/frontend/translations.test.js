@@ -67,9 +67,12 @@ test('translation library resolves every grouped and nested language-pack key', 
 });
 
 test('all locales contain the same keys and interpolation placeholders', () => {
-    const locales = Object.fromEntries(['en', 'zh', 'pt'].map(lang => [
+    const rawLocales = Object.fromEntries(['en', 'zh', 'pt'].map(lang => [
         lang,
-        prepareTranslations(JSON.parse(fs.readFileSync(new URL(`../../lang/${lang}.json`, import.meta.url), 'utf8'))).default,
+        JSON.parse(fs.readFileSync(new URL(`../../lang/${lang}.json`, import.meta.url), 'utf8')),
+    ]));
+    const locales = Object.fromEntries(Object.entries(rawLocales).map(([lang, messages]) => [
+        lang, prepareTranslations(messages).default,
     ]));
     const legacyKeys = messages => Object.keys(messages)
         .filter(key => !key.startsWith('sections.') && typeof messages[key] === 'string')
@@ -78,6 +81,27 @@ test('all locales contain the same keys and interpolation placeholders', () => {
         .map(match => match[0])
         .sort();
     const expected = legacyKeys(locales.en);
+
+    function assertMatchingStructure(reference, translated, path) {
+        assert.ok(translated && typeof translated === 'object' && !Array.isArray(translated), `${path}: expected an object`);
+        assert.deepEqual(Object.keys(translated).sort(), Object.keys(reference).sort(), `${path}: keys`);
+        for (const [key, value] of Object.entries(reference)) {
+            const childPath = `${path}.${key}`;
+            if (value !== null && typeof value === 'object' && !Array.isArray(value)) {
+                assertMatchingStructure(value, translated[key], childPath);
+            } else {
+                assert.equal(typeof translated[key], typeof value, `${childPath}: value type`);
+                if (typeof value === 'string') {
+                    assert.ok(translated[key].trim(), `${childPath}: empty translation`);
+                    assert.deepEqual(placeholders(translated[key]), placeholders(value), `${childPath}: placeholders`);
+                }
+            }
+        }
+    }
+
+    for (const lang of ['en', 'pt']) {
+        assertMatchingStructure(rawLocales.zh, rawLocales[lang], lang);
+    }
 
     for (const lang of ['zh', 'pt']) {
         assert.deepEqual(legacyKeys(locales[lang]), expected);

@@ -8,9 +8,9 @@
         "register": "註冊"
     },
     "member": {
-        "title": "會員",
         "wallet": "卡包",
         "business_card": "名片管理",
+        "title": "會員",
         "cards": "會員卡",
         "mobile_number": "手機號碼",
         "number": "會員編號",

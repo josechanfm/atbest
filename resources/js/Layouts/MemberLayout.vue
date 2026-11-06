@@ -158,10 +158,10 @@ export default {
                         {{ $t("account") }}
                       </DropdownLink>
                       <DropdownLink :href="route('member.membership.cards')??null">
-                        {{ $t('member').wallet }}
+                        {{ $t('member.wallet') }}
                       </DropdownLink>
                       <DropdownLink :href="route('member.businessCard.edit')??null">
-                        {{ $t('member').business_card }}
+                        {{ $t('member.business_card') }}
                       </DropdownLink>
                       <DropdownLink :href="route('member.entries.index')??null">
                         {{ $t("form_filled") }}
