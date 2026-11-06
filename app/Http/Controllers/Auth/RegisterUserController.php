@@ -15,7 +15,7 @@ use Illuminate\Validation\Rules;
 use Inertia\Inertia;
 use Inertia\Response;
 
-class RegisteredUserController extends Controller
+class RegisterUserController extends Controller
 {
     /**
      * Display the registration view.
@@ -39,7 +39,6 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'registration_code' => 'required|exists:organizations,registration_code',
         ]);
-		dd($request->all(), $validated);
 
         $user = User::create([
             'name' => $request->name,
