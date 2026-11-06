@@ -66,6 +66,9 @@
                 <DropdownLink as="a" href="/language/en">
                   {{ $t("english") }}
                 </DropdownLink>
+                <DropdownLink as="a" href="/language/pt">
+                  {{ $t("portuguese") }}
+                </DropdownLink>
               </template>
             </div>
           </template>

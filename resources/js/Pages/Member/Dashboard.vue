@@ -83,9 +83,6 @@
             <div class="bg-white shadow-md mt-10 rounded-lg">
               <div class="py-10">
                 <h1 class="font-bold text-center text-3xl text-gray-900">
-                  {{ member.family_name }}{{ member.given_name }}
-                </h1>
-                <h1 class="font-bold text-center text-2xl text-gray-900">
                   {{ member.display_name }}
                 </h1>
                 <p class="text-center text-sm text-gray-400 font-medium">

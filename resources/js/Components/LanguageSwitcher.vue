@@ -7,12 +7,15 @@
             </a>
         </template>
         <template #content>
-            <div class="w-20 text-center ">
+            <div class="w-25">
                 <DropdownLink :href="route('language', 'zh')">
                     {{ $t("chinese") }}
                 </DropdownLink>
                 <DropdownLink :href="route('language', 'en')">
                     {{ $t("english") }}
+                </DropdownLink>
+                <DropdownLink :href="route('language', 'pt')">
+                    {{ $t("portuguese") }}
                 </DropdownLink>
             </div>
         </template>
@@ -28,7 +31,7 @@ import DropdownLink from "@/Components/DropdownLink.vue";
 import { getActiveLanguage,loadLanguageAsync } from "laravel-vue-i18n";
 
 const locale = getActiveLanguage()
-const locales = ref([{code:'zh' , name:'zh'},{code:'en',name:'en'}])
+const locales = ref([{code:'zh' , name:'zh'},{code:'en',name:'en'},{code:'pt',name:'pt'}])
 const page = usePage();
 loadLanguageAsync(page.props.lang);
 // 获取可用语言列表
