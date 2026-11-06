@@ -119,12 +119,12 @@
             </template>
 
             <template v-else-if="column.dataIndex === 'manager'">
-              <div v-if="record.users && record.users.length > 0">
-                <a-tag v-for="user in record.users.slice(0, 2)" :key="user.id" class="mb-1 mr-1">
-                  {{ user.name }}
+              <div v-if="record.members && record.members.some(member => member.is_organizer)">
+                <a-tag v-for="member in record.members.filter(member => member.is_organizer).slice(0, 2)" :key="member.id" class="mb-1 mr-1">
+                  {{ member.display_name || member.given_name || member.user?.name }}
                 </a-tag>
-                <a-tag v-if="record.users.length > 2" color="blue">
-                  +{{ record.users.length - 2 }}
+                <a-tag v-if="record.members.filter(member => member.is_organizer).length > 2" color="blue">
+                  +{{ record.members.filter(member => member.is_organizer).length - 2 }}
                 </a-tag>
               </div>
               <span v-else class="text-gray-400">—</span>
@@ -199,11 +199,11 @@
 
     <!-- Modal Component -->
     <OrganizationModal
-      :open="modal.isOpen"
+      :visible="modal.isOpen"
       :organization="modal.organization"
-      :users="users"
       :card-styles="cardStyles"
-      @update:visible="modal.isOpen = $event"
+      :submitting="loading"
+      @update:open="modal.isOpen = $event"
       @save="onModalSave"
     />
   </AdminLayout>
@@ -251,7 +251,7 @@ export default {
     CloseCircleOutlined
   },
   
-  props: ["organizations", "users"],
+  props: ["organizations"],
   
   data() {
     return {
@@ -359,8 +359,9 @@ export default {
             onError: (error) => {
               this.loading = false;
               console.error("Update failed:", error);
-              this.$message.error(this.$t('update_failed'));
+              this.$message.error(Object.values(error)[0] || this.$t('update_failed'));
             },
+            onFinish: () => { this.loading = false; },
           }
         );
       } else {
@@ -376,8 +377,9 @@ export default {
             onError: (error) => {
               this.loading = false;
               console.error("Store failed:", error);
-              this.$message.error(this.$t('create_failed'));
+              this.$message.error(Object.values(error)[0] || this.$t('create_failed'));
             },
+            onFinish: () => { this.loading = false; },
           }
         );
       }

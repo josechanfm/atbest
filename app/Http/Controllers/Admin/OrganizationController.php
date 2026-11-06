@@ -10,6 +10,8 @@ use App\Models\Member;
 use App\Models\User;
 use App\Models\Config;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 
 class OrganizationController extends Controller
 {
@@ -38,7 +40,6 @@ class OrganizationController extends Controller
         return Inertia::render('Admin/Organizations', [
             'cardStyles' => Config::item('card_styles'),
             'organizations' => $organizations,
-            'users' => User::all()
         ]);
     }
 
@@ -60,7 +61,26 @@ class OrganizationController extends Controller
      */
     public function store(Request $request)
     {
-        Organization::create($request->all());
+        $validated = $request->validate([
+            'abbr_en' => 'required|string|max:255',
+            'registration_code' => 'nullable|string|max:100',
+            'name_zh' => 'required|string|max:255',
+            'name_en' => 'nullable|string|max:255',
+            'name_pt' => 'nullable|string|max:255',
+            'email' => 'required|email|max:255',
+            'phone' => 'nullable|string|max:50',
+            'address' => 'nullable|string',
+            'href' => 'nullable|string|max:255',
+            'avatar' => 'nullable|string|max:255',
+            'card_style' => 'nullable|string|max:50',
+            'president' => 'nullable|string|max:255',
+            'content' => 'nullable|string',
+            'status' => 'nullable|boolean',
+        ]);
+        if (empty($validated['card_style'])) {
+            unset($validated['card_style']);
+        }
+        Organization::create($validated);
         return redirect()->back();
     }
 
@@ -98,7 +118,7 @@ class OrganizationController extends Controller
         $validated = $request->validate([
             // 必要欄位
             'parish' => 'nullable|string|max:255',
-            'abbr' => 'nullable|string|max:50',
+            'abbr_en' => 'required|string|max:255',
             'name_zh' => 'nullable|string|max:255',
             'name_en' => 'nullable|string|max:255',
             'email' => 'nullable|email|max:255',
@@ -120,26 +140,23 @@ class OrganizationController extends Controller
             'founded_at' => 'nullable|date',
             'status' => 'nullable|boolean',
             
-            'organizer_member_ids' => 'nullable',
+            'organizer_member_ids' => 'sometimes|array',
+            'organizer_member_ids.*' => [
+                'integer',
+                'distinct',
+                Rule::exists('members', 'id')->where('organization_id', $organization->id),
+            ],
         ]);
 
-        try {
-            // 更新基本資訊
+        DB::transaction(function () use ($organization, $validated) {
             $organization->update($validated);
-            
-            // 處理用戶關聯
-            if ($request->has('organizer_member_ids')) {
-                $organization->users()->sync($request->organizer_member_ids);
+
+            if (array_key_exists('organizer_member_ids', $validated)) {
+                $this->updateOrganizers($organization, $validated['organizer_member_ids']);
             }
-            
-            // 處理組織者設定
-            $this->updateOrganizers($organization, $request->organizer_member_ids ?? []);
-            
-            return redirect()->back()->with('success', '組織資訊更新成功！');
-        
-        } catch (\Exception $e) {
-            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
-        }
+        });
+
+        return redirect()->back()->with('success', '組織資訊更新成功！');
     }
     /**
      * Remove the specified resource from storage.
@@ -183,28 +200,10 @@ class OrganizationController extends Controller
 
     private function updateOrganizers(Organization $organization, array $organizerIds)
     {
-        // 開始資料庫事務
-        try {
-            // 1. 先將該組織所有成員的 is_organizer 設為 0
-            $organization->members()->update(['is_organizer' => 0]);
-            
-            // 2. 如果有指定組織者，將他們設為 1
-            if (!empty($organizerIds)) {
-                // 只更新屬於這個組織的成員
-                $validMemberIds = $organization->members()
-                    ->whereIn('id', $organizerIds)
-                    ->pluck('id')
-                    ->toArray();
-                
-                if (!empty($validMemberIds)) {
-                    $organization->members()
-                        ->whereIn('id', $validMemberIds)
-                        ->update(['is_organizer' => 1]);
-                }
-            }
-            
-        } catch (\Exception $e) {
-            throw $e;
+        $organization->members()->update(['is_organizer' => 0]);
+
+        if (!empty($organizerIds)) {
+            $organization->members()->whereIn('id', $organizerIds)->update(['is_organizer' => 1]);
         }
     }
 }

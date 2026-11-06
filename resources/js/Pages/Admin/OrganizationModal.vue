@@ -5,23 +5,23 @@
     class="md:!w-[70%] !w-full"
     :footer="null"
     centered
-    :styles="{ body: { padding: '24px' } }"
+    :styles="{ body: { padding: '16px 24px' } }"
     wrap-class-name="organization-modal"
     @cancel="handleCancel"
   >
     <a-form
       ref="formRef"
       :model="formData"
-      layout="horizontal"
+      layout="vertical"
       @finish="handleFinish"
       class="organization-form"
     >
       <!-- Basic Information Section -->
-      <div class="mb-6">
-        <h3 class="mb-4 text-lg font-semibold text-gray-900">
+      <div class="mb-4">
+        <h3 class="mb-2 text-base font-semibold text-gray-900">
           {{ $t('basic_information') }}
         </h3>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2">
           <a-form-item
             :label="$t('abbreviation')"
             name="abbr_en"
@@ -46,7 +46,7 @@
           </a-form-item>
         </div>
 
-        <div class="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div class="mt-2 grid grid-cols-1 gap-y-2">
           <a-form-item
             :label="$t('organization_name_zh')"
             name="name_zh"
@@ -84,11 +84,11 @@
       </div>
 
       <!-- Contact Information Section -->
-      <div class="mb-6">
-        <h3 class="mb-4 text-lg font-semibold text-gray-900">
+      <div class="mb-4">
+        <h3 class="mb-2 text-base font-semibold text-gray-900">
           {{ $t('contact_information') }}
         </h3>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2">
           <a-form-item
             :label="$t('email')"
             name="email"
@@ -125,7 +125,7 @@
           </a-form-item>
         </div>
 
-        <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="mt-2 grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2">
           <a-form-item
             :label="$t('address')"
             name="address"
@@ -155,11 +155,11 @@
       </div>
 
       <!-- Organization Settings -->
-      <div class="mb-6">
-        <h3 class="mb-4 text-lg font-semibold text-gray-900">
+      <div class="mb-4">
+        <h3 class="mb-2 text-base font-semibold text-gray-900">
           {{ $t('organization_settings') }}
         </h3>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2">
           <a-form-item
             :label="$t('avatar_url')"
             name="avatar"
@@ -191,7 +191,7 @@
           </a-form-item>
         </div>
 
-        <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="mt-2 grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2">
           <a-form-item
             :label="$t('president')"
             name="president"
@@ -204,7 +204,7 @@
           </a-form-item>
           <a-form-item
             :label="$t('manager')"
-            name="manager"
+            name="organizer_member_ids"
           >
             <a-select
               v-model:value="formData.organizer_member_ids"
@@ -212,17 +212,16 @@
               :placeholder="$t('select_managers')"
               allow-clear
               :options="availableManagerOptions"
-              :fieldNames="{ value: 'id', label: 'given_name' }"
+              :disabled="!isEdit"
               class="w-full"
             />
           </a-form-item>
         </div>
 
-        <div class="mt-4">
+        <div class="mt-2">
           <a-form-item
             :label="$t('content')"
             name="content"
-            :wrapper-col="{ span: 24 }"
           >
             <a-textarea
               v-model:value="formData.content"
@@ -234,7 +233,7 @@
           </a-form-item>
         </div>
 
-        <div class="mt-4">
+        <div class="mt-2">
           <a-form-item
             :label="$t('status')"
             name="status"
@@ -242,8 +241,8 @@
             <div class="flex items-center space-x-4">
               <a-switch
                 v-model:checked="formData.status"
-                :checked-value="1"
-                :unchecked-value="0"
+                :checked-value="true"
+                :unchecked-value="false"
                 :checked-children="$t('active')"
                 :un-checked-children="$t('inactive')"
               />
@@ -253,14 +252,14 @@
       </div>
 
       <!-- Form Actions -->
-      <div class="flex justify-end space-x-3 border-t border-gray-200 pt-6">
+      <div class="flex justify-end space-x-3 border-t border-gray-200 pt-4">
         <a-button @click="handleCancel">
           {{ $t('cancel') }}
         </a-button>
         <a-button
           type="primary"
           :loading="submitting"
-          @click="submitForm"
+          html-type="submit"
           class="!bg-indigo-600 hover:!bg-indigo-700"
         >
           <template #icon>
@@ -275,7 +274,6 @@
 
 <script>
 import { ref, watch, computed, toRaw, getCurrentInstance } from 'vue';
-import { message } from 'ant-design-vue';
 import {
   MailOutlined,
   PhoneOutlined,
@@ -300,13 +298,13 @@ export default {
       type: Object,
       default: null
     },
-    users: {
-      type: Array,
-      default: () => []
-    },
     cardStyles: {
       type: Array,
       default: () => []
+    },
+    submitting: {
+      type: Boolean,
+      default: false
     }
   },
   emits: ['update:open', 'save'],
@@ -316,7 +314,6 @@ export default {
     const t = instance.proxy.$t; // This is the laravel-vue-i18n $t
 
     const formRef = ref(null);
-    const submitting = ref(false);
     const localVisible = ref(props.visible);
 
     const getDefaultFormData = () => ({
@@ -335,7 +332,7 @@ export default {
       president: '',
       organizer_member_ids: [],
       content: '',
-      status: 1,
+      status: true,
     });
 
     const formData = ref({ ...getDefaultFormData() });
@@ -346,22 +343,27 @@ export default {
     );
 
     const availableManagerOptions = computed(() => {
-      if (!props.users) return [];
-      return props.users.filter(u => u.user_id != null);
+      return (props.organization?.members || [])
+        .map(member => ({
+          value: member.id,
+          label: member.display_name || member.given_name || member.user?.name || String(member.id)
+        }));
     });
 
     watch(() => props.visible, (newVal) => {
       localVisible.value = newVal;
       if (newVal) {
         if (props.organization) {
-          const orgCopy = { ...props.organization };
-          if (orgCopy.organizer_member_ids === undefined) {
-            orgCopy.organizer_member_ids = [];
-          }
-          formData.value = orgCopy;
+          formData.value = {
+            ...getDefaultFormData(),
+            ...props.organization,
+            organizer_member_ids: [...(props.organization.organizer_member_ids || [])],
+            status: !!props.organization.status
+          };
         } else {
           formData.value = { ...getDefaultFormData() };
         }
+        formRef.value?.clearValidate();
       }
     });
 
@@ -373,32 +375,11 @@ export default {
 
     const handleCancel = () => {
       localVisible.value = false;
-      emit('update:open', false);
     };
 
-    const submitForm = () => {
-      formRef.value?.$emit('finish');
+    const handleFinish = () => {
+      emit('save', toRaw(formData.value));
     };
-
-    const handleFinish = async () => {
-      try {
-        await formRef.value?.validate();
-        submitting.value = true;
-        const payload = toRaw(formData.value);
-        emit('save', payload);
-      } catch (error) {
-        console.error('Validation failed:', error);
-        if (error.errorFields) {
-          message.error(t('please_fill_required_fields'));
-        }
-      }
-    };
-
-    watch(() => localVisible.value, (newVal) => {
-      if (!newVal) {
-        submitting.value = false;
-      }
-    });
 
     return {
       formRef,
@@ -407,9 +388,7 @@ export default {
       isEdit,
       modalTitle,
       availableManagerOptions,
-      submitting,
       handleCancel,
-      submitForm,
       handleFinish
     };
   }
@@ -417,5 +396,11 @@ export default {
 </script>
 
 <style scoped>
-/* Optional custom styles */
+.organization-form :deep(.ant-form-item) {
+  margin-bottom: 0;
+}
+
+.organization-form :deep(.ant-form-item-label) {
+  padding-bottom: 2px;
+}
 </style>
