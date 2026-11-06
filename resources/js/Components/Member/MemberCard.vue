@@ -1,7 +1,6 @@
 <template>
   <div class="flex items-center justify-center">
     <div class="w-full [container-type:inline-size]" :style="{ maxWidth: card.maxWidth }">
-      {{ props.data.org?.card_style?.logo }}
       <!-- Flip wrapper -->
       <div
         class="relative w-full aspect-[1.586/1] cursor-pointer select-none [perspective:1400px]"
