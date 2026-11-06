@@ -1,5 +1,5 @@
 <script>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
 import { router } from "@inertiajs/vue3";
 import { Head } from "@inertiajs/vue3";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink.vue";
@@ -48,6 +48,7 @@ export default {
         const nav = ref(null)
         const placeholderHeight = ref(0)
         let animation
+        let menuAnimation
 
         const setupAnimation = () => {
             // 配置 GSAP 时间轴
@@ -81,13 +82,19 @@ export default {
             window.addEventListener('resize', updateHeight)
             window.addEventListener('scroll', handleScroll, { passive: true })
 
-            gsap.from(
+            menuAnimation = gsap.from(
                 menuBar.value, {
                     x: 150,
                     duration: 0.5,
                     opacity: 0
                 }
             );
+        });
+        onUnmounted(() => {
+            window.removeEventListener('resize', updateHeight);
+            window.removeEventListener('scroll', handleScroll);
+            animation?.kill();
+            menuAnimation?.kill();
         });
 
         return {
@@ -123,7 +130,7 @@ export default {
                 </h1>
             </div>
 
-            <menuDashboard />
+            <div ref="menuBar"><menuDashboard /></div>
         </div>
 
         <!-- Responsive Navigation Menu -->

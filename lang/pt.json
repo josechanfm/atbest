@@ -197,6 +197,7 @@
             "enter_website": "Introduza o endereço do sítio Web"
         },
         "actions_and_feedback": {
+            "rss_load_failed": "Não foi possível carregar as notícias. Tente novamente mais tarde.",
             "back": "Voltar",
             "create_feature": "Criar destaque",
             "cancel": "Cancelar",

@@ -197,6 +197,7 @@
             "inactive": "Inactive"
         },
         "actions_and_feedback": {
+            "rss_load_failed": "Unable to load news. Please try again later.",
             "back": "Back",
             "create_feature": "Create feature",
             "search_clear": "Clear search",

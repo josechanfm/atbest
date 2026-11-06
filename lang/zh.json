@@ -210,6 +210,7 @@
             "inactive": "停用"
         },
         "actions_and_feedback": {
+            "rss_load_failed": "無法載入新聞，請稍後再試。",
             "back": "返回",
             "create_feature": "創建精選",
             "cancel": "取消",
