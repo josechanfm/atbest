@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Member;
 use App\Http\Controllers\Controller;
 use Inertia\Inertia;
 use App\Models\Member;
+use Illuminate\Support\Facades\DB;
 
 class MembershipController extends Controller
 {
@@ -24,14 +25,19 @@ class MembershipController extends Controller
         ]);
     }
     public function switch(Member $member){
-        Member::where('user_id',$member->user->id)->update(['is_default'=>false]);
-        // dd($member);
-        Member::where('id',$member->id)->update(['is_default'=>true]);
-        // $member->is_default=true;
-        // $member->save();
-        //dd($member->toArray());
-        //$member->organization;
-        
+        abort_unless($member->user_id === auth()->id(), 403);
+
+        DB::transaction(function () use ($member) {
+            Member::where('user_id', $member->user_id)->update(['is_default' => false]);
+            Member::whereKey($member->id)->update(['is_default' => true]);
+        });
+
+        $member->refresh();
+        session([
+            'member' => $member,
+            'organization' => $member->organization,
+        ]);
+
         return to_route('member.dashboard');
     }
     

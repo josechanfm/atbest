@@ -4,11 +4,9 @@ namespace App\Http\Controllers\Member;
 
 use App\Http\Controllers\Controller;
 use App\Models\Article;
-use Inertia\Inertia;
 use App\Models\Config;
 use App\Models\Feature;
-use App\Models\Member;
-use App\Models\Organization;
+use Inertia\Inertia;
 
 class DashboardController extends Controller
 {
@@ -16,35 +14,32 @@ class DashboardController extends Controller
     {
         $user = auth()->user();
 
-        // 1. Admin redirect
         if ($user && $user->hasRole('admin')) {
             return redirect()->intended('/admin');
         }
 
-        // 2. Check if user has a member record
-        if (empty($user->member)) {
+        $member = $user->member;
+        if (!$member) {
             return redirect()->route('guest.dashboard');
-            // return Inertia::render('Error', [
-            //     'message' => 'You are not a registered member.'
-            // ]);
         }
-        // 3. Store member & organization in session if not already set
-        session()->put([
-            'member' => $user->member,
-            'organization' => $user->member->organization,
-        ]);
-        // 4. Load necessary relations
-        $member = $user->member->load('organization');
-        $member->name_card_link=$member->nameCardLink(); // Ensure name card link is generated
+
+        if (!session()->has('member')) {
+            session()->put([
+                'member' => $member,
+                'organization' => $member->organization,
+            ]);
+        }
+
+        $member->load('organization');
+        $member->name_card_link = $member->nameCardLink();
         $org = session('member')->organization;
-        // 5. Fetch data
+
         $features = Feature::whereBelongsTo($org)
             ->orderBy('sequence')
             ->limit(4)
             ->get();
 
         $articles = Article::whereBelongsTo($org)
-            ->where('organization_id', $member->organization_id)
             ->where('category_code', 'NEWS')
             ->where('published', true)
             ->orderBy('sequence', 'DESC')
@@ -52,7 +47,6 @@ class DashboardController extends Controller
 
         $cardStyle = Config::item('card_styles')[$org->card_style] ?? 'card_01';
 
-        // 6. Render dashboard
         return Inertia::render('Member/Dashboard', [
             'member'    => $member,
             'members'   => $user->members()->get(),
