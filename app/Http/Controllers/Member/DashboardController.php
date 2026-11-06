@@ -29,18 +29,14 @@ class DashboardController extends Controller
             // ]);
         }
         // 3. Store member & organization in session if not already set
-        if (!session()->has('member')) {
-            
-            session()->put([
-                'member' => $user->member,
-                'organization' => $user->member->organization,
-            ]);
-        }
+        session()->put([
+            'member' => $user->member,
+            'organization' => $user->member->organization,
+        ]);
         // 4. Load necessary relations
         $member = $user->member->load('organization');
         $member->name_card_link=$member->nameCardLink(); // Ensure name card link is generated
         $org = session('member')->organization;
-        
         // 5. Fetch data
         $features = Feature::whereBelongsTo($org)
             ->orderBy('sequence')
@@ -48,6 +44,7 @@ class DashboardController extends Controller
             ->get();
 
         $articles = Article::whereBelongsTo($org)
+            ->where('organization_id', $member->organization_id)
             ->where('category_code', 'NEWS')
             ->where('published', true)
             ->orderBy('sequence', 'DESC')

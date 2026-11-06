@@ -37,7 +37,6 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
         $request->session()->regenerate();
         Session::put('applocale', $applocale);
-
         if(auth()->user()){
             if(auth()->user()->member){
                     return redirect()->intended('member');
