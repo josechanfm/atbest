@@ -67,7 +67,7 @@ class Article extends Model implements HasMedia
                 ->where(function($query){
                     $query->whereNull('expire_at')->orWhere('expire_at','>=',date('Y-m-d'));
                 })
-                ->orderBy('sequence','DESC')->get();
+                ->orderBy('created_at','DESC')->get();
     }
     public static function privates(){
         if(empty(session('organization'))){
