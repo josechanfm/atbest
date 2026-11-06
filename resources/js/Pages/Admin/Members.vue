@@ -61,7 +61,7 @@
               </span>
             </template>
             <template v-else-if="column.dataIndex == 'avatar'">
-              <img :src="record.avatar_url" width="60" />
+              <img :src="record.avatar" width="60" />
             </template>
             <template v-else-if="column.dataIndex == 'organization'">
               <span v-if="record.organization">
@@ -73,7 +73,6 @@
             </template>
           </template>
         </a-table>
-        <!-- <Pagination :data="members" :search="search" /> -->
       </div>
     </div>
     <MemberModal
@@ -90,17 +89,15 @@
 
 <script>
 import AdminLayout from "@/Layouts/AdminLayout.vue";
-import Pagination from "@/Components/Pagination.vue";
 import MemberModal from "./MemberModal.vue";
 import { message } from "ant-design-vue";
 
 export default {
   components: {
     AdminLayout,
-    Pagination,
     MemberModal,
   },
-  props: ["organizations", "members", "users"],
+  props: ["organizations", "members", "users", "filters"],
   data() {
     return {
       saving: false,
@@ -110,14 +107,9 @@ export default {
         mode: "",
       },
       search: {
-        organization:null,
-        given_name:null,
-        family_name:null
-      },
-      pagination: {
-        total: this.members.total,
-        current: this.members.current_page,
-        pageSize: this.members.per_page,
+        organization: this.filters?.organization ? Number(this.filters.organization) : null,
+        given_name: this.filters?.given_name || null,
+        family_name: this.filters?.family_name || null,
       },
       columns: [
         {
@@ -159,31 +151,22 @@ export default {
       ],
     };
   },
-  created() {},
-  mounted() {
-    console.log(this.route().params)
-    if(this.route().params.search){
-      this.search = {
-          organization: parseInt(this.route().params.search.organization) || null,
-          given_name: this.route().params.search.given_name || null,
-          family_name: this.route().params.search.family_name || null,
+  computed: {
+    pagination() {
+      return {
+        total: this.members.total,
+        current: this.members.current_page,
+        pageSize: this.members.per_page,
+        showSizeChanger: true,
       };
-
-    }
-    //this.search = this.route().params.search ?? {};
+    },
   },
   methods: {
-    onPaginationChange(page, filters, sorter) {
-      this.$inertia.get(route("admin.members.index"),{
-          page: page.current,
-          per_page: page.pageSize,
-        },{
-          onSuccess: (page) => {
-            console.log(page);
-          },
-          onError: (error) => {
-            console.log(error);
-          },
+    onPaginationChange(page) {
+      this.$inertia.get(route("admin.members.index"), {
+        page: page.current,
+        per_page: page.pageSize,
+        search: this.filters,
       });
     },
     createRecord() {
@@ -235,13 +218,11 @@ export default {
       console.log("create login" + record.id);
     },
     searchData() {
-      this.$inertia.get(route("admin.members.index"),{ search: this.search },{
-          onSuccess: (page) => {
-            console.log(page);
-          },
-          // preserveState: true,
-        }
-      );
+      this.$inertia.get(route("admin.members.index"), {
+        page: 1,
+        per_page: this.members.per_page,
+        search: this.search,
+      });
     },
   },
 };

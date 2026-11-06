@@ -34,10 +34,11 @@ class MemberController extends Controller
                     $query->where('family_name', 'like', '%' . $request->search['family_name'] . '%');
                 }
             }
-        })->with('organization')->with('user')->paginate($request->per_page);
+        })->with('organization')->with('user')->orderBy('id')->paginate($request->per_page);
         //})->with('organization')->with('user')->paginate($pageSize, ['*'], 'page', $currentPage);
         return Inertia::render('Admin/Members', [
             'members' => $members,
+            'filters' => $request->input('search', []),
             'organizations' => Organization::where('status', true)->get(),
             //'users' => User::whereNotIn('id', Member::whereNotNull('user_id')->get()->pluck('user_id'))->get()
             'users' => User::all()
