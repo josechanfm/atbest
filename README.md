@@ -71,6 +71,7 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 Set `EMAIL_GATEWAY_URL`, `EMAIL_GATEWAY_ABBR`, and `EMAIL_GATEWAY_FROM` in the
 environment to use the email gateway for member invitations. The abbreviation
 and sender must be configured for your gateway; they have no default values.
+The URL may be the gateway base URL or the full `/api/email/emitter` endpoint.
 After changing environment settings, refresh Laravel's configuration cache if
 it is enabled. Invitations without an email address remain available for manual
 sharing. If delivery fails, the invitation remains in the list for manual sharing.

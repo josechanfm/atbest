@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Invitation;
 use App\Models\User;
+use App\Services\EmailGateway;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\DB;
@@ -79,6 +80,21 @@ class MemberInvitationEmailTest extends TestCase
         Http::assertNothingSent();
     }
 
+    public function test_full_gateway_endpoint_is_not_appended_twice(): void
+    {
+        config(['services.genie_email.base_url' => 'https://gateway.example/api/email/emitter/']);
+        Http::fake(['gateway.example/*' => Http::response('', 200)]);
+
+        $response = $this->post(route('member.invitations.store'), ['email' => 'invitee@example.com']);
+
+        $response->assertSessionHas('invitation_notice.type', 'success');
+        Http::assertSent(function ($request) {
+            return parse_url($request->url(), PHP_URL_PATH) === '/api/email/emitter'
+                && $request->data()['email_to'] === 'invitee@example.com';
+        });
+        Http::assertSentCount(1);
+    }
+
     public function test_failed_delivery_keeps_invitation_and_warns_user(): void
     {
         Http::fake(['gateway.example/*' => Http::response('', 500)]);
@@ -88,6 +104,17 @@ class MemberInvitationEmailTest extends TestCase
         $response->assertSessionHas('invitation_notice.type', 'warning');
         $this->assertSame('invitee@example.com', Invitation::firstOrFail()->email);
         Http::assertSentCount(1);
+    }
+
+    public function test_gateway_returns_a_boolean_for_http_responses(): void
+    {
+        Http::fakeSequence()
+            ->push('', 200)
+            ->push('', 500);
+
+        $gateway = app(EmailGateway::class);
+        $this->assertTrue($gateway->send('invitee@example.com', 'Hi', 'Hello'));
+        $this->assertFalse($gateway->send('invitee@example.com', 'Hi', 'Hello'));
     }
 
     public function test_missing_gateway_configuration_warns_without_sending(): void

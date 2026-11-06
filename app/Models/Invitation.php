@@ -71,6 +71,13 @@ class Invitation extends Model
             'used_by' => $user->id,
         ]);
     }
+    public function markAsSent(): void
+    {
+        $this->update([
+            'sent_at' => now(),
+            'sent_by' => auth()->id(),
+        ]);
+    }
 
     public function getShareUrlAttribute(): string
     {

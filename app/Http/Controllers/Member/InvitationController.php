@@ -6,11 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Models\Invitation;
 use App\Services\EmailGateway;
 use Illuminate\Http\Client\ConnectionException;
-use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use RuntimeException;
+use Illuminate\Support\Facades\Http;
 
 class InvitationController extends Controller
 {
@@ -60,29 +60,33 @@ class InvitationController extends Controller
             'inviter_id' => $request->user()->id,
             'email'      => $validated['email'] ?? null,
             'expires_at' => now()->addDays(3),
+            'used_by'   => auth()->id(),
         ]);
 
         if ($invitation->email) {
             try {
-                $emailGateway->send(
+                $sent = $emailGateway->send(
                     $invitation->email,
                     '邀請您註冊',
                     "您好，您已獲邀註冊。請點擊以下連結接受邀請：\n"
                         . $invitation->share_url
                         . "\n此邀請有效期為三天，僅可使用一次。"
                 );
-            } catch (ConnectionException | RequestException | RuntimeException $exception) {
+            } catch (ConnectionException | RuntimeException $exception) {
                 Log::warning('Invitation email delivery failed', [
                     'invitation_id' => $invitation->id,
                     'error_type' => get_class($exception),
                 ]);
+                $sent = false;
+            }
 
+            if (! $sent) {
                 return back()->with('invitation_notice', [
                     'type' => 'warning',
                     'message' => '邀請已建立，但電郵發送失敗。請從下方列表複製連結並手動分享。',
                 ]);
             }
-
+            $invitation->markAsSent();
             return back()->with('invitation_notice', [
                 'type' => 'success',
                 'message' => '邀請已建立並已提交電郵發送。',

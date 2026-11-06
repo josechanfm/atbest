@@ -14,6 +14,8 @@ return new class extends Migration
             $table->foreignId('inviter_id')->constrained('users')->cascadeOnDelete();
             $table->string('email')->nullable(); // optional: lock to a specific email
             $table->timestamp('expires_at');
+            $table->timestamp('sent_at')->nullable();
+            $table->foreignId('sent_by')->nullable()->constrained('users')->nullOnDelete();
             $table->timestamp('used_at')->nullable();
             $table->foreignId('used_by')->nullable()->constrained('users')->nullOnDelete();
             $table->timestamps();
