@@ -21,28 +21,47 @@
                 <!-- Create Invitation -->
                 <div class="bg-white rounded-3xl shadow-xl p-6 sm:p-8">
                     <h3 class="text-sm font-bold text-gray-900 uppercase tracking-wider mb-4">
-                        建立新邀請 (Create Invitation)
+                        透過電郵邀請註冊 (Invite by Email)
                     </h3>
 
-                    <form @submit.prevent="createInvitation" class="flex flex-col sm:flex-row gap-3">
-                        <input
-                            v-model="form.email"
-                            type="email"
-                            placeholder="(選填) 指定電郵 — 留空則任何人可用"
-                            class="flex-1 rounded-xl border-gray-300 text-sm focus:border-indigo-500 focus:ring-indigo-500 shadow-sm"
-                        />
-                        <button
-                            type="submit"
-                            :disabled="form.processing"
-                            class="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl shadow-md disabled:opacity-50 transition-all"
-                        >
-                            <span v-if="form.processing">建立中...</span>
-                            <span v-else>+ 建立邀請</span>
-                        </button>
+                    <form @submit.prevent="createInvitation">
+                        <label for="invitation-email" class="block text-sm font-medium text-gray-700 mb-1">
+                            受邀人電郵地址 (Invitee email address)
+                        </label>
+                        <div class="flex flex-col sm:flex-row gap-3">
+                            <input
+                                id="invitation-email"
+                                v-model.trim="form.email"
+                                type="email"
+                                required
+                                maxlength="255"
+                                autocomplete="email"
+                                placeholder="name@example.com"
+                                :aria-invalid="!!form.errors.email || (!!form.email && !isEmailValid)"
+                                aria-describedby="invitation-email-help"
+                                class="flex-1 rounded-xl border-gray-300 text-sm focus:border-indigo-500 focus:ring-indigo-500 shadow-sm"
+                                @input="onEmailInput"
+                            />
+                            <button
+                                type="submit"
+                                :disabled="form.processing || !isEmailValid"
+                                class="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl shadow-md disabled:opacity-50 transition-all"
+                            >
+                                <span v-if="form.processing">建立中...</span>
+                                <span v-else>+ 建立邀請</span>
+                            </button>
+                        </div>
+                        <p v-if="form.errors.email" role="alert" class="text-xs text-red-600 mt-2">
+                            {{ form.errors.email }}
+                        </p>
+                        <p v-else-if="form.email && !isEmailValid" role="alert" class="text-xs text-red-600 mt-2">
+                            請輸入有效的電郵地址。 (Please enter a valid email address.)
+                        </p>
                     </form>
 
-                    <p class="text-xs text-gray-400 mt-2">
-                        每個邀請有效期 3 天，且僅能使用一次。填寫電郵後會自動發送邀請。
+                    <p id="invitation-email-help" class="text-xs text-gray-500 mt-2">
+                        請輸入受邀人的電郵地址，邀請將自動發送至該地址。邀請有效期為 3 天，僅可使用一次。
+                        (Enter the invitee's email address to send an invitation. It is valid for 3 days and can be used once.)
                     </p>
                 </div>
 
@@ -141,13 +160,23 @@ export default {
     data() {
         return {
             form: useForm({ email: '' }),
+            isEmailValid: false,
         };
     },
     methods: {
+        onEmailInput(event) {
+            this.isEmailValid = event.target.validity.valid;
+            this.form.clearErrors('email');
+        },
         createInvitation() {
+            if (!this.isEmailValid || this.form.processing) return;
+
             this.form.post(route('member.invitations.store'), {
                 preserveScroll: true,
-                onSuccess: () => this.form.reset('email'),
+                onSuccess: () => {
+                    this.form.reset('email');
+                    this.isEmailValid = false;
+                },
             });
         },
         revoke(inv) {
