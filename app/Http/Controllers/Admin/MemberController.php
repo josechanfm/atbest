@@ -62,6 +62,7 @@ class MemberController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validateMember($request);
         Member::create($request->all());
         return redirect()->back();
 
@@ -98,8 +99,20 @@ class MemberController extends Controller
      */
     public function update(Request $request, Member $member)
     {
+        $this->validateMember($request);
         $member->update($request->all());
         return redirect()->back();
+    }
+
+    private function validateMember(Request $request): void
+    {
+        $request->validate([
+            'organization_id' => ['required'],
+            'given_name' => ['required', 'string'],
+            'family_name' => ['required', 'string'],
+            'display_name' => ['required', 'string'],
+            'email' => ['required', 'string'],
+        ]);
     }
 
     /**

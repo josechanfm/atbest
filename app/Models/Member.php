@@ -29,7 +29,7 @@ class Member extends Model
         'address',
         'avatar',
         'valid_at',
-        'expired_at',
+        'valid_to',
         'is_default',
         'is_organizer',
         'is_dismissed'

@@ -31,7 +31,7 @@ return new class extends Migration
             $table->string('address')->nullable();
             $table->string('avatar')->nullable();
             $table->date('valid_at')->nullable();
-            $table->date('expired_at')->nullable();
+            $table->date('valid_to')->nullable();
             $table->boolean('is_default')->default(false);
             $table->boolean('is_organizer')->default(false);
             $table->boolean('is_dismissed')->default(false);

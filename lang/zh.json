@@ -24,6 +24,8 @@
     "logo_size_note": "PNG、JPG 或 GIF（最大 800x400px）",
     "image_size_note": "PNG、JPG 或 GIF（最大 800x400 像素）",
     "member_dashboard": "會員專頁",
+    "is_organizer": "組織管理員",
+    "is_dismissed": "已除名",
     "profile": "會員資訊",
     "manager": "管理",
     "portfolios": "個人檔案",

@@ -165,9 +165,6 @@
                   </div>
                   <div class="text-[3cqw] tracking-[0.16em] uppercase text-[#f5f1e8] w-full">
                     {{ card.member.nameChinese }}
-                    <span class="text-[#f5f1e8]/55 font-light">
-                      · {{ card.member.nameEnglish }}
-                    </span>
                   </div>
                 </div>
 
@@ -302,9 +299,6 @@
                     <div class="text-[2.8cqw] font-semibold tracking-[0.08em] text-[#f5f1e8]">
                       {{ card.member.nameChinese }}
                     </div>
-                    <div class="text-[1.8cqw] tracking-[0.14em] uppercase text-[#f5f1e8]/60 mt-[0.2cqw]">
-                      {{ card.member.nameEnglish }}
-                    </div>
 
                     <div class="grid grid-cols-2 gap-[2.4cqw] mt-[2.2cqw]">
                       <div>
@@ -401,7 +395,7 @@ const props = defineProps({
    * {
    *   org:    { logo, name_zh, name_pt },
    *   member: {
-   *     number, name_zh, name_en,
+   *     number, display_name,
    *     issueAt, validTo,
    *     memberType, avatarSrc, nameCardLink
    *   }
@@ -448,7 +442,6 @@ const defaults = {
 
   member: {
     nameChinese: '陳大文',
-    nameEnglish: 'CHAN TAI MAN',
   },
 
   validity: {
@@ -500,8 +493,7 @@ const card = computed(() => {
     },
 
     member: {
-      nameChinese: mem.name_zh || d.member.nameChinese,
-      nameEnglish: mem.name_en || d.member.nameEnglish,
+      nameChinese: mem.display_name || d.member.nameChinese,
     },
 
     validity: {

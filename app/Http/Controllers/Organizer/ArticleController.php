@@ -32,7 +32,7 @@ class ArticleController extends Controller
                 }
             }
         })->paginate($pageSize, ['*'], 'page', $currentPage);
-        
+       
         return Inertia::render('Organizer/Articles', [
             'classifies' => Classify::whereBelongsTo(session('organization'))->get(),
             'articleCategories' => Config::item('article_categories'),

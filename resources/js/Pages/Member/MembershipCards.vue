@@ -209,8 +209,7 @@ export default {
                 },
                 member: {
                     number: member.member_number ?? '000000000',
-                    name_zh: member.name_zh ?? '',
-                    name_en: member.name_en ?? '',
+                    display_name: member.display_name,
                     issueAt: this.formatCardDate(member.issue_at ?? '---'),
                     validTo: this.formatCardDate(member.valid_to ?? '---'),
                     memberType: member.member_type ?? '會員',

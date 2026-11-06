@@ -206,9 +206,8 @@ export default {
         },
         member: {
           number: this.member.number ?? '000000000',
-          name_zh: this.member.name_zh,
-          name_en: this.member.name_en??'',
-          issueAt: this.formatCardDate(this.member.issue_at??'---'),
+          display_name: this.member.display_name,
+          issueAt: this.formatCardDate(this.member.valid_at??'---'),
           validTo: this.formatCardDate(this.member.valid_to??'---'),
           memberType: this.member.member_type??'會員',
           avatarSrc: this.member.avatar??'',
@@ -257,7 +256,7 @@ export default {
       const yyyy = d.getFullYear();
       const mm = String(d.getMonth() + 1).padStart(2, "0");
       const dd = String(d.getDate()).padStart(2, "0");
-      return `${yyyy} · ${mm} · ${dd}`;
+      return `${yyyy}·${mm}·${dd}`;
     },
   },
 };

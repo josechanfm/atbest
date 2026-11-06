@@ -70,6 +70,7 @@ class MemberController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate(['display_name' => ['required', 'string']]);
         $data = $request->all();
         $data['organization_id'] = session('organization')->id;
         $member = Member::create($data);
@@ -85,7 +86,7 @@ class MemberController extends Controller
      */
     public function show(Member $member)
     {
-        return Inertia::render('Organizer/Member', [
+        return Inertia::render('Organizer/MemberShow', [
             'member' => $member,
         ]);
     }
@@ -113,6 +114,7 @@ class MemberController extends Controller
      */
     public function update(Request $request, Member $member)
     {
+        $request->validate(['display_name' => ['required', 'string']]);
         $member->update($request->all());
         return redirect()->back();
     }

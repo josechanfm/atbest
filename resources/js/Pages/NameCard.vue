@@ -237,8 +237,7 @@ const cardData = computed(() => ({
   },
   member: {
     number: props.nameCard?.number ?? '00000000',
-    name_zh: props.member.name_zh ?? '',
-    name_en: props.member.name_en ?? '',
+    display_name: props.member.display_name,
     issueAt: formatDate(props.nameCard?.issue_at),
     validTo: formatDate(props.nameCard?.valid_to),
     memberType: props.nameCard?.member_type ?? '會員',

@@ -55,7 +55,7 @@
               </a-button>
             </template>
             <template v-else-if="column.dataIndex == 'avatar'">
-              <img :src="record.avatar_url" width="60" />
+              <img :src="record.avatar" width="60" />
             </template>
             <template v-else>
               {{ record[column.dataIndex] }}
@@ -66,109 +66,15 @@
       </div>
     </div>
 
-    <!-- Modal Start-->
-    <a-modal v-model:open="modal.isOpen" :title="$t(modal.title)" width="60%">
-      <a-form
-        ref="modalRef"
-        :model="modal.data"
-        :label-col="{ span: 4 }"
-        autocomplete="off"
-        :rules="rules"
-        :validate-messages="validateMessages"
-      >
-        <a-row :span="24">
-          <a-col :span="8"> </a-col>
-          <a-col :span="8"> </a-col>
-          <a-col :span="8">
-            <img :src="modal.data.avatar_url" width="200" />
-          </a-col>
-        </a-row>
-        <a-form-item :label="$t('given_name')" name="given_name">
-          <a-input type="input" v-model:value="modal.data.given_name" />
-        </a-form-item>
-        <a-row :span="24">
-          <a-col :span="12">
-            <a-form-item
-              :label="$t('middle_name')"
-              name="middle_name"
-              :label-col="{ span: 8 }"
-            >
-              <a-input type="input" v-model:value="modal.data.middle_name" />
-            </a-form-item>
-          </a-col>
-          <a-col :span="12">
-            <a-form-item
-              :label="$t('family_name')"
-              name="family_name"
-              :label-col="{ span: 6 }"
-            >
-              <a-input type="input" v-model:value="modal.data.family_name" />
-            </a-form-item>
-          </a-col>
-        </a-row>
-        <a-form-item :label="$t('display_name')" name="display_name">
-          <a-input type="input" v-model:value="modal.data.display_name" />
-        </a-form-item>
-        <a-row :span="24">
-          <a-col :span="12">
-            <a-form-item :label="$t('gender')" name="gender" :label-col="{ span: 8 }">
-              <a-radio-group v-model:value="modal.data.gender" button-style="solid">
-                <a-radio-button value="M">{{ $t("male") }}</a-radio-button>
-                <a-radio-button value="F">{{ $t("female") }}</a-radio-button>
-              </a-radio-group>
-            </a-form-item>
-          </a-col>
-          <a-col :span="12">
-            <a-form-item :label="$t('dob')" name="dob" :label-col="{ span: 8 }">
-              <a-date-picker
-                v-model:value="modal.data.dob"
-                :format="dateFormat"
-                :valueFormat="dateFormat"
-              />
-            </a-form-item>
-          </a-col>
-        </a-row>
-        <a-row :span="24">
-          <a-col :span="12">
-            <a-form-item
-              :label="$t('email')"
-              name="email"
-              :label-col="{ span: 8 }"
-              :wrapper-col="{ span: 14, offset: 0 }"
-            >
-              <a-input type="input" v-model:value="modal.data.email" />
-            </a-form-item>
-          </a-col>
-          <a-col :span="12">
-            <a-form-item
-              :label="$t('mobile_number')"
-              name="mobile"
-              :label-col="{ span: 8 }"
-            >
-              <a-input type="input" v-model:value="modal.data.mobile" />
-            </a-form-item>
-          </a-col>
-        </a-row>
-      </a-form>
-      <template #footer>
-        <a-button key="back" @click="onCancelModal">返回</a-button>
-
-        <a-button
-          v-if="modal.mode == 'EDIT'"
-          key="Update"
-          type="primary"
-          @click="updateRecord()"
-          >{{ $t("update") }}</a-button
-        >
-        <a-button
-          v-if="modal.mode == 'CREATE'"
-          key="Store"
-          type="primary"
-          @click="storeRecord()"
-          >{{ $t("add") }}</a-button
-        >
-      </template>
-    </a-modal>
+    <MemberModal
+      :open="modal.isOpen"
+      :member="modal.data"
+      :mode="modal.mode"
+      :title="modal.title"
+      :saving="saving"
+      @cancel="onCancelModal"
+      @save="saveRecord"
+    />
     <a-modal :title="$t('import_members_list')" v-model:open="visible">
       <a-upload-dragger
         v-model:fileList="files"
@@ -229,8 +135,9 @@
 
 <script>
 import OrganizerLayout from "@/Layouts/OrganizerLayout.vue";
-import { Modal as PopupModal } from "ant-design-vue";
+import { Modal as PopupModal, message } from "ant-design-vue";
 import Pagination from "@/Components/Pagination.vue";
+import MemberModal from "./MemberModal.vue";
 import axios from 'axios';
 import { defineComponent, reactive } from "vue";
 import {
@@ -246,6 +153,7 @@ export default {
     OrganizerLayout,
     PopupModal,
     Pagination,
+    MemberModal,
     DownloadOutlined,
     FileExcelOutlined,
     WarningOutlined,
@@ -255,7 +163,7 @@ export default {
   data() {
     return {
       breadcrumb: [{ label: "會員列表", url: null }],
-      dateFormat: "YYYY-MM-DD",
+      saving: false,
       lang:getActiveLanguage(),
       modal: {
         isOpen: false,
@@ -310,24 +218,6 @@ export default {
           i18n: "operation",
         },
       ],
-      rules: {
-        given_name: { required: true },
-        family_name: { required: true },
-        gender: { required: true },
-        dob: { required: true },
-        email: { required: true, type: "email" },
-        state: { required: true },
-      },
-      validateMessages: {
-        required: "${label} is required!",
-        types: {
-          email: "${label} is not a valid email!",
-          number: "${label} is not a valid number!",
-        },
-        number: {
-          range: "${label} must be between ${min} and ${max}",
-        },
-      },
       labelCol: {
         style: {
           width: "150px",
@@ -362,46 +252,25 @@ export default {
       this.modal.title = "edit";
       this.modal.isOpen = true;
     },
-    storeRecord() {
-      this.$refs.modalRef
-        .validateFields()
-        .then(() => {
-          this.$inertia.post(route("organizer.members.store"), this.modal.data, {
-            onSuccess: (page) => {
-              this.modal.data = {};
-              this.modal.isOpen = false;
-            },
-            onError: (err) => {
-              console.log(err);
-            },
-          });
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
-    updateRecord() {
-      this.$refs.modalRef
-        .validateFields()
-        .then(() => {
-          this.$inertia.patch(
-            route("organizer.members.update", this.modal.data.id),
-            this.modal.data,
-            {
-              onSuccess: (page) => {
-                this.modal.isOpen = false;
-                //this.modal.data = {};
-                console.log(page);
-              },
-              onError: (error) => {
-                console.log(error);
-              },
-            }
-          );
-        })
-        .catch((err) => {
-          console.log("error", err);
-        });
+    saveRecord(formData) {
+      if (this.saving) return;
+      this.saving = true;
+      const options = {
+        onSuccess: () => {
+          this.modal.data = {};
+          this.modal.isOpen = false;
+        },
+        onError: (errors) => {
+          console.error("Failed to save member:", errors);
+          message.error(Object.values(errors)[0] || this.$t("submit_failed"));
+        },
+        onFinish: () => { this.saving = false; },
+      };
+      if (this.modal.mode === "CREATE") {
+        this.$inertia.post(route("organizer.members.store"), formData, options);
+      } else {
+        this.$inertia.patch(route("organizer.members.update", formData.id), formData, options);
+      }
     },
     deleteConfirmed(recordId) {
       this.$inertia.delete(route("organizer.members.destroy", { member: recordId }));
@@ -468,4 +337,3 @@ export default {
   },
 };
 </script>
-
