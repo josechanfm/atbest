@@ -9,6 +9,15 @@
         <div class="py-8">
             <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
 
+                <div
+                    v-if="invitationNotice"
+                    role="status"
+                    class="rounded-xl border px-4 py-3 text-sm"
+                    :class="invitationNotice.type === 'warning' ? 'border-amber-200 bg-amber-50 text-amber-800' : 'border-green-200 bg-green-50 text-green-800'"
+                >
+                    {{ invitationNotice.message }}
+                </div>
+
                 <!-- Create Invitation -->
                 <div class="bg-white rounded-3xl shadow-xl p-6 sm:p-8">
                     <h3 class="text-sm font-bold text-gray-900 uppercase tracking-wider mb-4">
@@ -33,7 +42,7 @@
                     </form>
 
                     <p class="text-xs text-gray-400 mt-2">
-                        每個邀請有效期 3 天，且僅能使用一次。
+                        每個邀請有效期 3 天，且僅能使用一次。填寫電郵後會自動發送邀請。
                     </p>
                 </div>
 
@@ -127,6 +136,7 @@ export default {
     components: { MemberLayout },
     props: {
         invitations: { type: Array, default: () => [] },
+        invitationNotice: { type: Object, default: null },
     },
     data() {
         return {

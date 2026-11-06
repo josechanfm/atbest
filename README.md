@@ -65,3 +65,21 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
 # judokan
+
+## Invitation email gateway
+
+Set `EMAIL_GATEWAY_URL`, `EMAIL_GATEWAY_ABBR`, and `EMAIL_GATEWAY_FROM` in the
+environment to use the email gateway for member invitations. The abbreviation
+and sender must be configured for your gateway; they have no default values.
+After changing environment settings, refresh Laravel's configuration cache if
+it is enabled. Invitations without an email address remain available for manual
+sharing. If delivery fails, the invitation remains in the list for manual sharing.
+
+## SMS gateway
+
+Set `SMS_GATEWAY_URL` and `SMS_GATEWAY_ABBR` for the Genie SMS gateway. The
+abbreviation must be configured for your gateway. Refresh Laravel's configuration
+cache after changing these settings if caching is enabled. The URL is the gateway
+base URL, without `/api/sms/emitter`; this replaces the legacy `SMS_BASE_URL` and
+`SMS_CLIENT_ID` settings. Local eight-digit Macau mobile numbers are prefixed with
+`853`, and formatting characters are removed from other numbers.

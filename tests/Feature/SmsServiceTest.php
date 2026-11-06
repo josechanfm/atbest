@@ -3,89 +3,94 @@
 namespace Tests\Feature;
 
 use App\Services\SmsService;
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
 
 class SmsServiceTest extends TestCase
 {
-    protected SmsService $smsService;
-
     protected function setUp(): void
     {
         parent::setUp();
-        $this->smsService = new SmsService();
+
+        config([
+            'services.genie_sms.base_url' => 'https://gateway.example/',
+            'services.genie_sms.abbr' => 'test-sms',
+        ]);
     }
 
-    /** @test */
-    public function it_sends_an_sms_successfully()
+    public function test_it_sends_a_local_macau_number_to_the_genie_gateway(): void
     {
-        // 1. Fake the external HTTP call
-        Http::fake([
-            'emg.ctm-mobile.com:*' => Http::response('0', 200), // assume '0' means success
-        ]);
+        Http::fake(['gateway.example/*' => Http::response(['accepted' => true])]);
 
-        // 2. Execute the service
-        $result = $this->smsService->send('1234567890', 'Test message');
+        $result = app(SmsService::class)->send('66666666', 'Hello & welcome');
 
-        // 3. Assert
-        $this->assertTrue($result);
-
-        // 4. Verify that the HTTP request was sent with the correct parameters
+        $this->assertSame(['success' => true, 'response' => ['accepted' => true], 'error' => null], $result);
         Http::assertSent(function ($request) {
-            return $request->url() === config('sms.gateway.url') &&
-                   $request->data()['username'] === config('sms.gateway.username') &&
-                   $request->data()['password'] === config('sms.gateway.password') &&
-                   $request->data()['to'] === '1234567890' &&
-                   $request->data()['text'] === 'Test message';
+            return $request->method() === 'GET'
+                && str_starts_with($request->url(), 'https://gateway.example/api/sms/emitter?')
+                && $request->data() === [
+                    'abbr' => 'test-sms',
+                    'mobile' => '85366666666',
+                    'content' => 'Hello & welcome',
+                ];
         });
+        Http::assertSentCount(1);
     }
 
-    /** @test */
-    public function it_throws_exception_on_http_failure()
+    public function test_it_normalizes_international_numbers_without_adding_a_second_prefix(): void
     {
-        // Fake a server error (500)
-        Http::fake([
-            'emg.ctm-mobile.com:*' => Http::response('Error', 500),
-        ]);
+        Http::fake(['gateway.example/*' => Http::response('OK')]);
 
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Failed to send SMS');
+        $result = app(SmsService::class)->send('+853 6666-6666', 'Hello');
 
-        $this->smsService->send('1234567890', 'Test message');
+        $this->assertTrue($result['success']);
+        $this->assertSame('OK', $result['response']);
+        Http::assertSent(fn ($request) => $request->data()['mobile'] === '85366666666');
     }
 
-    /** @test */
-    public function it_retries_on_failure()
+    public function test_it_reports_http_failures(): void
     {
-        // Configure retries to 3 (you can set in config for this test)
-        config(['sms.retry' => 3]);
+        Http::fake(['gateway.example/*' => Http::response('Failed', 500)]);
 
-        // Fake the first two calls as errors, third as success
-        Http::fakeSequence()
-            ->push('Error', 500)
-            ->push('Error', 500)
-            ->push('0', 200);
+        $result = app(SmsService::class)->send('85366666666', 'Hello');
 
-        $result = $this->smsService->send('1234567890', 'Test message');
-
-        $this->assertTrue($result);
-        // Assert that 3 requests were made
-        Http::assertSentCount(3);
+        $this->assertSame(['success' => false, 'response' => 'Failed', 'error' => 'HTTP status 500'], $result);
+        Http::assertSentCount(1);
     }
 
-    /** @test */
-    public function it_handles_custom_from_number()
+    public function test_it_reports_connection_failures(): void
     {
-        Http::fake([
-            'emg.ctm-mobile.com:*' => Http::response('0', 200),
-        ]);
-
-        $result = $this->smsService->send('1234567890', 'Test', 'CUSTOM');
-
-        $this->assertTrue($result);
-
-        Http::assertSent(function ($request) {
-            return $request->data()['from'] === 'CUSTOM';
+        Http::fake(function () {
+            throw new ConnectionException('Connection failed');
         });
+
+        $result = app(SmsService::class)->send('85366666666', 'Hello');
+
+        $this->assertSame(['success' => false, 'response' => null, 'error' => 'SMS gateway connection failed.'], $result);
+    }
+
+    public function test_it_reports_missing_configuration_without_sending(): void
+    {
+        config(['services.genie_sms.abbr' => null]);
+        Http::fake();
+
+        $result = app(SmsService::class)->send('85366666666', 'Hello');
+
+        $this->assertFalse($result['success']);
+        $this->assertSame('SMS gateway configuration is incomplete.', $result['error']);
+        Http::assertNothingSent();
+    }
+
+    public function test_it_rejects_invalid_mobile_numbers(): void
+    {
+        Http::fake();
+
+        foreach (['', '+ -', 'abc66666666'] as $mobile) {
+            $result = app(SmsService::class)->send($mobile, 'Hello');
+            $this->assertFalse($result['success']);
+            $this->assertSame('Invalid mobile number.', $result['error']);
+        }
+        Http::assertNothingSent();
     }
 }

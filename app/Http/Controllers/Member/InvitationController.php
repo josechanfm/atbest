@@ -4,8 +4,13 @@ namespace App\Http\Controllers\Member;
 
 use App\Http\Controllers\Controller;
 use App\Models\Invitation;
+use App\Services\EmailGateway;
+use Illuminate\Http\Client\ConnectionException;
+use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
+use RuntimeException;
 
 class InvitationController extends Controller
 {
@@ -37,13 +42,14 @@ class InvitationController extends Controller
 
         return Inertia::render('Member/InvitationCreate', [
             'invitations' => $invitations,
+            'invitationNotice' => $request->session()->get('invitation_notice'),
         ]);
     }
 
     /**
      * Create a new invitation.
      */
-    public function store(Request $request)
+    public function store(Request $request, EmailGateway $emailGateway)
     {
         $validated = $request->validate([
             'email' => ['nullable', 'email', 'max:255'],
@@ -56,7 +62,37 @@ class InvitationController extends Controller
             'expires_at' => now()->addDays(3),
         ]);
 
-        return back()->with('success', '邀請已建立');
+        if ($invitation->email) {
+            try {
+                $emailGateway->send(
+                    $invitation->email,
+                    '邀請您註冊',
+                    "您好，您已獲邀註冊。請點擊以下連結接受邀請：\n"
+                        . $invitation->share_url
+                        . "\n此邀請有效期為三天，僅可使用一次。"
+                );
+            } catch (ConnectionException | RequestException | RuntimeException $exception) {
+                Log::warning('Invitation email delivery failed', [
+                    'invitation_id' => $invitation->id,
+                    'error_type' => get_class($exception),
+                ]);
+
+                return back()->with('invitation_notice', [
+                    'type' => 'warning',
+                    'message' => '邀請已建立，但電郵發送失敗。請從下方列表複製連結並手動分享。',
+                ]);
+            }
+
+            return back()->with('invitation_notice', [
+                'type' => 'success',
+                'message' => '邀請已建立並已提交電郵發送。',
+            ]);
+        }
+
+        return back()->with('invitation_notice', [
+            'type' => 'success',
+            'message' => '邀請已建立。請從下方列表複製連結並分享。',
+        ]);
     }
 
     /**

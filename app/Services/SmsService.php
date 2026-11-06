@@ -2,83 +2,69 @@
 
 namespace App\Services;
 
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
 class SmsService
 {
-    protected string $baseUrl;
-    protected int $clientId;
-
-    public function __construct()
-    {
-        // Read directly from .env
-        $this->baseUrl = env('SMS_BASE_URL', 'https://genie.hubis.ltd/api/sms/emitter');
-        $this->clientId = (int) env('SMS_CLIENT_ID', 2);
-    }
-
     /**
-     * Send an SMS message.
-     *
-     * @param string $mobile   Recipient phone number (without country code? adjust as needed)
-     * @param string $content  Message content (URL-encoded)
-     * @param int|null $clientId Optional override of the default client ID
-     * @return array ['success' => bool, 'response' => mixed, 'error' => string|null]
+     * @return array{success: bool, response: mixed, error: string|null}
      */
-    public function send(string $mobile, string $content, ?int $clientId = null): array
+    public function send(string $mobile, string $content): array
     {
-        $clientId = $clientId ?? $this->clientId;
+        $baseUrl = rtrim((string) config('services.genie_sms.base_url'), '/');
+        $abbr = config('services.genie_sms.abbr');
 
-        // Build the full URL with query parameters
-        $url = $this->baseUrl . '?' . http_build_query([
-            'client_id' => $clientId,
-            'mobile'    => $mobile,
-            'content'   => $content,
-        ]);
-        dd($url, $content, $mobile, $clientId);
-        
+        if ($baseUrl === '' || blank($abbr)) {
+            Log::error('SMS gateway configuration is incomplete.');
+
+            return ['success' => false, 'response' => null, 'error' => 'SMS gateway configuration is incomplete.'];
+        }
+
+        $mobile = trim($mobile);
+        if (! preg_match('/^[0-9+\-() ]+$/', $mobile)) {
+            Log::warning('SMS send failed: invalid mobile number.');
+
+            return ['success' => false, 'response' => null, 'error' => 'Invalid mobile number.'];
+        }
+
+        $mobile = preg_replace('/\D/', '', $mobile);
+        if (preg_match('/^6\d{7}$/', $mobile)) {
+            $mobile = '853' . $mobile;
+        }
+        if ($mobile === '') {
+            Log::warning('SMS send failed: invalid mobile number.');
+
+            return ['success' => false, 'response' => null, 'error' => 'Invalid mobile number.'];
+        }
+
         try {
-            $response = Http::timeout(30)->get($url);
-
-            if ($response->successful()) {
-                // Log success
-                Log::info('SMS sent successfully', [
-                    'mobile'    => $mobile,
-                    'client_id' => $clientId,
-                    'response'  => $response->body(),
-                ]);
-
-                return [
-                    'success'  => true,
-                    'response' => $response->json() ?? $response->body(),
-                    'error'    => null,
-                ];
-            }
-
-            // Log failure
-            Log::error('SMS sending failed', [
-                'mobile'    => $mobile,
-                'client_id' => $clientId,
-                'status'    => $response->status(),
-                'body'      => $response->body(),
-            ]);
-
-            return [
-                'success'  => false,
-                'response' => $response->body(),
-                'error'    => "HTTP status {$response->status()}",
-            ];
-        } catch (\Exception $e) {
-            Log::error('SMS exception', [
+            $response = Http::timeout(30)->acceptJson()->get($baseUrl . '/api/sms/emitter', [
+                'abbr' => $abbr,
                 'mobile' => $mobile,
-                'error'  => $e->getMessage(),
+                'content' => $content,
             ]);
+        } catch (ConnectionException $exception) {
+            Log::error('SMS gateway connection failed.');
+
+            return ['success' => false, 'response' => null, 'error' => 'SMS gateway connection failed.'];
+        }
+
+        if (! $response->successful()) {
+            Log::error('SMS gateway request failed.', ['status' => $response->status()]);
 
             return [
-                'success'  => false,
-                'response' => null,
-                'error'    => $e->getMessage(),
+                'success' => false,
+                'response' => $response->body(),
+                'error' => "HTTP status {$response->status()}",
             ];
         }
+
+        return [
+            'success' => true,
+            'response' => $response->json() ?? $response->body(),
+            'error' => null,
+        ];
     }
 }

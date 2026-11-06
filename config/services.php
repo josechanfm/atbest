@@ -31,4 +31,15 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'genie_email' => [
+        'base_url' => env('EMAIL_GATEWAY_URL', 'https://genie.hubis.ltd'),
+        'abbr' => env('EMAIL_GATEWAY_ABBR'),
+        'from' => env('EMAIL_GATEWAY_FROM'),
+    ],
+
+    'genie_sms' => [
+        'base_url' => env('SMS_GATEWAY_URL', 'https://genie.hubis.ltd'),
+        'abbr' => env('SMS_GATEWAY_ABBR'),
+    ],
+
 ];
