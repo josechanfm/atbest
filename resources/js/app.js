@@ -8,6 +8,7 @@ import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy';
 import Antd from 'ant-design-vue';
 import { i18nVue } from 'laravel-vue-i18n'
+import { prepareTranslations } from './translations';
 // import 'ant-design-vue/dist/reset.css';
 
 import  RolePermission  from './Directives/RolePermission.js';
@@ -35,7 +36,8 @@ createInertiaApp({
             .use(i18nVue, {
                 resolve: async lang => {
                     const langs = import.meta.glob('../../lang/*.json');
-                    return await langs[`../../lang/${lang}.json`]();
+                    const { default: messages } = await langs[`../../lang/${lang}.json`]();
+                    return prepareTranslations(messages);
 
                 },
             })

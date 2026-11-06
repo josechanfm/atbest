@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Http;
 class WelcomeController extends Controller
 {
     public function dashboard(){
+        // dd('welcome');
         return Inertia::render('Welcome', [
             'canLogin' => Route::has('login'),
             'canRegister' => Route::has('register'),

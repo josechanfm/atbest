@@ -12,6 +12,15 @@
     "portuguese": "Protuguese",
     "dashboard": "Dashboard",
     "back": "Back",
+    "navigation_menu": "Navigation menu",
+    "home_menu": {
+        "gazette": "Official Gazette",
+        "one_account": "Macao One Account",
+        "member": "Member",
+        "logout": "Log Out",
+        "login": "Login",
+        "register": "Register"
+    },
     "parish": "Parish",
     "blogs": "Blogs",
     "feature": "Feature",

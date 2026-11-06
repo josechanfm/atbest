@@ -12,6 +12,15 @@
     "portuguese": "葡文",
     "dashboard": "首頁",
     "back": "返回",
+    "navigation_menu": "導覽選單",
+    "home_menu": {
+        "gazette": "公報",
+        "one_account": "一戶通",
+        "member": "會員",
+        "logout": "登出",
+        "login": "登入",
+        "register": "註冊"
+    },
     "parish": "堂區",
     "blogs": "留言板",
     "feature": "精選組織",

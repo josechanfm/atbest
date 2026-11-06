@@ -85,7 +85,6 @@ export default {
             <div class="mx-4 text-3xl mt-4 mb-8 font-bold text-gray-800 max-w-md" style="border-bottom: 2px solid #404040">
                 最新消息 <span class="text-base px-4 text-slate-500">News</span>
             </div>
-
             <ThumbList :records="articles" routePath="article.item" />
             <ThumbList :records="forms" routePath="form.item" />
             <ThumbList :records="events" routePath="event.item" />
