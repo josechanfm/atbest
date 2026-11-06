@@ -425,8 +425,8 @@ const defaults = {
   avatarSrc: '',
 
   organization: {
-    nameChinese: '澳門公務專業人員協會',
-    namePortuguese: 'Associação dos Técnicos da Administração Pública de Macau',
+    nameChinese: '澳門社團',
+    namePortuguese: 'Associação de Macau',
   },
 
   labels: {
@@ -443,7 +443,7 @@ const defaults = {
 
   memberNumber: {
     part1: '0000',
-    part2: '0000',
+    part2: '00000',
   },
 
   member: {
@@ -473,8 +473,7 @@ const card = computed(() => {
 
   const rawNumber = String(mem.number ?? '')
     .replace(/\D/g, '')
-    .padStart(8, '0')
-    .slice(0, 8)
+    .padStart(9, '0')
 
   return {
     logoSrc: org.logo || d.logoSrc,
@@ -497,7 +496,7 @@ const card = computed(() => {
 
     memberNumber: {
       part1: rawNumber.slice(0, 4),
-      part2: rawNumber.slice(4, 8),
+      part2: rawNumber.slice(4),
     },
 
     member: {

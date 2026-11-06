@@ -208,7 +208,7 @@ export default {
                     name_pt: member.organization?.name_pt ?? '',
                 },
                 member: {
-                    number: member.id ?? '0000000',
+                    number: member.member_number ?? '000000000',
                     name_zh: member.name_zh ?? '',
                     name_en: member.name_en ?? '',
                     issueAt: this.formatCardDate(member.issue_at ?? '---'),

@@ -35,7 +35,7 @@ class Member extends Model
         'is_dismissed'
     ];
 
-    protected $appends=['avatar_url','member_number'];
+    protected $appends=['avatar_url','number'];
     protected $casts=['is_default'=>'boolean','is_dismissed'=>'boolean','is_organizer'=>'boolean'];
     protected $with=['organization'];
 
@@ -43,8 +43,7 @@ class Member extends Model
         return $this->avatar?Storage::url($this->avatar):'';
     }
     
-    public function getMemberNumberAttribute(){
-
+    public function getNumberAttribute(){
         return substr('000'.$this->organization_id,-4).substr('000000'.$this->id,-5);
     }
     public function createUser(): User
