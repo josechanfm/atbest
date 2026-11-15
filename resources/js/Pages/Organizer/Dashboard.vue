@@ -157,7 +157,7 @@
                             </div>
 
                             <!-- Footer Link -->
-                            <div class="border-t border-gray-200 bg-gray-50 px-6 py-3">
+                            <!-- <div class="border-t border-gray-200 bg-gray-50 px-6 py-3">
                                 <inertia-link 
                                     :href="route('organizer.organizations.index')" 
                                     class="text-sm text-indigo-600 hover:text-indigo-900 flex items-center justify-center gap-2"
@@ -167,7 +167,7 @@
                                     </svg>
                                     {{ $t('view_all_organizations') }}
                                 </inertia-link>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>

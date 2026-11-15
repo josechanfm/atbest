@@ -201,23 +201,24 @@ export default {
 
         getMemberCardData(member) {
             if (!member) return {};
-            return {
-                org: {
-                    logo: member.organization?.logo ?? '/storage/images/site_logo.png',
-                    name_zh: member.organization?.name_zh ?? '',
-                    name_pt: member.organization?.name_pt ?? '',
-                    card_style: member.organization?.card_style,
-                },
-                member: {
-                    number: member.member_number ?? '000000000',
+                return {
+                    org:{
+                    logo: member.organization.logo ?? '/storage/images/site_logo.png',
+                    name_zh: member.organization.name_zh??'',
+                    name_pt: member.organization.name_pt??'',
+                    card_style: member.organization.card_style ?? '',
+                    },
+                    member: {
+                    number: member.number ?? '000000000',
                     display_name: member.display_name,
-                    issueAt: this.formatCardDate(member.issue_at ?? '---'),
-                    validTo: this.formatCardDate(member.valid_to ?? '---'),
-                    memberType: member.member_type ?? '會員',
-                    avatarSrc: member.avatar ?? '',
-                    nameCardLink: member.name_card_url ?? '',
-                },
-            };
+                    issueAt: this.formatCardDate(member.valid_at??'---'),
+                    validTo: this.formatCardDate(member.valid_to??'---'),
+                    memberType: member.member_type??'會員',
+                    avatarSrc: member.avatar??'',
+                    nameCardLink: member.name_card_link??'',
+                    },
+                };
+
         },
         formatCardDate(dateString) {
             if (!dateString || dateString === '---') return '---';
