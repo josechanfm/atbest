@@ -137,7 +137,6 @@ class OrganizationController extends Controller
      */
     public function update(Request $request, Organization $organization)
     {
-        dd($request->all());
         $validated = $request->validate([
             // 必要欄位
             'parish' => 'nullable|string|max:255',
@@ -186,8 +185,6 @@ class OrganizationController extends Controller
             ],
         ]);
 
-        dd($request->all(), $validate);
-
         if ($request->boolean('organizer_member_ids_present') && !array_key_exists('organizer_member_ids', $validated)) {
             $validated['organizer_member_ids'] = [];
         }
@@ -217,7 +214,6 @@ class OrganizationController extends Controller
     public function createLogin(Member $member)
     {
 
-        dd($member);
         if (!$member->hasUser()) {
             $user = $member->createUser();
         } else {
@@ -280,7 +276,7 @@ class OrganizationController extends Controller
                         }
 
                         $newPaths[] = $path;
-                        if ($input === 'card_style_logo_upload') {
+                        if ($input === 'avatar_upload') {
                             $data['avatar'] = '/storage/' . $path;
                         } else {
                             $field = array_search($input, $uploads, true);

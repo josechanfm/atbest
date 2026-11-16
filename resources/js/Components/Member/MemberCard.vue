@@ -1,6 +1,5 @@
 <template>
   <div class="flex items-center justify-center">
-    {{ card }}
     <div class="w-full [container-type:inline-size]" :style="{ maxWidth: card.maxWidth }">
       <!-- Flip wrapper -->
       <div

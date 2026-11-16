@@ -33,6 +33,7 @@
                                 class="absolute inset-x-0 top-0 transition-all duration-500 ease-out cursor-pointer origin-top"
                                 :style="getStackStyle(index)"
                             >
+                            
                                 <!-- Card Container -->
                                 <div class="bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden p-2 flex flex-col justify-between hover:border-indigo-200">
 
@@ -40,7 +41,7 @@
                                     <div class="flex items-center justify-between mb-2 border-b border-gray-100 bg-white/90 backdrop-blur-sm">
                                         <div class="flex items-center space-x-3">
                                             <div class="w-9 h-9 rounded-xl bg-gray-50 flex items-center justify-center p-1 border border-gray-100 shadow-sm">
-                                                <img :src="member.organization?.logo ?? '/storage/images/site_logo.png'" class="w-full h-full object-contain" alt="Logo" />
+                                                <img :src="member.organization?.avatar ?? '/storage/images/site_logo.png'" class="w-full h-full object-contain" alt="Logo" />
                                             </div>
                                             <div>
                                                 <div class="font-bold text-sm text-gray-900 line-clamp-1">
@@ -57,7 +58,6 @@
                                             {{ isFrontCard(index) ? '當前顯示' : `#${index + 1}` }}
                                         </span>
                                     </div>
-
                                     <!-- Member Card Body Content -->
                                     <div :class="{ 'opacity-40 pointer-events-none': !isFrontCard(index) }" class="transition-opacity duration-300">
                                         <MemberCard :data="getMemberCardData(member)" />
@@ -203,19 +203,19 @@ export default {
             if (!member) return {};
                 return {
                     org:{
-                    logo: member.organization.logo ?? '/storage/images/site_logo.png',
-                    name_zh: member.organization.name_zh??'',
-                    name_pt: member.organization.name_pt??'',
-                    card_style: member.organization.card_style ?? '',
+                        logo: member.organization.avatar ?? '/storage/images/site_logo.png',
+                        name_zh: member.organization.name_zh??'',
+                        name_pt: member.organization.name_pt??'',
+                        card_style: member.organization.card_style ?? '',
                     },
                     member: {
-                    number: member.number ?? '000000000',
-                    display_name: member.display_name,
-                    issueAt: this.formatCardDate(member.valid_at??'---'),
-                    validTo: this.formatCardDate(member.valid_to??'---'),
-                    memberType: member.member_type??'會員',
-                    avatarSrc: member.avatar??'',
-                    nameCardLink: member.name_card_link??'',
+                        number: member.number ?? '000000000',
+                        display_name: member.display_name,
+                        issueAt: this.formatCardDate(member.valid_at??'---'),
+                        validTo: this.formatCardDate(member.valid_to??'---'),
+                        memberType: member.member_type??'會員',
+                        avatarSrc: member.avatar??'',
+                        nameCardLink: member.name_card_link??'',
                     },
                 };
 
