@@ -150,7 +150,10 @@
 
             </div>
 
-            <p class="text-center text-xs text-slate-400">Atbest Digital Business Card System</p>
+            <p class="text-center text-xs text-slate-400">
+                Atbest Digital Business Card System @2024<br>
+                Contact: info@atbest.com; Tel: +853-63816386
+            </p>
 
         </div>
     </div>
