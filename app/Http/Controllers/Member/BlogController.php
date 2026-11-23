@@ -14,14 +14,20 @@ class BlogController extends Controller
     public function index()
     {
         return Inertia::render('Member/Blogs', [
-            'blogs' => Blog::whereBelongsTo(session('member')->organization)->get()
+            'blogs' => Blog::forUser(),
         ]);
     }
 
     public function show(Blog $blog)
     {
+        $theBlog = Blog::forUser()->find($blog->id);
+        if (!$theBlog) {
+            return Inertia::render('Error', [
+                'message' => '留言板不存在或沒有權限.'
+            ]);
+        }
         return Inertia::render('Member/Blog', [
-            'blog' => $blog,
+            'blog' => $theBlog,
             'blog_contents' => BlogContent::where('blog_id', $blog->id)->where('reply_id', 0)->orderBy('created_at', 'desc')->get()
         ]);
     }

@@ -122,12 +122,21 @@ export default {
 
         <div class="flex justify-between items-center py-6 px-10 container mx-auto">
             <div class="flex items-center">
-                <div class="shrink-0 flex ">
-                    <a href="/"><img src="/storage/images/site_logo.png" class="block h-14 w-auto" /></a>
+                <div class="shrink-0 flex">
+                    <a href="/">
+                        <img src="/storage/images/site_logo.png" class="block h-14 w-auto" alt="智滙精英 Logo" />
+                    </a>
                 </div>
-                <h1 class="ml-2 text-2xl font-bold">
-                    <a href="/" class="hidden md:block text-white">Atbest</a>
-                </h1>
+                <div class="ml-3 flex flex-col justify-center">
+                    <h1 class="text-xl md:text-2xl font-bold tracking-wider leading-tight">
+                        <a href="/" class="text-white hover:text-indigo-200 transition-colors">
+                            智滙精英
+                        </a>
+                    </h1>
+                    <p class="hidden sm:block text-xs text-indigo-200/90 tracking-widest mt-0.5">
+                        Atbest · NPO 精英會員平台
+                    </p>
+                </div>
             </div>
 
             <div ref="menuBar"><menuDashboard /></div>

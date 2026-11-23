@@ -13,7 +13,6 @@ class DashboardController extends Controller
     public function index()
     {
         $user = auth()->user();
-
         if ($user && $user->hasRole('admin')) {
             return redirect()->intended('/admin');
         }
@@ -47,7 +46,6 @@ class DashboardController extends Controller
 
         $style = $org->card_style;
         $cardStyle = is_array($style) ? $style : (Config::item('card_styles')[$style ?? 'card_01'] ?? 'card_01');
-
         return Inertia::render('Member/Dashboard', [
             'member'    => $member,
             'members'   => $user->members()->get(),

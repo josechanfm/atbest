@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Organization;
+use App\Models\Member;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
@@ -47,15 +48,7 @@ class RegisterUserController extends Controller
             'password' => Hash::make($request->password),
         ]);
         $organization=Organization::where('registration_code',$request->registration_code)->first();
-        $organization->members()->create([
-            'user_id'=>$user->id,
-            'given_name'=>$request->given_name,
-            'middle_name'=>$request->middle_name??null,
-            'family_name'=>$request->family_name,
-            'display_name'=>$request->name,
-            'email'=>$request->email,
-            'is_default'=>true,
-        ]);
+		Member::createOrganizationMember($organization, $user);
 
         event(new Registered($user));
 

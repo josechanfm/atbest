@@ -17,13 +17,36 @@
                 >
                     {{ invitationNotice.message }}
                 </div>
+                <!-- Target Organization -->
+                <div
+                    v-if="$page.props.auth?.user?.member?.organization"
+                    class="bg-white rounded-3xl shadow-xl p-6 sm:p-8 flex items-center gap-4 border border-indigo-100"
+                >
+                    <div class="shrink-0 w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                        </svg>
+                    </div>
+                    <div class="min-w-0 flex-1">
+                        <p class="text-xs font-bold text-indigo-600 uppercase tracking-wider">
+                            邀請成為用戶 (Invite as member)
+                        </p>
+                        <div class="mt-1 flex flex-wrap items-baseline gap-x-2 gap-y-1">
+                            <h3 class="text-lg sm:text-xl font-bold text-gray-900 truncate">
+                                滙智精英
+                            </h3>
+                            <span>
+                                Atbest
+                            </span>
+                        </div>
+                    </div>
+                </div>
 
                 <!-- Create Invitation -->
                 <div class="bg-white rounded-3xl shadow-xl p-6 sm:p-8">
                     <h3 class="text-sm font-bold text-gray-900 uppercase tracking-wider mb-4">
                         透過電郵邀請註冊 (Invite by Email)
                     </h3>
-
                     <form @submit.prevent="createInvitation">
                         <label for="invitation-email" class="block text-sm font-medium text-gray-700 mb-1">
                             受邀人電郵地址 (Invitee email address)

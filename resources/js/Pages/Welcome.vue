@@ -44,36 +44,43 @@ export default {
 <DefaultLayout title="Dashboard">
 
     <div class="flex flex-col gap-4">
-        <div class="h-[45vh] md:h-[50vh] lg:h-[60vh]  bg-slate-800 bg-gradient-to-tr relative overflow-hidden rounded-md flex items-center shadow-xl">
-            <img class="object-cover opacity-60 md:w-full" src="/storage/images/meeting.jpg" />
+        <!-- Hero Banner: h-auto on mobile so the block expands to fit full-size text -->
+        <div class="relative h-auto min-h-[45vh] md:min-h-[50vh] lg:min-h-[60vh] bg-slate-800 bg-gradient-to-tr overflow-hidden rounded-md flex items-center shadow-xl p-2 sm:p-6 md:p-10">
+            <!-- Background image fills whatever height the content block requires -->
+            <img class="absolute inset-0 w-full h-full object-cover opacity-60" src="/storage/images/meeting.jpg" alt="智滙精英背景" />
 
-            <div class="">
-                <div class="flex flex-col justify-center absolute w-full md:w-3/4 h-full sm:h-auto top-0 sm:top-10 left-0 sm:left-10 text-white bg-black/70 p-2 rounded-lg">
-                    <div class="ml-0 md:ml-5 lg:ml-20 w-full lg:w-4/5 py-2 md:py-5">
-                        <h2 class="text-white text-2xl md:text-3xl lg:text-4xl" v-if="welcomeMessage">{{ welcomeMessage.title }}</h2>
-                        <h2 class="text-white text-2xl md:text-3xl lg:text-4xl" v-else>{{ $t('welcome_message') }}</h2>
-                        <p class="text-sm md:text-2xl text-indigo-100 mr-2 md:mr-4 capitalize font-thick tracking-wider leading-6 md:leading-7 text-justify">
-                            <template v-if="welcomeMessage">
-                                {{ welcomeMessage.intro  }}
-                                <template v-if="welcomeMessage.url">
-                                    <a-button :href="welcomeMessage.url">{{ $t('readmore') }}</a-button>
-                                </template>
-                                <template v-else-if="welcomeMessage.content">
-                                    <a-button :href="route('article.item',{t:welcomeMessage.uuid})">{{ $t('readmore') }}</a-button>
-                                </template>
-                            </template>
-                            <template v-else>
-                                <div class="p-3 leading-5 md:leading-8 text-base md:text-lg">
-                                    「澳門非牽利社團網首頁」是一個提供非牽利社團相關資訊和服務的網站。該網站結合了各類社團的功能，為成員提供一個資訊平台，方便他們獲取所需資訊和進行交流。除了提供基本資訊外，網站還設有電子會員卡和會員會籍管理系統等功能。通過這些功能，成員可以方便地管理自己的會籍信息，並獲得相關的會員福利。
-                                    <br>
-                                    此外，「澳門非牽利社團網首頁」可能還提供其他相關服務，例如社團活動、培訓課程、就業資訊、法規法案解讀等。這些服務幫助成員更好地了解自己所屬的社團及行業的最新動態，並提升自身的專業能力。
+            <!-- Content Block: Full width on mobile, normal flow (relative z-10) so block height grows with content -->
+            <div class="relative z-10 w-full md:w-4/5 lg:w-3/4 text-white bg-black/75 p-4 sm:p-6 md:p-8 rounded-lg">
+                <div class="ml-0 md:ml-4 lg:ml-12 w-full lg:w-11/12">
+                    <h2 class="text-white font-bold text-2xl md:text-3xl lg:text-4xl mb-3" v-if="welcomeMessage">
+                        {{ welcomeMessage.title }}
+                    </h2>
+                    <h2 class="text-white font-bold text-2xl md:text-3xl lg:text-4xl mb-3" v-else>
+                        {{ $t('welcome_message') }}
+                    </h2>
 
-                                    <!-- 「公務人員聯合總會網首頁」是一個提供公務人員相關資訊和服務的網站。該網站結合了屬會和友會的功能，為公務人員提供一個資信平台，方便他們獲取所需的資訊和進行交流。
-                                    此網站除了提供基本資訊外，還提供了電子會員卡和會員會籍管理系統等功能。通過這些功能，公務人員可以方便地管理自己的會籍信息，並獲得相關的會員福利。
-                                    此外，「公務人員聯合總會網首頁」也可能提供其他相關服務，例如公務人員培訓課程、就業資訊、法規法案解讀等。透過這些服務，公務人員可以更好地了解自己所屬的組織和行業的最新動態，並提升自身的專業能力。 -->
-                                </div>
+                    <div class="text-indigo-100 tracking-wider text-justify">
+                        <template v-if="welcomeMessage">
+                            <p class="text-base md:text-lg leading-7 md:leading-8 mb-3">
+                                {{ welcomeMessage.intro }}
+                            </p>
+                            <template v-if="welcomeMessage.url">
+                                <a-button :href="welcomeMessage.url">{{ $t('readmore') }}</a-button>
                             </template>
-                        </p>
+                            <template v-else-if="welcomeMessage.content">
+                                <a-button :href="route('article.item',{t:welcomeMessage.uuid})">{{ $t('readmore') }}</a-button>
+                            </template>
+                        </template>
+                        <template v-else>
+                            <div class="text-base md:text-lg leading-7 md:leading-8 space-y-3">
+                                <p>
+                                    「智滙精英（Atbest）會員平台」是一個紮根澳門、專為凝聚本地各領域優秀社團領袖與專業人士而設的非牟利組織（NPO）社團社交平台。網站匯聚澳門多元社團社群，配備專屬電子會員卡及一站式會籍管理系統，讓成員隨時輕鬆管理個人會籍、拓展跨會人脈網絡，並尊享全方位會員禮遇。
+                                </p>
+                                <p>
+                                    此外，「智滙精英」亦致力打造充滿活力的澳門社團互動圈，持續提供社團聯誼活動、專業培訓課程、本地行業前沿資訊及特區政策法規解讀，促進跨界交流與資源共享，攜手推動澳門社團及社會的高質量發展。
+                                </p>
+                            </div>
+                        </template>
                     </div>
                 </div>
             </div>

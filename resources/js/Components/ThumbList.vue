@@ -80,30 +80,37 @@ export default {
 </script>
 
 <template>
-
- 
 <div class="card-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 my-4" style="  ">
     <div v-for="record in records" 
         :key="record.id" 
         @mouseenter="scaleUp($event)" 
         @mouseleave="scaleDown($event)"
-        class="relative card bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl flex flex-col">
+        class="group relative card bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl flex flex-col cursor-pointer">
 
-        <div v-if="record.thumb_url" style="background-image: url(record.thumb_url)" class="min-h-48 bg-cover "> </div>
-        <div v-else style="background-image: url('/storage/images/site_logo.png')" class="min-h-48 bg-no-repeat bg-center "> </div> 
+        <!-- Fixed dynamic :style binding for thumb_url -->
+        <div v-if="record.thumb_url" :style="{ backgroundImage: `url(${record.thumb_url})` }" class="min-h-48 bg-cover bg-center"></div>
+        <div v-else style="background-image: url('/storage/images/site_logo.png')" class="min-h-48 bg-no-repeat bg-center"></div> 
         
-        <div class="flex-1 p-6 flex flex-col ">
+        <div class="flex-1 p-6 flex flex-col">
             <div class="flex items-center mb-4">
-                <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center mr-3">
+                <div class="shrink-0 w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center mr-3">
                     <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
                     </svg>
                 </div>
 
-                <a :href="route(routePath, { t: record.uuid })" target="_blank">
-                    <h2 class="text-xl font-bold">{{ record.title }}</h2>
+                <!-- Stretched link covers the entire card via after:absolute after:inset-0 -->
+                <a
+                    :href="route(routePath, { t: record.uuid })"
+                    target="_blank"
+                    class="after:absolute after:inset-0 focus:outline-none"
+                >
+                    <h2 class="text-xl font-bold group-hover:text-blue-600 transition-colors">
+                        {{ record.title }}
+                    </h2>
                 </a>
             </div>
+
             <div class="flex-1">
                 <div v-if="record.intro" class="text-justify">
                     {{ record.intro }}
@@ -115,26 +122,26 @@ export default {
                     {{ record.description.replace(/<[^>]+>/g, "").substring(0, 100) }} ...
                 </div>
             </div>
-            <a-divider class="my-3 " />
-            <div class=" text-gray-600 leading-relaxed px-2">
+
+            <a-divider class="my-3" />
+
+            <div class="text-gray-600 leading-relaxed px-2">
                 <div class="flex flex-row justify-between items-center">
                     
-                    <div class="flex items-center gap-2">
+                    <div class="flex flex-wrap items-center gap-2">
                         <span v-if="record.organization_abbr" class="bg-rose-600 text-white py-1 px-2 rounded-full text-sm">{{ record.organization_abbr }}</span>
                         <span v-if="routePath=='article.item'" class="bg-blue-500 text-slate-100 py-1 px-2 rounded-full text-sm">Article</span>
                         <span v-else-if="routePath=='form.item'" class="bg-green-300 text-gray-500 py-1 px-2 rounded-full text-sm">Form</span>
                         <span v-else-if="routePath=='event.item'" class="bg-pink-600 text-white py-1 px-2 rounded-full text-sm">Event</span>
-                        <span v-if="record.category_code" class="bg-lime-400 text-gray-600 py-1 px-2 rounded-full text-sm">{{ record.category_code}}</span>
+                        <span v-if="record.category_code" class="bg-lime-400 text-gray-600 py-1 px-2 rounded-full text-sm">{{ record.category_code }}</span>
                     </div>
                     
-                    <div class=" text-gray-600">
-                        <div v-if="record.url">
-                            <inertia-link :href="record.url" target="_blank">{{
-                                $t("url_link")
-                            }}</inertia-link>
-                        </div>
+                    <!-- Elevated above the stretched link (relative z-10) so clicking this link doesn't trigger the card link -->
+                    <div v-if="record.url" class="relative z-10 text-gray-600">
+                        <a :href="record.url" target="_blank" class="text-blue-600 hover:underline">
+                            {{ $t("url_link") }}
+                        </a>
                     </div>
-                    <!-- <a class="text-blue-700 underline" href="/products/atbest">連結</a> -->
                 </div>
             </div>
         </div>

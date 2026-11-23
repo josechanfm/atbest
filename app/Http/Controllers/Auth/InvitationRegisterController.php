@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\Invitation;
 use App\Models\User;
+use App\Models\Member;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -29,7 +30,12 @@ class InvitationRegisterController extends Controller
                 'reason' => $invitation->isUsed() ? 'used' : 'expired',
             ]);
         }
-
+        $memeber=Member::where('organization_id', 1)->where('user_id', $invitation->used_by)->first();
+        
+        if($memeber) {
+            auth()->login($memeber->user);
+            return redirect()->route('member.dashboard');
+        }
         return Inertia::render('Auth/InvitationRegister', [
             'token'      => $invitation->token,
             'inviter'    => [
@@ -43,10 +49,10 @@ class InvitationRegisterController extends Controller
     /**
      * Handle registration via invitation.
      */
-    public function store(Request $request, string $token)
+    public function register(Request $request, string $token)
     {
         $invitation = Invitation::where('token', $token)->firstOrFail();
-
+        
         if (! $invitation->isValid()) {
             return redirect()->route('invitations.show', $token);
         }

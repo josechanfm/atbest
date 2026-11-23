@@ -304,7 +304,7 @@ Route::group([
 // Public — invitation landing & registration
 Route::get('/invitations/{token}', [InvitationRegisterController::class, 'show'])
     ->name('invitations.show');
-Route::post('/invitations/{token}/register', [InvitationRegisterController::class, 'store'])
+Route::post('/invitations/{token}/register', [InvitationRegisterController::class, 'register'])
     ->name('invitations.register');
 
 require __DIR__ . '/auth.php';

@@ -122,7 +122,7 @@ export default {
                     </button>
                     <a-avatar v-else>
                       <template #icon>
-                        {{ $page.props.auth.user.member.family_name.charAt($page.props.auth.user.member.family_name.length-1) }}
+                        {{ $page.props.auth.user.member.display_name.charAt($page.props.auth.user.member.display_name.length-1) }}
                       </template>
                     </a-avatar>
                     <div class="ml-8 inline-flex rounded-md mx-2">
@@ -130,7 +130,7 @@ export default {
                         type="button"
                         class="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-xl text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition"
                       >
-                        {{ $page.props.auth.user.member.given_name }}
+                        {{ $page.props.auth.user.member.display_name }}
                         <svg
                           class="ml-2 -mr-0.5 h-4 w-4"
                           xmlns="http://www.w3.org/2000/svg"

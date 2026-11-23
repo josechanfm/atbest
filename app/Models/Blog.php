@@ -20,4 +20,13 @@ class Blog extends Model
     {
         return $this->belongsTo(User::class);
     }
+    public static function forUser(User $user =null)
+    {
+        if ($user) {
+            return self::whereIn('organization_id', $user->members->pluck('organization_id'))->get();
+        }else{
+            $user = $user ?? auth()->user();
+            return self::whereIn('organization_id', $user->members->pluck('organization_id'))->get();
+        }
+    }
 }

@@ -46,6 +46,17 @@ class Member extends Model
     public function getNumberAttribute(){
         return substr('000'.$this->organization_id,-4).substr('000000'.$this->id,-5);
     }
+    public static function createOrganizationMember(Organization $organization, User $user){
+        $organization->members()->create([
+            'user_id'=>$user->id,
+            // 'given_name'=>$user->given_name,
+            // 'middle_name'=>$user->middle_name??null,
+            // 'family_name'=>$user->family_name,
+            'display_name'=>$user->name,
+            'email'=>$user->email,
+            'is_default'=>true,
+        ]);
+    }
     public function createUser(): User
     {
         $user = new User();
