@@ -27,16 +27,23 @@ const showingNavigationDropdown = ref(false);
         <div class="flex justify-between items-center h-20">
           
           <!-- Brand / Logo -->
-          <div class="flex items-center space-x-3">
-            <Link v-if="organization?.logo" href="/" class="shrink-0 flex items-center transition hover:opacity-90">
-              <img :src="organization.logo" alt="Organization Logo" class="block h-12 w-auto object-contain rounded" />
-            </Link>
-            <h1 class="text-xl sm:text-2xl font-bold tracking-tight text-white">
-              <Link href="/" class="hover:text-blue-100 transition">
-                {{ organization?.name_zh || "Organization Name" }}
-              </Link>
-            </h1>
-          </div>
+            <div class="flex items-center">
+                <div class="shrink-0 flex">
+                    <a href="/">
+                        <img src="/storage/images/site_logo.png" class="block h-14 w-auto" alt="智滙精英 Logo" />
+                    </a>
+                </div>
+                <div class="ml-3 flex flex-col justify-center">
+                    <h1 class="text-xl md:text-2xl font-bold tracking-wider leading-tight">
+                        <a href="/" class="text-white hover:text-indigo-200 transition-colors">
+                            智滙精英
+                        </a>
+                    </h1>
+                    <p class="hidden sm:block text-xs text-indigo-200/90 tracking-widest mt-0.5">
+                        Atbest · NPO 精英會員平台
+                    </p>
+                </div>
+            </div>
 
           <!-- Desktop Menu -->
           <div class="hidden sm:flex sm:items-center sm:space-x-6">
