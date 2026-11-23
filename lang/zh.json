@@ -55,9 +55,7 @@
             "prefer_language": "預設語言"
         },
         "organizations": {
-            "host": "區會",
-            "headquater": "總會",
-            "parish": "堂區",
+            "host": "主頁",
             "manager": "管理",
             "my_organizations": "我的社團",
             "you_have_organizations": "您有 :count 個社團",

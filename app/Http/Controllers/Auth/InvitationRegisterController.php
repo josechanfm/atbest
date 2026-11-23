@@ -88,11 +88,12 @@ class InvitationRegisterController extends Controller
 
             return $user;
         });
-
+        $organization = Organization::find(1);
+        Member::createOrganizationMember($organization, $user);
         event(new Registered($user));
 
-        //Auth::login($user);
+        Auth::login($user);
 
-        return redirect()->route('/');
+        return redirect()->route('member.dashboard');
     }
 }
