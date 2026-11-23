@@ -116,8 +116,9 @@
                           href="#"
                           class="w-full border-t border-gray-100 text-gray-600 py-4 pl-6 pr-3 block hover:bg-gray-100 transition duration-150"
                         >
+                        
                           <img
-                            :src="orgMember.organization.avatar"
+                            :src="orgMember.organization.avatar??'/storage/images/site_logo.png'"
                             alt=""
                             class="rounded-full h-6 shadow-md inline-block mr-2"
                           />
