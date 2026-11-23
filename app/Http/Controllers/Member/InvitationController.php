@@ -39,7 +39,6 @@ class InvitationController extends Controller
                 'is_used'    => $inv->isUsed(),
                 'is_expired' => $inv->isExpired(),
             ]);
-
         return Inertia::render('Member/InvitationCreate', [
             'invitations' => $invitations,
             'invitationNotice' => $request->session()->get('invitation_notice'),
@@ -54,13 +53,11 @@ class InvitationController extends Controller
         $validated = $request->validate([
             'email' => ['nullable', 'email', 'max:255'],
         ]);
-
         $invitation = Invitation::create([
             'token'      => Invitation::generateToken(),
             'inviter_id' => $request->user()->id,
             'email'      => $validated['email'] ?? null,
             'expires_at' => now()->addDays(3),
-            'used_by'   => auth()->id(),
         ]);
 
         if ($invitation->email) {
