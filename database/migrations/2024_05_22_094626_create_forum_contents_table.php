@@ -13,12 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('blogs', function (Blueprint $table) {
+        Schema::create('forum_contents', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('organization_id');
+            $table->foreignId('forum_id');
+            $table->foreignId('parent_id')->nullable();
+            $table->string('title')->nullable();
+            $table->text('content');
             $table->foreignId('user_id');
-            $table->string('title');
-            $table->text('description');
             $table->timestamps();
         });
     }
@@ -30,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('blogs');
+        Schema::dropIfExists('forum_contents');
     }
 };

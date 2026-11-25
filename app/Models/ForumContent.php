@@ -5,20 +5,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class BlogContent extends Model
+class ForumContent extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['blog_id', 'reply_id', 'title', 'content', 'user_id'];
+    protected $fillable = ['forum_id', 'reply_id', 'title', 'content', 'user_id'];
 
     protected $appends = [
         'user',
         'reply_contents',
     ];
 
-    public function blog()
+    public function forum()
     {
-        return $this->belongsTo(Blog::class);
+        return $this->belongsTo(Forum::class);
     }
     public function user()
     {
@@ -30,15 +30,15 @@ class BlogContent extends Model
     }
     public function getReplyContentsAttribute()
     {
-        return BlogContent::where('reply_id', $this->id)->orderBy('created_at', 'desc')->get();
+        return ForumContent::where('reply_id', $this->id)->orderBy('created_at', 'desc')->get();
     }
     
     public function parent()
     {
-        return $this->belongsTo(BlogContent::class, 'reply_id')->orderBy('created_at');
+        return $this->belongsTo(ForumContent::class, 'reply_id')->orderBy('created_at');
     }
     public function children()
     {
-        return $this->hasMany(BlogContent::class, 'reply_id')->orderBy('created_at');
+        return $this->hasMany(ForumContent::class, 'reply_id')->orderBy('created_at');
     }
 }

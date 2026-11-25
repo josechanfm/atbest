@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Blog extends Model
+class Forum extends Model
 {
     use HasFactory;
 
@@ -28,5 +28,9 @@ class Blog extends Model
             $user = $user ?? auth()->user();
             return self::whereIn('organization_id', $user->members->pluck('organization_id'))->get();
         }
+    }
+    public function contents()
+    {
+        return $this->hasMany(ForumContent::class);
     }
 }

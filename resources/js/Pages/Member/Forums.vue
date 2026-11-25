@@ -7,14 +7,14 @@
   <MemberLayout title="留言板">
     <template #header>
       <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-        {{ $t("blog") }}
+        {{ $t("forum") }}
       </h2>
     </template>
 
     <div class="container mx-auto min-h-[800px] py-6">
       <div class="grid xl:grid-cols-5 md:grid-cols-4 gap-4">
-        <div v-for="b in blogs" :key="b.id" class="shadow-md">
-          <a :href="route('member.blogs.show', b.id)">
+        <div v-for="b in forums" :key="b.id" class="shadow-md">
+          <a :href="route('member.forums.show', b.id)">
             <a-card hoverable>
               <template #cover>
                 <img alt="example" src="/storage/images/site_icon.png" />
@@ -32,11 +32,10 @@
 
 <script>
 import MemberLayout from "@/Layouts/MemberLayout.vue";
-import { router } from "@inertiajs/vue3";
 import { onBeforeUnmount, ref, shallowRef, onMounted } from "vue";
 export default {
   components: { MemberLayout },
-  props: ["blogs"],
+  props: ["forums"],
   setup() {
     const editorRef = shallowRef();
     const valueHtml = ref("<p>hello</p>");
@@ -60,7 +59,7 @@ export default {
         formData.append("file", file);
         console.log(file);
         window.axios
-          .post(route("member.blog.media-upload"), formData, {
+          .post(route("member.forum.media-upload"), formData, {
             headers: {
               "Content-Type": "multipart/form-data",
             },

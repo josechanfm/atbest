@@ -89,8 +89,8 @@ export default {
                 <a class="inline-flex items-center px-1 pt-1" :href="route('member.entries.index')">
                   {{ $t("form_filled") }}
                 </a>
-                <a class="inline-flex items-center px-1 pt-1" :href="route('member.blogs.index')">
-                  {{ $t("blogs") }}
+                <a class="inline-flex items-center px-1 pt-1" :href="route('member.forums.index')">
+                  {{ $t("forums") }}
                 </a>
                 <a class="inline-flex items-center px-1 pt-1" :href="route('widget.admin.dashboard')" v-permission="['widget']">
                   {{ $t("widget") }}
@@ -167,8 +167,8 @@ export default {
                         {{ $t("form_filled") }}
                       </DropdownLink>
                       
-                      <DropdownLink :href="route('member.blogs.index')??null">
-                        {{ $t("blogs") }}
+                      <DropdownLink :href="route('member.forums.index')??null">
+                        {{ $t("forums") }}
                       </DropdownLink>
                       <DropdownLink
                         v-if="isOrganizer()"

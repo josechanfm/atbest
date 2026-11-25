@@ -42,6 +42,16 @@
           </inertia-link>
         </span>
       </a-menu-item>
+      <a-menu-item key="blogs.index">
+        <template #icon>
+          <PieChartOutlined />
+        </template>
+        <span>
+          <inertia-link :href="route('admin.forums.index')">
+            {{ $t("blogs") }}
+          </inertia-link>
+        </span>
+      </a-menu-item>
       <a-menu-item key="members.index">
         <template #icon>
           <PieChartOutlined />

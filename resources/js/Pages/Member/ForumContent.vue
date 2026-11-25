@@ -2,7 +2,7 @@
   <MemberLayout title="留言板">
     <template #header>
       <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-        {{ blog.title }}
+        {{ forum.title }}
       </h2>
     </template>
 
@@ -19,13 +19,13 @@
         <div class="">
           <a-form
             ref="modalRef"
-            :model="reply_blog_content"
-            name="blog_content"
+            :model="reply_forum_content"
+            name="forum_content"
             :rules="rules"
             :validate-messages="validateMessages"
           >
             <a-form-item :label="$t('content')" name="content">
-              <a-textarea v-model:value="reply_blog_content.content"></a-textarea>
+              <a-textarea v-model:value="reply_forum_content.content"></a-textarea>
             </a-form-item>
           </a-form>
           <div class="flex justify-end gap-4">
@@ -111,7 +111,7 @@ dayjs.extend(duration);
 
 export default {
   components: { MemberLayout, dayjs },
-  props: ["blog", "content"],
+  props: ["forum", "content"],
   setup() {
     const editorRef = shallowRef();
     const valueHtml = ref("<p>hello</p>");
@@ -135,7 +135,7 @@ export default {
         formData.append("file", file);
         console.log(file);
         window.axios
-          .post(route("member.blog.media-upload"), formData, {
+          .post(route("member.forum.media-upload"), formData, {
             headers: {
               "Content-Type": "multipart/form-data",
             },
@@ -172,7 +172,7 @@ export default {
       pageLoading: false,
       newBlog: "",
       replyContentVisable: false,
-      reply_blog_content: {},
+      reply_forum_content: {},
       rules: {
         content: { required: true },
       },
@@ -190,13 +190,13 @@ export default {
   },
   methods: {
     createContent() {
-      console.log(this.reply_blog_content);
+      console.log(this.reply_forum_content);
       this.$refs.modalRef
         .validateFields()
         .then(() => {
           this.$inertia.post(
-            route("member.blog.content.reply", this.blog.id),
-            this.reply_blog_content,
+            route("member.forum.content.reply", this.forum.id),
+            this.reply_forum_content,
             {
               onSuccess: (page) => {
                 console.log(page);
@@ -214,11 +214,11 @@ export default {
     },
     cancelBlogContent() {
       this.replyContentVisable = false;
-      this.reply_blog_content = {};
+      this.reply_forum_content = {};
     },
     replyContent(reply_id) {
       this.replyContentVisable = true;
-      this.reply_blog_content.reply_id = reply_id;
+      this.reply_forum_content.reply_id = reply_id;
     },
     handleScroll(event) {
       const body = document.getElementById("app");

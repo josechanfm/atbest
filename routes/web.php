@@ -29,6 +29,8 @@ use App\Http\Controllers\Member\MembershipController as MemberMembershipControll
 use App\Http\Controllers\Member\EventController as MemberEventController;
 use App\Http\Controllers\Member\EntryController as MemberEntryController;
 use App\Http\Controllers\Member\BusinessCardController as MemberBusinessCardController;
+use App\Http\Controllers\Member\ForumController as MemberForumController;
+use App\Http\Controllers\Member\ForumContentController as MemberForumContentController;
 
 // Organizer Controllers
 use App\Http\Controllers\Organizer\DashboardController as OrganizerDashboardController;
@@ -59,12 +61,14 @@ use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\ConfigController as AdminConfigController;
 use App\Http\Controllers\Admin\FeatureController as AdminFeatureController;
 use App\Http\Controllers\Admin\ArticleController as AdminArticleController;
+use App\Http\Controllers\Admin\BlogController as AdminBlogController;
 use App\Http\Controllers\Admin\IssueController as AdminIssueController;
 use App\Http\Controllers\Admin\FormController as AdminFormController;
 use App\Http\Controllers\Admin\FormFieldController as AdminFormFieldController;
 use App\Http\Controllers\Admin\EntryController as AdminEntryController;
 use App\Http\Controllers\Admin\SmsMessageController as AdminSmsMessageController;
 use App\Http\Controllers\Admin\MessageTestController as AdminMessageTestController;
+use App\Http\Controllers\Admin\ForumController as AdminForumController;
 
 // Widget Controllers
 use App\Http\Controllers\Widget\PollController as WidgetPollController;
@@ -146,9 +150,9 @@ Route::group([
     Route::get('/', [MemberDashboardController::class, 'index'])->name('member.dashboard');
     Route::get('get_qrcode', [MemberDashboardController::class, 'getQrcode'])->name('member.getQrcode');
     
-    Route::resource('blogs', MemberBlogController::class)->names('member.blogs');
-    Route::post('blog/{blog}/content/reply', [MemberBlogContentController::class, 'replyContent'])->name('member.blog.content.reply');
-    Route::resource('blog/{blog}/content', MemberBlogContentController::class)->names('member.blog.contents');
+    Route::resource('forums', MemberForumController::class)->names('member.forums');
+    Route::post('forum/{forum}/content/reply', [MemberForumContentController::class, 'replyContent'])->name('member.forum.content.reply');
+    Route::resource('forum/{forum}/content', MemberForumContentController::class)->names('member.forum.contents');
     
     Route::resource('portfolios', MemberPortfolioController::class)->names('member.portfolios');
     Route::resource('profile', MemberProfileController::class)->names('member.profile');
@@ -218,8 +222,8 @@ Route::group([
     Route::resource('certificate/{certificate}/members', OrganizerCertificateMemberController::class)->names('organizer.certificate.members');
     
     Route::resource('emails', OrganizerEmailController::class)->names('organizer.emails');
-    Route::resource('blogs', OrganizerBlogController::class)->names('organizer.blogs');
-    Route::resource('blog-contents', OrganizerBlogContentController::class)->names('organizer.blog.contents');
+    Route::resource('forums', OrganizerForumController::class)->names('organizer.forums');
+    Route::resource('forum-contents', OrganizerForumContentController::class)->names('organizer.forum.contents');
     
     Route::resource('articles', OrganizerArticleController::class)->names('organizer.articles');
     Route::delete('article/delete_image/{article}', [OrganizerArticleController::class, 'deleteImage'])->name('organizer.article.deleteImage');
@@ -256,6 +260,8 @@ Route::group([
     Route::resource('articles', AdminArticleController::class)->names('admin.articles');
     Route::post('article/sequence', [AdminArticleController::class, 'sequence'])->name('admin.article.sequence');
     Route::post('article/delete_image/{article}', [AdminArticleController::class, 'deleteImage'])->name('admin.article.deleteImage');
+
+    Route::resource('forums', AdminForumController::class)->names('admin.forums');
     
     Route::resource('issues', AdminIssueController::class)->names('admin.issues');
 

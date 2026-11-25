@@ -2,38 +2,39 @@
 namespace App\Http\Controllers\Member;
 
 use App\Http\Controllers\Controller;
-use App\Models\Blog;
+use App\Models\Forum;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
-use App\Models\BlogContent;
+use App\Models\ForumContent;
 
-class BlogController extends Controller
+class ForumController extends Controller
 {
     //
     public function index()
     {
-        return Inertia::render('Member/Blogs', [
-            'blogs' => Blog::forUser(),
+        
+        return Inertia::render('Member/Forums', [
+            'forums' => Forum::forUser(),
         ]);
     }
 
-    public function show(Blog $blog)
+    public function show(Forum $forum)
     {
-        $theBlog = Blog::forUser()->find($blog->id);
-        if (!$theBlog) {
+        $theForum = Forum::forUser()->find($forum->id);
+        if (!$theForum) {
             return Inertia::render('Error', [
                 'message' => '留言板不存在或沒有權限.'
             ]);
         }
-        return Inertia::render('Member/Blog', [
-            'blog' => $theBlog,
-            'blog_contents' => BlogContent::where('blog_id', $blog->id)->where('reply_id', 0)->orderBy('created_at', 'desc')->get()
+        return Inertia::render('Member/Forum', [
+            'forum' => $theForum,
+            'forum_contents' => ForumContent::where('forum_id', $forum->id)->where('reply_id', 0)->orderBy('created_at', 'desc')->get()
         ]);
     }
     public function mediaUpload(Request $request)
     {
-        $path = Storage::putFile('public/images/blog', $request->file);
+        $path = Storage::putFile('public/images/forum', $request->file);
         $path = Storage::url($path);
         return response()->json([
             'path' => $path,
@@ -43,12 +44,14 @@ class BlogController extends Controller
 
     public function addContent(Request $request)
     {
-        //blog_id, reply_id, title, content
+        //forum_id, parent_id, title, content
         $data = $request->all();
         $data['user_id'] = session('member')->user_id;
-        BlogContent::create($data);
+        ForumContent::create($data);
         if ($request->hasFile('file')) {
             $file = $request->file('file');
+            $path = Storage::putFile('public/images/forum', $file);
+            $path = Storage::url($path);
         }
     }
 }

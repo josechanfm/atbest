@@ -13,9 +13,9 @@ class DashboardController extends Controller
     public function index()
     {
         $user = auth()->user();
-        if ($user && $user->hasRole('admin')) {
-            return redirect()->intended('/admin');
-        }
+        // if ($user && $user->hasRole('admin')) {
+        //     return redirect()->intended('/admin');
+        // }
 
         $member = $user->member;
         if (!$member) {
@@ -32,7 +32,9 @@ class DashboardController extends Controller
         $member->load('organization');
         $member->name_card_link = $member->nameCardLink();
         $org = session('member')->organization;
-
+        if(!$org) {
+            return redirect()->route('guest.dashboard');
+        }
         $features = Feature::whereBelongsTo($org)
             ->orderBy('sequence')
             ->limit(4)

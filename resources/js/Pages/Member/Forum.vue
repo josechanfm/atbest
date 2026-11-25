@@ -3,7 +3,7 @@
     <template #header>
       <div class="flex items-center justify-between">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-          {{ blog.title }}
+          {{ forum.title }}
         </h2>
       </div>
     </template>
@@ -19,11 +19,11 @@
                 會員交流區
               </span>
               <span class="text-xs text-gray-400">
-                共 {{ blog_contents?.length || 0 }} 則主題
+                共 {{ forum_contents?.length || 0 }} 則主題
               </span>
             </div>
-            <p v-if="blog.description" class="text-sm text-gray-500 mt-1.5">
-              {{ blog.description }}
+            <p v-if="forum.description" class="text-sm text-gray-500 mt-1.5">
+              {{ forum.description }}
             </p>
           </div>
 
@@ -71,15 +71,15 @@
 
           <a-form
             ref="modalRef"
-            :model="new_blog_content"
-            name="blog_content"
+            :model="new_forum_content"
+            name="forum_content"
             layout="vertical"
             :rules="rules"
             :validate-messages="validateMessages"
           >
             <a-form-item :label="$t('title')" name="title">
               <a-input
-                v-model:value="new_blog_content.title"
+                v-model:value="new_forum_content.title"
                 size="large"
                 placeholder="請輸入留言標題..."
                 class="!rounded-xl"
@@ -88,7 +88,7 @@
 
             <a-form-item :label="$t('content')" name="content">
               <a-textarea
-                v-model:value="new_blog_content.content"
+                v-model:value="new_forum_content.content"
                 :rows="5"
                 show-count
                 :maxlength="2000"
@@ -119,7 +119,7 @@
 
         <!-- Empty State -->
         <div
-          v-if="!blog_contents || blog_contents.length === 0"
+          v-if="!forum_contents || forum_contents.length === 0"
           class="bg-white rounded-3xl shadow-sm border border-dashed border-gray-200 p-12 text-center"
         >
           <div class="w-12 h-12 rounded-2xl bg-gray-50 text-gray-400 flex items-center justify-center mx-auto mb-3">
@@ -133,10 +133,10 @@
 
         <!-- Topic Cards List -->
         <div v-else class="space-y-3" ref="scrollContainer">
-          <template v-for="(bc, idx) in blog_contents" :key="bc.id || idx">
+          <template v-for="(bc, idx) in forum_contents" :key="bc.id || idx">
             <a
               v-if="idx < page * 6"
-              :href="route('member.blog.contents.show', { blog: blog, content: bc })"
+              :href="route('member.forum.contents.show', { forum: forum, content: bc })"
               class="group block bg-white rounded-2xl p-5 sm:p-6 border border-gray-100 shadow-sm hover:shadow-md hover:border-indigo-200 transition-all duration-200"
             >
               <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
@@ -185,7 +185,7 @@
           </template>
 
           <!-- Pagination / Load More Indicator -->
-          <div v-if="blog_contents.length > page * 6" class="py-4 text-center">
+          <div v-if="forum_contents.length > page * 6" class="py-4 text-center">
             <span v-if="pageLoading" class="text-xs text-gray-400">載入更多留言中...</span>
             <button
               v-else
@@ -193,7 +193,7 @@
               @click="page++"
               class="px-5 py-2 text-xs font-bold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 rounded-full transition-colors"
             >
-              載入更多 ({{ blog_contents.length - page * 6 }})
+              載入更多 ({{ forum_contents.length - page * 6 }})
             </button>
           </div>
         </div>
@@ -210,8 +210,8 @@ import dayjs from "dayjs";
 export default {
   components: { MemberLayout },
   props: {
-    blog: { type: Object, required: true },
-    blog_contents: { type: Array, default: () => [] },
+    forum: { type: Object, required: true },
+    forum_contents: { type: Array, default: () => [] },
   },
   data() {
     return {
@@ -219,7 +219,7 @@ export default {
       pageLoading: false,
       submitting: false,
       createBlogContent: false,
-      new_blog_content: {
+      new_forum_content: {
         title: "",
         content: "",
       },
@@ -255,8 +255,8 @@ export default {
         .then(() => {
           this.submitting = true;
           this.$inertia.post(
-            route("member.blog.contents.store", this.blog.id),
-            this.new_blog_content,
+            route("member.forum.contents.store", this.forum.id),
+            this.new_forum_content,
             {
               preserveScroll: true,
               onSuccess: () => {
@@ -272,14 +272,14 @@ export default {
     },
     cancelBlogContent() {
       this.createBlogContent = false;
-      this.new_blog_content = { title: "", content: "" };
+      this.new_forum_content = { title: "", content: "" };
     },
     handleScroll() {
       const body = document.getElementById("app");
       if (!body || this.pageLoading) return;
       const scrollEnd = window.innerHeight + window.scrollY >= body.scrollHeight - 80;
 
-      if (scrollEnd && this.blog_contents.length > this.page * 6) {
+      if (scrollEnd && this.forum_contents.length > this.page * 6) {
         this.pageLoading = true;
         setTimeout(() => {
           this.pageLoading = false;

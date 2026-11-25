@@ -265,7 +265,7 @@ export default {
       });
     },
     onPaginationChange(page, filters, sorter) {
-      this.$inertia.get(route("admin.blogs.index"), {
+      this.$inertia.get(route("admin.forums.index"), {
         page: page.current,
         per_page: page.pageSize,
       });
