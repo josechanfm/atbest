@@ -46,7 +46,7 @@
                 <h3 class="mt-4 text-lg font-semibold text-gray-800">
                   {{ member.display_name || member.given_name }}
                 </h3>
-                <p class="text-sm text-gray-500">{{ member.email }}</p>
+                <p class="text-sm text-gray-500">{{ $page.props.auth.user.email }}</p>
               </div>
 
               <!-- 快速信息 -->
@@ -184,9 +184,12 @@
                     <a-form-item :label="$t('mobile_number')" name="mobile">
                       <a-input v-model:value="member.mobile" placeholder="請輸入手機號碼" class="rounded-lg" />
                     </a-form-item>
-                    <a-form-item :label="$t('email')" name="email" required>
-                      <a-input v-model:value="member.email" placeholder="請輸入電子郵件" class="rounded-lg" disabled />
+                    <a-form-item :label="$t('email')" name="email" >
+                      <a-input v-model:value="member.email" placeholder="請輸入電子郵件" class="rounded-lg" />
                     </a-form-item>
+                  </div>
+                  <div>
+                      <p>This additional mobile number and email address is different from the one used for login purposes.</p>
                   </div>
                 </div>
 
@@ -331,7 +334,6 @@ export default {
         given_name: { required: true, message: "請輸入名字" },
         family_name: { required: true, message: "請輸入姓氏" },
         display_name: { required: true, message: "請輸入顯示名稱" },
-        email: { required: true, type: "email", message: "請輸入有效的電子郵件" },
       },
       validateMessages: {
         required: "${label} 是必填欄位",
