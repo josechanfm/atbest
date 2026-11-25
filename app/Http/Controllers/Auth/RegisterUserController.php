@@ -48,8 +48,7 @@ class RegisterUserController extends Controller
             'registration_code' => 'required|exists:organizations,registration_code',
         ]);
 
-        // Generate 6-digit verification code (000000 - 999999)
-        $code = str_pad((string) random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+        $otp = $this->smsService->sendVerificationCode($validated['mobile']);
 
         // Store pre-registration payload & OTP state in session
         session()->put('registration.pending', [
@@ -60,14 +59,12 @@ class RegisterUserController extends Controller
             'email' => $validated['email'],
             'password_hash' => Hash::make($validated['password']),
             'registration_code' => $validated['registration_code'],
-            'otp_hash' => Hash::make($code),
-            'otp_expires_at' => now()->addMinutes(10)->timestamp,
+            'otp_hash' => $otp['otp_hash'],
+            'otp_expires_at' => $otp['otp_expires_at'],
             'otp_attempts' => 0,
             'mobile_verified' => false,
             'mobile_validated_at' => null,
         ]);
-
-        //$this->sendVerificationSms($validated['mobile'], $code);
 
         session()->flash('sms_status', 'code_sent');
 
@@ -85,36 +82,21 @@ class RegisterUserController extends Controller
 
         $pending = session('registration.pending');
 
-        // if (! $pending) {
-        //     throw ValidationException::withMessages([
-        //         'code' => ['註冊資料已過期，請重新填寫並發送驗證碼。'],
-        //     ]);
-        // }
+        if (! $pending) {
+            throw ValidationException::withMessages([
+                'code' => ['註冊資料已過期，請重新填寫並發送驗證碼。'],
+            ]);
+        }
 
-        // if (now()->timestamp > ($pending['otp_expires_at'] ?? 0)) {
-        //     throw ValidationException::withMessages([
-        //         'code' => ['驗證碼已過期，請重新發送。'],
-        //     ]);
-        // }
+        $result = $this->smsService->verifyCode($pending, $request->code);
+        session()->put('registration.pending', $result['pending']);
 
-        // if (($pending['otp_attempts'] ?? 0) >= 5) {
-        //     throw ValidationException::withMessages([
-        //         'code' => ['驗證嘗試次數過多，請重新發送驗證碼。'],
-        //     ]);
-        // }
+        if (! $result['verified']) {
+            throw ValidationException::withMessages([
+                'code' => [$result['error']],
+            ]);
+        }
 
-        // if (! Hash::check($request->code, $pending['otp_hash'])) {
-        //     $pending['otp_attempts'] = ($pending['otp_attempts'] ?? 0) + 1;
-        //     session()->put('registration.pending', $pending);
-
-        //     throw ValidationException::withMessages([
-        //         'code' => ['驗證碼錯誤，請重新輸入。'],
-        //     ]);
-        // }
-
-		$pending['mobile_verified'] = true;
-        $pending['mobile_validated_at'] = now()->toDateTimeString();
-        session()->put('registration.pending', $pending);
         Cache::forget('registration_' . $pending['mobile']);
 
         return back();
@@ -174,21 +156,5 @@ class RegisterUserController extends Controller
         Auth::login($user);
 
         return redirect(RouteServiceProvider::HOME);
-    }
-
-    /**
-     * Send 6-digit verification SMS via SmsService.
-     */
-    protected function sendVerificationSms(string $mobile, string $code): void
-    {
-        app()->setLocale('zh_TW');
-        $content = trans('sms.verification_code', ['code' => $code]);
-        $result = $this->smsService->send($mobile, $content);
-
-        if (! ($result['success'] ?? false)) {
-            throw ValidationException::withMessages([
-                'mobile' => [trans('accounts_and_security.sms_send_failed')],
-            ]);
-        }
     }
 }

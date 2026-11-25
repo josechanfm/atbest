@@ -310,6 +310,10 @@ Route::group([
 // Public — invitation landing & registration
 Route::get('/invitations/{token}', [InvitationRegisterController::class, 'show'])
     ->name('invitations.show');
+Route::post('/invitations/{token}/send-code', [InvitationRegisterController::class, 'sendCode'])
+    ->name('invitations.sendCode');
+Route::post('/invitations/{token}/verify-code', [InvitationRegisterController::class, 'verifyCode'])
+    ->name('invitations.verifyCode');
 Route::post('/invitations/{token}/register', [InvitationRegisterController::class, 'register'])
     ->name('invitations.register');
 

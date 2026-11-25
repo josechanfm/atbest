@@ -34,12 +34,15 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'mobile',
+        'mobile_validated_at',
         'email',
         'password',
         'is_active',
+        'language',
         'google_id',
         'google_email',
-        'google_avatar'
+        'google_avatar',
+        'registration_method'
     ];
 
     /**
