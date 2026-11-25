@@ -1,4 +1,5 @@
 {
+    "login_header": "User Login",
     "member": {
         "wallet": "Wallet",
         "business_card": "Business card management",
@@ -336,6 +337,7 @@
             "click_verification_email": "Click here to re-send the verification email.",
             "email": "Email",
             "please_input_email": "Please enter Email",
+            "please_input_mobile": "Please enter mobile number",
             "email_invalid": "Please enter a valid email address",
             "email_required": "Please enter an email address",
             "enter_email": "Enter email address",

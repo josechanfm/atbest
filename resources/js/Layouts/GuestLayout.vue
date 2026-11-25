@@ -39,7 +39,7 @@ const showingNavigationDropdown = ref(false);
                             智滙精英
                         </a>
                     </h1>
-                    <p class="hidden sm:block text-xs text-indigo-200/90 tracking-widest mt-0.5">
+                    <p class="block text-xs text-indigo-200/90 tracking-widest mt-0.5">
                         Atbest · NPO 精英會員平台
                     </p>
                 </div>
@@ -117,14 +117,6 @@ const showingNavigationDropdown = ref(false);
             class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 hover:border-[#0081C8] transition"
           >
             {{ $t("host") }}
-          </a>
-
-          <a
-            href="https://lionsclubs.org"
-            target="_blank"
-            class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 hover:border-[#0081C8] transition"
-          >
-            {{ $t("headquater") }}
           </a>
 
           <!-- Mobile Logout Button -->

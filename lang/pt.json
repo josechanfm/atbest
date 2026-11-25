@@ -1,4 +1,5 @@
 {
+    "login_header": "Início de sessão de utilizador",
     "home_menu": {
         "gazette": "Boletim Oficial",
         "one_account": "Conta Única de Macau",
@@ -431,6 +432,7 @@
             "click_verification_email": "Clique aqui para reenviar o e-mail de verificação.",
             "email": "E-mail",
             "please_input_email": "Introduza o e-mail",
+            "please_input_mobile": "Introduza o número de telemóvel",
             "email_invalid": "Introduza um endereço de e-mail válido",
             "email_required": "Introduza o endereço de e-mail",
             "enter_email": "Introduza o endereço de e-mail",
