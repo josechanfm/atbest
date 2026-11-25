@@ -82,6 +82,16 @@
           </inertia-link>
         </span>
       </a-menu-item>
+      <a-menu-item key="messageTest.index">
+        <template #icon>
+          <MailOutlined />
+        </template>
+        <span>
+          <inertia-link :href="route('admin.messageTest.index')">
+            {{ $t("message_test.title") }}
+          </inertia-link>
+        </span>
+      </a-menu-item>
       <a-menu-item key="widget">
         <template #icon>
           <PieChartOutlined />

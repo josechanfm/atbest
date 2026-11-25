@@ -21,8 +21,14 @@ class ProfileController extends Controller
      */
     public function index()
     {
+        $user = auth()->user();
+
         return Inertia::render('Member/Profile', [
-            'member' => auth()->user()->member,
+            'member' => $user->member,
+            'google' => [
+                'bound' => (bool) $user->google_id,
+                'email' => $user->google_email,
+            ],
         ]);
     }
 

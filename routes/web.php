@@ -64,6 +64,7 @@ use App\Http\Controllers\Admin\FormController as AdminFormController;
 use App\Http\Controllers\Admin\FormFieldController as AdminFormFieldController;
 use App\Http\Controllers\Admin\EntryController as AdminEntryController;
 use App\Http\Controllers\Admin\SmsMessageController as AdminSmsMessageController;
+use App\Http\Controllers\Admin\MessageTestController as AdminMessageTestController;
 
 // Widget Controllers
 use App\Http\Controllers\Widget\PollController as WidgetPollController;
@@ -73,11 +74,11 @@ use App\Http\Controllers\Widget\Admin\PollController as WidgetAdminPollControlle
 // Registration Inviation Controllers
 use App\Http\Controllers\Auth\InvitationRegisterController;
 use App\Http\Controllers\Member\InvitationController;
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-*/
+
+use App\Http\Controllers\Auth\GoogleController;
+Route::get('auth/google', [GoogleController::class, 'redirectToGoogle'])->name('auth.google');
+Route::get('auth/google/callback', [GoogleController::class, 'handleGoogleCallback']);
+Route::get('auth/google/bind', [GoogleController::class, 'redirectToGoogle'])->middleware('auth:sanctum')->name('auth.google.bind');
 
 /*
 |--------------------------------------------------------------------------
@@ -266,6 +267,11 @@ Route::group([
     Route::post('form/delete_media/{form}', [AdminFormController::class, 'deleteMedia'])->name('admin.form.deleteMedia');
 
     Route::resource('sms_messages', AdminSmsMessageController::class)->names('admin.smsMessages');
+
+    Route::get('message_test', [AdminMessageTestController::class, 'index'])->name('admin.messageTest.index');
+    Route::get('message_test/health', [AdminMessageTestController::class, 'health'])->name('admin.messageTest.health');
+    Route::post('message_test/email', [AdminMessageTestController::class, 'sendTestEmail'])->name('admin.messageTest.sendEmail');
+    Route::post('message_test/sms', [AdminMessageTestController::class, 'sendTestSms'])->name('admin.messageTest.sendSms');
 });
 
 /*

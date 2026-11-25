@@ -79,9 +79,11 @@ class InvitationRegisterController extends Controller
                 'mobile'               => $validated['mobile'],
                 'mobile_validated_at'  => null, // set after SMS verification
                 'email'                => $validated['email'],
+                'email_verified_at'     => now(),
                 'password'             => Hash::make($validated['password']),
                 'language'             => $validated['language'] ?? app()->getLocale(),
                 'is_active'            => true,
+                'registration_method'   => 'invitation_'.$invitation->id,
             ]);
 
             // Consume the invitation — single-use enforcement

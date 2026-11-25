@@ -27,7 +27,8 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => ['required', 'string', 'email'],
+            'email' => ['required_without:mobile', 'string', 'email'],
+            'mobile' => ['required_without:email', 'string', 'regex:/^\+8536\d{7}$/'],
             'password' => ['required', 'string'],
         ];
     }
@@ -41,11 +42,15 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
-        if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
+        $credentials = $this->filled('mobile')
+            ? ['mobile' => $this->input('mobile'), 'password' => $this->input('password')]
+            : ['email' => $this->input('email'), 'password' => $this->input('password')];
+
+        if (! Auth::attempt($credentials, $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
-                'email' => trans('auth.failed'),
+                $this->filled('mobile') ? 'mobile' : 'email' => trans('auth.failed'),
             ]);
         }
 
@@ -80,6 +85,8 @@ class LoginRequest extends FormRequest
      */
     public function throttleKey(): string
     {
-        return Str::transliterate(Str::lower($this->input('email')).'|'.$this->ip());
+        $identifier = $this->filled('mobile') ? $this->input('mobile') : $this->input('email');
+
+        return Str::transliterate(Str::lower((string) $identifier)).'|'.$this->ip();
     }
 }

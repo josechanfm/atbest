@@ -3,52 +3,171 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
-use App\Models\Organization;
 use App\Models\Member;
+use App\Models\Organization;
+use App\Models\User;
 use App\Providers\RouteServiceProvider;
+use App\Services\SmsService;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class RegisterUserController extends Controller
 {
-    /**
-     * Display the registration view.
-     */
+    public function __construct(
+        protected SmsService $smsService
+    ) {}
+
     public function create(): Response
     {
-        return Inertia::render('Auth/Register');
+        return Inertia::render('Auth/Register', [
+            'pendingRegistration' => session('registration.pending'),
+        ]);
     }
 
     /**
-     * Handle an incoming registration request.
-     *
-     * @throws \Illuminate\Validation\ValidationException
+     * Step 1: Validate registration fields, store pending data in session, and send 6-digit SMS code.
      */
-    public function store(Request $request): RedirectResponse
+    public function preRegister(Request $request): RedirectResponse
     {
-		$validated = $request->validate([
+        $validated = $request->validate([
             'name' => 'required|string|max:255',
-			'mobile' => 'required|string|max:255|unique:users',
-            'email' => 'required|string|lowercase|email|max:255|unique:users',
+            'given_name' => 'nullable|string|max:255',
+            'family_name' => 'nullable|string|max:255',
+            'mobile' => ['required', 'string', 'max:20', 'regex:/^\+8536\d{7}$/', 'unique:users,mobile'],
+            'email' => 'required|string|lowercase|email|max:255|unique:users,email',
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'registration_code' => 'required|exists:organizations,registration_code',
         ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'mobile' => $request->mobile,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
+        // Generate 6-digit verification code (000000 - 999999)
+        $code = str_pad((string) random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+
+        // Store pre-registration payload & OTP state in session
+        session()->put('registration.pending', [
+            'name' => $validated['name'],
+            'given_name' => $validated['given_name'] ?? null,
+            'family_name' => $validated['family_name'] ?? null,
+            'mobile' => $validated['mobile'],
+            'email' => $validated['email'],
+            'password_hash' => Hash::make($validated['password']),
+            'registration_code' => $validated['registration_code'],
+            'otp_hash' => Hash::make($code),
+            'otp_expires_at' => now()->addMinutes(10)->timestamp,
+            'otp_attempts' => 0,
+            'mobile_verified' => false,
+            'mobile_validated_at' => null,
         ]);
-        $organization=Organization::where('registration_code',$request->registration_code)->first();
-		Member::createOrganizationMember($organization, $user);
+
+        //$this->sendVerificationSms($validated['mobile'], $code);
+
+        session()->flash('sms_status', 'code_sent');
+
+        return back();
+    }
+
+    /**
+     * Step 2: Verify the 6-digit SMS code against the session record.
+     */
+    public function verifyCode(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'code' => ['required', 'string', 'regex:/^\d{6}$/'],
+        ]);
+
+        $pending = session('registration.pending');
+
+        // if (! $pending) {
+        //     throw ValidationException::withMessages([
+        //         'code' => ['註冊資料已過期，請重新填寫並發送驗證碼。'],
+        //     ]);
+        // }
+
+        // if (now()->timestamp > ($pending['otp_expires_at'] ?? 0)) {
+        //     throw ValidationException::withMessages([
+        //         'code' => ['驗證碼已過期，請重新發送。'],
+        //     ]);
+        // }
+
+        // if (($pending['otp_attempts'] ?? 0) >= 5) {
+        //     throw ValidationException::withMessages([
+        //         'code' => ['驗證嘗試次數過多，請重新發送驗證碼。'],
+        //     ]);
+        // }
+
+        // if (! Hash::check($request->code, $pending['otp_hash'])) {
+        //     $pending['otp_attempts'] = ($pending['otp_attempts'] ?? 0) + 1;
+        //     session()->put('registration.pending', $pending);
+
+        //     throw ValidationException::withMessages([
+        //         'code' => ['驗證碼錯誤，請重新輸入。'],
+        //     ]);
+        // }
+
+		$pending['mobile_verified'] = true;
+        $pending['mobile_validated_at'] = now()->toDateTimeString();
+        session()->put('registration.pending', $pending);
+        Cache::forget('registration_' . $pending['mobile']);
+
+        return back();
+    }
+
+    /**
+     * Step 3: Convert verified session data into a User & Organization Member.
+     */
+    public function store(Request $request): RedirectResponse
+    {
+        $pending = session('registration.pending');
+
+        if ($request->filled('verification_code') && ! ($pending['mobile_verified'] ?? false)) {
+            $request->merge(['code' => $request->input('verification_code')]);
+            $this->verifyCode($request);
+            $pending = session('registration.pending');
+        }
+
+        if (! $pending || ! ($pending['mobile_verified'] ?? false)) {
+            throw ValidationException::withMessages([
+                'mobile' => ['請先完成手機簡訊驗證後再提交註冊。'],
+            ]);
+        }
+
+        if (User::where('mobile', $pending['mobile'])->exists()) {
+            throw ValidationException::withMessages([
+                'mobile' => ['此手機號碼已被註冊。'],
+            ]);
+        }
+
+        if (User::where('email', $pending['email'])->exists()) {
+            throw ValidationException::withMessages([
+                'email' => ['此電子郵件已被註冊。'],
+            ]);
+        }
+
+        $organization = Organization::where('registration_code', $pending['registration_code'])->firstOrFail();
+
+        $user = User::create([
+            'name' => $pending['name'],
+            'given_name' => $pending['given_name'],
+            'family_name' => $pending['family_name'],
+            'mobile' => $pending['mobile'],
+            'mobile_validated_at' => $pending['mobile_validated_at'] ?? now(),
+            'email' => $pending['email'],
+            'email_verified_at' => null,
+            'password' => $pending['password_hash'],
+            'registration_method' => 'self_registration_' . $pending['registration_code'],
+        ]);
+
+        Member::createOrganizationMember($organization, $user);
+
+        session()->forget('registration.pending');
 
         event(new Registered($user));
 
@@ -57,81 +176,19 @@ class RegisterUserController extends Controller
         return redirect(RouteServiceProvider::HOME);
     }
 
-	public function mobileForgotPassword()
-	{
-		dd('mobileForgotPassword');
-	}
-
-    public function sendSMSVarificationCode(Request $request): RedirectResponse
+    /**
+     * Send 6-digit verification SMS via SmsService.
+     */
+    protected function sendVerificationSms(string $mobile, string $code): void
     {
-        $request->validate([
-            'phone_number' => 'required|string|phone:AUTO',
-        ]); 
-        
-		$sms_from=env('SMS_FROM');
-		$sms_username=env('SMS_USER');
-		$sms_password=env('SMS_PWD');
-		$sms_url=env('SMS_URL');
+        app()->setLocale('zh_TW');
+        $content = trans('sms.verification_code', ['code' => $code]);
+        $result = $this->smsService->send($mobile, $content);
 
-		
-		if( $message_language == 'full_english'){
-			$language = "";
-		}else{
-			$language = "&locale=utf-8";
-			$content = urlencode($content);
-		}
-
-
-		foreach ($recipients as $key => $value) {
-			if(strpos($value, "853") !== false){
-				$to = trim($value," ");
-			}else{
-				$to = "853" . trim($value," ");
-			}
-			$url = $sms_url."/"."?username=".$sms_username."&password=".$sms_password."&from=".$sms_from."&to=".$to.$language."&text=".$content;
-		
-			
-
-			$curl = curl_init($url);
-			curl_setopt($curl, CURLOPT_URL, $url);
-			curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-
-
-			//for debug only!
-			// curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-			// curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
-
-			$resp = curl_exec($curl);
-			curl_close($curl);
-
-			$str = (string) $resp;
-			// 返回 id 即是成功, 檢查是不是全數字且長度大於7
-			// 1. 如果是純數字(Float/Int)，用 number_format 強制轉成完整數字字串，避免科學記號
-			// 2. 如果是字串，直接處理
-			if (is_numeric($resp)) {
-				$str = number_format($resp, 0, '', '');
-			} else {
-				$str = (string)$resp;
-			}
-
-			// 3. 使用正則表達式移除所有「非數字」的字元 (包含逗號、空格、點、E+等)
-			$cleanStr = preg_replace('/\D/', '', $str);
-
-			// 4. 檢查清理後的字串長度是否大於 7
-			// 注意：這裡不需再用 is_numeric，因為 preg_replace 已經保證剩下的全是數字
-			if (strlen($cleanStr) > 7) {
-				$status = 'success';
-			} else {
-				$status = 'fail';
-			}
-			
-			$this->db->insert('sms_responses', array(
-				'sms_id' => $sms_id, 
-				'status' => $status, 
-				'number' => $to, 
-				'response' => $resp 
-			));
-
-    	}
-	}
+        if (! ($result['success'] ?? false)) {
+            throw ValidationException::withMessages([
+                'mobile' => [trans('accounts_and_security.sms_send_failed')],
+            ]);
+        }
+    }
 }

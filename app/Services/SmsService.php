@@ -40,7 +40,10 @@ class SmsService
         }
 
         try {
-            $response = Http::timeout(30)->acceptJson()->get($baseUrl . '/api/sms/emitter', [
+            $response = Http::timeout(30)
+            ->withoutVerifying() // <-- Use this instead
+            ->acceptJson()
+            ->get($baseUrl, [
                 'abbr' => $abbr,
                 'mobile' => $mobile,
                 'content' => $content,

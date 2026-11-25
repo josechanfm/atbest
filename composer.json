@@ -12,6 +12,7 @@
         "laravel/framework": "^10.10",
         "laravel/jetstream": "^4.3",
         "laravel/sanctum": "^3.3",
+        "laravel/socialite": "^5.31",
         "laravel/tinker": "^2.7",
         "laravel/vonage-notification-channel": "^3.3",
         "maatwebsite/excel": "^3.1",

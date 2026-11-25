@@ -166,9 +166,8 @@ export default {
   methods: {
     // Step 1: Send SMS code
     sendCode() {
-        console.log('Sending code to mobile:', this.form);
       this.sending = true;
-      this.$inertia.post(route('password.mobile.send'), {
+      this.$inertia.post(route('mobileForgotPassword.send'), {
         mobile: '+853' + this.form.mobile,
       }, {
         preserveState: true,
@@ -180,7 +179,7 @@ export default {
         },
         onError: (errors) => {
           this.sending = false;
-          message.error(errors.mobile || this.$t('send_failed'));
+          message.error(this.$t(errors.mobile) || this.$t('send_failed'));
         },
       });
     },
@@ -188,7 +187,7 @@ export default {
     // Step 2: Verify code
     verifyCode() {
       this.verifying = true;
-      this.$inertia.post(route('password.mobile.verify'), {
+      this.$inertia.post(route('mobileForgotPassword.mobile.verify'), {
         mobile: '+853' + this.form.mobile,
         code: this.form.code,
       }, {
@@ -208,7 +207,7 @@ export default {
     // Step 3: Reset password
     resetPassword() {
       this.resetting = true;
-      this.$inertia.post(route('password.mobile.reset'), {
+      this.$inertia.post(route('mobileForgotPassword.reset'), {
         mobile: '+853' + this.form.mobile,
         code: this.form.code,
         password: this.form.password,
@@ -232,7 +231,7 @@ export default {
       if (this.resendTimer > 0) return;
       // Reuse the sendCode logic but stay on step 1
       this.sending = true;
-      this.$inertia.post(route('password.mobile.send'), {
+      this.$inertia.post(route('mobileForgotPassword.mobile.send'), {
         mobile: '+853' + this.form.mobile,
       }, {
         preserveState: true,
@@ -242,6 +241,7 @@ export default {
           message.success(this.$t('code_sent'));
         },
         onError: (errors) => {
+          console.error('Send code error:', errors.mobile, this.$t('send_failed'));
           this.sending = false;
           message.error(errors.mobile || this.$t('send_failed'));
         },

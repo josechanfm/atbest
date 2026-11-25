@@ -13,10 +13,15 @@ use App\Http\Controllers\Auth\MobilePasswordController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
+
+
 Route::middleware('guest')->group(function () {
     Route::get('register', [RegisterUserController::class, 'create'])
         ->name('register');
-
+    Route::post('/register/pre-register', [RegisterUserController::class, 'preRegister'])
+        ->name('register.preRegister');
+    Route::post('/register/verify-code', [RegisterUserController::class, 'verifyCode'])
+        ->name('register.verifyCode');        
     Route::post('register', [RegisterUserController::class, 'store'])
         ->name('register.store');
 
@@ -25,18 +30,7 @@ Route::middleware('guest')->group(function () {
 
     Route::post('login', [AuthenticatedSessionController::class, 'store']);
     
-    Route::get('mobile-forgot-password', [MobilePasswordController::class, 'forgotPassword'])->name('mobileForgotPassword');
-    Route::post('mobile-forgot-password', [MobilePasswordController::class, 'sendValidation'])->name('mobileSendValidation');
-    Route::post('mobile-validate-code', [MobilePasswordController::class, 'validateCode'])->name('mobileValidateCode');
 
-    Route::get('password/mobile', [MobilePasswordController::class, 'showResetForm'])
-        ->name('password.mobile.form');
-    Route::post('password/mobile/send', [MobilePasswordController::class, 'sendResetCode'])
-        ->name('password.mobile.send');
-    Route::post('password/mobile/verify', [MobilePasswordController::class, 'verifyCode'])
-        ->name('password.mobile.verify');
-    Route::post('password/mobile/reset', [MobilePasswordController::class, 'resetPassword'])
-        ->name('password.mobile.reset');
 
     // Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])
     //     ->name('password.request');
@@ -51,7 +45,19 @@ Route::middleware('guest')->group(function () {
     //     ->name('password.store');
 });
 
+        Route::post('mobile-forgot-password/send', [MobilePasswordController::class, 'sendResetCode'])
+            ->name('mobileForgotPassword.send');
+        Route::post('mobile-forgot-password/verify', [MobilePasswordController::class, 'verifyCode'])
+            ->name('mobileForgotPassword.verify');
+
     Route::middleware('auth')->group(function () {
+        // Route::get('mobile-forgot-password', [MobilePasswordController::class, 'forgotPassword'])->name('mobileForgotPassword');
+        // Route::post('mobile-forgot-password', [MobilePasswordController::class, 'sendValidation'])->name('mobileSendValidation');
+        // Route::post('mobile-validate-code', [MobilePasswordController::class, 'validateCode'])->name('mobileValidateCode');
+        Route::get('mobile-forgot-password', [MobilePasswordController::class, 'showResetForm'])
+            ->name('mobileForgotPassword.form');
+        Route::post('mobile-forgot-password/reset', [MobilePasswordController::class, 'resetPassword'])
+            ->name('mobileForgotPassword.reset');
 
         // Route::get('verify-email', EmailVerificationPromptController::class)
         //     ->name('verification.notice');

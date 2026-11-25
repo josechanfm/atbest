@@ -43,6 +43,39 @@
         "total": "總計",
         "deleted_successfully": "刪除成功"
     },
+    "message_test": {
+        "title": "訊息測試",
+        "email_gateway": "電郵閘道",
+        "sms_gateway": "簡訊閘道",
+        "configured": "已設定",
+        "not_configured": "未設定",
+        "health_check": "健康檢查",
+        "run_health_check": "執行健康檢查",
+        "no_health_result": "尚未執行健康檢查。",
+        "to": "收件人",
+        "subject": "主旨",
+        "content": "內容",
+        "mobile": "手機號碼",
+        "enter_email": "輸入收件人電郵地址",
+        "enter_subject": "輸入主旨",
+        "enter_mobile": "輸入手機號碼",
+        "enter_message_content": "輸入訊息內容",
+        "send_test_email": "發送測試電郵",
+        "send_test_sms": "發送測試簡訊",
+        "email_sent_successfully": "測試電郵發送成功。",
+        "email_send_failed": "發送測試電郵失敗。",
+        "sms_sent_successfully": "測試簡訊發送成功。",
+        "sms_send_failed": "發送測試簡訊失敗。",
+        "elapsed": "耗時",
+        "request_failed": "請求失敗。",
+        "email_required": "請輸入電郵地址",
+        "invalid_email": "請輸入有效的電郵地址",
+        "subject_required": "請輸入主旨",
+        "content_required": "請輸入內容",
+        "mobile_required": "請輸入手機號碼",
+        "invalid_mobile": "請輸入有效的手機號碼",
+        "content_too_long": "內容過長"
+    },
     "sections": {
         "languages": {
             "zh": "中文",
@@ -476,6 +509,8 @@
             "users": "用戶",
             "account": "帳號",
             "login": "登入",
+            "email_login": "電郵",
+            "mobile_login": "手機",
             "log_out": "登出",
             "register": "注冊",
             "account_registration": "帳號註冊",
@@ -516,6 +551,9 @@
             "invalid_code": "驗證碼無效或已過期",
             "password_reset_success": "密碼已成功重設",
             "mobile_not_found": "此手機號碼未註冊",
+            "mobile_not_belong_to_user": "此手機號碼不屬於當前用戶",
+            "mobile_not_found_or_not_belong_to_user": "此手機號碼未註冊或不屬於當前用戶",
+            "sms_verification_code": "驗證碼: ",
             "sms_send_failed": "簡訊發送失敗，請稍後再試",
             "mobile_required": "請輸入手機號碼",
             "mobile_invalid": "請輸入8位數字，開頭為6",
@@ -526,5 +564,6 @@
             "confirm_password_required": "請確認密碼",
             "passwords_do_not_match": "密碼與確認密碼不符"
         }
-    }
+    },
+    "bind_google": "綁定 Google 帳號"
 }

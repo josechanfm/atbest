@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('mobile')->unique();
-            $table->string('mobile_validated_at');
+            $table->timestamp('mobile_validated_at')->nullable();
             $table->string('email')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
@@ -24,6 +24,10 @@ return new class extends Migration
             $table->string('profile_photo_path', 2048)->nullable();
             $table->string('language', 8)->nullable();
             $table->boolean('is_active');
+            $table->string('google_id')->nullable()->unique();
+            $table->string('google_email')->nullable();
+            $table->string('google_avatar')->nullable();
+            $table->string('registration_method')->nullable();
             $table->timestamps();
         });
     }

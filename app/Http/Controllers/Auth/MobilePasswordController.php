@@ -29,9 +29,10 @@ class MobilePasswordController extends Controller
 
         // Check if user exists with this mobile
         $user = User::where('mobile', $request->mobile)->first();
+
         if (!$user) {
             throw ValidationException::withMessages([
-                'mobile' => trans('mobile_not_found'),
+                'mobile' => 'mobile_not_found_or_not_belong_to_user',
             ]);
         }
 
@@ -91,6 +92,7 @@ class MobilePasswordController extends Controller
         }
 
         $user = User::where('mobile', $request->mobile)->first();
+        
         if (!$user) {
             throw ValidationException::withMessages([
                 'mobile' => trans('mobile_not_found'),
@@ -99,6 +101,8 @@ class MobilePasswordController extends Controller
 
         $user->password = Hash::make($request->password);
         $user->save();
+
+        // dd($request->all(), $user, $cachedCode, $verified);
 
         // Clear cache
         Cache::forget('password_reset_' . $request->mobile);
