@@ -53,8 +53,9 @@ Route::middleware('guest')->group(function () {
         Route::post('mobile-forgot-password/verify', [MobilePasswordController::class, 'verifyCode'])
             ->name('mobileForgotPassword.verify');
 
+    Route::get('auth/google', [GoogleController::class, 'redirectToGoogle'])->name('auth.google');
+
     Route::middleware('auth')->group(function () {
-        Route::get('auth/google', [GoogleController::class, 'redirectToGoogle'])->name('auth.google');
         Route::get('auth/google/callback', [GoogleController::class, 'handleGoogleCallback']);
         Route::get('auth/google/bind', [GoogleController::class, 'redirectToGoogle'])->middleware('auth:sanctum')->name('auth.google.bind');
         // Route::get('mobile-forgot-password', [MobilePasswordController::class, 'forgotPassword'])->name('mobileForgotPassword');
