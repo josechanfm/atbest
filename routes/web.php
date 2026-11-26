@@ -13,7 +13,6 @@ use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\FormController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\ContentController;
-use App\Http\Controllers\NamecardController;
 use App\Http\Controllers\EnquiryController;
 
 // Guest Controllers

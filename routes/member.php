@@ -13,9 +13,8 @@ use App\Http\Controllers\Member\MembershipController as MemberMembershipControll
 use App\Http\Controllers\Member\EventController as MemberEventController;
 use App\Http\Controllers\Member\EntryController as MemberEntryController;
 use App\Http\Controllers\Member\BusinessCardController as MemberBusinessCardController;
+use App\Http\Controllers\Member\NamecardController as MemberNamecardController;
 use App\Http\Controllers\Member\InvitationController;
-use App\Http\Controllers\Member\NamecardController;
-
 /*
 |--------------------------------------------------------------------------
 | Member Portal Routes
@@ -59,4 +58,4 @@ Route::group([
 });
 
 Route::get('/card/{uuid}', [MemberBusinessCardController::class, 'show'])->name('member.businessCard.show');
-Route::get('/namecard/{key}', [NamecardController::class, 'show'])->name('member.namecard');
+Route::get('/namecard/{key}', [MemberNamecardController::class, 'show'])->name('member.namecard');
