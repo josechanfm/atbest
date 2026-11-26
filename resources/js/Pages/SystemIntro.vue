@@ -163,10 +163,10 @@
                                 <a-textarea v-model:value="form.message" :rows="4" :placeholder="$t('enquiry.message_placeholder')" />
                             </a-form-item>
 
-                            <a-form-item v-if="recaptchaSiteKey" name="g-recaptcha-response"
-                                :validate-status="form.errors['g-recaptcha-response'] ? 'error' : undefined"
+                            <a-form-item v-if="form.errors['g-recaptcha-response']" name="g-recaptcha-response"
+                                validate-status="error"
                                 :help="form.errors['g-recaptcha-response']">
-                                <div class="text-xs text-gray-400">{{ $t('enquiry.recaptcha_note') }}</div>
+                                <span />
                             </a-form-item>
 
                             <a-button type="primary" html-type="submit" size="large" :loading="form.processing">

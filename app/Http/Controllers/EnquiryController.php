@@ -83,6 +83,8 @@ class EnquiryController extends Controller
         $result = $response->json();
 
         if (empty($result['success'])) {
+            \Log::warning('reCAPTCHA verification failed', $result);
+
             throw ValidationException::withMessages([
                 'g-recaptcha-response' => ['enquiry.recaptcha_failed'],
             ]);
