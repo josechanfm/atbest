@@ -13,7 +13,6 @@
 
     <div class="py-8">
       <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <a-alert v-if="page.errors.google" :message="$t(page.errors.google)" type="error" show-icon class="mb-4" />
         <a-alert v-if="page.props.status" :message="$t(page.props.status)" type="success" show-icon class="mb-4" />
         <!-- 个人资料卡片 -->
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
