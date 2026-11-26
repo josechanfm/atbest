@@ -132,7 +132,7 @@
                                 <a-form-item :label="$t('enquiry.name')" name="name"
                                     :validate-status="form.errors.name ? 'error' : undefined" :help="form.errors.name"
                                     :rules="[{ required: true, message: $t('enquiry.name_required') }]">
-                                    <a-input v-model:value="form.name" :placeholder="$t('enquiry.name')" />
+                                    <a-input type="input" v-model:value="form.name" :placeholder="$t('enquiry.name')" />
                                 </a-form-item>
 
                                 <a-form-item :label="$t('enquiry.email')" name="email"
@@ -141,19 +141,19 @@
                                         { required: true, message: $t('enquiry.email_required') },
                                         { type: 'email', message: $t('enquiry.email_invalid') },
                                     ]">
-                                    <a-input v-model:value="form.email" :placeholder="$t('enquiry.email')" />
+                                    <a-input type="input" v-model:value="form.email" :placeholder="$t('enquiry.email')" />
                                 </a-form-item>
                             </div>
 
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-4">
                                 <a-form-item :label="$t('enquiry.phone')" name="phone"
                                     :validate-status="form.errors.phone ? 'error' : undefined" :help="form.errors.phone">
-                                    <a-input v-model:value="form.phone" :placeholder="$t('enquiry.phone')" />
+                                    <a-input type="input" v-model:value="form.phone" :placeholder="$t('enquiry.phone')" />
                                 </a-form-item>
 
                                 <a-form-item :label="$t('enquiry.subject')" name="subject"
                                     :validate-status="form.errors.subject ? 'error' : undefined" :help="form.errors.subject">
-                                    <a-input v-model:value="form.subject" :placeholder="$t('enquiry.subject')" />
+                                    <a-input type="input" v-model:value="form.subject" :placeholder="$t('enquiry.subject')" />
                                 </a-form-item>
                             </div>
 

@@ -8,6 +8,7 @@ use Inertia\Inertia;
 use App\Models\Approbate;
 use App\Models\Portfolio;
 use App\Models\Member;
+use App\Models\Organization;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
@@ -23,6 +24,10 @@ class ProfileController extends Controller
     {
         $user = auth()->user();
 
+        $organizations = Organization::where('status', 1)
+            ->orderBy('name_zh')
+            ->get(['id', 'name_zh', 'name_en', 'name_pt', 'abbr_en', 'abbr_zh']);
+
         return Inertia::render('Member/Profile', [
             'member' => $user->member,
             'status' => session('status'),
@@ -30,6 +35,7 @@ class ProfileController extends Controller
                 'bound' => (bool) $user->google_id,
                 'email' => $user->google_email,
             ],
+            'organizations' => $organizations,
         ]);
     }
 

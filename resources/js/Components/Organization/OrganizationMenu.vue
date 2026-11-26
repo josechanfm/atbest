@@ -21,6 +21,16 @@
                 </inertia-link>
             </span>
         </a-menu-item>
+        <a-menu-item key="joinRequests">
+            <template #icon>
+                <UserAddOutlined />
+            </template>
+            <span>
+                <inertia-link :href="route('organizer.joinRequests.index')">
+                    {{ $t("join_request.title") }}
+                </inertia-link>
+            </span>
+        </a-menu-item>
         <a-menu-item key="certificates">
             <template #icon>
                 <FileProtectOutlined />
@@ -161,6 +171,7 @@ import {
     InboxOutlined,
     AppstoreOutlined,
     SettingOutlined,
+    UserAddOutlined,
 } from "@ant-design/icons-vue";
 
 export default defineComponent({
@@ -182,6 +193,7 @@ export default defineComponent({
         InboxOutlined,
         AppstoreOutlined,
         SettingOutlined,
+        UserAddOutlined,
     },
     props: ["organization"],
     setup() {

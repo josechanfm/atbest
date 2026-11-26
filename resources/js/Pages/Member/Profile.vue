@@ -108,6 +108,18 @@
                     <span v-if="google.email" class="text-xs font-normal">{{ google.email }}</span>
                   </div>
                 </div>
+
+                <!-- 申請加入其他組織 -->
+                <button
+                  type="button"
+                  @click="openJoinRequestModal"
+                  class="mt-3 flex w-full items-center justify-center gap-2 rounded-xl bg-green-600 px-4 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-green-700"
+                >
+                  <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
+                  </svg>
+                  <span>{{ $t('join_request.button') }}</span>
+                </button>
               </div>
             </div>
 
@@ -278,6 +290,88 @@
       @croppedImageData="setCroppedImageData"
       @showModal="showCropModal = false"
     />
+
+    <!-- 申請加入其他組織模態框 -->
+    <a-modal
+      v-model:open="showJoinRequestModal"
+      :title="$t('join_request.title')"
+      :width="640"
+      :confirmLoading="joinRequestSubmitting"
+      :okText="$t('join_request.submit')"
+      :cancelText="$t('join_request.cancel')"
+      @ok="submitJoinRequest"
+    >
+      <a-form
+        ref="joinRequestFormRef"
+        :model="joinRequest"
+        layout="vertical"
+        autocomplete="off"
+      >
+        <a-form-item
+          :label="$t('join_request.organization')"
+          name="organization_id"
+          :validate-status="joinRequestErrors.organization_id ? 'error' : undefined"
+          :help="joinRequestErrors.organization_id ? $t(joinRequestErrors.organization_id) : undefined"
+          :rules="[{ required: true, message: $t('join_request.organization_required') }]"
+        >
+          <a-select
+            v-model:value="joinRequest.organization_id"
+            :placeholder="$t('join_request.select_organization')"
+            show-search
+          >
+            <a-select-option v-for="org in organizations" :key="org.id" :value="org.id">
+              {{ org.name_zh || org.name_en || org.name_pt }}
+            </a-select-option>
+          </a-select>
+        </a-form-item>
+
+        <a-form-item
+          :label="$t('join_request.name')"
+          name="name"
+          :validate-status="joinRequestErrors.name ? 'error' : undefined"
+          :help="joinRequestErrors.name"
+          :rules="[{ required: true, message: $t('join_request.name_required') }]"
+        >
+          <a-input v-model:value="joinRequest.name" :placeholder="$t('join_request.name')" class="rounded-lg" />
+        </a-form-item>
+
+        <a-form-item
+          :label="$t('join_request.email')"
+          name="email"
+          :validate-status="joinRequestErrors.email ? 'error' : undefined"
+          :help="joinRequestErrors.email"
+          :rules="[
+            { required: true, message: $t('join_request.email_required') },
+            { type: 'email', message: $t('join_request.email_invalid') },
+          ]"
+        >
+          <a-input v-model:value="joinRequest.email" :placeholder="$t('join_request.email')" class="rounded-lg" />
+        </a-form-item>
+
+        <a-form-item
+          :label="$t('join_request.phone')"
+          name="phone"
+          :validate-status="joinRequestErrors.phone ? 'error' : undefined"
+          :help="joinRequestErrors.phone"
+        >
+          <a-input v-model:value="joinRequest.phone" :placeholder="$t('join_request.phone')" class="rounded-lg" />
+        </a-form-item>
+
+        <a-form-item
+          :label="$t('join_request.reason')"
+          name="reason"
+          :validate-status="joinRequestErrors.reason ? 'error' : undefined"
+          :help="joinRequestErrors.reason"
+        >
+          <a-textarea
+            v-model:value="joinRequest.reason"
+            :rows="4"
+            :placeholder="$t('join_request.reason_placeholder')"
+            class="rounded-lg"
+          />
+        </a-form-item>
+      </a-form>
+    </a-modal>
   </MemberLayout>
 </template>
 
@@ -298,7 +392,12 @@ export default {
     UploadOutlined,
     CropperModal,
   },
-  props: ["member", "positions", "google"],
+  props: {
+    member: { type: Object, default: () => ({}) },
+    positions: { type: Array, default: () => [] },
+    google: { type: Object, default: () => ({}) },
+    organizations: { type: Array, default: () => [] },
+  },
   setup() {
     return { page: usePage() };
   },
@@ -310,6 +409,16 @@ export default {
       avatarData: null,
       loading: false,
       isPasswordSectionOpen: false,
+      showJoinRequestModal: false,
+      joinRequestSubmitting: false,
+      joinRequest: {
+        organization_id: undefined,
+        name: "",
+        email: "",
+        phone: "",
+        reason: "",
+      },
+      joinRequestErrors: {},
       password: {
         old: '',
         new: '',
@@ -367,6 +476,41 @@ export default {
 
     togglePasswordSection() {
       this.isPasswordSectionOpen = !this.isPasswordSectionOpen;
+    },
+
+    openJoinRequestModal() {
+      this.joinRequest = {
+        organization_id: undefined,
+        name: this.member.display_name || this.member.given_name || "",
+        email: this.member.email || this.$page.props.auth.user.email || "",
+        phone: this.member.mobile || "",
+        reason: "",
+      };
+      this.joinRequestErrors = {};
+      this.showJoinRequestModal = true;
+    },
+
+    submitJoinRequest() {
+      this.$refs.joinRequestFormRef
+        .validate()
+        .then(() => {
+          this.joinRequestSubmitting = true;
+          this.$inertia.post(route("member.joinRequests.store"), this.joinRequest, {
+            preserveScroll: true,
+            onSuccess: () => {
+              this.joinRequestSubmitting = false;
+              this.showJoinRequestModal = false;
+              message.success(this.$t("join_request.submitted"));
+            },
+            onError: (errors) => {
+              this.joinRequestSubmitting = false;
+              this.joinRequestErrors = errors;
+            },
+          });
+        })
+        .catch(() => {
+          message.warning(this.$t("join_request.fill_required"));
+        });
     },
 
     onSubmit() {

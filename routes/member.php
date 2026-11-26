@@ -15,6 +15,7 @@ use App\Http\Controllers\Member\EntryController as MemberEntryController;
 use App\Http\Controllers\Member\BusinessCardController as MemberBusinessCardController;
 use App\Http\Controllers\Member\NameCardController as MemberNamecardController;
 use App\Http\Controllers\Member\InvitationController;
+use App\Http\Controllers\Member\JoinRequestController as MemberJoinRequestController;
 /*
 |--------------------------------------------------------------------------
 | Member Portal Routes
@@ -54,6 +55,9 @@ Route::group([
         ->name('member.invitations.store');
     Route::delete('/invitations/{invitation}', [InvitationController::class, 'destroy'])
         ->name('member.invitations.destroy');
+
+    Route::post('/join_requests', [MemberJoinRequestController::class, 'store'])
+        ->name('member.joinRequests.store');
 
 });
 

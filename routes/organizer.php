@@ -22,6 +22,7 @@ use App\Http\Controllers\Organizer\ConfigController as OrganizerConfigController
 use App\Http\Controllers\Organizer\UploaderController as OrganizerUploaderController;
 use App\Http\Controllers\Organizer\ForumController as OrganizerForumController;
 use App\Http\Controllers\Organizer\ForumContentController as OrganizerForumContentController;
+use App\Http\Controllers\Organizer\JoinRequestController as OrganizerJoinRequestController;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,6 +43,10 @@ Route::group([
     Route::post('members/import', [OrganizerMemberController::class, 'import'])->name('organizer.members.import');
     Route::resource('members', OrganizerMemberController::class)->names('organizer.members');
     Route::post('member/create/login/{member}', [OrganizerMemberController::class, 'createLogin'])->name('organizer.member.createLogin');
+
+    Route::get('join_requests', [OrganizerJoinRequestController::class, 'index'])->name('organizer.joinRequests.index');
+    Route::post('join_request/{joinRequest}/approve', [OrganizerJoinRequestController::class, 'approve'])->name('organizer.joinRequests.approve');
+    Route::post('join_request/{joinRequest}/reject', [OrganizerJoinRequestController::class, 'reject'])->name('organizer.joinRequests.reject');
     Route::post('member/{member}/reset_password', [OrganizerMemberController::class, 'resetPassword'])->name('member.member.resetPassword');
     Route::get('member/export', [OrganizerMemberController::class, 'export'])->name('member.member.export');
 

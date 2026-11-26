@@ -18,6 +18,7 @@ use App\Http\Controllers\Admin\EntryController as AdminEntryController;
 use App\Http\Controllers\Admin\SmsMessageController as AdminSmsMessageController;
 use App\Http\Controllers\Admin\MessageTestController as AdminMessageTestController;
 use App\Http\Controllers\Admin\EnquiryController as AdminEnquiryController;
+use App\Http\Controllers\Admin\JoinRequestController as AdminJoinRequestController;
 
 /*
 |--------------------------------------------------------------------------
@@ -60,6 +61,10 @@ Route::group([
 
     Route::resource('enquiries', AdminEnquiryController::class)->names('admin.enquiries');
     Route::post('enquiry/{enquiry}/read', [AdminEnquiryController::class, 'markRead'])->name('admin.enquiries.read');
+
+    Route::get('join_requests', [AdminJoinRequestController::class, 'index'])->name('admin.joinRequests.index');
+    Route::post('join_request/{joinRequest}/approve', [AdminJoinRequestController::class, 'approve'])->name('admin.joinRequests.approve');
+    Route::post('join_request/{joinRequest}/reject', [AdminJoinRequestController::class, 'reject'])->name('admin.joinRequests.reject');
 
     Route::get('message_test', [AdminMessageTestController::class, 'index'])->name('admin.messageTest.index');
     Route::get('message_test/health', [AdminMessageTestController::class, 'health'])->name('admin.messageTest.health');
