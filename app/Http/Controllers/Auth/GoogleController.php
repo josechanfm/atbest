@@ -7,18 +7,14 @@ use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 use Laravel\Socialite\Facades\Socialite;
+use Throwable;
 
 class GoogleController extends Controller
 {
-    /**
-     * Redirect the user to Google's OAuth consent screen.
-     *
-     * The intent (login or bind) is derived from the current route name and
-     * stored in the session so the callback knows how to handle the account.
-     */
     public function redirectToGoogle(): RedirectResponse
     {
         $intent = Route::currentRouteName() === 'auth.google.bind' ? 'bind' : 'login';
@@ -28,23 +24,66 @@ class GoogleController extends Controller
         return Socialite::driver('google')->redirect();
     }
 
-    /**
-     * Handle the callback from Google.
-     */
     public function handleGoogleCallback(Request $request): RedirectResponse
     {
         $intent = session('google_intent', 'login');
+
+        try {
+            $googleUser = Socialite::driver('google')->user();
+        } catch (Throwable $e) {
+            session()->forget('google_intent');
+            Log::warning('Google OAuth callback failed', [
+                'intent' => $intent,
+                'error'  => $e->getMessage(),
+            ]);
+
+            $targetRoute = ($intent === 'bind' && Auth::check())
+                ? 'member.profile.index'
+                : 'login';
+
+            return redirect()->route($targetRoute)
+                ->withErrors(['email' => 'Google 驗證失敗，請重新嘗試。']);
+        }
+
         session()->forget('google_intent');
 
-        $googleUser = Socialite::driver('google')->user();
         $googleId = $googleUser->getId();
         $googleEmail = $googleUser->getEmail();
         $googleAvatar = $googleUser->getAvatar();
 
-        // 1. Already bound to an account by google_id.
+        // 1. Explicit bind flow while logged in.
+        if ($intent === 'bind') {
+            if (! Auth::check()) {
+                return redirect()->route('login')
+                    ->withErrors(['email' => '登入狀態已逾時，請重新登入後再綁定 Google 帳號。']);
+            }
+
+            /** @var User $current */
+            $current = Auth::user();
+
+            $existingOwner = User::where('google_id', $googleId)
+                ->where('id', '!=', $current->id)
+                ->first();
+
+            if ($existingOwner) {
+                return redirect()->route('member.profile.index')
+                    ->withErrors(['google' => '此 Google 帳號已綁定至其他會員帳戶。']);
+            }
+
+            $current->forceFill([
+                'google_id' => $googleId,
+                'google_email' => $googleEmail,
+                'google_avatar' => $googleAvatar,
+            ])->save();
+
+            return redirect()->route('member.profile.index')
+                ->with('status', trans('accounts_and_security.google_bound'));
+        }
+
+        // 2. Login flow: match by google_id first.
         $user = User::where('google_id', $googleId)->first();
 
-        // 2. Google email matches an existing account -> auto-bind.
+        // 3. Login flow: auto-bind if email matches an existing user without a conflicting google_id.
         if (! $user && $googleEmail) {
             $user = User::where('email', $googleEmail)->first();
             if ($user) {
@@ -60,32 +99,10 @@ class GoogleController extends Controller
             return $this->loginAndRedirect($request, $user, $intent);
         }
 
-        // 3. Bind intent while authenticated -> bind to the current user.
-        if ($intent === 'bind') {
-            if (Auth::check()) {
-                $current = Auth::user();
-                $current->forceFill([
-                    'google_id' => $googleId,
-                    'google_email' => $googleEmail,
-                    'google_avatar' => $googleAvatar,
-                ])->save();
-
-                return redirect()->route('member.profile.index')
-                    ->with('status', trans('accounts_and_security.google_bound'));
-            }
-
-            // Session expired mid-flow -> send back to login.
-            return redirect()->route('login');
-        }
-
-        // 4. Login intent with no matching account -> not bound.
         return redirect()->route('login')
             ->withErrors(['email' => trans('accounts_and_security.google_not_bound')]);
     }
 
-    /**
-     * Log the user in and redirect to the appropriate portal.
-     */
     protected function loginAndRedirect(Request $request, User $user, string $intent): RedirectResponse
     {
         $applocale = Session::get('applocale', config('app.locale'));

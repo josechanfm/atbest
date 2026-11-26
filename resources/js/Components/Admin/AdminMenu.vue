@@ -92,6 +92,16 @@
           </inertia-link>
         </span>
       </a-menu-item>
+      <a-menu-item key="enquiries.index">
+        <template #icon>
+          <InboxOutlined />
+        </template>
+        <span>
+          <inertia-link :href="route('admin.enquiries.index')">
+            {{ $t("enquiry.title") }}
+          </inertia-link>
+        </span>
+      </a-menu-item>
       <a-menu-item key="messageTest.index">
         <template #icon>
           <MailOutlined />

@@ -13,6 +13,9 @@
     <!-- Scripts -->
     @routes
     @vite('resources/js/app.js')
+    @if(config('services.recaptcha.site_key'))
+        <script src="https://www.google.com/recaptcha/api.js?render={{ config('services.recaptcha.site_key') }}"></script>
+    @endif
     {{-- @vite(['resources/js/app.js', "resources/js/Pages/{$page['component']}.vue"]) --}}
     @inertiaHead
     

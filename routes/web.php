@@ -14,6 +14,7 @@ use App\Http\Controllers\FormController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\ContentController;
 use App\Http\Controllers\NamecardController;
+use App\Http\Controllers\EnquiryController;
 
 // Guest Controllers
 use App\Http\Controllers\Guest\DashboardController as GuestDashboardController;
@@ -69,6 +70,7 @@ use App\Http\Controllers\Admin\EntryController as AdminEntryController;
 use App\Http\Controllers\Admin\SmsMessageController as AdminSmsMessageController;
 use App\Http\Controllers\Admin\MessageTestController as AdminMessageTestController;
 use App\Http\Controllers\Admin\ForumController as AdminForumController;
+use App\Http\Controllers\Admin\EnquiryController as AdminEnquiryController;
 
 // Widget Controllers
 use App\Http\Controllers\Widget\PollController as WidgetPollController;
@@ -78,11 +80,6 @@ use App\Http\Controllers\Widget\Admin\PollController as WidgetAdminPollControlle
 // Registration Inviation Controllers
 use App\Http\Controllers\Auth\InvitationRegisterController;
 use App\Http\Controllers\Member\InvitationController;
-
-use App\Http\Controllers\Auth\GoogleController;
-Route::get('auth/google', [GoogleController::class, 'redirectToGoogle'])->name('auth.google');
-Route::get('auth/google/callback', [GoogleController::class, 'handleGoogleCallback']);
-Route::get('auth/google/bind', [GoogleController::class, 'redirectToGoogle'])->middleware('auth:sanctum')->name('auth.google.bind');
 
 /*
 |--------------------------------------------------------------------------
@@ -122,6 +119,13 @@ Route::get('events', [EventController::class, 'index'])->name('events');
 Route::get('event', [EventController::class, 'item'])->name('event.item');
 
 Route::get('content', [ContentController::class, 'page'])->name('content');
+
+Route::get('/system-intro', fn () => Inertia::render('SystemIntro', [
+    'recaptchaSiteKey' => config('services.recaptcha.site_key'),
+]))->name('system.intro');
+Route::get('/privacy-policy', fn () => Inertia::render('Privacy'))->name('privacy.policy');
+
+Route::post('enquiry', [EnquiryController::class, 'store'])->name('enquiry.store');
 
 Route::get('/card/{uuid}', [MemberBusinessCardController::class, 'show'])->name('member.businessCard.show');
 Route::get('/namecard/{key}', [NamecardController::class, 'show'])->name('member.namecard');
@@ -273,6 +277,9 @@ Route::group([
     Route::post('form/delete_media/{form}', [AdminFormController::class, 'deleteMedia'])->name('admin.form.deleteMedia');
 
     Route::resource('sms_messages', AdminSmsMessageController::class)->names('admin.smsMessages');
+
+    Route::resource('enquiries', AdminEnquiryController::class)->names('admin.enquiries');
+    Route::post('enquiry/{enquiry}/read', [AdminEnquiryController::class, 'markRead'])->name('admin.enquiries.read');
 
     Route::get('message_test', [AdminMessageTestController::class, 'index'])->name('admin.messageTest.index');
     Route::get('message_test/health', [AdminMessageTestController::class, 'health'])->name('admin.messageTest.health');
