@@ -13,7 +13,7 @@ use App\Http\Controllers\Member\MembershipController as MemberMembershipControll
 use App\Http\Controllers\Member\EventController as MemberEventController;
 use App\Http\Controllers\Member\EntryController as MemberEntryController;
 use App\Http\Controllers\Member\BusinessCardController as MemberBusinessCardController;
-use App\Http\Controllers\Member\NamecardController as MemberNamecardController;
+use App\Http\Controllers\Member\NameCardController as MemberNamecardController;
 use App\Http\Controllers\Member\InvitationController;
 /*
 |--------------------------------------------------------------------------
