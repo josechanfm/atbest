@@ -10,7 +10,7 @@ defineProps({
 
 const page = usePage();
 const activeTab = ref("mobile");
-const googlePromptDismissed = ref(false);
+const dismissedGoogleError = ref(false);
 
 const form = useForm({
   email: "",
@@ -20,7 +20,7 @@ const form = useForm({
   service: route().params.s,
 });
 
-const rawGooglePrompt = computed(() => {
+const rawGoogleNotBoundError = computed(() => {
   return (
     page.props.errors?.google_not_bound ||
     page.props.errors?.google ||
@@ -28,9 +28,9 @@ const rawGooglePrompt = computed(() => {
   );
 });
 
-const unboundPrompt = computed(() => {
-  if (googlePromptDismissed.value) return "";
-  return rawGooglePrompt.value;
+const googleNotBoundError = computed(() => {
+  if (dismissedGoogleError.value) return "";
+  return rawGoogleNotBoundError.value;
 });
 
 const unboundGoogleEmail = computed(() => {
@@ -39,16 +39,16 @@ const unboundGoogleEmail = computed(() => {
 
 const syncEmailFromUnboundGoogle = (email) => {
   if (!email) return;
-  googlePromptDismissed.value = false;
+  dismissedGoogleError.value = false;
   activeTab.value = "email";
   if (!form.email) {
     form.email = email;
   }
 };
 
-watch(rawGooglePrompt, (msg) => {
-  if (msg) {
-    googlePromptDismissed.value = false;
+watch(rawGoogleNotBoundError, (val) => {
+  if (val) {
+    dismissedGoogleError.value = false;
   }
 });
 
@@ -109,13 +109,13 @@ const submit = () => {
         <a-alert v-if="status" :message="status" type="success" show-icon class="mb-4" />
 
         <a-alert
-          v-if="unboundPrompt"
-          type="warning"
+          v-if="googleNotBoundError"
+          type="error"
           show-icon
           closable
           class="mb-4"
-          :message="unboundPrompt"
-          @close="googlePromptDismissed = true"
+          :message="googleNotBoundError"
+          @close="dismissedGoogleError = true"
         >
           <template #description>
             <div class="text-xs text-gray-700 space-y-1 mt-1">
@@ -123,7 +123,7 @@ const submit = () => {
                 Google: <strong>{{ unboundGoogleEmail }}</strong>
               </p>
               <p>
-                {{ $t("google_bind_first_hint", "請先使用電郵或手機號碼登入現有帳戶，然後前往個人資料／帳戶安全頁面綁定此 Google 帳號。") }}
+                {{ $t("google_bind_after_login_prompt", "請先使用電郵或手機號碼登入，然後前往個人帳戶設定頁面綁定此 Google 帳號。") }}
               </p>
             </div>
           </template>
