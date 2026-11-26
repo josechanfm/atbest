@@ -168,7 +168,7 @@ export default {
       loading: false,
       uploadPreview: null,
       uploadData: {
-        blog:null,
+        forum:null,
         name:null,
       },
       cropper: {
@@ -316,7 +316,7 @@ export default {
           console.log(err);
         });
 
-      // if(this.uploadData.blog && this.blog.name){
+      // if(this.uploadData.forum && this.forum.name){
       //   this.modal.data.cert_logo_upload = this.uploadData.blob;
       //   this.modal.data.orignial_file_name = this.uploadData.file.name;
       // }

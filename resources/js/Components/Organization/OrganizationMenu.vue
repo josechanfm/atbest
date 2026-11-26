@@ -87,8 +87,8 @@
                 <ProjectOutlined />
             </template>
             <span>
-                <inertia-link :href="route('organizer.blogs.index')">
-                    {{ $t("blogs.management") }}
+                <inertia-link :href="route('organizer.forums.index')">
+                    {{ $t("forums.management") }}
                 </inertia-link>
             </span>
         </a-menu-item>

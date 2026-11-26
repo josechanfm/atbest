@@ -1,13 +1,13 @@
 <template>
-  <OrganizerLayout :title="$t('blogs')">
+  <OrganizerLayout :title="$t('forums')">
     <div class="flex-auto pb-3 text-right">
       <a-button type="primary" class="!rounded" @click="createRecord()">
-        {{ $t("create_blog") }}
+        {{ $t("create_forum") }}
       </a-button>
     </div>
     <div class="bg-white relative shadow rounded-lg overflow-x-auto">
       <a-table
-        :dataSource="blogs"
+        :dataSource="forums"
         :columns="columns"
         :pagination="pagination"
         @change="onPaginationChange"
@@ -21,7 +21,7 @@
           <template v-if="column.dataIndex == 'operation'">
             <div class="space-x-2">
               <a-button @click="editRecord(record)">{{ $t("edit") }}</a-button>
-              <a :href="route('organizer.blogs.show', record.id)">
+              <a :href="route('organizer.forums.show', record.id)">
                 <a-button>
                   {{ $t("contents_management") }}
                 </a-button>
@@ -114,7 +114,7 @@ export default {
     RestFilled,
     // quillEditor,
   },
-  props: ["bulletinCategories", "blogs"],
+  props: ["bulletinCategories", "forums"],
   data() {
     return {
       dateFormat: "YYYY-MM-DD",
@@ -131,26 +131,26 @@ export default {
         mode: "",
       },
       pagination: {
-        total: this.blogs.total,
-        current: this.blogs.current_page,
-        pageSize: this.blogs.per_page,
+        total: this.forums.total,
+        current: this.forums.current_page,
+        pageSize: this.forums.per_page,
       },
       filter: {},
       columns: [
         {
           title: "User",
-          i18n: "blog.user",
+          i18n: "forum.user",
           dataIndex: "user_id",
           key: "user",
         },
         {
           title: "Title",
-          i18n: "blog.title",
+          i18n: "forum.title",
           dataIndex: "title",
         },
         {
           title: "Description",
-          i18n: "blog.description",
+          i18n: "forum.description",
           dataIndex: "description",
         },
         {
@@ -190,9 +190,9 @@ export default {
   compunted: {
     pagination() {
       return {
-        total: this.blogs.total,
-        current: this.blogs.current_page,
-        pageSize: this.blogs.per_page,
+        total: this.forums.total,
+        current: this.forums.current_page,
+        pageSize: this.forums.per_page,
       };
     },
   },
@@ -215,7 +215,7 @@ export default {
       this.$refs.modalRef
         .validateFields()
         .then(() => {
-          this.$inertia.post(route("organizer.blogs.store"), this.modal.data, {
+          this.$inertia.post(route("organizer.forums.store"), this.modal.data, {
             preserveState: false,
             onSuccess: (page) => {
               this.modal.isOpen = false;
@@ -241,7 +241,7 @@ export default {
         .then(() => {
           this.modal.data._method = "PATCH";
           this.$inertia.post(
-            route("organizer.blogs.update", this.modal.data.id),
+            route("organizer.forums.update", this.modal.data.id),
             this.modal.data,
             {
               preserveState: false,
@@ -261,7 +261,7 @@ export default {
         });
     },
     deleteRecord(recordId) {
-      this.$inertia.delete(route("organizer.blogs.destroy", recordId), {
+      this.$inertia.delete(route("organizer.forums.destroy", recordId), {
         preserveState: false,
         onSuccess: (page) => {
           console.log(page);

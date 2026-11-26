@@ -25,6 +25,7 @@ class ProfileController extends Controller
 
         return Inertia::render('Member/Profile', [
             'member' => $user->member,
+            'status' => session('status'),
             'google' => [
                 'bound' => (bool) $user->google_id,
                 'email' => $user->google_email,

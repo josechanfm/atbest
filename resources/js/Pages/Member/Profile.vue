@@ -13,6 +13,8 @@
 
     <div class="py-8">
       <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <a-alert v-if="page.errors.google" :message="$t(page.errors.google)" type="error" show-icon class="mb-4" />
+        <a-alert v-if="page.props.status" :message="$t(page.props.status)" type="success" show-icon class="mb-4" />
         <!-- 个人资料卡片 -->
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
           <!-- 侧边栏 + 主要内容区 -->
@@ -287,6 +289,7 @@ import { message } from "ant-design-vue";
 import { UploadOutlined } from "@ant-design/icons-vue";
 import CropperModal from "@/Components/Member/CropperModal.vue";
 import dayjs from "dayjs";
+import { usePage } from "@inertiajs/vue3";
 
 export default {
   components: {
@@ -297,6 +300,9 @@ export default {
     CropperModal,
   },
   props: ["member", "positions", "google"],
+  setup() {
+    return { page: usePage() };
+  },
   data() {
     return {
       dateFormat: "YYYY-MM-DD",

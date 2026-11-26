@@ -122,6 +122,8 @@
         },
         "organizations": {
             "host": "主頁",
+            "headquater": "總部",
+            "parish": "堂區",
             "manager": "管理",
             "my_organizations": "我的社團",
             "you_have_organizations": "您有 :count 個社團",
@@ -587,7 +589,6 @@
             "mobile_not_found": "此手機號碼未註冊",
             "mobile_not_belong_to_user": "此手機號碼不屬於當前用戶",
             "mobile_not_found_or_not_belong_to_user": "此手機號碼未註冊或不屬於當前用戶",
-            "sms_verification_code": "驗證碼: ",
             "sms_send_failed": "簡訊發送失敗，請稍後再試",
             "mobile_required": "請輸入手機號碼",
             "mobile_invalid": "請輸入8位數字，開頭為6",
@@ -596,8 +597,15 @@
             "password_required": "請輸入密碼",
             "password_min": "密碼至少8個字元",
             "confirm_password_required": "請確認密碼",
-            "passwords_do_not_match": "密碼與確認密碼不符"
+            "passwords_do_not_match": "密碼與確認密碼不符",
+            "google_login": "使用 Google 登入",
+            "bind_google": "綁定 Google 帳號",
+            "google_bound": "已綁定 Google 帳號",
+            "google_not_bound": "此 Google 帳號尚未綁定任何帳戶，請先註冊並綁定。",
+            "google_oauth_failed": "Google 驗證失敗，請重新嘗試。",
+            "google_session_expired": "登入狀態已逾時，請重新登入後再綁定 Google 帳號。",
+            "google_already_bound": "此 Google 帳號已綁定至其他會員帳戶。",
+            "or": "或"
         }
-    },
-    "bind_google": "綁定 Google 帳號"
+    }
 }

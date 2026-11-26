@@ -107,7 +107,7 @@ export default {
     RestFilled,
     // quillEditor,
   },
-  props: ["blog", "contents"],
+  props: ["forum", "contents"],
   data() {
     return {
       dateFormat: "YYYY-MM-DD",
@@ -208,7 +208,7 @@ export default {
       this.$refs.modalRef
         .validateFields()
         .then(() => {
-          this.$inertia.post(route("organizer.blog.contents.store"), this.modal.data, {
+          this.$inertia.post(route("organizer.forum.contents.store"), this.modal.data, {
             preserveState: false,
             onSuccess: (page) => {
               this.modal.isOpen = false;
@@ -234,7 +234,7 @@ export default {
         .then(() => {
           this.modal.data._method = "PATCH";
           this.$inertia.post(
-            route("organizer.blogs.update", this.modal.data.id),
+            route("organizer.forums.update", this.modal.data.id),
             this.modal.data,
             {
               preserveState: false,
@@ -254,7 +254,7 @@ export default {
         });
     },
     deleteRecord(recordId) {
-      this.$inertia.delete(route("organizer.blog.contents.destroy", recordId), {
+      this.$inertia.delete(route("organizer.forum.contents.destroy", recordId), {
         preserveState: false,
         onSuccess: (page) => {
           console.log(page);

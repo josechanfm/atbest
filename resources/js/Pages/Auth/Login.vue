@@ -1,13 +1,14 @@
 <script setup>
 import BlankLayout from "@/Layouts/BlankLayout.vue";
-import { ref, computed } from "vue";
-import { Head, Link, useForm } from "@inertiajs/vue3";
+import { ref, computed, watch, onMounted } from "vue";
+import { Head, Link, useForm, usePage } from "@inertiajs/vue3";
 
 defineProps({
   status: String,
   canResetPassword: Boolean,
 });
 
+const page = usePage();
 const activeTab = ref("mobile");
 
 const form = useForm({
@@ -16,6 +17,35 @@ const form = useForm({
   password: "",
   remember: false,
   service: route().params.s,
+});
+
+const unboundPrompt = computed(() => {
+  return (
+    page.props.errors?.google_not_bound ||
+    page.props.errors?.google ||
+    page.props.errors?.email ||
+    ""
+  );
+});
+
+const unboundGoogleEmail = computed(() => {
+  return page.props.flash?.google_unbound_email || "";
+});
+
+const syncEmailFromUnboundGoogle = (email) => {
+  if (!email) return;
+  activeTab.value = "email";
+  if (!form.email) {
+    form.email = email;
+  }
+};
+
+onMounted(() => {
+  syncEmailFromUnboundGoogle(unboundGoogleEmail.value);
+});
+
+watch(unboundGoogleEmail, (email) => {
+  syncEmailFromUnboundGoogle(email);
 });
 
 const handleTabChange = (key) => {
@@ -65,6 +95,25 @@ const submit = () => {
         <h2 class="text-xl font-bold text-center text-gray-800 mb-4">{{ $t("login_header") }}</h2>
 
         <a-alert v-if="status" :message="status" type="success" show-icon class="mb-4" />
+
+        <a-alert
+          v-if="unboundPrompt"
+          type="warning"
+          show-icon
+          class="mb-4"
+          :message="unboundPrompt"
+        >
+          <template #description>
+            <div class="text-xs text-gray-700 space-y-1 mt-1">
+              <p v-if="unboundGoogleEmail">
+                Google: <strong>{{ unboundGoogleEmail }}</strong>
+              </p>
+              <p>
+                {{ $t("google_bind_first_hint", "請先使用電郵或手機號碼登入現有帳戶，然後前往個人資料／帳戶安全頁面綁定此 Google 帳號。") }}
+              </p>
+            </div>
+          </template>
+        </a-alert>
 
         <a-tabs v-model:activeKey="activeTab" class="login-tabs" @change="handleTabChange">
           <a-tab-pane key="email" :tab="$t('email_login')" />
