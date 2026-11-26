@@ -169,6 +169,12 @@
                                 <span />
                             </a-form-item>
 
+                            <p v-if="recaptchaSiteKey" class="text-xs text-gray-400 mb-3">
+                                This site is protected by reCAPTCHA and the Google
+                                <a href="https://policies.google.com/privacy" target="_blank" rel="noopener" class="underline">Privacy Policy</a> and
+                                <a href="https://policies.google.com/terms" target="_blank" rel="noopener" class="underline">Terms of Service</a> apply.
+                            </p>
+
                             <a-button type="primary" html-type="submit" size="large" :loading="form.processing">
                                 {{ $t('enquiry.submit') }}
                             </a-button>
@@ -205,11 +211,45 @@ export default {
             }),
         };
     },
+    mounted() {
+        this.loadRecaptchaScript();
+    },
     methods: {
+        loadRecaptchaScript() {
+            if (!this.recaptchaSiteKey || typeof document === 'undefined') {
+                return;
+            }
+            const scriptId = 'google-recaptcha-v3-script';
+            if (document.getElementById(scriptId)) {
+                return;
+            }
+            const script = document.createElement('script');
+            script.id = scriptId;
+            script.src = `https://www.google.com/recaptcha/api.js?render=${encodeURIComponent(this.recaptchaSiteKey)}`;
+            script.async = true;
+            script.defer = true;
+            document.head.appendChild(script);
+        },
+        async getRecaptchaToken() {
+            if (!this.recaptchaSiteKey) {
+                return '';
+            }
+            if (!window.grecaptcha || typeof window.grecaptcha.execute !== 'function') {
+                throw new Error('grecaptcha is not loaded');
+            }
+            return await new Promise((resolve, reject) => {
+                window.grecaptcha.ready(() => {
+                    window.grecaptcha
+                        .execute(this.recaptchaSiteKey, { action: 'enquiry' })
+                        .then(resolve)
+                        .catch(reject);
+                });
+            });
+        },
         async submit() {
-            if (this.recaptchaSiteKey && window.grecaptcha) {
+            if (this.recaptchaSiteKey) {
                 try {
-                    const token = await window.grecaptcha.execute(this.recaptchaSiteKey, { action: 'enquiry' });
+                    const token = await this.getRecaptchaToken();
                     this.form['g-recaptcha-response'] = token;
                 } catch (e) {
                     this.$message.error(this.$t('enquiry.recaptcha_failed'));
