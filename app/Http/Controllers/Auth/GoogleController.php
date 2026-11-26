@@ -24,7 +24,7 @@ class GoogleController extends Controller
         return Socialite::driver('google')->redirect();
     }
 
-public function handleGoogleCallback(Request $request): RedirectResponse
+    public function handleGoogleCallback(Request $request): RedirectResponse
     {
         $intent = session('google_intent', 'login');
 
@@ -42,7 +42,7 @@ public function handleGoogleCallback(Request $request): RedirectResponse
                 : 'login';
 
             return redirect()->route($targetRoute)
-                ->withErrors(['email' => 'Google 驗證失敗，請重新嘗試。']);
+                ->withErrors(['google' => 'google_oauth_failed']);
         }
 
         session()->forget('google_intent');
@@ -53,13 +53,37 @@ public function handleGoogleCallback(Request $request): RedirectResponse
 
         // 1. Explicit bind flow while logged in.
         if ($intent === 'bind') {
-            // ... handle binding to Auth::user() ...
+            if (! Auth::check()) {
+                return redirect()->route('login')
+                    ->withErrors(['google' => 'google_session_expired']);
+            }
+
+            /** @var User $current */
+            $current = Auth::user();
+
+            $existingOwner = User::where('google_id', $googleId)
+                ->where('id', '!=', $current->id)
+                ->first();
+
+            if ($existingOwner) {
+                return redirect()->route('member.profile.index')
+                    ->withErrors(['google' => 'google_already_bound']);
+            }
+
+            $current->forceFill([
+                'google_id' => $googleId,
+                'google_email' => $googleEmail,
+                'google_avatar' => $googleAvatar,
+            ])->save();
+
+            return redirect()->route('member.profile.index')
+                ->with('status', 'google_bound');
         }
 
         // 2. Login flow: match by google_id first.
         $user = User::where('google_id', $googleId)->first();
 
-        // 3. Login flow: auto-bind if email matches an existing user.
+        // 3. Login flow: auto-bind if email matches an existing user without a conflicting google_id.
         if (! $user && $googleEmail) {
             $user = User::where('email', $googleEmail)->first();
             if ($user) {
@@ -75,15 +99,8 @@ public function handleGoogleCallback(Request $request): RedirectResponse
             return $this->loginAndRedirect($request, $user, $intent);
         }
 
-        // 4. Put the snippet right here: login intent with no matching account.
-        $promptMessage = trans('accounts_and_security.google_not_bound');
-        if ($promptMessage === 'accounts_and_security.google_not_bound') {
-            $promptMessage = '此 Google 帳號尚未綁定任何會員帳戶。請先使用電郵或手機號碼登入，再於帳戶設定中綁定 Google。';
-        }
-
         return redirect()->route('login')
-            ->with('google_unbound_email', $googleEmail)
-            ->withErrors(['google_not_bound' => $promptMessage]);
+            ->withErrors(['google' => 'google_not_bound']);
     }
 
     protected function loginAndRedirect(Request $request, User $user, string $intent): RedirectResponse
