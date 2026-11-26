@@ -34,7 +34,7 @@ const rawGoogleNotBoundError = computed(() => {
   if (fromProps) return fromProps;
 
   if (urlParams.value.get("google_error") === "not_bound") {
-    return "此 Google 帳號尚未綁定帳戶，請先登入您的帳戶後再於個人帳戶頁面進行綁定。";
+    return "google_not_bound";
   }
 
   return "";
@@ -130,7 +130,7 @@ const submit = () => {
           show-icon
           closable
           class="mb-4"
-          :message="googleNotBoundError"
+          :message="$t(googleNotBoundError)"
           @close="dismissedGoogleError = true"
         >
           <template #description>
@@ -139,7 +139,7 @@ const submit = () => {
                 Google: <strong>{{ unboundGoogleEmail }}</strong>
               </p>
               <p>
-                {{ $t("google_bind_after_login_prompt", "請先使用電郵或手機號碼登入，然後前往個人帳戶設定頁面綁定此 Google 帳號。") }}
+                {{ $t("google_bind_after_login_prompt") }}
               </p>
             </div>
           </template>

@@ -565,6 +565,7 @@
             "google_oauth_failed": "Google verification failed. Please try again.",
             "google_session_expired": "Your login session has expired. Please log in again and then bind your Google account.",
             "google_already_bound": "This Google account is already linked to another member account.",
+            "google_bind_after_login_prompt": "Please log in with your email or mobile number first, then go to your account settings page to bind this Google account.",
             "or": "or"
         },
         "forms_and_entries": {

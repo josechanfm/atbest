@@ -601,10 +601,11 @@
             "google_login": "使用 Google 登入",
             "bind_google": "綁定 Google 帳號",
             "google_bound": "已綁定 Google 帳號",
-            "google_not_bound": "此 Google 帳號尚未綁定任何帳戶，請先註冊並綁定。",
+            "google_not_bound": "此 Google 帳號尚未綁定任何帳戶，請先登入您的帳戶後再進行綁定。",
             "google_oauth_failed": "Google 驗證失敗，請重新嘗試。",
             "google_session_expired": "登入狀態已逾時，請重新登入後再綁定 Google 帳號。",
             "google_already_bound": "此 Google 帳號已綁定至其他會員帳戶。",
+            "google_bind_after_login_prompt": "請先使用電郵或手機號碼登入，然後前往個人帳戶設定頁面綁定此 Google 帳號。",
             "or": "或"
         }
     }

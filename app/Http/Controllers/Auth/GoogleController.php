@@ -41,13 +41,8 @@ class GoogleController extends Controller
                 ? 'member.profile.index'
                 : 'login';
 
-            $failedMessage = trans('accounts_and_security.google_oauth_failed');
-            if ($failedMessage === 'accounts_and_security.google_oauth_failed') {
-                $failedMessage = 'Google 驗證失敗，請重新嘗試。';
-            }
-
             return redirect()->route($targetRoute)
-                ->withErrors(['google' => $failedMessage]);
+                ->withErrors(['google' => 'google_oauth_failed']);
         }
 
         session()->forget('google_intent');
@@ -59,13 +54,8 @@ class GoogleController extends Controller
         // 1. Explicit bind flow while logged in.
         if ($intent === 'bind') {
             if (! Auth::check()) {
-                $expiredMessage = trans('accounts_and_security.google_session_expired');
-                if ($expiredMessage === 'accounts_and_security.google_session_expired') {
-                    $expiredMessage = '登入狀態已逾時，請重新登入後再綁定 Google 帳號。';
-                }
-
                 return redirect()->route('login')
-                    ->withErrors(['google' => $expiredMessage]);
+                    ->withErrors(['google' => 'google_session_expired']);
             }
 
             /** @var User $current */
@@ -76,13 +66,8 @@ class GoogleController extends Controller
                 ->first();
 
             if ($existingOwner) {
-                $alreadyBoundMessage = trans('accounts_and_security.google_already_bound');
-                if ($alreadyBoundMessage === 'accounts_and_security.google_already_bound') {
-                    $alreadyBoundMessage = '此 Google 帳號已綁定至其他會員帳戶。';
-                }
-
                 return redirect()->route('member.profile.index')
-                    ->withErrors(['google' => $alreadyBoundMessage]);
+                    ->withErrors(['google' => 'google_already_bound']);
             }
 
             $current->forceFill([
@@ -92,7 +77,7 @@ class GoogleController extends Controller
             ])->save();
 
             return redirect()->route('member.profile.index')
-                ->with('status', trans('accounts_and_security.google_bound'));
+                ->with('status', 'google_bound');
         }
 
         // 2. Login flow: match strictly by bound google_id.
@@ -103,11 +88,6 @@ class GoogleController extends Controller
         }
 
         // 3. Google account not yet bound -> redirect to login page with error prompt.
-        $notBoundMessage = trans('accounts_and_security.google_not_bound');
-        if ($notBoundMessage === 'accounts_and_security.google_not_bound') {
-            $notBoundMessage = '此 Google 帳號尚未綁定帳戶，請先登入您的帳戶後再於個人帳戶頁面進行綁定。';
-        }
-
         $queryParams = ['google_error' => 'not_bound'];
         if ($googleEmail) {
             $queryParams['google_email'] = $googleEmail;
@@ -116,8 +96,8 @@ class GoogleController extends Controller
         return redirect()->route('login', $queryParams)
             ->with('google_unbound_email', $googleEmail)
             ->withErrors([
-                'google' => $notBoundMessage,
-                'google_not_bound' => $notBoundMessage,
+                'google' => 'google_not_bound',
+                'google_not_bound' => 'google_not_bound',
             ]);
     }
 
