@@ -10,6 +10,7 @@ defineProps({
 
 const page = usePage();
 const activeTab = ref("mobile");
+const googlePromptDismissed = ref(false);
 
 const form = useForm({
   email: "",
@@ -19,13 +20,17 @@ const form = useForm({
   service: route().params.s,
 });
 
-const unboundPrompt = computed(() => {
+const rawGooglePrompt = computed(() => {
   return (
     page.props.errors?.google_not_bound ||
     page.props.errors?.google ||
-    page.props.errors?.email ||
     ""
   );
+});
+
+const unboundPrompt = computed(() => {
+  if (googlePromptDismissed.value) return "";
+  return rawGooglePrompt.value;
 });
 
 const unboundGoogleEmail = computed(() => {
@@ -34,11 +39,18 @@ const unboundGoogleEmail = computed(() => {
 
 const syncEmailFromUnboundGoogle = (email) => {
   if (!email) return;
+  googlePromptDismissed.value = false;
   activeTab.value = "email";
   if (!form.email) {
     form.email = email;
   }
 };
+
+watch(rawGooglePrompt, (msg) => {
+  if (msg) {
+    googlePromptDismissed.value = false;
+  }
+});
 
 onMounted(() => {
   syncEmailFromUnboundGoogle(unboundGoogleEmail.value);
@@ -100,8 +112,10 @@ const submit = () => {
           v-if="unboundPrompt"
           type="warning"
           show-icon
+          closable
           class="mb-4"
           :message="unboundPrompt"
+          @close="googlePromptDismissed = true"
         >
           <template #description>
             <div class="text-xs text-gray-700 space-y-1 mt-1">

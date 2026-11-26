@@ -80,7 +80,7 @@ class GoogleController extends Controller
                 ->with('status', 'google_bound');
         }
 
-        // 2. Login flow: match by google_id first.
+        // 2. Login flow: look up by google_id first.
         $user = User::where('google_id', $googleId)->first();
 
         // 3. Login flow: auto-bind if email matches an existing user without a conflicting google_id.
@@ -99,8 +99,12 @@ class GoogleController extends Controller
             return $this->loginAndRedirect($request, $user, $intent);
         }
 
+        // 4. Login flow: google_id not found on users table -> prompt on login page.
+        $prompt = '此 Google 帳號尚未綁定系統帳戶。請先完成登入，再於會員／帳戶頁面綁定 Google 帳號。';
+
         return redirect()->route('login')
-            ->withErrors(['google' => 'google_not_bound']);
+            ->with('google_unbound_email', $googleEmail)
+            ->withErrors(['google' => $prompt]);
     }
 
     protected function loginAndRedirect(Request $request, User $user, string $intent): RedirectResponse
