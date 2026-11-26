@@ -20,12 +20,24 @@ const form = useForm({
   service: route().params.s,
 });
 
+const urlParams = computed(() => {
+  if (typeof window === "undefined") return new URLSearchParams();
+  return new URLSearchParams(window.location.search);
+});
+
 const rawGoogleNotBoundError = computed(() => {
-  return (
+  const fromProps =
     page.props.errors?.google_not_bound ||
     page.props.errors?.google ||
-    ""
-  );
+    "";
+
+  if (fromProps) return fromProps;
+
+  if (urlParams.value.get("google_error") === "not_bound") {
+    return "此 Google 帳號尚未綁定帳戶，請先登入您的帳戶後再於個人帳戶頁面進行綁定。";
+  }
+
+  return "";
 });
 
 const googleNotBoundError = computed(() => {
@@ -34,7 +46,11 @@ const googleNotBoundError = computed(() => {
 });
 
 const unboundGoogleEmail = computed(() => {
-  return page.props.flash?.google_unbound_email || "";
+  return (
+    page.props.flash?.google_unbound_email ||
+    urlParams.value.get("google_email") ||
+    ""
+  );
 });
 
 const syncEmailFromUnboundGoogle = (email) => {

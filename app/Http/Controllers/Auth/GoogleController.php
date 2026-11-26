@@ -42,7 +42,8 @@ class GoogleController extends Controller
                 : 'login';
 
             $failedMessage = trans('accounts_and_security.google_oauth_failed');
-            if ($failedMessage === 'accounts_and_security.google_oauth_failed') {$failedMessage = 'Google 驗證失敗，請重新嘗試。';
+            if ($failedMessage === 'accounts_and_security.google_oauth_failed') {
+                $failedMessage = 'Google 驗證失敗，請重新嘗試。';
             }
 
             return redirect()->route($targetRoute)
@@ -51,29 +52,33 @@ class GoogleController extends Controller
 
         session()->forget('google_intent');
 
-        $googleId =$googleUser->getId();
-        $googleEmail =$googleUser->getEmail();
-        $googleAvatar =$googleUser->getAvatar();
+        $googleId = $googleUser->getId();
+        $googleEmail = $googleUser->getEmail();
+        $googleAvatar = $googleUser->getAvatar();
 
         // 1. Explicit bind flow while logged in.
         if ($intent === 'bind') {
             if (! Auth::check()) {
                 $expiredMessage = trans('accounts_and_security.google_session_expired');
-                if ($expiredMessage === 'accounts_and_security.google_session_expired') {$expiredMessage = '登入狀態已逾時，請重新登入後再綁定 Google 帳號。';
+                if ($expiredMessage === 'accounts_and_security.google_session_expired') {
+                    $expiredMessage = '登入狀態已逾時，請重新登入後再綁定 Google 帳號。';
                 }
 
                 return redirect()->route('login')
                     ->withErrors(['google' => $expiredMessage]);
             }
 
-            /** @var User $current */$current = Auth::user();
+            /** @var User $current */
+            $current = Auth::user();
 
-            $existingOwner = User::where('google_id',$googleId)
+            $existingOwner = User::where('google_id', $googleId)
                 ->where('id', '!=', $current->id)
                 ->first();
 
-            if ($existingOwner) {$alreadyBoundMessage = trans('accounts_and_security.google_already_bound');
-                if ($alreadyBoundMessage === 'accounts_and_security.google_already_bound') {$alreadyBoundMessage = '此 Google 帳號已綁定至其他會員帳戶。';
+            if ($existingOwner) {
+                $alreadyBoundMessage = trans('accounts_and_security.google_already_bound');
+                if ($alreadyBoundMessage === 'accounts_and_security.google_already_bound') {
+                    $alreadyBoundMessage = '此 Google 帳號已綁定至其他會員帳戶。';
                 }
 
                 return redirect()->route('member.profile.index')
@@ -91,10 +96,10 @@ class GoogleController extends Controller
         }
 
         // 2. Login flow: match strictly by bound google_id.
-        $user = User::where('google_id',$googleId)->first();
+        $user = User::where('google_id', $googleId)->first();
 
         if ($user) {
-            return $this->loginAndRedirect($request, $user,$intent);
+            return $this->loginAndRedirect($request, $user, $intent);
         }
 
         // 3. Google account not yet bound -> redirect to login page with error prompt.
@@ -103,7 +108,12 @@ class GoogleController extends Controller
             $notBoundMessage = '此 Google 帳號尚未綁定帳戶，請先登入您的帳戶後再於個人帳戶頁面進行綁定。';
         }
 
-        return redirect()->route('login')
+        $queryParams = ['google_error' => 'not_bound'];
+        if ($googleEmail) {
+            $queryParams['google_email'] = $googleEmail;
+        }
+
+        return redirect()->route('login', $queryParams)
             ->with('google_unbound_email', $googleEmail)
             ->withErrors([
                 'google' => $notBoundMessage,
@@ -111,10 +121,11 @@ class GoogleController extends Controller
             ]);
     }
 
-    protected function loginAndRedirect(Request $request, User $user, string$intent): RedirectResponse
+    protected function loginAndRedirect(Request $request, User $user, string $intent): RedirectResponse
     {
         $applocale = Session::get('applocale', config('app.locale'));
-        Auth::login($user, true);$request->session()->regenerate();
+        Auth::login($user, true);
+        $request->session()->regenerate();
         Session::put('applocale', $applocale);
 
         if ($intent === 'bind') {
