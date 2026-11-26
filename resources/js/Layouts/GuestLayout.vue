@@ -2,6 +2,7 @@
 import { ref } from "vue";
 import { router, Link } from "@inertiajs/vue3";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink.vue";
+import SiteFooter from "@/Components/SiteFooter.vue";
 
 defineProps({
   canLogin: Boolean,
@@ -147,5 +148,8 @@ const showingNavigationDropdown = ref(false);
     <main class="flex-grow max-w-7xl w-full mx-auto py-6 px-4 sm:px-6 lg:px-8">
       <slot />
     </main>
+
+    <!-- Footer -->
+    <SiteFooter />
   </div>
 </template>

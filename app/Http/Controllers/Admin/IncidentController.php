@@ -4,10 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Incident;
 use Inertia\Inertia;
-use App\Models\Issue;
 
-class IssueController extends Controller
+
+class IncidentController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,8 +17,8 @@ class IssueController extends Controller
      */
     public function index(Request $request)
     {
-        return Inertia::render('Admin/Issues',[
-            'issues'=>Issue::with('user')->paginate($request->page)
+        return Inertia::render('Admin/Incidents',[
+            'incidents'=>Incident::with('user')->paginate($request->page)
         ]);        
     }
 
@@ -41,7 +42,7 @@ class IssueController extends Controller
     {
         $data=$request->all();
         $data['user_id']=auth()->user()->id;
-        Issue::create($data);
+        Incident::create($data);
         return redirect()->back();
     }
 
@@ -74,9 +75,9 @@ class IssueController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Issue $issue)
+    public function update(Request $request, Incident $incident)
     {
-        $issue->update($request->all());
+        $incident->update($request->all());
         return redirect()->back();
     }
 
@@ -86,9 +87,9 @@ class IssueController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Issue $issue)
+    public function destroy(Incident $incident)
     {
-        $issue->delete();
+        $incident->delete();
         return redirect()->back();
     }
 }

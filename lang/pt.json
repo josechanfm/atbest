@@ -146,6 +146,26 @@
         "fill_required": "Preencha os campos obrigatórios",
         "forbidden": "Não tem permissão para executar esta ação."
     },
+    "incident": {
+        "title": "Gestão de Incidentes",
+        "topic": "Tema",
+        "title_field": "Título",
+        "content": "Conteúdo",
+        "solution": "Solução",
+        "raised_at": "Data de abertura",
+        "solved_at": "Data de resolução",
+        "user": "Utilizador",
+        "operation": "Operação",
+        "create": "Criar",
+        "edit": "Editar",
+        "update": "Atualizar",
+        "required": "${label} é obrigatório!",
+        "topic_suggestion": "Sugestão",
+        "topic_debug": "Depuração",
+        "topic_change": "Alteração",
+        "topic_request": "Pedido do Cliente",
+        "topic_security": "Problema de Segurança"
+    },
     "sections": {
         "languages": {
             "zh": "Chinês",
@@ -207,7 +227,7 @@
             "portfolios": "Portefólios",
             "dashboard_instruction": "Aqui pode gerir as suas organizações e os perfis dos membros",
             "configs": "Configurações",
-            "issues": "Problemas",
+            "incident": "Incidentes",
             "qrcode_scanner": "Leitor de código QR",
             "qrcode_show": "Mostrar código QR",
             "service": "Serviço",

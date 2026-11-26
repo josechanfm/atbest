@@ -2,23 +2,23 @@
   <AdminLayout title="Issue">
     <template #header>
       <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-        {{ $t("issues") }}
+        {{ $t("incident.title") }}
       </h2>
     </template>
     <div class="flex justify-end pb-3 gap-3">
       <a-button @click="createRecord()" type="primary">
-        {{ $t("create") }}
+        {{ $t("incident.create") }}
       </a-button>
     </div>
     <div class="container mx-auto pt-5">
       <div class="bg-white relative shadow rounded-lg overflow-x-auto">
-        <a-table :dataSource="issues.data" :columns="columns">
+        <a-table :dataSource="incidents.data" :columns="columns">
           <template #headerCell="{ column }">
             {{ column.i18n ? $t(column.i18n) : column.title }}
           </template>
           <template #bodyCell="{ column, text, record, index }">
             <template v-if="column.dataIndex == 'operation'">
-              <a-button @click="editRecord(record)">{{ $t("edit") }}</a-button>
+              <a-button @click="editRecord(record)">{{ $t("incident.edit") }}</a-button>
             </template>
             <template v-else-if="column.dataIndex == 'user_id'">
               {{ record.user.name }}
@@ -35,7 +35,7 @@
       <a-form
         ref="modalRef"
         :model="modal.data"
-        name="issue"
+        name="incident"
         :label-col="{ span: 4 }"
         :wrapper-col="{ span: 20 }"
         autocomplete="off"
@@ -43,33 +43,32 @@
         :validate-messages="validateMessages"
         @finish="onFormFinish"
       >
-        <a-input type="input" v-model:value="modal.data.id" />
-        <a-form-item :label="$t('topic')" name="topic">
+        <a-form-item :label="$t('incident.topic')" name="topic">
           <a-select
             v-model:value="modal.data.topic"
             :options="topicOptions"
           />
         </a-form-item>
-        <a-form-item :label="$t('title')" name="title">
+        <a-form-item :label="$t('incident.title_field')" name="title">
           <a-input type="input" v-model:value="modal.data.title" />
         </a-form-item>
-        <a-form-item :label="$t('content')" name="content">
+        <a-form-item :label="$t('incident.content')" name="content">
           <a-textarea v-model:value="modal.data.content" :rows="10" />
         </a-form-item>
-        <a-form-item :label="$t('solution')" name="solution" >
+        <a-form-item :label="$t('incident.solution')" name="solution" >
           <a-textarea v-model:value="modal.data.solution" :rows="5"/>
         </a-form-item>
-        <a-form-item :label="$t('raised_at')" name="raised_at" >
+        <a-form-item :label="$t('incident.raised_at')" name="raised_at" >
           <a-date-picker v-model:value="modal.data.raised_at" :format="dateFormat" :valueFormat="dateFormat"/>
         </a-form-item>
-        <a-form-item :label="$t('solved_at')" name="solved_at" >
+        <a-form-item :label="$t('incident.solved_at')" name="solved_at" >
           <a-date-picker v-model:value="modal.data.solved_at" :format="dateFormat" :valueFormat="dateFormat"/>
         </a-form-item>
       </a-form>
       <template #footer>
         <a-button @click="$refs.modalRef.$emit('finish')" type="primary">
-          <span v-if="modal.mode=='EDIT'">{{ $t('update') }}</span>
-          <span v-if="modal.mode=='CREATE'">{{ $t('create') }}</span>
+          <span v-if="modal.mode=='EDIT'">{{ $t('incident.update') }}</span>
+          <span v-if="modal.mode=='CREATE'">{{ $t('incident.create') }}</span>
         </a-button>
       </template>
     </a-modal>
@@ -85,16 +84,16 @@ export default {
   components: {
     AdminLayout,
   },
-  props: ["issues"],
+  props: ["incidents"],
   data() {
     return {
       dateFormat:'YYYY-MM-DD',
       topicOptions:[
-        {value:"SUG",label:"Suggestion  "},
-        {value:"DEG",label:"Debug"},
-        {value:"CHN",label:"Change"},
-        {value:"REQ",label:"Customer Request"},
-        {value:"SEC",label:"Security Issue"},
+        {value:"SUG",label:this.$t("incident.topic_suggestion")},
+        {value:"DEG",label:this.$t("incident.topic_debug")},
+        {value:"CHN",label:this.$t("incident.topic_change")},
+        {value:"REQ",label:this.$t("incident.topic_request")},
+        {value:"SEC",label:this.$t("incident.topic_security")},
       ],
       modal: {
         isOpen: false,
@@ -105,30 +104,30 @@ export default {
       columns: [
         {
           title: "Topic",
-          i18n: "topic",
+          i18n: "incident.topic",
           dataIndex: "topic",
         },{
           title: "Title",
-          i18n: "title",
+          i18n: "incident.title_field",
           dataIndex: "title",
         },{
           title: "Raised at",
-          i18n: "raised_at",
+          i18n: "incident.raised_at",
           dataIndex: "raised_at",
           key: "raised_at",
         },{
           title: "Solved at",
-          i18n: "solved_at",
+          i18n: "incident.solved_at",
           dataIndex: "solved_at",
           key: "solved_at",
         },{
           title: "User",
-          i18n: "user",
+          i18n: "incident.user",
           dataIndex: "user_id",
           key: "user_id",
         },{
           title: "Operation",
-          i18n: "operation",
+          i18n: "incident.operation",
           dataIndex: "operation",
           key: "operation",
         },
@@ -138,14 +137,7 @@ export default {
         title: { required: true},
       },
       validateMessages: {
-        required: "${label} is required!",
-        types: {
-          email: "${label} is not a valid email!",
-          number: "${label} is not a valid number!",
-        },
-        number: {
-          range: "${label} must be between ${min} and ${max}",
-        },
+        required: this.$t("incident.required"),
       },
       labelCol: {
         style: {
@@ -160,14 +152,14 @@ export default {
     createRecord() {
       this.modal.data = {};
       this.modal.mode = "CREATE";
-      this.modal.title = "create";
+      this.modal.title = "incident.create";
       this.modal.isOpen = true;
     },
     editRecord(record) {
       this.modal.data = { ...record };
       this.modal.data.value=JSON.stringify(this.modal.data.value)
       this.modal.mode = "EDIT";
-      this.modal.title = "edit";
+      this.modal.title = "incident.edit";
       this.modal.isOpen = true;
     },
     onFormFinish(){
@@ -188,7 +180,7 @@ export default {
         });
     },
     storeRecord(data) {
-        this.$inertia.post(route("admin.issues.store"), data, {
+        this.$inertia.post(route("admin.incidents.store"), data, {
           onSuccess: (page) => {
             data = {};
           },
@@ -200,7 +192,7 @@ export default {
     updateRecord(data) {
       //data.value=JSON.parse(data.value);
       this.$inertia.patch(
-        route("admin.issues.update", data.id),data,
+        route("admin.incidents.update", data.id),data,
         {
           onSuccess: (page) => {
             data = {}

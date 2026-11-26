@@ -146,6 +146,26 @@
         "fill_required": "請填寫必填欄位",
         "forbidden": "您沒有權限執行此操作。"
     },
+    "incident": {
+        "title": "事故管理",
+        "topic": "類別",
+        "title_field": "標題",
+        "content": "內容",
+        "solution": "解決方案",
+        "raised_at": "提出時間",
+        "solved_at": "解決時間",
+        "user": "用戶",
+        "operation": "操作",
+        "create": "新建",
+        "edit": "編輯",
+        "update": "更新",
+        "required": "${label} 為必填項！",
+        "topic_suggestion": "建議",
+        "topic_debug": "除錯",
+        "topic_change": "變更",
+        "topic_request": "客戶請求",
+        "topic_security": "安全問題"
+    },
     "sections": {
         "languages": {
             "zh": "中文",
@@ -207,7 +227,7 @@
             "portfolios": "個人檔案",
             "dashboard_instruction": "在這裡您可以管理您的社團和會員資料",
             "configs": "配置",
-            "issues": "問題",
+            "incident": "事故",
             "qrcode_scanner": "QR 圖碼掃描儀",
             "qrcode_show": "二維碼",
             "service": "服務",

@@ -9,3 +9,12 @@
 a{
     text-decoration: none;
 }
+
+/* Hide the reCAPTCHA badge everywhere except pages that opt in via body.has-recaptcha */
+#grecaptcha-badge {
+    visibility: hidden;
+}
+
+body.has-recaptcha #grecaptcha-badge {
+    visibility: visible;
+}

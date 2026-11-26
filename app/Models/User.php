@@ -156,8 +156,8 @@ class User extends Authenticatable
         //           ->where('user_id', $this->id);
         // })->get();
     }
-    public function issues(){
-        return $this->hasMany(Issue::class);
+    public function incidents(){
+        return $this->hasMany(Incident::class);
     }
 
     public function businessCard()

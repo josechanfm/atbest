@@ -8,6 +8,7 @@ import DropdownLink from "@/Components/DropdownLink.vue";
 import NavLink from "@/Components/NavLink.vue";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink.vue";
 import LanguageSwitcher from "@/Components/LanguageSwitcher.vue";
+import SiteFooter from "@/Components/SiteFooter.vue";
 import { loadLanguageAsync } from "laravel-vue-i18n";
 
 export default {
@@ -21,6 +22,7 @@ export default {
     NavLink,
     ResponsiveNavLink,
     LanguageSwitcher,
+    SiteFooter,
   },
   props: ["title"],
   data() {
@@ -220,7 +222,10 @@ export default {
       <!-- Page Content -->
       <div>
         <slot />
-      </div> 
+      </div>
+
+      <!-- Footer -->
+      <SiteFooter />
     </div>
   </div>
 </template>

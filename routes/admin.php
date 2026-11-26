@@ -11,7 +11,7 @@ use App\Http\Controllers\Admin\ConfigController as AdminConfigController;
 use App\Http\Controllers\Admin\FeatureController as AdminFeatureController;
 use App\Http\Controllers\Admin\ArticleController as AdminArticleController;
 use App\Http\Controllers\Admin\ForumController as AdminForumController;
-use App\Http\Controllers\Admin\IssueController as AdminIssueController;
+use App\Http\Controllers\Admin\IncidentController as AdminIncidentController;
 use App\Http\Controllers\Admin\FormController as AdminFormController;
 use App\Http\Controllers\Admin\FormFieldController as AdminFormFieldController;
 use App\Http\Controllers\Admin\EntryController as AdminEntryController;
@@ -48,7 +48,7 @@ Route::group([
 
     Route::resource('forums', AdminForumController::class)->names('admin.forums');
 
-    Route::resource('issues', AdminIssueController::class)->names('admin.issues');
+    Route::resource('incidents', AdminIncidentController::class)->names('admin.incidents');
 
     Route::resource('forms', AdminFormController::class)->names('admin.forms');
     Route::resource('form/{form}/fields', AdminFormFieldController::class)->names('admin.form.fields');

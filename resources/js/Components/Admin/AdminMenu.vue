@@ -48,7 +48,7 @@
         </template>
         <span>
           <inertia-link :href="route('admin.forums.index')">
-            {{ $t("blogs") }}
+            {{ $t("forums") }}
           </inertia-link>
         </span>
       </a-menu-item>
@@ -82,13 +82,13 @@
           </inertia-link>
         </span>
       </a-menu-item>
-      <a-menu-item key="issues.index">
+      <a-menu-item key="incidents.index">
         <template #icon>
           <PieChartOutlined />
         </template>
         <span>
-          <inertia-link :href="route('admin.issues.index')">
-            {{ $t("issues") }}
+          <inertia-link :href="route('admin.incidents.index')">
+            {{ $t("incident") }}
           </inertia-link>
         </span>
       </a-menu-item>

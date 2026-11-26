@@ -199,6 +199,12 @@ export default {
         status: { type: String, default: null },
         recaptchaSiteKey: { type: String, default: null },
     },
+    mounted() {
+        document.body.classList.add('has-recaptcha');
+    },
+    unmounted() {
+        document.body.classList.remove('has-recaptcha');
+    },
     data() {
         return {
             form: useForm({

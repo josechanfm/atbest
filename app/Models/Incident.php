@@ -5,7 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Issue extends Model
+
+class Incident extends Model
 {
     use HasFactory;
     protected $fillable=['topic','title','content','solution','raised_at','solved_at','user_id'];
