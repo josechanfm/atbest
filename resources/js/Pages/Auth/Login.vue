@@ -223,6 +223,9 @@ const submit = () => {
             </svg>
             {{ $t("google_login") }}
           </a>
+          <p class="mt-2 text-center text-xs text-gray-500">
+            {{ $t("google_bind_note") }}
+          </p>
         </div>
       </div>
     </div>

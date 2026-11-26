@@ -606,6 +606,7 @@
             "google_session_expired": "登入狀態已逾時，請重新登入後再綁定 Google 帳號。",
             "google_already_bound": "此 Google 帳號已綁定至其他會員帳戶。",
             "google_bind_after_login_prompt": "請先使用電郵或手機號碼登入，然後前往個人帳戶設定頁面綁定此 Google 帳號。",
+            "google_bind_note": "請先綁定 Google 帳號後，方可使用此方式登入。",
             "or": "或"
         }
     }

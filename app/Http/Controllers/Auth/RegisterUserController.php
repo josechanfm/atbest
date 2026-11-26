@@ -133,6 +133,7 @@ class RegisterUserController extends Controller
             ]);
         }
 
+        
         $organization = Organization::where('registration_code', $pending['registration_code'])->firstOrFail();
 
         $user = User::create([
@@ -148,6 +149,10 @@ class RegisterUserController extends Controller
         ]);
 
         Member::createOrganizationMember($organization, $user);
+        if($organization->id !== 1) {
+            $atbestOrg = Organization::find(1);
+            Member::createOrganizationMember($atbestOrg, $user);
+        }
 
         session()->forget('registration.pending');
 

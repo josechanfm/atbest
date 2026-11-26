@@ -579,6 +579,7 @@
             "google_session_expired": "A sessão de início de sessão expirou. Inicie sessão novamente e ligue a sua conta do Google.",
             "google_already_bound": "Esta conta do Google já está ligada a outra conta de membro.",
             "google_bind_after_login_prompt": "Inicie sessão primeiro com o seu email ou número de telemóvel, depois vá para a página de definições da conta para ligar esta conta do Google.",
+            "google_bind_note": "Ligue a sua conta do Google com antecedência antes de a utilizar para iniciar sessão.",
             "or": "ou",
             "reset_password": "Redefinir palavra-passe",
             "enter_8_digits_starting_with_6": "Introduza 8 dígitos, começando por 6",
