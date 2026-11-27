@@ -226,7 +226,6 @@
         <!-- 表單連結 -->
         <div class="mt-4 pt-4 border-t flex flex-col sm:flex-row items-center justify-center gap-3">
           <div class="flex items-center gap-2">
-            <a :href="formUrl" target="_blank" ref="formUrl">{{ formUrl }}</a>
             <a-button @click="copyLink" size="small">{{ $t('copy_link') }}</a-button>
           </div>
           <a-button @click="shareLink" size="small">{{ $t('share_link') }}</a-button>
@@ -306,6 +305,7 @@ export default {
   },
   data() {
     return {
+      platform_name: "智滙精英",
       formData: {},
       avatarPreview: null,
       showCropModal: "",
@@ -393,11 +393,13 @@ export default {
     shareLink() {
       const url = this.$refs.formUrl ? this.$refs.formUrl.href : this.formUrl;
       const title = this.form.title || '';
+      const lines = [this.platform_name, title, url].filter(Boolean);
+      const text = lines.join('\n');
       if (navigator.share) {
-        navigator.share({ title, text: title, url }).catch(() => {});
+        navigator.share({ title, text, url }).catch(() => {});
       } else if (navigator.clipboard) {
-        navigator.clipboard.writeText(title ? `${title}\n${url}` : url);
-        message.success(this.$t('copied_to_clipboard'));
+        navigator.clipboard.writeText(text);
+          message.success(this.$t('copied_to_clipboard'));
       }
     },
     setCroppedImageData(data) {
