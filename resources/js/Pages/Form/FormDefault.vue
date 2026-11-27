@@ -1,12 +1,12 @@
 <template>
   <DefaultLayout title="Dashboard">
     <template #header>
-      <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+      <h2 class="px-2 font-semibold text-xl text-gray-800 leading-tight">
         {{$t('form_registration')}}
       </h2>
     </template>
-    <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
-      <div class="mt-8 p-4 bg-white overflow-hidden shadow sm:rounded-lg">
+    <div class="mx-auto sm:px-6 lg:px-8">
+      <div class="p-4 bg-white overflow-hidden shadow sm:rounded-lg">
         <div class="text-center">
           <a-typography-title :level="3">{{ form.title }}</a-typography-title>
         </div>
@@ -209,9 +209,58 @@
 
           </template>
           <div class="text-center pb-10">
-            <a-button @click="storeRecord" type="primary">{{ $t("submit") }}</a-button>
+            <a-alert
+              v-if="isFormFull"
+              :message="$t('form_full')"
+              type="warning"
+              show-icon
+              class="mb-4"
+            />
+            <a-button
+              @click="storeRecord"
+              type="primary"
+              :disabled="isFormFull"
+            >{{ $t("submit") }}</a-button>
           </div>
         </a-form>
+        <!-- 表單連結 -->
+        <div class="mt-4 pt-4 border-t flex flex-col sm:flex-row items-center justify-center gap-3">
+          <div class="flex items-center gap-2">
+            <a :href="formUrl" target="_blank" ref="formUrl">{{ formUrl }}</a>
+            <a-button @click="copyLink" size="small">{{ $t('copy_link') }}</a-button>
+          </div>
+          <a-button @click="shareLink" size="small">{{ $t('share_link') }}</a-button>
+        </div>
+      </div>
+    </div>
+    <!-- Applied Records -->
+    <div v-if="form.show_entries" class="mx-auto sm:px-6 lg:px-8 mt-2">
+      <div class="bg-white overflow-hidden shadow sm:rounded-lg">
+        <div class="px-4 py-3 border-b border-gray-200 flex items-center justify-between">
+          <h3 class="text-lg font-semibold text-gray-800">
+            {{ $t("applied_records") }}
+          </h3>
+          <div>
+            <a-tooltip :title="$t('quota_limit') + ': ' + quotaText">
+              <a-tag :color="isFormFull ? 'red' : 'blue'">
+                {{ records.length }}
+                <span v-if="form.quota !== null && form.quota !== undefined && form.quota >= 0">
+                  /
+                  {{ quotaText }}
+                </span>
+              </a-tag>
+            </a-tooltip>
+          </div>
+        </div>
+        <div class="divide-y divide-gray-100">
+          <div v-for="(record, key) in records" :key="key" class="px-4 py-4 hover:bg-gray-50 transition-colors">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs text-gray-400">{{ formatDate(record.date) }}</span>
+              <a-tag color="geekblue">{{ record.uid }}</a-tag>
+            </div>
+            <p class="text-sm text-gray-700 whitespace-pre-wrap break-words">{{ record.value }}</p>
+          </div>
+        </div>
       </div>
     </div>
   </DefaultLayout>
@@ -221,6 +270,8 @@
 import MemberLayout from "@/Layouts/MemberLayout.vue";
 import DefaultLayout from "@/Layouts/DefaultLayout.vue";
 import CropperModal from "@/Components/Member/CropperModal.vue";
+import dayjs from "dayjs";
+import { Modal, message } from "ant-design-vue";
 import { formatStrategyValues } from "ant-design-vue/es/vc-tree-select/utils/strategyUtil";
 // import { quillEditor } from "vue3-quill";
 
@@ -231,7 +282,28 @@ export default {
     // quillEditor,
     CropperModal,
   },
-  props: ["form"],
+  props: ["form",'records'],
+  computed: {
+    formUrl() {
+      return this.form.uuid ? route('form.item', { t: this.form.uuid }) : window.location.href;
+    },
+    // 名額為 null 或負數時視為不限名額；否則提交數達名額即為滿
+    isFormFull() {
+      const quota = this.form.quota;
+      if (quota === null || quota === undefined || quota < 0) {
+        return false;
+      }
+      return (this.records || []).length >= quota;
+    },
+    // 名額顯示：null 或負數為「不限」，否則顯示數字
+    quotaText() {
+      const quota = this.form.quota;
+      if (quota === null || quota === undefined || quota < 0) {
+        return this.$t("unlimited");
+      }
+      return quota;
+    },
+  },
   data() {
     return {
       formData: {},
@@ -291,8 +363,43 @@ export default {
       },
     };
   },
-  created() {},
+  created() {
+    // 後端偵測到名額已滿時，以 ?quota_full=1 跳回此頁，彈出提示
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("quota_full") === "1") {
+      Modal.warning({
+        title: this.$t("form_full"),
+        okText: this.$t("acknowledged"),
+      });
+      params.delete("quota_full");
+      const query = params.toString();
+      window.history.replaceState(
+        null,
+        "",
+        window.location.pathname + (query ? "?" + query : "")
+      );
+    }
+  },
   methods: {
+    formatDate(value) {
+      return value ? dayjs(value).format("YYYY/DD/MM HH:mm") : "";
+    },
+    copyLink() {
+      if (this.$refs.formUrl) {
+        navigator.clipboard.writeText(this.$refs.formUrl.href);
+        message.success(this.$t('copied_to_clipboard'));
+      }
+    },
+    shareLink() {
+      const url = this.$refs.formUrl ? this.$refs.formUrl.href : this.formUrl;
+      const title = this.form.title || '';
+      if (navigator.share) {
+        navigator.share({ title, text: title, url }).catch(() => {});
+      } else if (navigator.clipboard) {
+        navigator.clipboard.writeText(title ? `${title}\n${url}` : url);
+        message.success(this.$t('copied_to_clipboard'));
+      }
+    },
     setCroppedImageData(data) {
       this.avatarPreview = data.imageUrl;
       this.formData[this.form.fields.find((x) => x.type == "photo").id] = data;
@@ -302,6 +409,9 @@ export default {
       // console.log(this.formData);
     },
     storeRecord() {
+      if (this.isFormFull) {
+        return;
+      }
       this.$refs.formRef
         .validateFields()
         .then(() => {

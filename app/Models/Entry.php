@@ -29,5 +29,10 @@ class Entry extends Model
     public function form(){
         return $this->belongsTo(Form::class)->with('fields');
     }
-
+    
+    public function firstRecord()
+    {
+        return $this->hasOne(EntryRecord::class)->oldestOfMany();
+        // Or ->latestOfMany() for the latest record
+    }
 }

@@ -64,6 +64,7 @@ class FormController extends Controller
     public function store(Request $request)
     {
         $form=Form::find($request->form['id']);
+
         if ($form->published==false) { //not yet publish
             return redirect('forms');
         }elseif ($form->require_login && empty(auth()->user()) ) {
@@ -73,6 +74,9 @@ class FormController extends Controller
                 return redirect('forms');
             }
         };
+        if ($form->isFull()) { //quota reached
+            return redirect()->route('form.item', ['t' => $form->uuid])->withQuery('quota_full', '1');
+        }
         $entry = new Entry();
         if ($form->for_member) {
             if(!session()->has('member')){
@@ -181,8 +185,7 @@ class FormController extends Controller
         $form = Form::with(['media' => function ($query) {
             $query->whereIn('collection_name', ['banner', 'thumb']);
         }])->where('uuid', $uuid)->first();
-
-
+        
         if (empty($form)) {
             return redirect('forms');
         }
@@ -213,13 +216,41 @@ class FormController extends Controller
                 return Inertia::render('Form/Unpublished', ['reason' => 'member_only']);
             }
         }
-
+        // $entries = Entry::where('form_id', $form->id)
+        //     ->with('firstRecord')
+        //     ->get()
+        //     ->pluck('firstRecord')
+        //     ->filter(); // removes nulls if an entry has no records
+            
+        // dd($form, $entries);
         return $this->renderForm($form);
     }
 
     private function renderForm($form)
     {
         $form->load('fields');
-        return Inertia::render('Form/FormDefault', ['form' => $form]);
+        $records = $form->entryList
+            ->map(function ($entry) {
+                $firstRecord = $entry->records->first();
+
+                if (! $firstRecord) {
+                    return null;
+                }
+                
+                return [
+                    'uid' => $entry->uid,
+                    'value' => $firstRecord->field_value,
+                    'date'=>$firstRecord->created_at,
+                ];
+            })
+            ->filter()
+            ->values();
+            
+        // dd($form, $firstRecords);
+
+        return Inertia::render('Form/FormDefault', [
+            'form' => $form,
+            'records' => $records
+        ]);
     }
 }

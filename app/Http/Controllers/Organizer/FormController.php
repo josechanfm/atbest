@@ -46,7 +46,7 @@ class FormController extends Controller
             })
             ->orderBy('created_at', 'desc')
             ->paginate($pageSize, ['*'], 'page', $currentPage);
-        
+
         return Inertia::render('Organizer/Forms', [
             'forms' => $forms
         ]);
@@ -147,6 +147,7 @@ class FormController extends Controller
      */
     public function update(Request $request, Form $form)
     {
+        
         $this->validate($request, [
             'name' => 'required',
             'title' => 'required',

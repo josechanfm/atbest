@@ -21,6 +21,10 @@ export default {
         SiteFooter,
     },
     props: {
+        sideBar: {
+            type: Boolean,
+            default: false
+        },
         canLogin: Boolean,
         canRegister: Boolean,
         laravelVersion: String,
@@ -115,6 +119,7 @@ export default {
 
 <template>
 <!-- component -->
+<Head :title="title" />
 <!-- Header -->
 <header class="">
 
@@ -194,49 +199,64 @@ export default {
         <div class="bg-slate-200 relative min-h-screen p-0 lg:p-4 pt-2">
             
             <!-- 主內容區 -->
-            <div ref="mainBody" class="main-body relative z-10 grid grid-cols-1 lg:grid-cols-5 md:gap-6">
-                <!-- 左側主內容 -->
-                
-                <div class="col-span-4 ">
-                    <!-- Page Content -->
-                    <main>
-                        <slot />
-                    </main>
-                </div>
-
-                <!-- 右邊欄 -->
-                <div ref="rightMenu" class="col-span-1 flex flex-col gap-4">
-
-                    <div class="bg-slate-50/80 py-3 px-4 rounded-lg flex justify-around items-center shadow">
-                        <input type="text" :placeholder="$t('search')" class="bg-gray-100 rounded-md outline-none pl-2 ring-indigo-700 w-full mr-2 p-2" />
-                        <span><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor ">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                            </svg>
-                        </span>
-                    </div>
-                    <div class="bg-white backdrop-blur-sm shadow-md rounded-md">
-                        <h1 class="text-center text-xl my-4 py-2 rounded-md border-b-2 cursor-pointer text-gray-600">
-                            {{ $t('service') }}
-                        </h1>
-                        <div class="rounded-md list-none text-center">
-                            <li class="py-3 ">
-                                <inertia-link :href="route('forms')">報名表格</inertia-link>
-                            </li>
-                            <li class="py-3 ">
-                                <inertia-link :href="route('events')">活動列表</inertia-link>
-                            </li>
-                            <li class="py-3 ">
-                                <a href="https://www.gcs.gov.mo" target="_blank" class="list-none hover:text-indigo-600">新聞局</a>
-                            </li>
-                            <li class="py-3 ">
-                                <a href="https://www.io.gov.mo/cn/home/" class="list-none hover:text-indigo-600" target="_blank">印務局</a>
-                            </li>
-                        </div>
-                    </div>
+             <template v-if="sideBar">
+                <div ref="mainBody" class="main-body relative z-10 grid grid-cols-1 lg:grid-cols-5 md:gap-6">
+                    <!-- 左側主內容 -->
                     
-                    <RSSNews />
+                    <div class="col-span-4 ">
+                        <!-- Page Content -->
+                        <main>
+                            <slot />
+                        </main>
+                    </div>
+
+                    <!-- 右邊欄 -->
+                    <div v-if="sideBar" ref="rightMenu" class="col-span-1 flex flex-col gap-4">
+
+                        <div class="bg-slate-50/80 py-3 px-4 rounded-lg flex justify-around items-center shadow">
+                            <input type="text" :placeholder="$t('search')" class="bg-gray-100 rounded-md outline-none pl-2 ring-indigo-700 w-full mr-2 p-2" />
+                            <span><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor ">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                </svg>
+                            </span>
+                        </div>
+                        <div class="bg-white backdrop-blur-sm shadow-md rounded-md">
+                            <h1 class="text-center text-xl my-4 py-2 rounded-md border-b-2 cursor-pointer text-gray-600">
+                                {{ $t('service') }}
+                            </h1>
+                            <div class="rounded-md list-none text-center">
+                                <li class="py-3 ">
+                                    <inertia-link :href="route('forms')">報名表格</inertia-link>
+                                </li>
+                                <li class="py-3 ">
+                                    <inertia-link :href="route('events')">活動列表</inertia-link>
+                                </li>
+                                <li class="py-3 ">
+                                    <a href="https://www.gcs.gov.mo" target="_blank" class="list-none hover:text-indigo-600">新聞局</a>
+                                </li>
+                                <li class="py-3 ">
+                                    <a href="https://www.io.gov.mo/cn/home/" class="list-none hover:text-indigo-600" target="_blank">印務局</a>
+                                </li>
+                            </div>
+                        </div>
+                        
+                        <RSSNews />
+                    </div>
                 </div>
-            </div>
+                
+            </template>
+            <template v-else>
+                <div ref="mainBody" class="main-body relative z-10">
+                    <!-- 左側主內容 -->
+                    
+                    <div class="col-span-4 ">
+                        <!-- Page Content -->
+                        <main>
+                            <slot />
+                        </main>
+                    </div>
+                </div>
+            </template>
         </div>
     </section>
 </main>

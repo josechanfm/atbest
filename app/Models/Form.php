@@ -15,8 +15,8 @@ class Form extends Model implements HasMedia
 {
     use HasFactory;
     use InteractsWithMedia;
-    protected $fillable = ['uuid','organization_id', 'name', 'title','tags','description', 'welcome','content', 'thanks','valid_at','expire_at', 'require_login', 'for_member', 'published', 'with_attendance'];
-    protected $casts=['require_login'=>'boolean','for_member'=>'boolean','published'=>'boolean','with_attendance'=>'boolean'];
+    protected $fillable = ['uuid','organization_id', 'name', 'title','tags','description', 'welcome','content', 'thanks','valid_at','expire_at', 'require_login', 'for_member','quota','show_entries', 'published', 'with_attendance'];
+    protected $casts=['require_login'=>'boolean','for_member'=>'boolean','published'=>'boolean','with_attendance'=>'boolean','show_entries'=>'boolean'];
     protected $appends=['banner_url','thumb_url'];
 
     public static function boot(){
@@ -86,6 +86,24 @@ class Form extends Model implements HasMedia
     {
         return $this->hasMany(Entry::class)->with('records');
     }
+
+    public function entryList()
+    {
+        return $this->hasMany(Entry::class)
+            ->has('records')
+            ->with('records');
+    }
+
+    // 名額檢查：quota 為 null 或負數時視為不限名額，否則提交數達名額即為滿
+    public function isFull()
+    {
+        $quota = $this->quota;
+        if ($quota === null || $quota < 0) {
+            return false;
+        }
+        return $this->entries()->count() >= $quota;
+    }
+
     //entries for frontend table view and export to excel
     public function tableEntries()
     {

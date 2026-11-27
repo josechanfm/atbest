@@ -1,10 +1,11 @@
 <template>
-  <OrganizerLayout :title="form.id ? '表格修改' : '表格新增'" :breadcrumb="breadcrumb">
+  <OrganizerLayout :title="form.id ? $t('form_edit') : $t('form_create')" :breadcrumb="breadcrumb">
     <div class="bg-white relative shadow p-5 rounded-lg overflow-x-auto">
       <a-form ref="modalRef" :model="form" name="From" layout="vertical" autocomplete="off" :rules="rules"
         :validate-messages="validateMessages" @finish="onFinish" @finishFailed="onFinishFailed">
         
-        <!-- 基本欄位 -->
+        <!-- 基本資料 -->
+        <div class="form-section-title">{{ $t('section_basic') }}</div>
         <a-form-item :label="$t('form_name')" name="name">
           <a-input type="input" v-model:value="form.name" />
         </a-form-item>
@@ -33,140 +34,156 @@
         <a-form-item :label="$t('form_thankyou')" name="thanks" v-if="form.openThanks">
           <RichTextEditor v-model="form.thanks"/>
         </a-form-item>
-        
-        <!-- 日期設定 -->
-        <a-form-item :label="$t('valid_at')" name="valid_at">
-          <a-date-picker
-            v-model:value="form.valid_at"
-            :format="dateFormat"
-            :valueFormat="dateFormat"
-          />
-        </a-form-item>
-        
-        <a-form-item :label="$t('expired_at')" name="expired_at">
-          <a-date-picker v-model:value="form.expire_at" :valueFormat="dateFormat" :format="dateFormat"/>
-        </a-form-item>
-        
-        <!-- 登入設定 -->
-        <a-form-item :label="$t('require_login')" name="require_login">
-          <a-switch v-model:checked="form.require_login" @change="onRequireLoginChange" />
-          <span class="pl-3">{{ $t("require_login_note") }}</span>
-        </a-form-item>
-        
-        <a-form-item :label="$t('for_member')" name="for_member" v-if="form.require_login">
-          <a-switch v-model:checked="form.for_member"/>
-          <span class="pl-3">{{ $t("for_member_note") }}</span>
-        </a-form-item>
-        
-        <!-- 發佈設定 -->
-        <a-form-item :label="$t('published')" name="published">
-          <a-switch v-model:checked="form.published" :disabled="form.entries_count > 0" />
-          <span class="pl-3">{{ $t("published_note") }}</span><br />
-          <span v-if="form.entries_count > 0" class="text-yellow-600">
-            {{ $t('form_has_responses_backup_warning') }}
-          </span>
-        </a-form-item>
-        
-        <a-form-item :label="$t('with_attendance')" name="with_attendance" v-if="form.published">
-          <a-switch v-model:checked="form.with_attendance"/>
-          <span class="pl-3">{{ $t("with_attendance_note") }}</span>
-        </a-form-item>
 
-        <!-- Banner 圖片上傳（延遲上傳） -->
-        <a-form-item :label="$t('banner')" name="banner_image">
-          <div class="image-upload-container">
-            <!-- 顯示已存在的圖片 -->
-            <div v-if="form.banner_url && !tempImages.banner" class="image-preview-card">
-              <img :src="form.banner_url" class="preview-image" />
-              <div class="image-overlay">
-                <a-popconfirm
-                  :title="$t('confirm_delete_image')"
-                  :ok-text="$t('yes')"
-                  :cancel-text="$t('no')"
-                  @confirm="removeExistingImage('banner')"
-                >
-                  <button type="button" class="delete-btn">
-                    <DeleteOutlined />
-                    <span>{{ $t('delete') }}</span>
-                  </button>
-                </a-popconfirm>
-              </div>
-            </div>
+        <!-- 名額設定 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <a-form-item :label="$t('quota')" name="quota">
+            <a-input-number v-model:value="form.quota" :min="0" />
+          </a-form-item>
+          <a-form-item :label="$t('show_entries')" name="show_entries">
+            <a-switch v-model:checked="form.show_entries"/>
+            <div class="pl-3">{{ $t('show_entries_note') }}</div>
+          </a-form-item>
+          <!-- 存取設定 -->
+          <a-form-item :label="$t('require_login')" name="require_login">
+            <a-switch v-model:checked="form.require_login" @change="onRequireLoginChange" />
+            <span class="pl-3">{{ $t("require_login_note") }}</span>
+          </a-form-item>
+          <a-form-item :label="$t('for_member')" name="for_member" >
             
-            <!-- 顯示暫存的圖片（剛選擇但未送出） -->
-            <div v-if="tempImages.banner" class="image-preview-card temp-image">
-              <img :src="tempImages.banner.preview" class="preview-image" />
-              <div class="image-overlay">
-                <button type="button" class="delete-btn" @click="removeTempImage('banner')">
-                  <CloseOutlined />
-                  <span>{{ $t('remove') }}</span>
-                </button>
-              </div>
-            </div>
+            <a-switch  v-model:checked="form.for_member" :disabled="!form.require_login"/>
+            <span class="pl-3">{{ $t("for_member_note") }}</span>
             
-            <!-- 上傳按鈕 -->
-            <a-upload
-              v-if="!form.banner_url && !tempImages.banner"
-              :before-upload="(file) => handleBeforeUpload(file, 'banner')"
-              :show-upload-list="false"
-              :accept="'image/*'"
-              :custom-request="() => {}"
-            >
-              <div class="upload-trigger">
-                <PlusOutlined />
-                <div class="ant-upload-text">{{ $t('upload_banner') }}</div>
-              </div>
-            </a-upload>
-          </div>
-        </a-form-item>
+          </a-form-item>
+          <!-- 日期設定 -->
+          <a-form-item :label="$t('valid_at')" name="valid_at">
+            <a-date-picker
+              v-model:value="form.valid_at"
+              :format="dateFormat"
+              :valueFormat="dateFormat"
+            />
+          </a-form-item>
+          
+          <a-form-item :label="$t('expired_at')" name="expired_at">
+            <a-date-picker v-model:value="form.expire_at" :valueFormat="dateFormat" :format="dateFormat"/>
+          </a-form-item>
 
-        <!-- 縮圖上傳（延遲上傳） -->
-        <a-form-item :label="$t('thumbnail')" name="thumb_image">
-          <div class="image-upload-container">
-            <!-- 顯示已存在的圖片 -->
-            <div v-if="form.thumb_url && !tempImages.thumb" class="image-preview-card">
-              <img :src="form.thumb_url" class="preview-image" />
-              <div class="image-overlay">
-                <a-popconfirm
-                  :title="$t('confirm_delete_image')"
-                  :ok-text="$t('yes')"
-                  :cancel-text="$t('no')"
-                  @confirm="removeExistingImage('thumb')"
-                >
-                  <button type="button" class="delete-btn">
-                    <DeleteOutlined />
-                    <span>{{ $t('delete') }}</span>
+          <!-- 發佈設定 -->
+          <a-form-item :label="$t('published')" name="published">
+            <a-switch v-model:checked="form.published" :disabled="form.entries_count > 0" />
+            <span class="pl-3">{{ $t("published_note") }}</span><br />
+            <span v-if="form.entries_count > 0" class="text-yellow-600">
+              {{ $t('form_has_responses_backup_warning') }}
+            </span>
+          </a-form-item>
+          
+          <a-form-item :label="$t('with_attendance')" name="with_attendance">
+              <a-switch v-model:checked="form.with_attendance" :disabled="!form.published"/>
+              <span class="pl-3">{{ $t("with_attendance_note") }}</span>
+          </a-form-item>
+        </div>
+
+        <!-- 圖片 -->
+        <div>
+          {{ $t('image') }}
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Banner 圖片上傳（延遲上傳） -->
+          <a-form-item :label="$t('banner')" name="banner_image">
+            <div class="image-upload-container">
+              <!-- 顯示已存在的圖片 -->
+              <div v-if="form.banner_url && !tempImages.banner" class="image-preview-card">
+                <img :src="form.banner_url" class="preview-image" />
+                <div class="image-overlay">
+                  <a-popconfirm
+                    :title="$t('confirm_delete_image')"
+                    :ok-text="$t('yes')"
+                    :cancel-text="$t('no')"
+                    @confirm="removeExistingImage('banner')"
+                  >
+                    <button type="button" class="delete-btn">
+                      <DeleteOutlined />
+                      <span>{{ $t('delete') }}</span>
+                    </button>
+                  </a-popconfirm>
+                </div>
+              </div>
+              
+              <!-- 顯示暫存的圖片（剛選擇但未送出） -->
+              <div v-if="tempImages.banner" class="image-preview-card temp-image">
+                <img :src="tempImages.banner.preview" class="preview-image" />
+                <div class="image-overlay">
+                  <button type="button" class="delete-btn" @click="removeTempImage('banner')">
+                    <CloseOutlined />
+                    <span>{{ $t('remove') }}</span>
                   </button>
-                </a-popconfirm>
+                </div>
               </div>
+              
+              <!-- 上傳按鈕 -->
+              <a-upload
+                v-if="!form.banner_url && !tempImages.banner"
+                :before-upload="(file) => handleBeforeUpload(file, 'banner')"
+                :show-upload-list="false"
+                :accept="'image/*'"
+                :custom-request="() => {}"
+              >
+                <div class="upload-trigger">
+                  <PlusOutlined />
+                  <div class="ant-upload-text">{{ $t('upload_banner') }}</div>
+                </div>
+              </a-upload>
             </div>
-            
-            <!-- 顯示暫存的圖片（剛選擇但未送出） -->
-            <div v-if="tempImages.thumb" class="image-preview-card temp-image">
-              <img :src="tempImages.thumb.preview" class="preview-image" />
-              <div class="image-overlay">
-                <button type="button" class="delete-btn" @click="removeTempImage('thumb')">
-                  <CloseOutlined />
-                  <span>{{ $t('remove') }}</span>
-                </button>
+          </a-form-item>
+
+          <!-- 縮圖上傳（延遲上傳） -->
+          <a-form-item :label="$t('thumbnail')" name="thumb_image">
+            <div class="image-upload-container">
+              <!-- 顯示已存在的圖片 -->
+              <div v-if="form.thumb_url && !tempImages.thumb" class="image-preview-card">
+                <img :src="form.thumb_url" class="preview-image" />
+                <div class="image-overlay">
+                  <a-popconfirm
+                    :title="$t('confirm_delete_image')"
+                    :ok-text="$t('yes')"
+                    :cancel-text="$t('no')"
+                    @confirm="removeExistingImage('thumb')"
+                  >
+                    <button type="button" class="delete-btn">
+                      <DeleteOutlined />
+                      <span>{{ $t('delete') }}</span>
+                    </button>
+                  </a-popconfirm>
+                </div>
               </div>
+              
+              <!-- 顯示暫存的圖片（剛選擇但未送出） -->
+              <div v-if="tempImages.thumb" class="image-preview-card temp-image">
+                <img :src="tempImages.thumb.preview" class="preview-image" />
+                <div class="image-overlay">
+                  <button type="button" class="delete-btn" @click="removeTempImage('thumb')">
+                    <CloseOutlined />
+                    <span>{{ $t('remove') }}</span>
+                  </button>
+                </div>
+              </div>
+              
+              <!-- 上傳按鈕 -->
+              <a-upload
+                v-if="!form.thumb_url && !tempImages.thumb"
+                :before-upload="(file) => handleBeforeUpload(file, 'thumb')"
+                :show-upload-list="false"
+                :accept="'image/*'"
+                :custom-request="() => {}"
+              >
+                <div class="upload-trigger">
+                  <PlusOutlined />
+                  <div class="ant-upload-text">{{ $t('upload_thumbnail') }}</div>
+                </div>
+              </a-upload>
             </div>
-            
-            <!-- 上傳按鈕 -->
-            <a-upload
-              v-if="!form.thumb_url && !tempImages.thumb"
-              :before-upload="(file) => handleBeforeUpload(file, 'thumb')"
-              :show-upload-list="false"
-              :accept="'image/*'"
-              :custom-request="() => {}"
-            >
-              <div class="upload-trigger">
-                <PlusOutlined />
-                <div class="ant-upload-text">{{ $t('upload_thumbnail') }}</div>
-              </div>
-            </a-upload>
-          </div>
-        </a-form-item>
+          </a-form-item>
+        </div>
 
         <!-- 送出按鈕 -->
         <a-form-item :wrapper-col="{ offset: 12, span: 10 }">
@@ -224,8 +241,8 @@ export default {
   data() {
     return {
       breadcrumb: [
-        { label: "表格列表", url: route('organizer.forms.index') },
-        { label: this.form.id ? '表格修改' : '表格新增', url: null }
+        { label: this.$t('forms'), url: route('organizer.forms.index') },
+        { label: this.form.id ? this.$t('form_edit') : this.$t('form_create'), url: null }
       ],
       dateFormat: "YYYY-MM-DD",
       submitting: false,
@@ -243,9 +260,9 @@ export default {
       },
       
       rules: {
-        name: { required: true, message: '請輸入表單名稱' },
-        title: { required: true, message: '請輸入表單標題' },
-        valid_at: { required: true, message: '請選擇生效日期' },
+        name: { required: true, message: this.$t('please_input_form_name') },
+        title: { required: true, message: this.$t('please_input_form_title') },
+        valid_at: { required: true, message: this.$t('please_select_valid_at') },
       },
       validateMessages: {
         required: "${label} is required!",
@@ -266,7 +283,7 @@ export default {
         message.error(this.$t('only_images_allowed'));
         return false;
       }
-      
+
       const isLt2M = file.size / 1024 / 1024 < 2;
       if (!isLt2M) {
         message.error(this.$t('image_size_limit'));

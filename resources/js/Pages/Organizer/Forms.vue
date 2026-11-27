@@ -49,42 +49,39 @@
             <template v-if="column.dataIndex === 'operation'">
               <!-- 桌面端：显示所有按钮 -->
               <div class="desktop-actions hidden md:flex flex-wrap gap-2">
-                <a-button :href="route('organizer.form.entries.index', { form: record.id })" as="link" size="small">
-                  {{ $t("applications") }}
-                </a-button>
-                <a-button :href="route('organizer.entry.export', { form: record.id })" as="link" size="small">
-                  {{ $t("export") }}
-                </a-button>
-                <a-button :href="route('organizer.form.fields.index', { form: record.id })" as="link" size="small">
-                  {{ $t("data_fields") }}
-                </a-button>
-                <a-button :href="route('organizer.forms.edit', record.id)" as="link" size="small">
-                  {{ $t("edit") }}
-                </a-button>
-
-                <!-- 删除 -->
-                <a-popconfirm
-                  :title="$t('confirm_delete_record')"
-                  :ok-text="$t('yes')"
-                  :cancel-text="$t('no')"
-                  @confirm="deleteConfirmed(record)"
-                  :disabled="hasEntries(record)"
-                >
-                  <a-button :disabled="hasEntries(record)" size="small">
-                    {{ $t("delete") }}
+                <template v-for="action in getFormActions(record)" :key="action.key">
+                  <!-- 删除 -->
+                  <a-popconfirm
+                    v-if="action.confirm"
+                    :title="$t('confirm_delete_record')"
+                    :ok-text="$t('yes')"
+                    :cancel-text="$t('no')"
+                    @confirm="action.click"
+                    :disabled="action.disabled"
+                  >
+                    <a-button
+                      danger
+                      :disabled="action.disabled"
+                      size="small"
+                      class="action-btn"
+                      :style="actionBtnStyle(action)"
+                    >
+                      {{ action.label }}
+                    </a-button>
+                  </a-popconfirm>
+                  <a-button
+                    v-else
+                    :href="action.href"
+                    :target="action.target"
+                    size="small"
+                    class="action-btn"
+                    :class="{ 'ghost-btn': action.ghost }"
+                    :style="actionBtnStyle(action)"
+                    @click="action.click"
+                  >
+                    {{ action.label }}
                   </a-button>
-                </a-popconfirm>
-
-                <!-- 备份 -->
-                <a-button v-if="hasEntries(record)" @click="backupRecords(record)" size="small">
-                  {{ $t("backup") }}
-                </a-button>
-
-                <a-button @click="openQrCodeModal(record)" size="small">{{ $t('qrcode_show') }}</a-button>
-                <a-button @click="cloneForm(record)" size="small">{{ $t('clone') }}</a-button>
-                <a-button :href="route('form.item', {t:record.uuid, preview:true})" target="_blank" size="small">
-                  {{ $t('preview') }}
-                </a-button>
+                </template>
               </div>
 
               <!-- 移动端：下拉菜单（节省空间，并允许水平滚动其他列） -->
@@ -95,33 +92,13 @@
                   </a-button>
                   <template #overlay>
                     <a-menu>
-                      <a-menu-item @click="goToRoute('organizer.form.entries.index', { form: record.id })">
-                        {{ $t("applications") }}
-                      </a-menu-item>
-                      <a-menu-item @click="goToRoute('organizer.entry.export', { form: record.id })">
-                        {{ $t("export") }}
-                      </a-menu-item>
-                      <a-menu-item @click="goToRoute('organizer.form.fields.index', { form: record.id })">
-                        {{ $t("data_fields") }}
-                      </a-menu-item>
-                      <a-menu-item @click="goToRoute('organizer.forms.edit', record.id)">
-                        {{ $t("edit") }}
-                      </a-menu-item>
-                      <!-- Delete, backup, QR, clone use existing methods -->
-                      <a-menu-item @click="deleteConfirmed(record)" :disabled="hasEntries(record)">
-                        {{ $t("delete") }}
-                      </a-menu-item>
-                      <a-menu-item v-if="hasEntries(record)" @click="backupRecords(record)">
-                        {{ $t("backup") }}
-                      </a-menu-item>
-                      <a-menu-item @click="openQrCodeModal(record)">
-                        {{ $t('qrcode_show') }}
-                      </a-menu-item>
-                      <a-menu-item @click="cloneForm(record)">
-                        {{ $t('clone') }}
-                      </a-menu-item>
-                      <a-menu-item @click="openPreview(record)">
-                        {{ $t('preview') }}
+                      <a-menu-item
+                        v-for="action in getFormActions(record)"
+                        :key="action.key"
+                        :disabled="action.disabled"
+                        @click="action.click"
+                      >
+                        {{ action.label }}
                       </a-menu-item>
                     </a-menu>
                   </template>
@@ -176,7 +153,7 @@ import {
   DownOutlined,
 } from "@ant-design/icons-vue";
 import { RestFilled } from "@ant-design/icons-vue";
-import { message } from "ant-design-vue";
+import { message, Modal } from "ant-design-vue";
 import QrCodeModal from '@/Components/QrCodeModal.vue';
 
 export default {
@@ -239,13 +216,64 @@ export default {
       return record.entries_count > 0;
     },
 
+    // 表單操作清單，桌面按鈕與行動選單共用
+    getFormActions(record) {
+      // 按功能分組配色：表單管理(藍)、資料記錄(綠)、分享預覽(紫)、刪除(紅)
+      const C = { manage: "#1677ff", data: "#5294aa", share: "#722ed1", danger: "#ff4d4f" };
+      const actions = [
+        { key: "edit", label: this.$t("edit"), color: C.manage, href: route("organizer.forms.edit", record.id) },
+        { key: "data_fields", label: this.$t("data_fields"), color: C.data, href: route("organizer.form.fields.index", { form: record.id }) },
+        { key: "applications", label: this.$t("applications"), color: C.data, href: route("organizer.form.entries.index", { form: record.id }) },
+        { key: "export", label: this.$t("export"), color: C.data, href: route("organizer.entry.export", { form: record.id }) },
+        { key: "qrcode", label: this.$t("qrcode_show"), color: C.share, ghost: true, click: () => this.openQrCodeModal(record) },
+        { key: "preview", label: this.$t("preview"), color: C.share, ghost: true, target: "_blank", href: route("form.item", { t: record.uuid, preview: true }) },
+        { key: "clone", label: this.$t("clone"), color: C.manage, click: () => this.cloneForm(record) },
+      ];
+      if (this.hasEntries(record)) {
+        actions.push({ key: "backup", label: this.$t("backup"), color: C.data, click: () => this.backupRecords(record) });
+      }
+      actions.push({
+        key: "delete",
+        label: this.$t("delete"),
+        color: "#ff4d4f",
+        confirm: true,
+        disabled: this.hasEntries(record),
+        click: () => this.deleteConfirmed(record),
+      });
+      return actions;
+    },
+
+    // 桌面端按鈕配色：ghost 型用透明背景＋彩色邊框文字，其餘用彩色背景實體按鈕；停用時不套用顏色
+    actionBtnStyle(action) {
+      if (action.disabled) {
+        return {};
+      }
+      if (action.ghost) {
+        return {
+          backgroundColor: "transparent",
+          borderColor: action.color,
+          color: action.color,
+          "--action-color": action.color,
+        };
+      }
+      return {
+        backgroundColor: action.color,
+        borderColor: action.color,
+        color: "#fff",
+      };
+    },
+
     deleteConfirmed(record) {
       this.$inertia.delete(route("organizer.forms.destroy", { form: record.id }), {
         onSuccess: (page) => {
           console.log("删除成功", page);
         },
         onError: (error) => {
-          message.error(error.message || "删除失败");
+          Modal.error({
+            title: this.$t("delete_failed") || "删除失败",
+            content: this.$t("delete_requires_empty") || "只有沒有資料的表單才能刪除。此表單可能包含資料欄位或回應，請確認表單為空後再刪除。",
+            okText: this.$t("acknowledged") || "知道了",
+          });
         },
       });
     },
@@ -272,13 +300,19 @@ export default {
     },
 
     cloneForm(form) {
-      console.log(form);
-      this.$inertia.post(route("manage.form.clone", form), {
-        onSuccess: (page) => {
-          console.log(page);
-        },
-        onError: (error) => {
-          alert(error.message);
+      Modal.confirm({
+        title: this.$t("confirm_clone") || "確定要克隆此表格嗎？",
+        content: form.title,
+        okText: this.$t("yes") || "是",
+        cancelText: this.$t("no") || "否",
+        onOk: () => {
+          this.$inertia.post(route("manage.form.clone", form), {
+            onSuccess: (page) => {
+            },
+            onError: (error) => {
+              message.error(error.message || "克隆失败");
+            },
+          });
         },
       });
     },
@@ -293,10 +327,6 @@ export default {
       this.qrCodeModal.isOpen = value;
     },
 
-    goToRoute(routeName, params) {
-      this.$inertia.visit(route(routeName, params));
-    },
-    
   },
 };
 </script>
@@ -305,6 +335,16 @@ export default {
 /* Keep row hover effect */
 :deep(.ant-table-tbody > tr:hover > td) {
   background-color: #f9fafb;
+}
+
+/* 實體操作按鈕 hover：內聯樣式會覆蓋 antd 預設，故用 !important 提亮 */
+.action-btn:not(.ant-btn-disabled):hover {
+  filter: brightness(1.1);
+}
+
+/* ghost 操作按鈕 hover：以自身顏色輕微填充 */
+.ghost-btn:not(.ant-btn-disabled):hover {
+  background-color: color-mix(in srgb, var(--action-color) 12%, transparent);
 }
 
 /* Ensure the table scrolls horizontally on small screens */

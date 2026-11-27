@@ -41,7 +41,7 @@ export default {
 </script>
 
 <template>
-<DefaultLayout title="Dashboard">
+<DefaultLayout title="智滙精英 AtBest" :sideBar="true">
 
     <div class="flex flex-col gap-4">
         <!-- Hero Banner: h-auto on mobile so the block expands to fit full-size text -->
