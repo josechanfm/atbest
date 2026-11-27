@@ -245,12 +245,10 @@ class FormController extends Controller
             })
             ->filter()
             ->values();
-            
-        // dd($form, $firstRecords);
-
+        $form->organization_name = $form->organization->name_zh ?? '';
         return Inertia::render('Form/FormDefault', [
             'form' => $form,
-            'records' => $records
+            'records' => $records,
         ]);
     }
 }

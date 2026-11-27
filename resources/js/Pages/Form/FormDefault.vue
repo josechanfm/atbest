@@ -224,7 +224,7 @@
           </div>
         </a-form>
         <!-- 表單連結 -->
-        <div class="mt-4 pt-4 border-t flex flex-col sm:flex-row items-center justify-center gap-3">
+        <div class="mt-4 pt-4 border-t flex flex-row items-center justify-center gap-3">
           <div class="flex items-center gap-2">
             <a-button @click="copyLink" size="small">{{ $t('copy_link') }}</a-button>
           </div>
@@ -305,7 +305,6 @@ export default {
   },
   data() {
     return {
-      platform_name: "智滙精英",
       formData: {},
       avatarPreview: null,
       showCropModal: "",
@@ -393,7 +392,7 @@ export default {
     shareLink() {
       const url = this.$refs.formUrl ? this.$refs.formUrl.href : this.formUrl;
       const title = this.form.title || '';
-      const lines = [this.platform_name, title, url].filter(Boolean);
+      const lines = [this.form.organization_name, title, url].filter(Boolean);
       const text = lines.join('\n');
       if (navigator.share) {
         navigator.share({ title, text, url }).catch(() => {});
